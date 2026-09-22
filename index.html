@@ -47,8 +47,8 @@ input[type=range]{height:26px}
  <main id="main">
   <section class="page" id="accueil" aria-labelledby="homeTitle">
    <div class="hero"><div class="hero-copy"><p class="eyebrow">JuL · Les premiers sons</p><h1 id="homeTitle" tabindex="-1">AVANT<span>L’USINE.</span></h1><p class="lede">Les morceaux d’avant. Les souvenirs qui restent.<br>Explore la collection, volume après volume.</p><div class="actions"><button class="button" type="button" data-go="collection">Explorer la collection <span aria-hidden="true">↗</span></button><button class="button secondary" type="button" id="homePlay">Lancer l’écoute <span aria-hidden="true">▶</span></button></div></div>
-   <div class="hero-art" aria-label="Les volumes disponibles"><button class="sleeve back" id="heroBack" type="button"><canvas width="440" height="440"></canvas></button><button class="sleeve front" id="heroFront" type="button"><canvas width="440" height="440"></canvas></button><div class="art-stamp" aria-hidden="true">LES ARCHIVES<b>JuL</b>À REDÉCOUVRIR</div></div></div>
-   <div class="stats"><div class="stat"><b id="totalTracks">86</b><span>morceaux à retrouver</span></div><div class="stat"><b id="availableVolumes">02</b><span>volumes à écouter</span></div><div class="stat"><b>La suite arrive</b><span>une collection qui grandit</span></div></div>
+   <div class="hero-art" aria-label="Les volumes disponibles"><button class="sleeve back" id="heroBack" type="button"><canvas width="440" height="440"></canvas></button><button class="sleeve front" id="heroFront" type="button"><canvas width="440" height="440"></canvas></button></div></div>
+   <div class="stats"><div class="stat"><b id="totalTracks">119</b><span>morceaux à retrouver</span></div><div class="stat"><b id="availableVolumes">03</b><span>volumes à écouter</span></div><div class="stat"><b>La suite arrive</b><span>une collection qui grandit</span></div></div>
    <div class="section-head"><div><p class="eyebrow">À l’écoute</p><h2>Les volumes disponibles.</h2></div><button class="text-button" type="button" data-go="collection">Tout voir ↗</button></div><div id="featured" class="featured"></div>
    <div class="manifesto"><div><strong>Un volume. Toute une époque.</strong><p>Les pochettes, les morceaux et les archives à emporter. Retrouve ici les sorties disponibles et celles à venir.</p></div><button class="text-button" type="button" data-go="telechargements">Récupérer les archives ↗</button></div>
   </section>
@@ -64,7 +64,7 @@ input[type=range]{height:26px}
    <div class="empty" id="comingSoon" hidden><strong>La suite arrive.</strong>La pochette est là. Les morceaux de ce volume seront ajoutés prochainement.</div>
   </section>
   <section class="page" id="telechargements" aria-labelledby="downloadsTitle" hidden>
-   <div class="page-heading"><p class="eyebrow">Les archives à emporter</p><h1 id="downloadsTitle" tabindex="-1">Téléchargements.</h1><p class="lede">Récupère chaque volume en une seule archive ZIP, avec ses morceaux numérotés.</p></div><div id="downloadGrid" class="download-grid"></div>
+   <div class="page-heading"><p class="eyebrow">Les archives à emporter</p><h1 id="downloadsTitle" tabindex="-1">Téléchargements.</h1><p class="lede">Récupère chaque volume en une seule archive ZIP, avec ses morceaux numérotés.</p></div><div id="downloadGrid" class="download-grid"></div><div class="download-card" style="margin-top:22px"><h2>Les pochettes</h2><p>Télécharge toutes les pochettes de la collection.</p><a class="button" href="https://mega.nz/file/VN9wlAwY#ZLQni_ZMuq8ROXibMS-47kOb4j-AeMlB4T_POjPn7kU" target="_blank" rel="noopener noreferrer">Télécharger les pochettes sur MEGA ↗</a><small>Le téléchargement s’ouvre dans un nouvel onglet.</small></div>
    <div class="faq"><h2>Bon à savoir.</h2><details><summary>Comment écouter directement sur le site ?</summary><p>Ouvre la rubrique Écoute, choisis un volume puis un morceau. Le lecteur reste présent quand tu navigues entre les rubriques de ce site.</p></details><details><summary>Comment récupérer un volume complet ?</summary><p>Le bouton de téléchargement ouvre MEGA dans un nouvel onglet. Télécharge le ZIP puis extrais-le pour retrouver les fichiers audio individuels.</p></details><details><summary>Et les prochains volumes ?</summary><p>Leurs pochettes sont visibles dans la collection. L’écoute et le téléchargement seront proposés au fil des sorties.</p></details></div>
   </section>
   <section class="page" id="paroles" aria-labelledby="lyricsHeading" hidden>
@@ -1961,8 +1961,306 @@ const COLLECTION = [
       [20,33,208,141,205,169,96,160,145,227,100,56,70,224,0,0]
     ]
     },
-    "zip": "",
-    "tracks": []
+    "zip": "https://mega.nz/file/BN91VbKY#ToqdoDNIH9VaGV-yEQ60n_3EG4Jy8MrQb9IBy6G0mlk",
+    "tracks": [
+      {
+        "number": 1,
+        "title": "Miné",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/01%20-%20Mine%CC%81.mp3",
+        "filename": "01 - Miné.mp3",
+        "archiveFilename": "01 - Miné.mp3",
+        "genius": null
+      },
+      {
+        "number": 2,
+        "title": "Révolution",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/2%20-%20Re%CC%81volution.mp3",
+        "filename": "2 - Révolution.mp3",
+        "archiveFilename": "2 - Révolution.mp3",
+        "genius": null
+      },
+      {
+        "number": 3,
+        "title": "Malamadré",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/3%20-%20Malamadre%CC%81.mp3",
+        "filename": "3 - Malamadré.mp3",
+        "archiveFilename": "3 - Malamadré.mp3",
+        "genius": null
+      },
+      {
+        "number": 4,
+        "title": "Mal aimé",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/4%20-%20Mal%20aime%CC%81.mp3",
+        "filename": "4 - Mal aimé.mp3",
+        "archiveFilename": "4 - Mal aimé.mp3",
+        "genius": null
+      },
+      {
+        "number": 5,
+        "title": "On n’a pas le choix ( feat.Veazy )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/5%20-%20On%20n%E2%80%99a%20pas%20le%20choix%20%28%20feat.Veazy%20%29.mp3",
+        "filename": "5 - On n’a pas le choix ( feat.Veazy ).mp3",
+        "archiveFilename": "5 - On n’a pas le choix ( feat.Veazy ).mp3",
+        "genius": null
+      },
+      {
+        "number": 6,
+        "title": "wesh le clin’s ( feat.Soso maness )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/6%20-%20wesh%20le%20clin%E2%80%99s%20%28%20feat.Soso%20maness%20%29.mp3",
+        "filename": "6 - wesh le clin’s ( feat.Soso maness ).mp3",
+        "archiveFilename": "6 - wesh le clin’s ( feat.Soso maness ).mp3",
+        "genius": null
+      },
+      {
+        "number": 7,
+        "title": "Ça m’a mis dedans ( feat.Nino )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/7%20-%20C%CC%A7a%20m%E2%80%99a%20mis%20dedans%20%28%20feat.Nino%20%29.mp3",
+        "filename": "7 - Ça m’a mis dedans ( feat.Nino ).mp3",
+        "archiveFilename": "7 - Ça m’a mis dedans ( feat.Nino ).mp3",
+        "genius": null
+      },
+      {
+        "number": 8,
+        "title": "Qu’est-c’qu’tu connais de ma vie",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/8%20-%20Qu%E2%80%99est-c%E2%80%99qu%E2%80%99tu%20connais%20de%20ma%20vie.mp3",
+        "filename": "8 - Qu’est-c’qu’tu connais de ma vie.mp3",
+        "archiveFilename": "8 - Qu’est-c’qu’tu connais de ma vie.mp3",
+        "genius": null
+      },
+      {
+        "number": 9,
+        "title": "J’trace",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/9%20-%20J%E2%80%99trace.mp3",
+        "filename": "9 - J’trace.mp3",
+        "archiveFilename": "9 - J’trace.mp3",
+        "genius": null
+      },
+      {
+        "number": 10,
+        "title": "Je m’isole",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/10%20-%20Je%20m%E2%80%99isole.mp3",
+        "filename": "10 - Je m’isole.mp3",
+        "archiveFilename": "10 - Je m’isole.mp3",
+        "genius": null
+      },
+      {
+        "number": 11,
+        "title": "Alors les frères ( feat.non crédité )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/11%20-%20Alors%20les%20fre%CC%80res%20%28%20feat.non%20cre%CC%81dite%CC%81%20%29.mp3",
+        "filename": "11 - Alors les frères ( feat.non crédité ).mp3",
+        "archiveFilename": "11 - Alors les frères ( feat.non crédité ).mp3",
+        "genius": null
+      },
+      {
+        "number": 12,
+        "title": "D’où je vient",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/12%20-%20D%E2%80%99ou%CC%80%20je%20vient.mp3",
+        "filename": "12 - D’où je vient.mp3",
+        "archiveFilename": "12 - D’où je vient.mp3",
+        "genius": null
+      },
+      {
+        "number": 13,
+        "title": "Un son de tess",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/13%20-%20Un%20son%20de%20tess.mp3",
+        "filename": "13 - Un son de tess.mp3",
+        "archiveFilename": "13 - Un son de tess.mp3",
+        "genius": null
+      },
+      {
+        "number": 14,
+        "title": "Y’a plus d’amour ( feat.Tanyno )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/14%20-%20Y%E2%80%99a%20plus%20d%E2%80%99amour%20%28%20feat.Tanyno%20%29.mp3",
+        "filename": "14 - Y’a plus d’amour ( feat.Tanyno ).mp3",
+        "archiveFilename": "14 - Y’a plus d’amour ( feat.Tanyno ).mp3",
+        "genius": null
+      },
+      {
+        "number": 15,
+        "title": "Au piquet",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/15%20-%20Au%20piquet.mp3",
+        "filename": "15 - Au piquet.mp3",
+        "archiveFilename": "15 - Au piquet.mp3",
+        "genius": null
+      },
+      {
+        "number": 16,
+        "title": "Bonita",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/16%20-%20Bonita.mp3",
+        "filename": "16 - Bonita.mp3",
+        "archiveFilename": "16 - Bonita.mp3",
+        "genius": null
+      },
+      {
+        "number": 17,
+        "title": "Moi ci, moi ça",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/17%20-%20Moi%20ci%2C%20moi%20c%CC%A7a.mp3",
+        "filename": "17 - Moi ci, moi ça.mp3",
+        "archiveFilename": "17 - Moi ci, moi ça.mp3",
+        "genius": null
+      },
+      {
+        "number": 18,
+        "title": "All Eyez on Me",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/18%20-%20All%20Eyez%20on%20Me.mp3",
+        "filename": "18 - All Eyez on Me.mp3",
+        "archiveFilename": "18 - All Eyez on Me.mp3",
+        "genius": null
+      },
+      {
+        "number": 19,
+        "title": "Le jour et la nuit ( feat.Houari )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/19%20-%20Le%20jour%20et%20la%20nuit%20%28%20feat.Houari%20%29.mp3",
+        "filename": "19 - Le jour et la nuit ( feat.Houari ).mp3",
+        "archiveFilename": "19 - Le jour et la nuit ( feat.Houari ).mp3",
+        "genius": null
+      },
+      {
+        "number": 20,
+        "title": "Liga One Industry",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/20%20-%20Liga%20One%20Industry.mp3",
+        "filename": "20 - Liga One Industry.mp3",
+        "archiveFilename": "20 - Liga One Industry.mp3",
+        "genius": null
+      },
+      {
+        "number": 21,
+        "title": "Elle",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/21%20-%20Elle.mp3",
+        "filename": "21 - Elle.mp3",
+        "archiveFilename": "21 - Elle.mp3",
+        "genius": null
+      },
+      {
+        "number": 22,
+        "title": "Le vice du ghetto ( feat.Nono )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/22%20-%20Le%20vice%20du%20ghetto%20%28%20feat.Nono%20%29.mp3",
+        "filename": "22 - Le vice du ghetto ( feat.Nono ).mp3",
+        "archiveFilename": "22 - Le vice du ghetto ( feat.Nono ).mp3",
+        "genius": null
+      },
+      {
+        "number": 23,
+        "title": "J’gamberge",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/23%20-%20J%E2%80%99gamberge.mp3",
+        "filename": "23 - J’gamberge.mp3",
+        "archiveFilename": "23 - J’gamberge.mp3",
+        "genius": null
+      },
+      {
+        "number": 24,
+        "title": "T’étonne pas ( feat.Bil-K )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/24%20-%20T%E2%80%99e%CC%81tonne%20pas%20%28%20feat.Bil-K%20%29.mp3",
+        "filename": "24 - T’étonne pas ( feat.Bil-K ).mp3",
+        "archiveFilename": "24 - T’étonne pas ( feat.Bil-K ).mp3",
+        "genius": null
+      },
+      {
+        "number": 25,
+        "title": "L’hiver au quartier ( feat.Mehdi YZ, Hors Ligne, Ger, Norey & Moubarak )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/25%20-%20L%E2%80%99hiver%20au%20quartier%20%28%20feat.Mehdi%20YZ%2C%20Hors%20Ligne%2C%20Ger%2C%20Norey%20%26%20Moubarak%20%29.mp3",
+        "filename": "25 - L’hiver au quartier ( feat.Mehdi YZ, Hors Ligne, Ger, Norey & Moubarak ).mp3",
+        "archiveFilename": "25 - L’hiver au quartier ( feat.Mehdi YZ, Hors Ligne, Ger, Norey & Moubarak ).mp3",
+        "genius": null
+      },
+      {
+        "number": 26,
+        "title": "Range ta kalash",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/26%20-%20Range%20ta%20kalash.mp3",
+        "filename": "26 - Range ta kalash.mp3",
+        "archiveFilename": "26 - Range ta kalash.mp3",
+        "genius": null
+      },
+      {
+        "number": 27,
+        "title": "Laisse-moi respirer ( feat.Norey Fz )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/27%20-%20Laisse-moi%20respirer%20%28%20feat.Norey%20Fz%20%29.mp3",
+        "filename": "27 - Laisse-moi respirer ( feat.Norey Fz ).mp3",
+        "archiveFilename": "27 - Laisse-moi respirer ( feat.Norey Fz ).mp3",
+        "genius": null
+      },
+      {
+        "number": 28,
+        "title": "Tu m’as pas dit",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/28%20-%20Tu%20m%E2%80%99as%20pas%20dit.mp3",
+        "filename": "28 - Tu m’as pas dit.mp3",
+        "archiveFilename": "28 - Tu m’as pas dit.mp3",
+        "genius": null
+      },
+      {
+        "number": 29,
+        "title": "Chacun sa life ( feat.non crédité )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/29%20-%20Chacun%20sa%20life%20%28%20feat.non%20cre%CC%81dite%CC%81%20%29.mp3",
+        "filename": "29 - Chacun sa life ( feat.non crédité ).mp3",
+        "archiveFilename": "29 - Chacun sa life ( feat.non crédité ).mp3",
+        "genius": null
+      },
+      {
+        "number": 30,
+        "title": "Au bord de la mer",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/30%20-%20Au%20bord%20de%20la%20mer.mp3",
+        "filename": "30 - Au bord de la mer.mp3",
+        "archiveFilename": "30 - Au bord de la mer.mp3",
+        "genius": null
+      },
+      {
+        "number": 31,
+        "title": "On change pas nos habitudes ( feat.Wanted & Gambino )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/31%20-%20On%20change%20pas%20nos%20habitudes%20%28%20feat.Wanted%20%26%20Gambino%20%29.mp3",
+        "filename": "31 - On change pas nos habitudes ( feat.Wanted & Gambino ).mp3",
+        "archiveFilename": "31 - On change pas nos habitudes ( feat.Wanted & Gambino ).mp3",
+        "genius": null
+      },
+      {
+        "number": 32,
+        "title": "For me",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/32%20-%20For%20me.mp3",
+        "filename": "32 - For me.mp3",
+        "archiveFilename": "32 - For me.mp3",
+        "genius": null
+      },
+      {
+        "number": 33,
+        "title": "Soleil ( feat.Kalif Hardcore & Soso Maness )",
+        "artist": "JuL",
+        "src": "https://archive.org/download/AvantUsineVol3/33%20-%20Soleil%20%28%20feat.Kalif%20Hardcore%20%26%20Soso%20Maness%20%29.mp3",
+        "filename": "33 - Soleil ( feat.Kalif Hardcore & Soso Maness ).mp3",
+        "archiveFilename": "33 - Soleil ( feat.Kalif Hardcore & Soso Maness ).mp3",
+        "genius": null
+      }
+    ]
   },
   {
     "number": 4,
