@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Avant l’Usine — La collection",
+  "short_name": "Avant l’Usine",
+  "description": "Les premières archives de JuL, à écouter et à explorer.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#271336",
+  "theme_color": "#271336",
+  "icons": [
+    {"src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
