@@ -1,5 +1,5 @@
 /* Cache uniquement l’interface locale. Les MP3, paroles et contributions restent en ligne. */
-const AU_CACHE='avant-usine-shell-v2-accounts-20260924';
+const AU_CACHE='avant-usine-shell-v3-kofi-20260925';
 const AU_BASE=new URL('./',self.location.href);
 const AU_INDEX=new URL('./index.html',AU_BASE).href;
 const AU_OFFLINE=new URL('./offline.html',AU_BASE).href;
