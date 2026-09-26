@@ -1,5 +1,5 @@
 /* Cache uniquement l’interface locale. Les MP3, paroles et contributions restent en ligne. */
-const AU_CACHE='avant-usine-shell-v7-rgb-lyrics-20260926';
+const AU_CACHE='avant-usine-shell-v8-creator-catalog-20260926';
 const AU_BASE=new URL('./',self.location.href);
 const AU_INDEX=new URL('./index.html',AU_BASE).href;
 const AU_OFFLINE=new URL('./offline.html',AU_BASE).href;
