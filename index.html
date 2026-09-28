@@ -151,6 +151,10 @@ html[data-theme=light] :is(.annotation-body,.dc-post-body){color:var(--ink)}html
 html[data-theme=light] .au-account-button{background:var(--surface);color:var(--ink);border-color:var(--ui-border)}html[data-theme=light] .control{color:var(--ink)}html[data-theme=light] .control svg{fill:currentColor}html[data-theme=light] .major-eye{color:var(--ink)}
 #accountMember>.button{display:flex;width:100%;justify-content:flex-start;margin-top:10px;min-height:44px;text-align:left}
 @media(prefers-reduced-motion:reduce){.major-dialog,.major-toast{animation:none;transition:none}}
+/* Immersive controls must remain legible on the light surface. */
+html[data-theme=light] .au-art-control:not(.au-art-play){background:var(--surface-raised);color:var(--ink);border:1px solid var(--ui-border)}
+html[data-theme=light] .au-art-control:not(.au-art-play):hover{background:#e2dace}
+html[data-theme=light] :is(.au-immersive-seek span,.au-immersive-volume,.au-immersive-status,.au-immersive-volume-control,.au-immersive-copy .eyebrow){color:var(--muted)}
 </style>
 </head>
 <body>
@@ -9077,72 +9081,72 @@ const COLLECTION = [
         "number": 2,
         "title": "Révolution",
         "artist": "JuL",
-        "src": "https://archive.org/download/AvantUsineVol3/2%20-%20Re%CC%81volution.mp3",
+        "src": "https://archive.org/download/AvantUsineVol3/02%20-%20Re%CC%81volution.mp3",
         "filename": "2 - Révolution.mp3",
-        "archiveFilename": "2 - Révolution.mp3",
+        "archiveFilename": "02 - Révolution.mp3",
         "genius": null
       },
       {
         "number": 3,
         "title": "Malamadré",
         "artist": "JuL",
-        "src": "https://archive.org/download/AvantUsineVol3/3%20-%20Malamadre%CC%81.mp3",
+        "src": "https://archive.org/download/AvantUsineVol3/03%20-%20Malamadre%CC%81.mp3",
         "filename": "3 - Malamadré.mp3",
-        "archiveFilename": "3 - Malamadré.mp3",
+        "archiveFilename": "03 - Malamadré.mp3",
         "genius": null
       },
       {
         "number": 4,
         "title": "Mal aimé",
         "artist": "JuL",
-        "src": "https://archive.org/download/AvantUsineVol3/4%20-%20Mal%20aime%CC%81.mp3",
+        "src": "https://archive.org/download/AvantUsineVol3/04%20-%20Mal%20aime%CC%81.mp3",
         "filename": "4 - Mal aimé.mp3",
-        "archiveFilename": "4 - Mal aimé.mp3",
+        "archiveFilename": "04 - Mal aimé.mp3",
         "genius": null
       },
       {
         "number": 5,
         "title": "On n’a pas le choix ( feat.Veazy )",
         "artist": "JuL",
-        "src": "https://archive.org/download/AvantUsineVol3/5%20-%20On%20n%E2%80%99a%20pas%20le%20choix%20%28%20feat.Veazy%20%29.mp3",
+        "src": "https://archive.org/download/AvantUsineVol3/05%20-%20On%20n%E2%80%99a%20pas%20le%20choix%20%28%20feat.Veazy%20%29.mp3",
         "filename": "5 - On n’a pas le choix ( feat.Veazy ).mp3",
-        "archiveFilename": "5 - On n’a pas le choix ( feat.Veazy ).mp3",
+        "archiveFilename": "05 - On n’a pas le choix ( feat.Veazy ).mp3",
         "genius": null
       },
       {
         "number": 6,
         "title": "wesh le clin’s ( feat.Soso maness )",
         "artist": "JuL",
-        "src": "https://archive.org/download/AvantUsineVol3/6%20-%20wesh%20le%20clin%E2%80%99s%20%28%20feat.Soso%20maness%20%29.mp3",
+        "src": "https://archive.org/download/AvantUsineVol3/06%20-%20wesh%20le%20clin%E2%80%99s%20%28%20feat.Soso%20maness%20%29.mp3",
         "filename": "6 - wesh le clin’s ( feat.Soso maness ).mp3",
-        "archiveFilename": "6 - wesh le clin’s ( feat.Soso maness ).mp3",
+        "archiveFilename": "06 - wesh le clin’s ( feat.Soso maness ).mp3",
         "genius": null
       },
       {
         "number": 7,
         "title": "Ça m’a mis dedans ( feat.Nino )",
         "artist": "JuL",
-        "src": "https://archive.org/download/AvantUsineVol3/7%20-%20C%CC%A7a%20m%E2%80%99a%20mis%20dedans%20%28%20feat.Nino%20%29.mp3",
+        "src": "https://archive.org/download/AvantUsineVol3/07%20-%20C%CC%A7a%20m%E2%80%99a%20mis%20dedans%20%28%20feat.Nino%20%29.mp3",
         "filename": "7 - Ça m’a mis dedans ( feat.Nino ).mp3",
-        "archiveFilename": "7 - Ça m’a mis dedans ( feat.Nino ).mp3",
+        "archiveFilename": "07 - Ça m’a mis dedans ( feat.Nino ).mp3",
         "genius": null
       },
       {
         "number": 8,
         "title": "Qu’est-c’qu’tu connais de ma vie",
         "artist": "JuL",
-        "src": "https://archive.org/download/AvantUsineVol3/8%20-%20Qu%E2%80%99est-c%E2%80%99qu%E2%80%99tu%20connais%20de%20ma%20vie.mp3",
+        "src": "https://archive.org/download/AvantUsineVol3/08%20-%20Qu%E2%80%99est-c%E2%80%99qu%E2%80%99tu%20connais%20de%20ma%20vie.mp3",
         "filename": "8 - Qu’est-c’qu’tu connais de ma vie.mp3",
-        "archiveFilename": "8 - Qu’est-c’qu’tu connais de ma vie.mp3",
+        "archiveFilename": "08 - Qu’est-c’qu’tu connais de ma vie.mp3",
         "genius": null
       },
       {
         "number": 9,
         "title": "J’trace",
         "artist": "JuL",
-        "src": "https://archive.org/download/AvantUsineVol3/9%20-%20J%E2%80%99trace.mp3",
+        "src": "https://archive.org/download/AvantUsineVol3/09%20-%20J%E2%80%99trace.mp3",
         "filename": "9 - J’trace.mp3",
-        "archiveFilename": "9 - J’trace.mp3",
+        "archiveFilename": "09 - J’trace.mp3",
         "genius": null
       },
       {
@@ -49321,6 +49325,10 @@ async function catalogLoad(){
 }
 await catalogLoad();
 
+// Repair only the eight verified legacy URLs, including cached/published catalog copies.
+const VERIFIED_AUDIO_REPAIRS={"https://archive.org/download/AvantUsineVol3/2%20-%20Re%CC%81volution.mp3": "https://archive.org/download/AvantUsineVol3/02%20-%20Re%CC%81volution.mp3", "https://archive.org/download/AvantUsineVol3/3%20-%20Malamadre%CC%81.mp3": "https://archive.org/download/AvantUsineVol3/03%20-%20Malamadre%CC%81.mp3", "https://archive.org/download/AvantUsineVol3/4%20-%20Mal%20aime%CC%81.mp3": "https://archive.org/download/AvantUsineVol3/04%20-%20Mal%20aime%CC%81.mp3", "https://archive.org/download/AvantUsineVol3/5%20-%20On%20n%E2%80%99a%20pas%20le%20choix%20%28%20feat.Veazy%20%29.mp3": "https://archive.org/download/AvantUsineVol3/05%20-%20On%20n%E2%80%99a%20pas%20le%20choix%20%28%20feat.Veazy%20%29.mp3", "https://archive.org/download/AvantUsineVol3/6%20-%20wesh%20le%20clin%E2%80%99s%20%28%20feat.Soso%20maness%20%29.mp3": "https://archive.org/download/AvantUsineVol3/06%20-%20wesh%20le%20clin%E2%80%99s%20%28%20feat.Soso%20maness%20%29.mp3", "https://archive.org/download/AvantUsineVol3/7%20-%20C%CC%A7a%20m%E2%80%99a%20mis%20dedans%20%28%20feat.Nino%20%29.mp3": "https://archive.org/download/AvantUsineVol3/07%20-%20C%CC%A7a%20m%E2%80%99a%20mis%20dedans%20%28%20feat.Nino%20%29.mp3", "https://archive.org/download/AvantUsineVol3/8%20-%20Qu%E2%80%99est-c%E2%80%99qu%E2%80%99tu%20connais%20de%20ma%20vie.mp3": "https://archive.org/download/AvantUsineVol3/08%20-%20Qu%E2%80%99est-c%E2%80%99qu%E2%80%99tu%20connais%20de%20ma%20vie.mp3", "https://archive.org/download/AvantUsineVol3/9%20-%20J%E2%80%99trace.mp3": "https://archive.org/download/AvantUsineVol3/09%20-%20J%E2%80%99trace.mp3"};
+for(const v of COLLECTION)for(const t of v.tracks){if(VERIFIED_AUDIO_REPAIRS[t.src]){t.src=VERIFIED_AUDIO_REPAIRS[t.src];t.archiveFilename=decodeURIComponent(t.src.split("/").pop());}}
+
 // Palette follows the selected recording's cover, including future volumes.
 function applyLyricsTheme(volume){
  const palettes=[['#ff9a91','#190f10'],['#b3ed80','#10170d'],['#d0a4ff','#160f20'],['#f2ce7b','#1b160c'],['#eeeae2','#141414'],['#ffb279','#1c120c'],['#86d9f4','#0d171c'],['#f4a0d7','#1c0f18']];
@@ -49999,6 +50007,10 @@ function initMajorSocial({getClient,getUser,isCreator}) {
 (()=>{
  const page=element('section','page');page.id='historique';page.hidden=true;const head=element('div','page-heading'),h=element('h1','','Le site évolue.');h.tabIndex=-1;head.append(element('p','eyebrow','Historique des mises à jour'),h,element('p','lede','Les nouveautés, les changements visuels et les corrections, des premières archives à la communauté.'));page.append(head);const list=element('div','major-changelog');page.append(list);$('communaute').after(page);
  const releases=[
+  ['V10.1 · Corrections après vérification','28 septembre 2026','Lisibilité et liens audio corrigés.',[
+   'Lecteur immersif : flèches, minutages et informations secondaires plus lisibles en mode clair.',
+   'Volume 3 : réparation des adresses des pistes 2 à 9 pour correspondre aux noms des fichiers Archive.org, sans changer les titres ni les favoris.'
+  ]],
   ['V10 · Édition Communauté','28 septembre 2026','La plus grosse mise à jour du site à ce jour.',[
    'Comptes : affichage et masquage des mots de passe, sans perdre la saisie.',
    'Profils : photo et bannière importées depuis ton appareil, aperçu, présentation, couleur et trois ambiances visuelles. Les images sont optimisées avant enregistrement.',
