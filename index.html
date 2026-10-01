@@ -175,6 +175,10 @@ html[data-theme=light] :is(.au-immersive-seek span,.au-immersive-volume,.au-imme
 html[data-theme=light] .au-development-notice{background:#fff1dc;border-color:#c2a685;border-left-color:#ae5622;color:#402912}html[data-theme=light] .au-development-notice p{color:#65452b}html[data-theme=light] .au-development-notice button{color:#402912;border-color:#9b7354}html[data-theme=light] .au-development-notice button:hover{background:#f0dcc0}html[data-theme=light] .au-development-notice button:focus-visible{outline-color:#91401b}
 @media(max-width:1149px){.au-development-notice{width:calc(100% - 60px);margin-top:22px}}
 @media(max-width:700px){.au-development-notice{width:auto;margin:18px max(24px,env(safe-area-inset-right)) 0 max(24px,env(safe-area-inset-left));padding:18px;align-items:flex-start;flex-direction:column;gap:14px;border-radius:12px;font-size:12px}.au-development-notice strong{font-size:14px}.au-development-notice button{align-self:flex-start}}
+
+.sync-file-drop{border:2px dashed #98716d;border-radius:14px;padding:18px;margin:16px 0;background:rgba(255,255,255,.03)}
+.sync-file-drop.is-dragging{border-color:#ff7c6e;background:rgba(255,124,110,.12)}
+.sync-file-drop input{max-width:100%}
 </style>
 </head>
 <body>
@@ -50061,6 +50065,12 @@ function initMajorSocial({getClient,getUser,isCreator}) {
 (()=>{
  const page=element('section','page');page.id='historique';page.hidden=true;const head=element('div','page-heading'),h=element('h1','','Le site évolue.');h.tabIndex=-1;head.append(element('p','eyebrow','Historique des mises à jour'),h,element('p','lede','Les nouveautés, les changements visuels et les corrections, des premières archives à la communauté.'));page.append(head);const list=element('div','major-changelog');page.append(list);$('communaute').after(page);
  const releases=[
+  ['Import de paroles synchronisées','1 octobre 2026','Propose une synchronisation depuis un fichier, puis fais-la valider.',[
+   'Import de fichiers JSON dans l’atelier, initialement proposé au créateur puis ouvert à tous les membres connectés.',
+   'Ajout du glisser-déposer et des fichiers LRC avec horodatages de lignes ; progression des mots estimée pour ce format.',
+   'Vérification du morceau, des paroles, de la durée et des timings avant import.',
+   'Les fichiers importés restent des brouillons ; les contributions restent privées jusqu’à validation dans le compte créateur. Les synchronisations publiées peuvent être retirées.'
+  ]],
  ['13v02 · Paroles et gestion intelligente','30 septembre 2026','Nettoyage prudent, ordre des pistes et comparaison audio.',[
  'Nomination et retrait des modérateurs directement depuis leur profil par le créateur. Leur rôle se limite aux synchronisations et ajouts de paroles.',
    'Les titres de section reconnus sont retirés automatiquement de l’atelier, y compris pour les anciens textes. Les paroles originales sont conservées.',
@@ -50176,6 +50186,28 @@ function createKaraokeEditor({host,lines,audio,play,initial,review,onchange}){
  host.append(toolbar,status,board,hint,edits);select(0);tick();return {get curves(){return curves;},select,setCurves(next,duration){if(!AU_KARAOKE.validate(lines,next,duration))throw Error('Timings invalides.');curves=next.map(points=>points.map(point=>[...point]));onchange(curves);select(0);},dispose(){disposed=true;cancelAnimationFrame(frame);audio.removeEventListener('pause',pause);audio.removeEventListener('seeking',pause);}};
 }
 
+function parseSyncFile(text,name,key,lines,duration){
+ text=text.replace(/^\uFEFF/,'');
+ if(/\.json$/i.test(name))return JSON.parse(text);
+ if(!/\.lrc$/i.test(name))throw Error('Choisis un fichier .lrc ou .json.');
+ if(!Number.isFinite(duration)||duration<=0)throw Error('Attends le chargement de l’audio puis réimporte le fichier LRC.');
+ const entries=[];let offset=0;
+ for(const raw of text.split(/\r?\n/)){
+  const line=raw.trim();if(!line)continue;
+  const shift=line.match(/^\[offset:([+-]?\d+)\]$/i);if(shift){offset=Number(shift[1])/1000;continue;}
+  if(/^\[(?:ar|al|ti|au|by|re|ve|length):[^\]]*\]$/i.test(line))continue;
+  const tags=[...line.matchAll(/\[(\d+):([0-5]\d)(?:[.:](\d{1,3}))?\]/g)];
+  if(!tags.length||tags[0].index!==0)throw Error('Chaque ligne du fichier LRC doit commencer par un horodatage.');
+  const prefix=tags.map(t=>t[0]).join('');if(!line.startsWith(prefix))throw Error('Format LRC non pris en charge.');
+  const lyric=line.slice(prefix.length).trim();if(!lyric)continue;
+  if(/<\d+:\d/.test(lyric))throw Error('Les fichiers LRC enrichis mot par mot ne sont pas encore pris en charge.');
+  for(const tag of tags)entries.push({text:lyric,time:Number(tag[1])*60+Number(tag[2])+Number('0.'+(tag[3]||'0'))});
+ }
+ entries.sort((a,b)=>a.time-b.time);entries.forEach(e=>e.time+=offset);
+ if(entries.length!==lines.length||entries.some((entry,i)=>entry.text.normalize('NFC')!==lines[i].trim().normalize('NFC')))throw Error('Le texte LRC doit correspondre exactement aux lignes de paroles de ce morceau.');
+ const curves=entries.map((entry,i)=>[[0,entry.time],[Array.from(lines[i]).length,(i+1<entries.length?entries[i+1].time:duration)-.001]]);
+ return {track:key,lines:[...lines],duration,curves};
+}
 function validateSyncImport(data, key, lines, duration){
  if(!data||data.track!==key)throw Error('Ce fichier correspond à un autre morceau.');
  if(!Array.isArray(data.lines)||data.lines.length!==lines.length||data.lines.some((line,i)=>line!==lines[i]))throw Error('Les paroles du fichier diffèrent de celles de cet atelier.');
@@ -50233,17 +50265,25 @@ function initActivationSync({getClient,getUser,isCreator}){
   if(!review)try{const saved=JSON.parse(localStorage.getItem(draftKey(work))||'null');if(Array.isArray(saved?.curves)&&saved.curves.length===work.lines.length)work.curves=saved.curves;}catch{}
   if(review)studio.d.dataset.auAccess='moderator';else delete studio.d.dataset.auAccess;chooser.d.close();studio.body.replaceChildren(E('h3','',item.t.title),E('p','au-note','Les intitulés de section reconnus sont masqués ; le texte original est conservé. Suis les mots au rythme du chant.'),work.clock);studio.open();
   work.editor=createKaraokeEditor({host:studio.body,lines:work.lines,audio,play:async()=>{if(current().key!==key)throw Error('Reviens au morceau de cet atelier.');await startPlayback();},initial:work.curves,review:!!review,onchange:curves=>{work.curves=curves;work.times=curves.map(p=>p?.[0]?.[1]??null);saveDraft();}});
-  if(isCreator()&&!review){
-   const importField=field('Importer une synchronisation de test','file');importField.i.accept='.json,application/json';
-   importField.i.addEventListener('change',async()=>{const w=work,file=importField.i.files?.[0];if(!file)return;try{
+  if(!review){
+   const drop=E('div','sync-file-drop'),hint=E('p','au-note','Glisse ici un fichier .lrc ou .json, ou choisis-le ci-dessous. Il restera privé jusqu’à validation.');
+   const importField=field('Choisir un fichier de paroles synchronisées','file');importField.i.accept='.json,.lrc,application/json,text/plain';
+   drop.append(hint,importField.l);let importing=false;
+   async function importFile(file){const w=work;if(!file||importing)return;importing=true;importField.i.disabled=true;try{
     if(file.size>2000000)throw Error('Le fichier dépasse 2 Mo.');
-    const data=JSON.parse(await file.text());
-    if(g!==epoch||work!==w||!studio.d.open||!isCreator())return;
+    const text=await file.text();
+    if(g!==epoch||work!==w||!studio.d.open||!getUser()||w.submitted)return;
+    const data=parseSyncFile(text,file.name,w.key,w.lines,audio.duration);
     const curves=validateSyncImport(data,w.key,w.lines,audio.duration);
     w.editor.setCurves(curves,data.duration);
-    say('Timings de test importés. Tu peux les écouter, les corriger puis les envoyer pour validation.');
-   }catch(err){if(g===epoch&&work===w&&studio.d.open)say(err instanceof SyntaxError?'Le fichier JSON est illisible.':err.message);}finally{importField.i.value='';}});
-   studio.body.append(importField.l);
+    hint.textContent='Fichier importé : '+file.name+' · '+w.lines.length+' lignes. Écoute le résultat puis clique sur « Envoyer pour validation ». '+(/\.lrc$/i.test(file.name)?'Les fichiers LRC donnent les débuts de ligne ; la progression des mots est estimée.':'');
+    say('Paroles synchronisées importées. Rien n’est publié avant validation.');
+   }catch(err){if(g===epoch&&work===w&&studio.d.open)say(err instanceof SyntaxError?'Le fichier JSON est illisible.':err.message);}finally{importing=false;importField.i.disabled=false;importField.i.value='';}}
+   importField.i.addEventListener('change',()=>importFile(importField.i.files?.[0]));
+   for(const event of ['dragenter','dragover'])drop.addEventListener(event,e=>{e.preventDefault();drop.classList.add('is-dragging');if(e.dataTransfer)e.dataTransfer.dropEffect='copy';});
+   drop.addEventListener('dragleave',e=>{if(!drop.contains(e.relatedTarget))drop.classList.remove('is-dragging');});
+   drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('is-dragging');const files=e.dataTransfer?.files;if(files?.length!==1){say('Dépose un seul fichier de paroles synchronisées.');return;}importFile(files[0]);});
+   studio.body.append(drop);
   }
   const feedback=field('Message au contributeur (facultatif)','textarea');feedback.i.maxLength=1000;
   async function send(approve){const w=work,duration=Number.isFinite(audio.duration)?audio.duration:w.review?.duration;if(!AU_KARAOKE.validate(w.lines,w.editor.curves,duration))throw Error('Termine chaque ligne dans l’ordre du morceau. Tu peux refaire les lignes incomplètes.');if(w.review){await rpc('au_sync','approve',{id:w.review.id,revision:w.review.revision,curves:w.editor.curves,note:feedback.i.value});}else await rpc('au_sync','submit',{track:w.key,hash:w.hash,curves:w.editor.curves,duration});if(g!==epoch)return;if(!w.review)try{localStorage.removeItem(draftKey(w));}catch{}w.submitted=true;studio.d.close();audio.pause();say(w.review?'Synchronisation publiée pour tous.':'Contribution envoyée au créateur pour vérification.');publicKey='';await loadPublished(true);}
