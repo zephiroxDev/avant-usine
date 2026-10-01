@@ -50173,9 +50173,16 @@ function createKaraokeEditor({host,lines,audio,play,initial,review,onchange}){
  function select(n){audio.pause();recording=false;armed=false;waitStart=false;index=Math.max(0,Math.min(lines.length-1,n));AU_KARAOKE.text(board,lines[index]);hint.textContent='Ligne '+(index+1)+' / '+lines.length+' · '+curves.filter(p=>p.length>1).length+' enregistrées. Au clavier, Espace avance d’un caractère.';status.textContent=curves[index].length?'Cette ligne possède un enregistrement. Tu peux la refaire.':'Appuie sur « Commencer », puis suis le texte. Plus besoin de valider chaque ligne.';correction();}
  const pause=()=>{recording=false;};audio.addEventListener('pause',pause);audio.addEventListener('seeking',pause);
  function tick(){if(disposed)return;playback.textContent=audio.paused?'Lire':'Pause';capture.setAttribute('aria-pressed',String(recording));board.classList.toggle('is-recording',armed);AU_KARAOKE.paint(board,AU_KARAOKE.position(curves[index],audio.currentTime));frame=requestAnimationFrame(tick);}
- host.append(toolbar,status,board,hint,edits);select(0);tick();return {get curves(){return curves;},select,dispose(){disposed=true;cancelAnimationFrame(frame);audio.removeEventListener('pause',pause);audio.removeEventListener('seeking',pause);}};
+ host.append(toolbar,status,board,hint,edits);select(0);tick();return {get curves(){return curves;},select,setCurves(next,duration){if(!AU_KARAOKE.validate(lines,next,duration))throw Error('Timings invalides.');curves=next.map(points=>points.map(point=>[...point]));onchange(curves);select(0);},dispose(){disposed=true;cancelAnimationFrame(frame);audio.removeEventListener('pause',pause);audio.removeEventListener('seeking',pause);}};
 }
 
+function validateSyncImport(data, key, lines, duration){
+ if(!data||data.track!==key)throw Error('Ce fichier correspond à un autre morceau.');
+ if(!Array.isArray(data.lines)||data.lines.length!==lines.length||data.lines.some((line,i)=>line!==lines[i]))throw Error('Les paroles du fichier diffèrent de celles de cet atelier.');
+ if(!AU_KARAOKE.validate(lines,data.curves,data.duration))throw Error('Le fichier contient des timings incomplets ou invalides.');
+ if(Number.isFinite(duration)&&Math.abs(data.duration-duration)>.5)throw Error('La durée du fichier ne correspond pas à cet audio.');
+ return data.curves.map(points=>points.map(point=>[...point]));
+}
 function initActivationSync({getClient,getUser,isCreator}){
  const canReview=()=>isCreator()||AU_ROLE.canModerate();const E=element,B=button;let epoch=0,view=0,features=[],work=null,active=-1,published=null,publicRequest=0,publicKey='',automatic=true;
  const note=E('p','au-note sync-notice');note.setAttribute('role','status');
@@ -50226,6 +50233,18 @@ function initActivationSync({getClient,getUser,isCreator}){
   if(!review)try{const saved=JSON.parse(localStorage.getItem(draftKey(work))||'null');if(Array.isArray(saved?.curves)&&saved.curves.length===work.lines.length)work.curves=saved.curves;}catch{}
   if(review)studio.d.dataset.auAccess='moderator';else delete studio.d.dataset.auAccess;chooser.d.close();studio.body.replaceChildren(E('h3','',item.t.title),E('p','au-note','Les intitulés de section reconnus sont masqués ; le texte original est conservé. Suis les mots au rythme du chant.'),work.clock);studio.open();
   work.editor=createKaraokeEditor({host:studio.body,lines:work.lines,audio,play:async()=>{if(current().key!==key)throw Error('Reviens au morceau de cet atelier.');await startPlayback();},initial:work.curves,review:!!review,onchange:curves=>{work.curves=curves;work.times=curves.map(p=>p?.[0]?.[1]??null);saveDraft();}});
+  if(isCreator()&&!review){
+   const importField=field('Importer une synchronisation de test','file');importField.i.accept='.json,application/json';
+   importField.i.addEventListener('change',async()=>{const w=work,file=importField.i.files?.[0];if(!file)return;try{
+    if(file.size>2000000)throw Error('Le fichier dépasse 2 Mo.');
+    const data=JSON.parse(await file.text());
+    if(g!==epoch||work!==w||!studio.d.open||!isCreator())return;
+    const curves=validateSyncImport(data,w.key,w.lines,audio.duration);
+    w.editor.setCurves(curves,data.duration);
+    say('Timings de test importés. Tu peux les écouter, les corriger puis les envoyer pour validation.');
+   }catch(err){if(g===epoch&&work===w&&studio.d.open)say(err instanceof SyntaxError?'Le fichier JSON est illisible.':err.message);}finally{importField.i.value='';}});
+   studio.body.append(importField.l);
+  }
   const feedback=field('Message au contributeur (facultatif)','textarea');feedback.i.maxLength=1000;
   async function send(approve){const w=work,duration=Number.isFinite(audio.duration)?audio.duration:w.review?.duration;if(!AU_KARAOKE.validate(w.lines,w.editor.curves,duration))throw Error('Termine chaque ligne dans l’ordre du morceau. Tu peux refaire les lignes incomplètes.');if(w.review){await rpc('au_sync','approve',{id:w.review.id,revision:w.review.revision,curves:w.editor.curves,note:feedback.i.value});}else await rpc('au_sync','submit',{track:w.key,hash:w.hash,curves:w.editor.curves,duration});if(g!==epoch)return;if(!w.review)try{localStorage.removeItem(draftKey(w));}catch{}w.submitted=true;studio.d.close();audio.pause();say(w.review?'Synchronisation publiée pour tous.':'Contribution envoyée au créateur pour vérification.');publicKey='';await loadPublished(true);}
   if(review){studio.body.append(feedback.l,action('Approuver et publier',()=>send(true),'button'),action('Renvoyer au contributeur',async()=>{await rpc('au_sync','reject',{id:review.id,revision:review.revision,note:feedback.i.value});studio.d.close();await openQueue();}));}else studio.body.append(action('Envoyer pour validation',()=>send(false),'button'));
