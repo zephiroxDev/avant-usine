@@ -186,6 +186,21 @@ html[data-theme=light] .au-development-notice{background:#fff1dc;border-color:#c
 .karaoke-record-line.is-done{opacity:.8}
 .karaoke-continuous.is-recording{touch-action:none}
 @media(max-width:600px){.karaoke-continuous{padding:12px 6px;font-size:25px;max-height:48vh}.karaoke-record-line{padding:12px 8px}}
+
+.au-immersive.has-lyrics{width:min(1380px,calc(100% - 30px))}
+.au-immersive.has-lyrics .au-immersive-body{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:start;gap:30px;padding:26px}
+.au-immersive.has-lyrics .au-immersive-body>:is(canvas,.au-motion-cover){position:sticky;top:20px;width:100%;margin:0}
+.au-immersive.has-lyrics .au-immersive-copy h3{font-size:clamp(24px,3vw,38px)}
+.au-immersive.has-lyrics .au-immersive-transport{margin:14px 0}
+.au-immersive-lyrics{margin-top:18px;text-align:left;--karaoke-ink:var(--lyrics-ink,#eeeae2);--karaoke-dim:#84738b}html[data-theme=light] .au-immersive-lyrics{--karaoke-ink:#231e1b;--karaoke-dim:#8b8077}
+.au-immersive-lyrics-note{font-size:12px;line-height:1.6;color:inherit;opacity:.75}
+.au-immersive-lyrics-scroll{height:clamp(220px,42vh,540px);overflow:auto;position:relative;overscroll-behavior:contain;margin-top:12px;scroll-behavior:auto;padding:10px 6px 30px}
+.au-immersive-lyrics-content{position:relative}
+.au-immersive-lyric-line{display:block;width:100%;text-align:left;border:0;background:transparent;color:inherit;font:inherit;font-size:clamp(19px,2.1vw,29px);font-weight:650;line-height:1.55;padding:12px 8px;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+button.au-immersive-lyric-line{opacity:.55;cursor:pointer}
+button.au-immersive-lyric-line.is-current{opacity:1;background:rgba(255,128,110,.09)}
+.au-immersive-lyric-line:focus-visible{outline:2px solid currentColor}
+@media(max-width:700px){.au-immersive.has-lyrics .au-immersive-body{grid-template-columns:minmax(0,.34fr) minmax(0,.66fr);gap:12px;padding:14px}.au-immersive.has-lyrics .au-immersive-copy{text-align:left}.au-immersive.has-lyrics .au-immersive-copy h3{font-size:22px}.au-immersive.has-lyrics .au-immersive-transport{gap:6px}.au-immersive.has-lyrics .au-art-play{width:48px;height:48px}.au-immersive.has-lyrics .au-art-control:not(.au-art-play){width:35px;height:35px}.au-immersive.has-lyrics .au-art-option{padding:8px;font-size:10px}.au-immersive.has-lyrics .au-immersive-options{gap:5px;margin-top:12px}.au-immersive.has-lyrics .au-immersive-lyric-line{font-size:18px;padding:9px 3px}.au-immersive.has-lyrics .au-immersive-lyrics-scroll{height:45vh}.au-immersive.has-lyrics .au-immersive-volume{font-size:10px}}
 </style>
 </head>
 <body>
@@ -49629,7 +49644,7 @@ window.addEventListener('message',event=>{
  if(Number.isFinite(d.height))frame.style.height=Math.max(180,Math.min(30000,d.height+16))+'px';
  $('lyricsState').textContent=d.ready?(frame.dataset.manual==='true'?'Paroles ajoutées par le créateur · Défilement manuel.':'Paroles fournies par Genius · Défilement manuel.'):'Si les paroles ne s’affichent pas, utilise le lien Genius ci-dessous.';
 });
-$('openLyrics').addEventListener('click',()=>navigate('paroles'));
+$('openLyrics').addEventListener('click',()=>{if($('auImmersiveDialog')?.open)window.dispatchEvent(new Event('au:immersive-toggle-lyrics'));else navigate('paroles');});
 
 $ ('albumTitle').after(button('button secondary catalog-edit-button','Modifier cet album',()=>window.dispatchEvent(new CustomEvent('au:edit-volume',{detail:COLLECTION[selectedVolume].number}))));
 renderHome();renderCollection();renderDownloads();renderAlbum();updateNow();navigate('accueil',false);
@@ -49673,7 +49688,7 @@ const AU_GENIUS_SYNC=(()=>{
  const cache=new Map(),pending=new Map();
  window.addEventListener('message',e=>{const f=$('lyricsFrame'),d=e.data;if(e.source!==f.contentWindow||d?.type!=='avant-usine-sync-text'||d.request!==f.dataset.request||typeof d.text!=='string'||d.text.length>40000)return;const key=COLLECTION[playingVolume].number+':'+track().number;if(!track().genius?.id||f.dataset.manual==='true')return;cache.set(key,d.text);pending.get(key)?.(d.text);});
  async function read(item){if(cache.has(item.key))return cache.get(item.key);selectTrack(item.vi,item.ti,false);renderLyrics();const f=$('lyricsFrame');return new Promise((resolve,reject)=>{let timer;const done=t=>{clearTimeout(timer);pending.delete(item.key);resolve(t);};pending.set(item.key,done);timer=setTimeout(()=>{pending.delete(item.key);reject(Error('Genius ne transmet pas les paroles actuellement. Réessaie quand son widget est chargé.'));},16000);f.contentWindow?.postMessage({type:'avant-usine-sync-request',request:f.dataset.request},'*');});}
- return {read};
+ return {read,peek:key=>cache.get(key)};
 })();
 
 // Audio-only candidates, never automatic deletion. Three independent excerpts.
@@ -49848,6 +49863,41 @@ const discoveryCommunityModule=(()=>{
 function initDiscoveryCommunity(){discoveryCommunityModule.init();}
 
 /* Galerie, écoute immersive et installation. Appeler initPwaGallery() après le lecteur. */
+function initImmersiveLyrics({dialog,copy,button,make,action}){
+ let enabled=false,automatic=true,key='',signature='',sync=null,latest=null,nodes=[],frame=0,active=-1;
+ const panel=make('section','au-immersive-lyrics'),note=make('p','au-immersive-lyrics-note'),viewport=make('div','au-immersive-lyrics-scroll'),content=make('div','au-immersive-lyrics-content');
+ panel.hidden=true;panel.setAttribute('aria-label','Paroles du morceau');note.setAttribute('role','status');viewport.tabIndex=0;viewport.setAttribute('aria-label','Paroles défilantes');viewport.append(content);
+ const follow=action('au-art-option','Défilement automatique : activé',()=>{automatic=!automatic;updateFollow();tick();});follow.setAttribute('aria-pressed','true');panel.append(note,follow,viewport);copy.append(panel);
+ function songKey(){const t=track();return t?COLLECTION[playingVolume].number+':'+t.number:'';}
+ function updateFollow(){follow.textContent='Défilement automatique : '+(automatic?'activé':'en pause');follow.setAttribute('aria-pressed',String(automatic));}
+ function pauseFollow(){if(automatic){automatic=false;updateFollow();}}
+ viewport.addEventListener('wheel',pauseFollow,{passive:true});viewport.addEventListener('touchstart',pauseFollow,{passive:true});viewport.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key))pauseFollow();});
+ function requestWidget(){const t=track(),f=$('lyricsFrame');if(enabled&&dialog.open&&t?.genius?.id&&f.dataset.manual!=='true')f.contentWindow?.postMessage({type:'avant-usine-sync-request',request:f.dataset.request},'*');}
+ function rebuild(text,data){sync=data||null;active=-1;const lines=data?.lines||AU_LYRICS.lines(text);content.replaceChildren();nodes=lines.map((line,i)=>{const row=make(data?'button':'p','au-immersive-lyric-line',line);if(data){row.type='button';row.setAttribute('aria-label',clock(data.times[i])+' — '+line);row.addEventListener('click',()=>{if(Number.isFinite(audio.duration))audio.currentTime=data.times[i];tick();});if(data.curves)AU_KARAOKE.text(row,line);}content.append(row);return row;});
+  note.textContent=data?'Paroles synchronisées avec le morceau.':lines.length?'Paroles non synchronisées · Défilement approximatif.':track()?.genius?.id?'Chargement des paroles…':'Pas encore de paroles pour ce morceau. Elles apparaîtront ici dès qu’elles seront ajoutées.';
+  follow.hidden=!lines.length;viewport.scrollTop=0;tick();
+ }
+ function refresh(force=false){if(!enabled||!dialog.open)return;const t=track(),nextKey=songKey(),nextSignature=nextKey+'|'+(t?.lyrics||'')+'|'+(t?.genius?.id||'');
+  if(nextSignature!==signature||force){const changed=nextKey!==key;key=nextKey;signature=nextSignature;if(changed){automatic=true;updateFollow();}const data=latest?.track===key?latest.data:null;rebuild(t?.lyrics||AU_GENIUS_SYNC.peek(key)||'',data);if(changed){renderLyrics();requestWidget();}}
+ }
+ function scrollTo(top){viewport.scrollTo({top:Math.max(0,top),behavior:'auto'});}
+ function tick(){if(!enabled||!dialog.open||document.hidden||!nodes.length)return;
+  if(sync){let current=-1;for(let n=0;n<sync.times.length;n++){if(audio.currentTime>=sync.times[n])current=n;else break;}if(sync.curves)nodes.forEach((node,n)=>AU_KARAOKE.paint(node,AU_KARAOKE.position(sync.curves[n],audio.currentTime)));if(current!==active){active=current;nodes.forEach((node,n)=>{node.classList.toggle('is-current',n===active);if(n===active)node.setAttribute('aria-current','true');else node.removeAttribute('aria-current');});}if(automatic&&nodes[active])scrollTo(nodes[active].offsetTop-content.offsetTop-viewport.clientHeight*.35);
+  }else if(automatic&&Number.isFinite(audio.duration)&&audio.duration>0){const intro=Math.min(8,audio.duration*.06),end=audio.duration*.95,ratio=Math.max(0,Math.min(1,(audio.currentTime-intro)/Math.max(1,end-intro)));scrollTo(Math.max(0,viewport.scrollHeight-viewport.clientHeight)*ratio);}
+ }
+ function animate(){cancelAnimationFrame(frame);frame=0;if(!enabled||!dialog.open||audio.paused||document.hidden)return;tick();frame=requestAnimationFrame(animate);}
+ function toggle(){enabled=!enabled;dialog.classList.toggle('has-lyrics',enabled);panel.hidden=!enabled;button.setAttribute('aria-pressed',String(enabled));button.textContent=enabled?'Masquer les paroles':'Paroles';if(enabled){refresh(true);renderLyrics();requestWidget();animate();}else{cancelAnimationFrame(frame);frame=0;}}
+ button.setAttribute('aria-pressed','false');button.textContent='Paroles';button.setAttribute('aria-controls','auImmersiveLyrics');panel.id='auImmersiveLyrics';
+ window.addEventListener('au:immersive-toggle-lyrics',toggle);
+ window.addEventListener('au:sync-published',e=>{latest=e.detail;if(enabled&&dialog.open&&latest?.track===songKey()){key=songKey();rebuild(track()?.lyrics||AU_GENIUS_SYNC.peek(key)||'',latest.data);}});
+ window.addEventListener('au:lyrics-render',()=>queueMicrotask(()=>refresh()));
+ $('lyricsFrame').addEventListener('load',requestWidget);
+ window.addEventListener('message',e=>{const f=$('lyricsFrame'),d=e.data;if(e.source!==f.contentWindow||d?.request!==f.dataset.request||!enabled||!dialog.open)return;if(d.type==='avant-usine-lyrics'&&d.ready){requestWidget();return;}if(d.type==='avant-usine-sync-text'&&typeof d.text==='string'&&d.text.length<=40000&&key===songKey()&&!sync&&track()?.genius?.id&&f.dataset.manual!=='true')rebuild(d.text,null);});
+ for(const name of ['timeupdate','seeked','loadedmetadata','durationchange'])audio.addEventListener(name,()=>{refresh();tick();});audio.addEventListener('play',animate);audio.addEventListener('pause',()=>{cancelAnimationFrame(frame);frame=0;tick();});document.addEventListener('visibilitychange',()=>{refresh();animate();});
+ dialog.addEventListener('close',()=>{cancelAnimationFrame(frame);frame=0;});
+ return {toggle,refresh(){refresh();tick();animate();}};
+}
+
 function initPwaGallery() {
  if(document.getElementById('auGalleryDialog'))return;
  const make=(tag,classes,text)=>{const e=document.createElement(tag);if(classes)e.className=classes;if(text!==undefined)e.textContent=text;return e;};
@@ -49896,12 +49946,14 @@ function initPwaGallery() {
  seek.addEventListener('change',()=>{if(Number.isFinite(audio.duration))audio.currentTime=Math.max(0,Math.min(audio.duration,Number(seek.value)));immersiveSeeking=false;syncImmersive();});
  const options=make('div','au-immersive-options');
  const shuffleButton=action('au-art-option','Aléatoire',()=>{$('shuffle').click();syncImmersive();}),repeatButton=action('au-art-option','Répéter',()=>{$('repeat').click();syncImmersive();});
- const lyricsButton=action('au-art-option','Lire les paroles',()=>{immersive.close();navigate('paroles');});options.append(shuffleButton,repeatButton,lyricsButton);
+ const lyricsButton=action('au-art-option','Paroles',()=>immersiveLyrics.toggle());options.append(shuffleButton,repeatButton,lyricsButton);
  const volumeRow=make('label','au-immersive-volume-control'),volume=make('input');volume.type='range';volume.min=0;volume.max=1;volume.step=.02;volume.value=audio.volume;volume.setAttribute('aria-label','Volume sonore');volume.addEventListener('input',()=>{audio.volume=Number(volume.value);audio.muted=false;});volumeRow.append(make('span','','Volume'),volume);
  const immersiveStatus=make('p','au-immersive-status');immersiveStatus.setAttribute('role','status');
  immersiveCopy.append(immersiveArtist,immersiveTitle,immersiveVolume,transport,seekRow,options,volumeRow,immersiveStatus);immersiveBody.append(immersiveCanvas,immersiveCopy);immersive.append(immersiveBody);
+ const immersiveLyrics=initImmersiveLyrics({dialog:immersive,copy:immersiveCopy,button:lyricsButton,make,action});
  function syncImmersive(){
   if(!immersive.open)return;
+  immersiveLyrics.refresh();
   const t=track(),v=COLLECTION[playingVolume],on=playing(),hasTrack=!!t&&!!mediaURL(t.src),length=Number.isFinite(audio.duration)?audio.duration:0;
   immersiveArtist.textContent=t?.artist||'JuL';immersiveTitle.textContent=t?.title||'Choisis un morceau';immersiveVolume.textContent=v.title+(t?' · Piste '+number(t.number):'');
   if(lastCover!==playingVolume){drawCover(immersiveCanvas,v);immersiveCanvas.setAttribute('aria-label','Pochette — '+v.title);lastCover=playingVolume;}
@@ -50072,6 +50124,12 @@ function initMajorSocial({getClient,getUser,isCreator}) {
 (()=>{
  const page=element('section','page');page.id='historique';page.hidden=true;const head=element('div','page-heading'),h=element('h1','','Le site évolue.');h.tabIndex=-1;head.append(element('p','eyebrow','Historique des mises à jour'),h,element('p','lede','Les nouveautés, les changements visuels et les corrections, des premières archives à la communauté.'));page.append(head);const list=element('div','major-changelog');page.append(list);$('communaute').after(page);
  const releases=[
+  ['Immersion avec paroles','1 octobre 2026','La pochette et les paroles restent ensemble pendant l’écoute.',[
+   'Le bouton Paroles du mode immersion conserve la pochette à gauche et affiche le texte défilant à droite, y compris sur téléphone.',
+   'Les paroles synchronisées suivent les timings et la progression du morceau.',
+   'Les paroles non synchronisées défilent progressivement pendant l’écoute, avec une indication de défilement approximatif.',
+   'Défilement automatique désactivable et lecture manuelle possibles. Les paroles ajoutées plus tard apparaissent dans ce mode sans autre mise à jour.'
+  ]],
   ['Synchronisation en continu','1 octobre 2026','Suis le texte, l’atelier enchaîne les phrases pour toi.',[
    'Toutes les phrases restent affichées, avec la phrase active mise en évidence et la suivante déjà visible.',
    'Un seul démarrage : sélection, enregistrement et passage à la phrase suivante automatiques, sans boutons entre les phrases.',
@@ -50278,8 +50336,8 @@ function initActivationSync({getClient,getUser,isCreator}){
  }
  const toolbar=E('div','actions sync-toolbar');toolbar.append(action('Contribuer à la synchronisation',openChooser));$('lyricsState').after(toolbar);
  const synced=E('div','sync-player');synced.hidden=true;const follow= B('button secondary','Défilement automatique : activé',()=>{automatic=!automatic;follow.textContent='Défilement automatique : '+(automatic?'activé':'en pause');follow.setAttribute('aria-pressed',String(automatic));});follow.setAttribute('aria-pressed','true');const syncedLines=E('div','sync-player-lines');syncedLines.setAttribute('aria-label','Paroles synchronisées');synced.append(E('p','au-note','Synchronisation validée par le créateur'),follow,syncedLines);$('lyricsFrame').before(synced);
- function clearPlayer(){published=null;active=-1;synced.hidden=true;syncedLines.replaceChildren();$('lyricsFrame').hidden=!$('lyricsFrame').getAttribute('srcdoc');}
- async function loadPublished(force=false){const item=current(),key=item.key;if(!force&&key===publicKey)return;publicKey=key;const request=++publicRequest;clearPlayer();try{const data=await rpc('au_sync','published',{track:key});if(request!==publicRequest||current().key!==key||!data)return;published=data;synced.hidden=false;syncedLines.replaceChildren(...data.lines.map((line,i)=>{const b=B('sync-line',line,()=>{if(Number.isFinite(audio.duration))audio.currentTime=data.times[i];});b.setAttribute('aria-label',clock(data.times[i])+' — '+line);if(data.curves)AU_KARAOKE.text(b,line);return b;}));$('lyricsFrame').hidden=true;tick();}catch{/* Preserve the existing unsynchronised lyrics when the service is unavailable. */}}
+ function clearPlayer(){published=null;active=-1;window.dispatchEvent(new CustomEvent('au:sync-published',{detail:{track:current().key,data:null}}));synced.hidden=true;syncedLines.replaceChildren();$('lyricsFrame').hidden=!$('lyricsFrame').getAttribute('srcdoc');}
+ async function loadPublished(force=false){const item=current(),key=item.key;if(!force&&key===publicKey)return;publicKey=key;const request=++publicRequest;clearPlayer();try{const data=await rpc('au_sync','published',{track:key});if(request!==publicRequest||current().key!==key||!data)return;published=data;window.dispatchEvent(new CustomEvent('au:sync-published',{detail:{track:key,data}}));synced.hidden=false;syncedLines.replaceChildren(...data.lines.map((line,i)=>{const b=B('sync-line',line,()=>{if(Number.isFinite(audio.duration))audio.currentTime=data.times[i];});b.setAttribute('aria-label',clock(data.times[i])+' — '+line);if(data.curves)AU_KARAOKE.text(b,line);return b;}));$('lyricsFrame').hidden=true;tick();}catch{/* Preserve the existing unsynchronised lyrics when the service is unavailable. */}}
  function tick(){if(work&&studio.d.open&&current().key===work.key){work.clock.textContent=clock(audio.currentTime)+' / '+clock(audio.duration);}
   if(!published||publicKey!==current().key)return;if(route==='paroles')$('lyricsFrame').hidden=true;let i=-1;for(let n=0;n<published.times.length;n++){if(audio.currentTime>=published.times[n])i=n;else break;}if(published.curves)[...syncedLines.children].forEach((b,n)=>AU_KARAOKE.paint(b,AU_KARAOKE.position(published.curves[n],audio.currentTime)));if(i===active)return;active=i;[...syncedLines.children].forEach((b,n)=>{b.classList.toggle('is-current',n===i);if(n===i)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');});const b=syncedLines.children[i];if(b&&automatic&&route==='paroles')syncedLines.scrollTo({top:Math.max(0,b.offsetTop-syncedLines.offsetTop-syncedLines.clientHeight/2+b.offsetHeight/2),behavior:'auto'});
  }
