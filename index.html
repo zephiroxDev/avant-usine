@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#121212">
 <link rel="icon" href="./favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png"><link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
 <title>Avant l’Usine — La collection</title>
-<link rel="stylesheet" href="./styles-13v09.css">
+<link rel="stylesheet" href="./styles-13v10.css">
 </head>
 <body>
 <noscript><p class="noscript">Active JavaScript pour afficher la collection et écouter les morceaux.</p></noscript>
@@ -19,7 +19,7 @@
  <main id="main">
 <aside id="desktopAnnouncement" class="au-desktop-announcement" aria-labelledby="desktopAnnouncementTitle">
  <div><span class="au-desktop-tag">NOUVEAU · WINDOWS</span><h2 id="desktopAnnouncementTitle">Avant l’Usine existe maintenant en application.</h2><p>Installe la collection sur ton PC : même interface, mêmes morceaux et ton compte habituel. L’interface reste disponible sans connexion ; l’écoute en ligne et les contributions nécessitent Internet.</p></div>
- <div class="au-desktop-actions"><a class="button" href="https://github.com/zephiroxDev/avant-usine/releases/download/v0.1.0/Avant-Usine-Installation-0.1.0.exe">Télécharger l’application Windows</a><a class="text-button" href="https://github.com/zephiroxDev/avant-usine/releases/tag/v0.1.0" target="_blank" rel="noopener noreferrer">Version 0.1.0 · Windows 64 bits · Détails et version portable ↗</a></div>
+ <div class="au-desktop-actions"><a id="desktopDownload" class="button" href="https://github.com/zephiroxDev/avant-usine/releases">Télécharger l’application Windows</a><a id="desktopDownloadVersion" class="text-button" href="https://github.com/zephiroxDev/avant-usine/releases" target="_blank" rel="noopener noreferrer">Dernière version · Windows 64 bits · Détails et version portable ↗</a></div>
 </aside>
   <section class="page" id="accueil" aria-labelledby="homeTitle">
    <div class="hero"><div class="hero-copy"><p class="eyebrow">JuL · Les premiers sons</p><h1 id="homeTitle" tabindex="-1">AVANT<span>L’USINE.</span></h1><p class="lede">Les morceaux d’avant. Les souvenirs qui restent.<br>Explore la collection, volume après volume.</p><div class="actions"><button class="button" type="button" data-go="collection">Explorer la collection <span aria-hidden="true">↗</span></button><button class="button secondary" type="button" id="homePlay">Lancer l’écoute <span aria-hidden="true">▶</span></button></div></div>
@@ -105,6 +105,7 @@
 
 <audio id="audio" preload="none"></audio>
 <script src="./collection-13v08.js"></script>
-<script src="./app-13v09.js"></script>
+<script src="./app-13v10.js"></script>
+<script src="./release-download.js" defer></script>
 </body>
 </html>
