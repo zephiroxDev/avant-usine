@@ -1,9 +1,9 @@
 /* Cache uniquement l’interface locale. Les MP3, paroles et contributions restent en ligne. */
-const AU_CACHE='avant-usine-shell-15v01-lyrics-20261004';
+const AU_CACHE='avant-usine-shell-16v01-lyrics-20261004';
 const AU_BASE=new URL('./',self.location.href);
 const AU_INDEX=new URL('./index.html',AU_BASE).href;
 const AU_OFFLINE=new URL('./offline.html',AU_BASE).href;
-const AU_ASSETS=['./index.html','./release-download.js','./collection-13v08.js','./app-15v01.js','./styles-15v01.css','./cover-01.webp','./cover-02.webp','./cover-03.webp','./cover-04.webp','./cover-05.webp','./cover-06.webp','./cover-07.webp','./cover-08.webp','./offline.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'].map(p=>new URL(p,AU_BASE).href);
+const AU_ASSETS=['./index.html','./release-download.js','./collection-13v08.js','./app-16v01.js','./styles-16v01.css','./cover-01.webp','./cover-02.webp','./cover-03.webp','./cover-04.webp','./cover-05.webp','./cover-06.webp','./cover-07.webp','./cover-08.webp','./offline.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'].map(p=>new URL(p,AU_BASE).href);
 self.addEventListener('install',event=>event.waitUntil(caches.open(AU_CACHE).then(cache=>cache.addAll(AU_ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('avant-usine-shell-')&&key!==AU_CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
