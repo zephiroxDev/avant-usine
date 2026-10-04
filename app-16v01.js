@@ -669,10 +669,10 @@ function initPwaGallery() {
  immersive.addEventListener('close',()=>{immersiveSeeking=false;immersionRequested=false;if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});});
 
  const installDialog=dialog('auInstallDialog','Toujours à portée de main.','au-install-dialog');
- const installBody=make('div','au-install-body');installBody.append(make('p','','Ajoute Avant l’Usine à ton écran d’accueil pour retrouver le lecteur comme une application.'));
+ const installBody=make('div','au-install-body');installBody.append(make('p','','Ajoute Avant l’usine à ton écran d’accueil pour retrouver le lecteur comme une application.'));
  const installInstructions=make('p','au-install-instructions');const installStatus=make('p','au-install-status');installStatus.setAttribute('role','status');
  let deferredInstall=null;
- const installAction=action('button','Installer Avant l’Usine',async()=>{if(!deferredInstall)return;const prompt=deferredInstall;deferredInstall=null;installAction.hidden=true;await prompt.prompt();const choice=await prompt.userChoice;installStatus.textContent=choice.outcome==='accepted'?'Installation demandée. Tu retrouveras l’icône sur ton appareil.':'Tu pourras installer le site plus tard depuis le menu du navigateur.';});installAction.hidden=true;
+ const installAction=action('button','Installer Avant l’usine',async()=>{if(!deferredInstall)return;const prompt=deferredInstall;deferredInstall=null;installAction.hidden=true;await prompt.prompt();const choice=await prompt.userChoice;installStatus.textContent=choice.outcome==='accepted'?'Installation demandée. Tu retrouveras l’icône sur ton appareil.':'Tu pourras installer le site plus tard depuis le menu du navigateur.';});installAction.hidden=true;
  installBody.append(installInstructions,installAction,make('p','au-install-note','L’écoute des morceaux et les paroles nécessitent une connexion Internet.'),installStatus);installDialog.append(installBody);
  function installationHelp(){
   const standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -682,7 +682,7 @@ function initPwaGallery() {
  }
  const installOpen=action('text-button au-install-open','Installer le site ↗',installationHelp);document.querySelector('.footer')?.append(installOpen);
  window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;installAction.hidden=false;if(installDialog.open)installationHelp();});
- window.addEventListener('appinstalled',()=>{deferredInstall=null;installAction.hidden=true;installStatus.textContent='Avant l’Usine est installé. Bonne écoute !';});
+ window.addEventListener('appinstalled',()=>{deferredInstall=null;installAction.hidden=true;installStatus.textContent='Avant l’usine est installé. Bonne écoute !';});
  if(window.top===window&&/^https?:$/.test(location.protocol)){
   if(!document.querySelector('link[rel="manifest"]')){const manifest=make('link');manifest.rel='manifest';manifest.href='./manifest.webmanifest';document.head.append(manifest);}
   if(!document.querySelector('meta[name="theme-color"]')){const theme=make('meta');theme.name='theme-color';theme.content='#271336';document.head.append(theme);}
@@ -700,7 +700,7 @@ function initCatalogEditor({call,allowed}){
  const toolbar=element('div','actions'),select=document.createElement('select');select.setAttribute('aria-label','Volume à gérer');select.id='catalogSelect';
  const body=element('div','au-catalog-body'),form=element('form','au-catalog-form');form.noValidate=true;form.addEventListener('submit',e=>e.preventDefault());
  function field(label,id,type='text',hint=''){const wrap=element('label','au-catalog-field',label),input=document.createElement('input');input.id=id;input.type=type;if(hint){const note=element('small','au-note',hint);note.id=id+'Help';input.setAttribute('aria-describedby',note.id);wrap.append(input,note);}else wrap.append(input);form.append(wrap);return input;}
- const title=field('Nom du volume','catalogTitle','text','Exemple : Avant l’Usine — Volume 4');title.maxLength=150;
+ const title=field('Nom du volume','catalogTitle','text','Exemple : Avant l’usine — Volume 4');title.maxLength=150;
  const archive=field('Lien de l’album sur Archive.org','catalogArchive','url','Colle le lien de la page de ton album, puis clique sur Récupérer les morceaux.');
  const importButton=button('button secondary','Récupérer les morceaux',()=>busy(importArchive));form.append(importButton);
  const zip=field('Lien MEGA du ZIP (facultatif)','catalogZip','url');
@@ -835,7 +835,7 @@ function initMajorSocial({getClient,getUser,isCreator}) {
 (()=>{
  const page=element('section','page');page.id='historique';page.hidden=true;const head=element('div','page-heading'),h=element('h1','','Le site évolue.');h.tabIndex=-1;head.append(element('p','eyebrow','Historique des mises à jour'),h,element('p','lede','Les nouveautés, les changements visuels et les corrections, des premières archives à la communauté.'));page.append(head);const list=element('div','major-changelog');page.append(list);$('communaute').after(page);
  const releases=[
-["16 · Historiques séparés et espace équipe", "4 octobre 2026", "Lecture, synchronisation et outils privés mieux organisés.", ["Historique du site réservé aux changements Web ; historique Windows indépendant démarrant à 13v09.", "Pendant la synchronisation, le morceau reste verrouillé ; sa fin arrête la lecture sans effacer le travail. Retour à 00:00 disponible dans l’atelier.", "Une fin de paroles explicite est enregistrée pour les blocs. La dernière phrase s’efface progressivement avant les actions d’avis, de commentaire et d’explication. Les anciens timings sans fin explicite restent conservés.", "Immersion : pochette et paroles occupent chacune environ la moitié de la zone principale ; commandes et informations compactes placées en bas.", "Suppression du titre visible Écoute immersive. Espace équipe regroupé dans le compte, avec outils de contributions et de gestion distincts.", "Permissions créateur, modérateur et public inchangées ; les actions contextuelles restent accessibles sur les éléments concernés."]],
+["16 · Historiques séparés et espace équipe", "4 octobre 2026", "Lecture, synchronisation et outils privés mieux organisés.", ["Historique du site réservé aux changements Web ; historique Windows indépendant démarrant à 13v09.", "Pendant la synchronisation, le morceau reste verrouillé ; sa fin arrête la lecture sans effacer le travail. Retour à 00:00 disponible dans l’atelier.", "Une fin de paroles explicite est enregistrée pour les blocs. La dernière phrase s’efface progressivement avant les actions d’avis, de commentaire et d’explication. Les anciens timings sans fin explicite restent conservés.", "Immersion : pochette et paroles occupent chacune environ la moitié de la zone principale ; commandes et informations compactes placées en bas.", "Suppression du titre visible Écoute immersive. Espace équipe regroupé dans le compte, avec outils de contributions et de gestion distincts.", "Permissions créateur, modérateur et public inchangées ; les actions contextuelles restent accessibles sur les éléments concernés.", "Nom harmonisé : Avant l’usine, avec un u minuscule."]],
   ['15 · Paroles visibles et immersion repensée','4 octobre 2026','Un rendu partagé entre écoute publique et vérification des contributions.',[
    'Le suivi maintient la phrase ou le bloc chanté dans la zone visible avec un défilement progressif, y compris les longues phrases et les backs.',
    'Immersion sur une grande pochette floutée, avec voile sombre pour la lisibilité et disparition des fonds gris.',
@@ -963,7 +963,7 @@ function initMajorSocial({getClient,getUser,isCreator}) {
    'Messages de validation plus clairs dans les formulaires.'
   ]],
   ['Les premières évolutions','Date exacte non documentée','Étapes antérieures reconstituées à partir du projet et de son historique.',[
-   'Création du lecteur Avant l’Usine, avec accueil, collection, écoute et téléchargements ; passage de Google Sites à un site autonome sur GitHub Pages.',
+   'Création du lecteur Avant l’usine, avec accueil, collection, écoute et téléchargements ; passage de Google Sites à un site autonome sur GitHub Pages.',
    'Intégration des trois volumes disponibles et de leurs 119 pistes depuis Archive.org, pochettes et liens MEGA.',
    'Paroles via le widget officiel Genius, sélection de passages, explications communautaires et votes.',
    'Bibliothèque personnelle, favoris, playlists, découverte, contributions et liens officiels.',
