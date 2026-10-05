@@ -1,0 +1,58 @@
+{
+  "name": "avant-usine-desktop",
+  "version": "0.3.1",
+  "description": "Avant l’usine — application Windows avec interface locale",
+  "author": "zephiroxDev",
+  "private": true,
+  "main": "bootstrap.cjs",
+  "scripts": {
+    "prepare:site": "node scripts/prepare-site.cjs",
+    "start": "node scripts/prepare-site.cjs && electron .",
+    "build:win": "node scripts/prepare-site.cjs && electron-builder --win nsis portable --x64 --publish never",
+    "test": "node --test test/*.test.cjs"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "dev.zephirox.avantusine",
+    "productName": "Avant l’usine",
+    "directories": {
+      "output": "../../outputs/application-windows",
+      "buildResources": "build"
+    },
+    "files": [
+      "bootstrap.cjs",
+      "product.cjs",
+      "release-api.cjs",
+      "version-store.cjs",
+      "managed-updates.cjs",
+      "update-preload.cjs",
+      "update.html",
+      "update.css",
+      "update-renderer.js",
+      "local-path.cjs",
+      "site/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "icon": "build/icon.ico",
+      "signExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "runAfterFinish": false,
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "Avant-Usine-Installation-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "Avant-Usine-Portable-${version}.${ext}"
+    }
+  }
+}

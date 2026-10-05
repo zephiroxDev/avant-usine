@@ -1,0 +1,1220 @@
+window.AU_STATS_METRICS=[
+  {
+    "id": "A",
+    "label": "Temps d’écoute",
+    "metrics": [
+      {
+        "id": "a-1",
+        "label": "temps d’écoute total"
+      },
+      {
+        "id": "a-2",
+        "label": "heures"
+      },
+      {
+        "id": "a-3",
+        "label": "minutes"
+      },
+      {
+        "id": "a-4",
+        "label": "secondes"
+      },
+      {
+        "id": "a-5",
+        "label": "équivalent continu en jours/heures/minutes"
+      },
+      {
+        "id": "a-6",
+        "label": "moyenne quotidienne"
+      },
+      {
+        "id": "a-7",
+        "label": "moyenne hebdomadaire"
+      },
+      {
+        "id": "a-8",
+        "label": "moyenne mensuelle"
+      },
+      {
+        "id": "a-9",
+        "label": "médiane quotidienne lorsque calculable"
+      },
+      {
+        "id": "a-10",
+        "label": "journée avec le plus d’écoute"
+      },
+      {
+        "id": "a-11",
+        "label": "semaine avec le plus d’écoute"
+      },
+      {
+        "id": "a-12",
+        "label": "mois avec le plus d’écoute"
+      },
+      {
+        "id": "a-13",
+        "label": "mois avec le moins d’écoute"
+      },
+      {
+        "id": "a-14",
+        "label": "évolution mois par mois"
+      },
+      {
+        "id": "a-15",
+        "label": "pourcentage de la période totale passé à écouter"
+      },
+      {
+        "id": "a-16",
+        "label": "comparaison avec la période précédente comparable"
+      },
+      {
+        "id": "a-17",
+        "label": "pourcentage d’augmentation ou de diminution"
+      }
+    ]
+  },
+  {
+    "id": "B",
+    "label": "Morceaux écoutés",
+    "metrics": [
+      {
+        "id": "b-1",
+        "label": "nombre total de lancements"
+      },
+      {
+        "id": "b-2",
+        "label": "morceaux uniques"
+      },
+      {
+        "id": "b-3",
+        "label": "nouveaux morceaux découverts"
+      },
+      {
+        "id": "b-4",
+        "label": "morceaux réécoutés"
+      },
+      {
+        "id": "b-5",
+        "label": "nombre total de réécoutes"
+      },
+      {
+        "id": "b-6",
+        "label": "morceaux terminés"
+      },
+      {
+        "id": "b-7",
+        "label": "morceaux interrompus"
+      },
+      {
+        "id": "b-8",
+        "label": "taux moyen de complétion"
+      },
+      {
+        "id": "b-9",
+        "label": "morceau le plus écouté"
+      },
+      {
+        "id": "b-10",
+        "label": "nombre d’écoutes de celui-ci"
+      },
+      {
+        "id": "b-11",
+        "label": "temps total passé dessus"
+      },
+      {
+        "id": "b-12",
+        "label": "pourcentage de l’écoute totale qu’il représente"
+      },
+      {
+        "id": "b-13",
+        "label": "Top 5"
+      },
+      {
+        "id": "b-14",
+        "label": "Top 10"
+      },
+      {
+        "id": "b-15",
+        "label": "Top 25 lorsque suffisamment de morceaux existent"
+      },
+      {
+        "id": "b-16",
+        "label": "morceau le moins écouté parmi ceux réellement écoutés"
+      },
+      {
+        "id": "b-17",
+        "label": "morceau le plus rejoué"
+      },
+      {
+        "id": "b-18",
+        "label": "morceau avec le plus grand temps cumulé"
+      },
+      {
+        "id": "b-19",
+        "label": "meilleur taux de complétion"
+      },
+      {
+        "id": "b-20",
+        "label": "morceau le plus souvent interrompu"
+      },
+      {
+        "id": "b-21",
+        "label": "découverte la plus récente"
+      },
+      {
+        "id": "b-22",
+        "label": "premier morceau écouté"
+      },
+      {
+        "id": "b-23",
+        "label": "dernier morceau écouté"
+      },
+      {
+        "id": "b-24",
+        "label": "plus forte progression dans les habitudes"
+      },
+      {
+        "id": "b-25",
+        "label": "anciens morceaux très écoutés ayant fortement diminué"
+      },
+      {
+        "id": "b-26",
+        "label": "répartition des écoutes entre les morceaux"
+      }
+    ]
+  },
+  {
+    "id": "C",
+    "label": "Volumes / albums",
+    "metrics": [
+      {
+        "id": "c-1",
+        "label": "volume le plus écouté"
+      },
+      {
+        "id": "c-2",
+        "label": "volume le moins écouté parmi ceux utilisés"
+      },
+      {
+        "id": "c-3",
+        "label": "classement complet"
+      },
+      {
+        "id": "c-4",
+        "label": "Top 3"
+      },
+      {
+        "id": "c-5",
+        "label": "Top 5"
+      },
+      {
+        "id": "c-6",
+        "label": "temps d’écoute par volume"
+      },
+      {
+        "id": "c-7",
+        "label": "pourcentage du total par volume"
+      },
+      {
+        "id": "c-8",
+        "label": "nombre d’écoutes par volume"
+      },
+      {
+        "id": "c-9",
+        "label": "morceaux uniques écoutés par volume"
+      },
+      {
+        "id": "c-10",
+        "label": "volume contenant le plus de morceaux distincts écoutés"
+      },
+      {
+        "id": "c-11",
+        "label": "volume le plus exploré"
+      },
+      {
+        "id": "c-12",
+        "label": "volume le plus réécouté"
+      },
+      {
+        "id": "c-13",
+        "label": "meilleur taux de complétion"
+      },
+      {
+        "id": "c-14",
+        "label": "évolution mensuelle des préférences"
+      },
+      {
+        "id": "c-15",
+        "label": "premier volume écouté"
+      },
+      {
+        "id": "c-16",
+        "label": "dernier volume écouté"
+      },
+      {
+        "id": "c-17",
+        "label": "éventuels changements de volume favori"
+      }
+    ]
+  },
+  {
+    "id": "D",
+    "label": "Sessions d’écoute",
+    "metrics": [
+      {
+        "id": "d-1",
+        "label": "nombre total de sessions"
+      },
+      {
+        "id": "d-2",
+        "label": "durée cumulée"
+      },
+      {
+        "id": "d-3",
+        "label": "durée moyenne"
+      },
+      {
+        "id": "d-4",
+        "label": "durée médiane"
+      },
+      {
+        "id": "d-5",
+        "label": "session la plus longue"
+      },
+      {
+        "id": "d-6",
+        "label": "session significative la plus courte"
+      },
+      {
+        "id": "d-7",
+        "label": "moyenne de morceaux par session"
+      },
+      {
+        "id": "d-8",
+        "label": "maximum de morceaux dans une session"
+      },
+      {
+        "id": "d-9",
+        "label": "heure habituelle de début"
+      },
+      {
+        "id": "d-10",
+        "label": "heure habituelle de fin"
+      },
+      {
+        "id": "d-11",
+        "label": "session avec le plus de morceaux distincts"
+      },
+      {
+        "id": "d-12",
+        "label": "session avec le plus de réécoutes"
+      },
+      {
+        "id": "d-13",
+        "label": "distribution des durées de session"
+      }
+    ]
+  },
+  {
+    "id": "E",
+    "label": "Habitudes horaires",
+    "metrics": [
+      {
+        "id": "e-1",
+        "label": "heure précise la plus fréquente"
+      },
+      {
+        "id": "e-2",
+        "label": "créneau horaire préféré"
+      },
+      {
+        "id": "e-3",
+        "label": "répartition heure par heure lorsque pertinente"
+      },
+      {
+        "id": "e-4",
+        "label": "répartition matin / après-midi / soirée / nuit"
+      },
+      {
+        "id": "e-5",
+        "label": "période dominante de la journée"
+      },
+      {
+        "id": "e-6",
+        "label": "jour de semaine favori"
+      },
+      {
+        "id": "e-7",
+        "label": "classement des sept jours"
+      },
+      {
+        "id": "e-8",
+        "label": "journée historiquement la plus active de la période"
+      },
+      {
+        "id": "e-9",
+        "label": "horaire d’écoute le plus inhabituel"
+      },
+      {
+        "id": "e-10",
+        "label": "comparaison semaine/week-end"
+      },
+      {
+        "id": "e-11",
+        "label": "évolution mensuelle des habitudes horaires"
+      }
+    ]
+  },
+  {
+    "id": "F",
+    "label": "Régularité et activité",
+    "metrics": [
+      {
+        "id": "f-1",
+        "label": "jours actifs"
+      },
+      {
+        "id": "f-2",
+        "label": "jours inactifs"
+      },
+      {
+        "id": "f-3",
+        "label": "pourcentage de jours actifs"
+      },
+      {
+        "id": "f-4",
+        "label": "plus longue série de jours actifs consécutifs"
+      },
+      {
+        "id": "f-5",
+        "label": "plus longue période sans écoute"
+      },
+      {
+        "id": "f-6",
+        "label": "fréquence moyenne d’utilisation"
+      },
+      {
+        "id": "f-7",
+        "label": "moyenne de connexions/sessions par jour actif"
+      },
+      {
+        "id": "f-8",
+        "label": "mois comportant le plus de jours actifs"
+      },
+      {
+        "id": "f-9",
+        "label": "mois comportant le moins de jours actifs"
+      },
+      {
+        "id": "f-10",
+        "label": "semaine la plus active"
+      },
+      {
+        "id": "f-11",
+        "label": "date exacte de la journée la plus active"
+      },
+      {
+        "id": "f-12",
+        "label": "activité moyenne selon le jour de la semaine"
+      },
+      {
+        "id": "f-13",
+        "label": "évolution générale de la régularité"
+      }
+    ]
+  },
+  {
+    "id": "G",
+    "label": "Playlists",
+    "metrics": [
+      {
+        "id": "g-1",
+        "label": "playlists créées"
+      },
+      {
+        "id": "g-2",
+        "label": "playlists supprimées"
+      },
+      {
+        "id": "g-3",
+        "label": "playlists existantes"
+      },
+      {
+        "id": "g-4",
+        "label": "modifications"
+      },
+      {
+        "id": "g-5",
+        "label": "ajouts de morceaux"
+      },
+      {
+        "id": "g-6",
+        "label": "suppressions de morceaux"
+      },
+      {
+        "id": "g-7",
+        "label": "nombre total de morceaux actuellement présents"
+      },
+      {
+        "id": "g-8",
+        "label": "morceaux uniques présents dans au moins une playlist"
+      },
+      {
+        "id": "g-9",
+        "label": "taille moyenne"
+      },
+      {
+        "id": "g-10",
+        "label": "plus grande playlist"
+      },
+      {
+        "id": "g-11",
+        "label": "plus petite playlist non vide"
+      },
+      {
+        "id": "g-12",
+        "label": "playlist la plus modifiée"
+      },
+      {
+        "id": "g-13",
+        "label": "playlist la plus utilisée lorsque calculable"
+      },
+      {
+        "id": "g-14",
+        "label": "morceau présent dans le plus de playlists"
+      },
+      {
+        "id": "g-15",
+        "label": "volume le plus représenté"
+      },
+      {
+        "id": "g-16",
+        "label": "période avec le plus de créations"
+      },
+      {
+        "id": "g-17",
+        "label": "évolution mensuelle"
+      }
+    ]
+  },
+  {
+    "id": "H",
+    "label": "Messages privés et interactions sociales",
+    "metrics": [
+      {
+        "id": "h-1",
+        "label": "messages envoyés"
+      },
+      {
+        "id": "h-2",
+        "label": "messages reçus"
+      },
+      {
+        "id": "h-3",
+        "label": "nombre total d’échanges"
+      },
+      {
+        "id": "h-4",
+        "label": "nombre d’utilisateurs différents avec lesquels une conversation a eu lieu"
+      },
+      {
+        "id": "h-5",
+        "label": "utilisateur avec le plus d’échanges"
+      },
+      {
+        "id": "h-6",
+        "label": "classement des utilisateurs avec lesquels il y a eu le plus d’interactions"
+      },
+      {
+        "id": "h-7",
+        "label": "nombre d’échanges par personne"
+      },
+      {
+        "id": "h-8",
+        "label": "journée avec le plus d’activité de messagerie"
+      },
+      {
+        "id": "h-9",
+        "label": "mois avec le plus d’activité"
+      },
+      {
+        "id": "h-10",
+        "label": "évolution mensuelle"
+      },
+      {
+        "id": "h-11",
+        "label": "ratio envoyés/reçus"
+      },
+      {
+        "id": "h-12",
+        "label": "nouvelles conversations commencées"
+      }
+    ]
+  },
+  {
+    "id": "I",
+    "label": "Activité communautaire",
+    "metrics": [
+      {
+        "id": "i-1",
+        "label": "contributions totales"
+      },
+      {
+        "id": "i-2",
+        "label": "synchronisations réalisées"
+      },
+      {
+        "id": "i-3",
+        "label": "corrections de synchronisation proposées"
+      },
+      {
+        "id": "i-4",
+        "label": "modifications communautaires"
+      },
+      {
+        "id": "i-5",
+        "label": "paroles ajoutées"
+      },
+      {
+        "id": "i-6",
+        "label": "corrections de paroles"
+      },
+      {
+        "id": "i-7",
+        "label": "annotations et contributions similaires"
+      },
+      {
+        "id": "i-8",
+        "label": "propositions envoyées"
+      },
+      {
+        "id": "i-9",
+        "label": "contributions publiées/acceptées lorsque ce statut existe"
+      },
+      {
+        "id": "i-10",
+        "label": "contributions refusées lorsque ce statut existe"
+      },
+      {
+        "id": "i-11",
+        "label": "morceaux distincts concernés"
+      },
+      {
+        "id": "i-12",
+        "label": "volume ayant reçu le plus de contributions"
+      },
+      {
+        "id": "i-13",
+        "label": "mois le plus actif"
+      },
+      {
+        "id": "i-14",
+        "label": "évolution mensuelle"
+      },
+      {
+        "id": "i-15",
+        "label": "type de contribution le plus fréquent"
+      },
+      {
+        "id": "i-16",
+        "label": "séries de jours avec participation communautaire"
+      },
+      {
+        "id": "i-17",
+        "label": "records personnels de contribution"
+      }
+    ]
+  },
+  {
+    "id": "J",
+    "label": "Synchronisation des paroles",
+    "metrics": [
+      {
+        "id": "j-1",
+        "label": "synchronisations commencées"
+      },
+      {
+        "id": "j-2",
+        "label": "synchronisations terminées"
+      },
+      {
+        "id": "j-3",
+        "label": "synchronisations abandonnées"
+      },
+      {
+        "id": "j-4",
+        "label": "morceaux synchronisés"
+      },
+      {
+        "id": "j-5",
+        "label": "nombre total de phrases/blocs synchronisés lorsque calculable"
+      },
+      {
+        "id": "j-6",
+        "label": "mode de synchronisation le plus utilisé"
+      },
+      {
+        "id": "j-7",
+        "label": "temps total consacré à la synchronisation lorsque calculable"
+      },
+      {
+        "id": "j-8",
+        "label": "durée moyenne"
+      },
+      {
+        "id": "j-9",
+        "label": "mois le plus actif"
+      },
+      {
+        "id": "j-10",
+        "label": "corrections apportées à des synchronisations existantes"
+      },
+      {
+        "id": "j-11",
+        "label": "évolution pendant la période"
+      }
+    ]
+  },
+  {
+    "id": "K",
+    "label": "Blind Test",
+    "metrics": [
+      {
+        "id": "k-1",
+        "label": "parties jouées"
+      },
+      {
+        "id": "k-2",
+        "label": "manches"
+      },
+      {
+        "id": "k-3",
+        "label": "morceaux testés"
+      },
+      {
+        "id": "k-4",
+        "label": "bonnes réponses"
+      },
+      {
+        "id": "k-5",
+        "label": "mauvaises réponses"
+      },
+      {
+        "id": "k-6",
+        "label": "taux de réussite"
+      },
+      {
+        "id": "k-7",
+        "label": "résultats par difficulté"
+      },
+      {
+        "id": "k-8",
+        "label": "difficulté la plus utilisée"
+      },
+      {
+        "id": "k-9",
+        "label": "difficulté avec le meilleur taux de réussite"
+      },
+      {
+        "id": "k-10",
+        "label": "difficulté la plus difficile pour l’utilisateur"
+      },
+      {
+        "id": "k-11",
+        "label": "meilleur score"
+      },
+      {
+        "id": "k-12",
+        "label": "score moyen"
+      },
+      {
+        "id": "k-13",
+        "label": "meilleure série"
+      },
+      {
+        "id": "k-14",
+        "label": "temps moyen de réponse"
+      },
+      {
+        "id": "k-15",
+        "label": "réponse la plus rapide"
+      },
+      {
+        "id": "k-16",
+        "label": "réponse la plus lente"
+      },
+      {
+        "id": "k-17",
+        "label": "morceau le plus facilement reconnu"
+      },
+      {
+        "id": "k-18",
+        "label": "morceau le plus difficile à reconnaître"
+      },
+      {
+        "id": "k-19",
+        "label": "volume le mieux reconnu"
+      },
+      {
+        "id": "k-20",
+        "label": "volume le plus difficile"
+      },
+      {
+        "id": "k-21",
+        "label": "progression des performances"
+      },
+      {
+        "id": "k-22",
+        "label": "meilleure partie"
+      },
+      {
+        "id": "k-23",
+        "label": "évolution mensuelle"
+      },
+      {
+        "id": "k-24",
+        "label": "records personnels battus"
+      }
+    ]
+  },
+  {
+    "id": "L",
+    "label": "Utilisation générale du site et de l’application",
+    "metrics": [
+      {
+        "id": "l-1",
+        "label": "connexions"
+      },
+      {
+        "id": "l-2",
+        "label": "jours de connexion"
+      },
+      {
+        "id": "l-3",
+        "label": "plateforme la plus utilisée"
+      },
+      {
+        "id": "l-4",
+        "label": "répartition Site PC / Site mobile / Application PC"
+      },
+      {
+        "id": "l-5",
+        "label": "sessions par plateforme"
+      },
+      {
+        "id": "l-6",
+        "label": "durée d’utilisation par plateforme"
+      },
+      {
+        "id": "l-7",
+        "label": "plateforme utilisée le plus longtemps"
+      },
+      {
+        "id": "l-8",
+        "label": "évolution de l’utilisation des plateformes"
+      },
+      {
+        "id": "l-9",
+        "label": "fonctionnalités les plus utilisées"
+      },
+      {
+        "id": "l-10",
+        "label": "sections les plus consultées"
+      },
+      {
+        "id": "l-11",
+        "label": "nombre d’utilisations du lecteur"
+      },
+      {
+        "id": "l-12",
+        "label": "nombre d’utilisations du mode immersion"
+      },
+      {
+        "id": "l-13",
+        "label": "utilisation du Blind Test"
+      },
+      {
+        "id": "l-14",
+        "label": "consultations des paroles"
+      },
+      {
+        "id": "l-15",
+        "label": "utilisation des fonctions communautaires"
+      },
+      {
+        "id": "l-16",
+        "label": "autres fonctionnalités les plus utilisées"
+      }
+    ]
+  },
+  {
+    "id": "M",
+    "label": "Préférences musicales calculées",
+    "metrics": [
+      {
+        "id": "m-1",
+        "label": "morceau statistiquement favori"
+      },
+      {
+        "id": "m-2",
+        "label": "volume statistiquement favori"
+      },
+      {
+        "id": "m-3",
+        "label": "morceaux auxquels l’utilisateur revient le plus"
+      },
+      {
+        "id": "m-4",
+        "label": "volumes auxquels il revient le plus"
+      },
+      {
+        "id": "m-5",
+        "label": "part du Top 5 dans l’écoute totale"
+      },
+      {
+        "id": "m-6",
+        "label": "diversité d’écoute"
+      },
+      {
+        "id": "m-7",
+        "label": "concentration ou variété des écoutes"
+      },
+      {
+        "id": "m-8",
+        "label": "évolution des morceaux favoris"
+      },
+      {
+        "id": "m-9",
+        "label": "évolution du volume favori"
+      },
+      {
+        "id": "m-10",
+        "label": "nouvelles découvertes devenues rapidement importantes"
+      },
+      {
+        "id": "m-11",
+        "label": "anciens favoris moins écoutés"
+      }
+    ]
+  },
+  {
+    "id": "N",
+    "label": "Comparaisons temporelles",
+    "metrics": [
+      {
+        "id": "n-1",
+        "label": "comparaison avec le mois précédent"
+      },
+      {
+        "id": "n-2",
+        "label": "comparaison avec l’année précédente"
+      },
+      {
+        "id": "n-3",
+        "label": "différence de temps d’écoute"
+      },
+      {
+        "id": "n-4",
+        "label": "différence du nombre d’écoutes"
+      },
+      {
+        "id": "n-5",
+        "label": "évolution de la diversité"
+      },
+      {
+        "id": "n-6",
+        "label": "évolution du morceau favori"
+      },
+      {
+        "id": "n-7",
+        "label": "évolution du volume favori"
+      },
+      {
+        "id": "n-8",
+        "label": "évolution des playlists"
+      },
+      {
+        "id": "n-9",
+        "label": "évolution communautaire"
+      },
+      {
+        "id": "n-10",
+        "label": "évolution des messages"
+      },
+      {
+        "id": "n-11",
+        "label": "évolution du Blind Test"
+      },
+      {
+        "id": "n-12",
+        "label": "nouveaux records"
+      },
+      {
+        "id": "n-13",
+        "label": "records battus"
+      },
+      {
+        "id": "n-14",
+        "label": "records toujours détenus"
+      },
+      {
+        "id": "n-15",
+        "label": "plus forte progression statistique"
+      },
+      {
+        "id": "n-16",
+        "label": "plus forte diminution statistique"
+      }
+    ]
+  },
+  {
+    "id": "O",
+    "label": "Records personnels",
+    "metrics": [
+      {
+        "id": "o-1",
+        "label": "record quotidien de temps d’écoute"
+      },
+      {
+        "id": "o-2",
+        "label": "record hebdomadaire"
+      },
+      {
+        "id": "o-3",
+        "label": "record mensuel"
+      },
+      {
+        "id": "o-4",
+        "label": "session la plus longue"
+      },
+      {
+        "id": "o-5",
+        "label": "plus longue série de jours actifs"
+      },
+      {
+        "id": "o-6",
+        "label": "maximum de morceaux écoutés en une journée"
+      },
+      {
+        "id": "o-7",
+        "label": "maximum de réécoutes d’un morceau"
+      },
+      {
+        "id": "o-8",
+        "label": "record de contributions"
+      },
+      {
+        "id": "o-9",
+        "label": "meilleur score au Blind Test"
+      },
+      {
+        "id": "o-10",
+        "label": "réponse la plus rapide au Blind Test"
+      },
+      {
+        "id": "o-11",
+        "label": "maximum de playlists créées sur une période"
+      },
+      {
+        "id": "o-12",
+        "label": "autres records calculables"
+      }
+    ]
+  },
+  {
+    "id": "P",
+    "label": "Statistiques insolites et équivalences",
+    "metrics": [
+      {
+        "id": "p-1",
+        "label": "temps d’écoute converti en jours continus"
+      },
+      {
+        "id": "p-2",
+        "label": "pourcentage de l’année passé à écouter"
+      },
+      {
+        "id": "p-3",
+        "label": "moyenne de morceaux par jour actif"
+      },
+      {
+        "id": "p-4",
+        "label": "moyenne d’écoutes par semaine"
+      },
+      {
+        "id": "p-5",
+        "label": "nombre théorique de lectures du morceau favori correspondant à tout le temps annuel d’écoute"
+      },
+      {
+        "id": "p-6",
+        "label": "part du Top 1 / Top 5 / Top 10"
+      },
+      {
+        "id": "p-7",
+        "label": "écart entre les morceaux n°1 et n°2"
+      },
+      {
+        "id": "p-8",
+        "label": "écart entre le mois le plus actif et le moins actif"
+      },
+      {
+        "id": "p-9",
+        "label": "heure statistiquement la plus probable d’écoute"
+      },
+      {
+        "id": "p-10",
+        "label": "autres statistiques inhabituelles ou remarquables détectées automatiquement"
+      }
+    ]
+  },
+  {
+    "id": "Q",
+    "label": "Trophées et accomplissements",
+    "metrics": [
+      {
+        "id": "q-1",
+        "label": "trophées obtenus pendant la période"
+      },
+      {
+        "id": "q-2",
+        "label": "nombre total possédé"
+      },
+      {
+        "id": "q-3",
+        "label": "nouveaux trophées"
+      },
+      {
+        "id": "q-4",
+        "label": "rareté de chacun"
+      },
+      {
+        "id": "q-5",
+        "label": "répartition par rareté"
+      },
+      {
+        "id": "q-6",
+        "label": "trophée le plus rare"
+      },
+      {
+        "id": "q-7",
+        "label": "nombre par catégorie"
+      },
+      {
+        "id": "q-8",
+        "label": "progression vers les trophées verrouillés lorsque calculable"
+      },
+      {
+        "id": "q-9",
+        "label": "trophées presque débloqués"
+      },
+      {
+        "id": "q-10",
+        "label": "date de déblocage"
+      },
+      {
+        "id": "q-11",
+        "label": "accomplissements majeurs"
+      },
+      {
+        "id": "q-12",
+        "label": "trophées affichés publiquement sur le profil"
+      }
+    ]
+  },
+  {
+    "id": "R",
+    "label": "Chronologie de l’année",
+    "metrics": [
+      {
+        "id": "r-1",
+        "label": "temps d’écoute"
+      },
+      {
+        "id": "r-2",
+        "label": "morceau dominant"
+      },
+      {
+        "id": "r-3",
+        "label": "volume dominant"
+      },
+      {
+        "id": "r-4",
+        "label": "activité générale"
+      },
+      {
+        "id": "r-5",
+        "label": "playlists"
+      },
+      {
+        "id": "r-6",
+        "label": "activité communautaire"
+      },
+      {
+        "id": "r-7",
+        "label": "messages"
+      },
+      {
+        "id": "r-8",
+        "label": "Blind Test"
+      },
+      {
+        "id": "r-9",
+        "label": "trophées"
+      },
+      {
+        "id": "r-10",
+        "label": "principaux records et événements statistiques"
+      }
+    ]
+  },
+  {
+    "id": "S",
+    "label": "Bilan final de la période",
+    "metrics": [
+      {
+        "id": "s-1",
+        "label": "statistiques majeures"
+      },
+      {
+        "id": "s-2",
+        "label": "meilleurs records"
+      },
+      {
+        "id": "s-3",
+        "label": "morceau de la période"
+      },
+      {
+        "id": "s-4",
+        "label": "volume de la période"
+      },
+      {
+        "id": "s-5",
+        "label": "mois le plus actif"
+      },
+      {
+        "id": "s-6",
+        "label": "principale habitude d’écoute"
+      },
+      {
+        "id": "s-7",
+        "label": "trophée le plus rare obtenu"
+      },
+      {
+        "id": "s-8",
+        "label": "évolutions majeures"
+      },
+      {
+        "id": "s-9",
+        "label": "accomplissements importants"
+      },
+      {
+        "id": "s-10",
+        "label": "chiffres remarquables"
+      },
+      {
+        "id": "s-11",
+        "label": "statistiques insolites pertinentes"
+      }
+    ]
+  }
+];
