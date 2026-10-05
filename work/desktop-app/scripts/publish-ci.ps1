@@ -33,7 +33,9 @@ if ($LASTEXITCODE -eq 0) {
 $taskPaths=@($taskFiles | ForEach-Object { $_.FullName })
 gh release upload $taskTag @taskPaths --clobber
 if ($LASTEXITCODE -ne 0) { throw 'Upload failed; release remains private' }
-$taskRemote=gh api "repos/$env:GH_REPO/releases/tags/$taskTag" | ConvertFrom-Json
+$taskReleaseList=gh api "repos/${env:GH_REPO}/releases?per_page=100" | ConvertFrom-Json
+if ($LASTEXITCODE -ne 0) { throw 'Release listing failed' }
+$taskRemote=@($taskReleaseList | Where-Object { $_.tag_name -eq $taskTag }) | Select-Object -First 1
 if ($LASTEXITCODE -ne 0 -or -not $taskRemote.draft) { throw 'Draft verification failed' }
 if ($taskRemote.assets.Count -ne $taskExpected.Count) { throw 'Incomplete or unexpected release assets' }
 foreach ($taskAsset in $taskRemote.assets) {

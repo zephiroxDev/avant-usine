@@ -2,7 +2,7 @@ name: Windows release
 on:
   push:
     branches: [main]
-    paths: ['work/desktop-app/release.json']
+    paths: ['work/desktop-app/release.json', 'work/desktop-app/scripts/publish-ci.ps1']
   workflow_dispatch:
 permissions:
   contents: write
