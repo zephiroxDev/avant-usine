@@ -2,6 +2,7 @@ $ErrorActionPreference='Stop'
 $taskRoot=(Resolve-Path (Join-Path $PSScriptRoot '../../..')).Path
 $taskPackage=Get-Content (Join-Path $PSScriptRoot '../package.json') -Raw | ConvertFrom-Json
 $taskVersion=$taskPackage.version
+$taskReleaseId=(Get-Content (Join-Path $PSScriptRoot '../release.json') -Raw | ConvertFrom-Json).releaseId
 $taskTag="v$taskVersion"
 $taskReleaseOutput=Join-Path $taskRoot 'outputs/application-windows'
 $taskUpdateOutput=Join-Path $taskRoot "outputs/application-windows-$taskVersion/update-assets"
@@ -9,7 +10,7 @@ $taskManifestPath=Join-Path $taskUpdateOutput "Avant-Usine-Mise-a-jour-$taskVers
 $taskManifest=Get-Content $taskManifestPath -Raw | ConvertFrom-Json
 if ($taskManifest.version -ne $taskVersion) { throw 'Manifest version mismatch' }
 $taskFiles=@(Get-ChildItem -LiteralPath $taskUpdateOutput -File)
-$taskNames=@("Avant-Usine-Installation-$taskVersion.exe","Avant-Usine-Portable-$taskVersion.exe",'Avant-Usine-Site-17V01.zip',"Avant-Usine-Sources-Windows-$taskVersion.zip",'livraison.json')
+$taskNames=@("Avant-Usine-Installation-$taskVersion.exe","Avant-Usine-Portable-$taskVersion.exe","Avant-Usine-Site-$taskReleaseId.zip","Avant-Usine-Sources-Windows-$taskVersion.zip",'livraison.json')
 foreach ($taskName in $taskNames) {
     $taskFile=Get-Item -LiteralPath (Join-Path $taskReleaseOutput $taskName)
     $taskFiles+= $taskFile
@@ -27,7 +28,7 @@ if ($LASTEXITCODE -eq 0) {
     $taskExistingRelease=$taskExisting | ConvertFrom-Json
     if (-not $taskExistingRelease.isDraft) { throw 'This version is already public; do not overwrite it' }
 } else {
-    gh release create $taskTag --draft --target $env:RELEASE_COMMIT --title "Avant l’usine — Windows $taskVersion · 17V01" --notes-file (Join-Path $PSScriptRoot '../NOTES-17V01.md')
+    gh release create $taskTag --draft --target $env:RELEASE_COMMIT --title "Avant l’usine — Windows $taskVersion · $taskReleaseId" --notes-file (Join-Path $PSScriptRoot "../NOTES-$taskReleaseId.md")
     if ($LASTEXITCODE -ne 0) { throw 'Draft creation failed' }
 }
 $taskPaths=@($taskFiles | ForEach-Object { $_.FullName })
