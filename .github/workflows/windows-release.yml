@@ -46,6 +46,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Catalog audit tests failed' }
           node work/mine-sync/test-native-light-17v04.cjs
           if ($LASTEXITCODE -ne 0) { throw 'Native lighting tests failed' }
+          node work/mine-sync/test-sync-17v05.cjs
+          if ($LASTEXITCODE -ne 0) { throw 'Synchronization tests failed' }
       - name: Build and verify Windows packages
         shell: pwsh
         run: ./work/desktop-app/scripts/release.ps1 -Python python

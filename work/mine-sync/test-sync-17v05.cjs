@@ -1,0 +1,22 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const source=fs.readFileSync(path.resolve(__dirname,'../github-sync-import/app-17v01.js'),'utf8');
+class Element{constructor(tag){this.tagName=tag;this.children=[];this.attrs={};this.dataset={};this.textContent='';this.disabled=false;this.scrollTop=0;this.offsetTop=0;this.listeners={};this.className='';this.classList={toggle:(c,on)=>{const set=new Set(this.className.split(' ').filter(Boolean));on?set.add(c):set.delete(c);this.className=[...set].join(' ');}};}append(...n){this.children.push(...n);}setAttribute(k,v){this.attrs[k]=v;}addEventListener(k,fn){this.listeners[k]=fn;}removeEventListener(k){delete this.listeners[k];}}
+const context={document:{createElement:tag=>new Element(tag)},console};vm.createContext(context);
+vm.runInContext(source.slice(source.indexOf('function lyricAnnotationMap('),source.indexOf('function createPublicLyricsView('))+source.slice(source.indexOf('function createBlockEditor('),source.indexOf('function initLyricsCopy(')),context);
+const mapped=context.lyricAnnotationMap(['Été ici (yeah)','À bientôt'],'[Intro]\nÉté ici (yeah)\n[Refrain]\nÀ bientôt');
+assert.deepEqual(Array.from(mapped[0],t=>t.word),[1,2,3]);assert.deepEqual(Array.from(mapped[1],t=>t.word),[5,6]);
+assert.equal(context.lyricAnnotationMap(['😀 Salut'],'[Intro] 😀 Salut')[0][1].start,2,'Unicode positions use code points');
+assert.equal(context.lyricAnnotationMap(['Texte différent'],'Ancien texte')[0].length,0,'No invented annotation offsets');
+(async()=>{const host=new Element('div'),audio={paused:true,currentTime:0,duration:12,seeking:false,listeners:{},pause(){this.paused=true;},addEventListener(k,fn){this.listeners[k]=fn;},removeEventListener(k){delete this.listeners[k];}};let change;
+ const editor=context.createBlockEditor({host,lines:['un','deux','trois'],audio,play:async()=>audio.paused=false,onchange:data=>change=data});
+ const controls=host.children[0].children[0],down=controls.children[0],up=controls.children[1];assert.equal(controls.children.length,2);assert.equal(up.disabled,true);
+ await editor.start();assert.equal(audio.paused,false);assert.equal(editor.times[0],null,'Opening starts playback without inventing a sung onset');
+ audio.currentTime=1;await down.onclick();audio.currentTime=3;await down.onclick();assert.deepEqual(Array.from(editor.times),[1,3,null]);
+ await up.onclick();assert.equal(audio.currentTime,2.25);assert.equal(audio.paused,false);assert.deepEqual(Array.from(editor.times),[1,null,null]);
+ audio.currentTime=2.5;await down.onclick();audio.currentTime=5;await down.onclick();audio.currentTime=7;await down.onclick();assert.equal(editor.endTime,7);assert.equal(change.end_time,7);assert.equal(audio.paused,true);assert.equal(down.disabled,true);
+ await up.onclick();assert.equal(editor.endTime,null);assert.deepEqual(Array.from(editor.times),[1,2.5,null]);
+ audio.currentTime=6;await down.onclick();audio.currentTime=12;audio.listeners.ended();assert.equal(editor.endTime,12,'Audio end safely finalizes the last phrase');
+ editor.dispose();assert.equal(down.disabled,true);assert.equal(up.disabled,true);
+ const h2=new Element('div');const e2=context.createBlockEditor({host:h2,lines:['a','b','c'],audio,initialTimes:[1,1,5],initialGroups:[0,0,1],onchange(){}});assert.deepEqual(Array.from(e2.times),[1,null,null],'Old grouped timings require recapture from the first ambiguous phrase');e2.dispose();
+ console.log('PASS: two arrows, starts, correction rewind, future timings invalidated, explicit/end-of-audio finish, draft migration, Unicode annotation indices and no invented matches.');
+})().catch(e=>{console.error(e);process.exitCode=1;});
