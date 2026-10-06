@@ -1,6 +1,6 @@
 {
-  "releaseId": "17V02",
-  "desktopVersion": "0.3.2",
+  "releaseId": "17V03",
+  "desktopVersion": "0.3.3",
   "websiteSource": "../github-sync-import",
   "publicationPolicy": "Historiques indépendants : publier chaque plateforme dès qu’elle est prête. Publier tous les fichiers de mise à jour et leur manifest avant de rendre la release Windows publique."
 }

@@ -42,12 +42,14 @@ const motionCovers = (() => {
   const entry=entries.get(change.target);if(!entry)return;entry.visible=change.isIntersecting;sync(entry);
  }),{threshold:.01});
  function sync(entry){
-  if(enabled&&entry.visible&&!document.hidden&&!entry.failed){
+  const active=enabled&&!reduced.matches&&document.documentElement.dataset.effects!=='off';entry.canvas.parentElement.dataset.motionActive=String(active&&entry.visible&&!document.hidden);
+  if(entry.visible&&!document.hidden&&active)entry.canvas.parentElement.dataset.motionFailed=String(entry.failed);
+  if(active&&entry.visible&&!document.hidden&&!entry.failed){
    if(!entry.video.hasAttribute('src'))entry.video.src=entry.source;
    entry.video.play().catch(()=>{entry.canvas.dataset.motionState='paused';});
   }else entry.video.pause();
  }
- function refresh(){document.documentElement.dataset.motion=enabled?'on':'off';const frame=document.getElementById('lyricsFrame');if(frame?.contentWindow)frame.contentWindow.postMessage({type:'avant-usine-motion',request:frame.dataset.request,motion:enabled?'on':'off'},'*');entries.forEach((e,c)=>{if(!c.isConnected){observer.unobserve(c);e.video.pause();e.video.removeAttribute('src');e.video.load();entries.delete(c);}else sync(e);});
+ function refresh(){const effects=document.documentElement.dataset.effects||'full',active=enabled&&effects!=='off'&&!reduced.matches;document.documentElement.dataset.motion=active?'on':'off';const frame=document.getElementById('lyricsFrame');if(frame?.contentWindow)frame.contentWindow.postMessage({type:'avant-usine-motion',request:frame.dataset.request,motion:enabled?'on':'off'},'*');entries.forEach((e,c)=>{if(!c.isConnected){observer.unobserve(c);e.video.pause();e.video.removeAttribute('src');e.video.load();entries.delete(c);}else sync(e);});
   if(toggle){toggle.textContent=enabled?'Animations : activées':'Animations : en pause';toggle.setAttribute('aria-pressed',String(enabled));}
  }
  function attach(canvas,volume){
@@ -66,8 +68,8 @@ const motionCovers = (() => {
   if(entry.source!==volume.motion){entry.video.pause();entry.video.classList.remove('ready');entry.video.removeAttribute('src');entry.video.load();entry.source=volume.motion;entry.failed=false;canvas.dataset.motionState='pending';sync(entry);}
  }
  document.addEventListener('visibilitychange',refresh);
- window.addEventListener('au:routechange',refresh);
- reduced.addEventListener('change',()=>{enabled=!reduced.matches;refresh();});
+ window.addEventListener('au:routechange',refresh);window.addEventListener('au:effects-change',refresh);
+ reduced.addEventListener('change',refresh);
  function init(){
   toggle=document.createElement('button');toggle.type='button';toggle.className='text-button au-motion-toggle';toggle.addEventListener('click',()=>{enabled=!enabled;try{localStorage.setItem('au-cover-motion',enabled?'on':'off');}catch{}refresh();});
   toggle.setAttribute('aria-label','Activer ou mettre en pause toutes les animations du site');document.querySelector('.footer')?.append(toggle);
@@ -362,17 +364,7 @@ const AU_AUDIO_SIGNATURE=(()=>{
  return {fingerprint,compare,analyze,distance};
 })();
 function initAudioAudit({call,allowed}){
- const overrides=new Map();let running=false,cancel=null,loaded=false,generation=0,records=[],queue=[],failures=[],paused=false;
- const panel=element('dialog','au-dialog major-dialog');panel.dataset.auAccess='creator';panel.setAttribute('aria-label','Doublons audio');const body=element('div','major-dialog-body'),status=element('p','au-note'),list=element('div');panel.append(element('h2','','Ressemblances audio'),button('au-icon','Fermer',()=>panel.close()),body);body.append(element('p','','Comparaison sonore sur trois extraits de chaque fichier. Une ressemblance est une piste à vérifier : aucun morceau n’est supprimé automatiquement.'),status,list);document.body.append(panel);
- const entry=button('button au-admin-entry','Doublons audio',()=>{if(!allowed())return;render();panel.showModal();});entry.dataset.auAccess='creator';entry.hidden=true;$('accountMember').append(entry);
- const pause=button('button secondary','Mettre l’analyse en pause',()=>{paused=!paused;if(paused)cancel?.abort();else start();pause.textContent=paused?'Reprendre l’analyse':'Mettre l’analyse en pause';});body.append(pause,button('button secondary','Réessayer les fichiers inaccessibles',()=>{failures=[];loaded=false;start();}));
- function all(){return COLLECTION.map(v=>overrides.get(v.number)||v).flatMap(v=>v.tracks.map(t=>({key:v.number+':'+t.number,src:t.src,title:t.title,volume:v.title})));}
- function render(){const songs=all(),names=new Map(songs.map(t=>[t.key,t]));status.textContent=records.length+' signatures enregistrées · '+queue.length+' pistes restantes · '+failures.length+' non analysées'+(paused?' · en pause':'');list.replaceChildren();let count=0;for(let i=0;i<records.length;i++)for(let j=i+1;j<records.length;j++){const a=records[i],b=records[j],x=names.get(a.track_key),y=names.get(b.track_key);if(!x||!y||x.src!==a.src||y.src!==b.src)continue;const match=AU_AUDIO_SIGNATURE.compare(a.signature,b.signature);if(!match)continue;count++;const card=element('article','major-card');card.append(element('h3','',x.title+' ↔ '+y.title),element('p','',x.volume+' / '+y.volume+' · ressemblance sonore forte sur les trois extraits'));for(const song of [x,y]){const audio=document.createElement('audio');audio.controls=true;audio.preload='none';audio.src=song.src;audio.setAttribute('aria-label','Comparer '+song.title);card.append(audio);}list.append(card);}if(!count)list.append(element('p','','Aucun candidat détecté parmi les fichiers analysés. Cela ne garantit pas l’absence de doublons.'));for(const failure of failures)list.append(element('p','au-note',failure.title+' : '+failure.message));}
- async function start(){entry.hidden=!allowed();if(running||paused||!allowed())return;running=true;const g=generation;try{if(!loaded){records=await call('au_audio_audit',{p_action:'list',p:{}});if(g!==generation||!allowed())return;loaded=true;}queue=all().filter(t=>!records.some(r=>r.track_key===t.key&&r.src===t.src)&&!failures.some(f=>f.key===t.key));render();while(queue.length&&allowed()&&!paused&&g===generation){if(document.hidden){await new Promise(r=>setTimeout(r,2500));continue;}const t=queue[0];cancel=new AbortController();const timeout=setTimeout(()=>cancel?.abort(),90000);try{const signature=await AU_AUDIO_SIGNATURE.analyze(t.src,cancel.signal);if(g!==generation||!allowed()||paused)break;await call('au_audio_audit',{p_action:'save',p:{track:t.key,src:t.src,signature}});records=records.filter(r=>r.track_key!==t.key);records.push({track_key:t.key,src:t.src,signature});}catch(e){if(g!==generation||paused)break;failures.push({...t,message:e.name==='AbortError'?'Chargement interrompu ; réessaie.':e.message});}finally{clearTimeout(timeout);}queue.shift();render();await new Promise(r=>setTimeout(r,150));}}catch(e){status.textContent='Analyse indisponible : '+e.message;}finally{running=false;cancel=null;}}
- function stop(){entry.hidden=true;generation++;cancel?.abort();loaded=false;records=[];queue=[];failures=[];panel.close();list.replaceChildren();}
- window.addEventListener('au:catalog-published',e=>{overrides.set(e.detail.number,e.detail);loaded=false;start();});
- panel.addEventListener('close',()=>panel.querySelectorAll('audio').forEach(a=>a.pause()));
- return {start,stop};
+ return window.AU_INIT_CATALOG_AUDIT({getSongs:()=>COLLECTION.flatMap(v=>v.tracks.map(t=>({...t,key:v.number+':'+t.number,src:mediaURL(t.src),volume:v.title}))),allowed:()=>AU_ROLE.canModerate()&&AU_ROLE.view()!=='public',getSignatures:()=>allowed()?call('au_audio_audit',{p_action:'list',p:{}}):Promise.resolve([]),saveSignature:(song,signature)=>allowed()?call('au_audio_audit',{p_action:'save',p:{track:song.key,src:song.src,signature}}):Promise.resolve(),signature:AU_AUDIO_SIGNATURE});
 }
 
 // Bibliothèque privée : rien n'est envoyé au serveur pour les favoris et playlists.
@@ -1258,7 +1250,7 @@ function initInterfaceEffects(){
  const framed=n=>{const s=getComputedStyle(n);return ['Top','Right','Bottom','Left'].some(side=>parseFloat(s['border'+side+'Width'])>0&&!['none','hidden'].includes(s['border'+side+'Style']))||(!['transparent','rgba(0, 0, 0, 0)'].includes(s.backgroundColor)&&s.backgroundColor!=='');};
  document.addEventListener('pointerover',event=>{const n=event.target.closest('button,a[href],summary');if(n)n.dataset.auFramed=String(framed(n));},true);document.addEventListener('focusin',event=>{const n=event.target.closest('button,a[href],summary');if(n)n.dataset.auFramed=String(framed(n));},true);
  const levels=['full','reduced','off'],names={full:'complets',reduced:'réduits',off:'désactivés'};let level=localRead('au-visual-effects')||(matchMedia('(pointer:coarse)').matches?'reduced':'full');if(!levels.includes(level))level='full';document.documentElement.dataset.effects=level;
- const effectControl=button('text-button','Effets visuels : '+names[level],()=>{level=levels[(levels.indexOf(level)+1)%levels.length];document.documentElement.dataset.effects=level;localWrite('au-visual-effects',level);effectControl.textContent='Effets visuels : '+names[level];});effectControl.setAttribute('aria-label','Changer le niveau des effets visuels');document.querySelector('.footer').append(effectControl);document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('au-17-inactive',document.hidden));
+ const effectControl=button('text-button','Effets visuels : '+names[level],()=>{level=levels[(levels.indexOf(level)+1)%levels.length];document.documentElement.dataset.effects=level;localWrite('au-visual-effects',level);effectControl.textContent='Effets visuels : '+names[level];window.dispatchEvent(new Event('au:effects-change'));});effectControl.setAttribute('aria-label','Changer le niveau des effets visuels');document.querySelector('.footer').append(effectControl);document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('au-17-inactive',document.hidden));
  const reduced=matchMedia('(prefers-reduced-motion: reduce)'),desktop=matchMedia('(hover:hover) and (pointer:fine)');let context,last=0;const oscillators=new Set();
  let enabled=localRead('au-ui-sound','on')!=='off';
  const music=()=>[...document.querySelectorAll('audio,video')].some(m=>!m.paused&&!m.ended&&(m.tagName==='AUDIO'||!m.muted&&m.volume>0));
@@ -1308,6 +1300,9 @@ function initProjectGuide(){
  secret.forEach((word,i)=>{const card=element('article','major-card'),paragraph=element('p');const [before,clue,after]=clueSentences[i];if(clue!==word)throw Error('Indice incomplet');paragraph.append(document.createTextNode(guide[i][1]+' '+before),element('span','au-17-guide-clue',clue),document.createTextNode(after));card.append(element('h2','',guide[i][0]),paragraph);zone.append(card);});
  const rest=element('div','au-17-guide au-17-guide-rest');rest.hidden=true;const more=button('button secondary','Lire le reste',()=>{rest.hidden=!rest.hidden;more.textContent=rest.hidden?'Lire le reste':'Masquer la suite';more.setAttribute('aria-expanded',String(!rest.hidden));});more.setAttribute('aria-expanded','false');
  for(const [title,text]of [
+ ['Pochettes animées renforcées','Les pochettes visibles utilisent un mouvement ample et un reflet animé plus perceptible. Animations en pause, effets réduits ou désactivés et préférences de réduction du mouvement restent disponibles. Les pochettes hors écran ne continuent pas leur animation.'],
+ ['Diagnostic du catalogue audio','Créateur et modérateurs peuvent vérifier tous les liens Archive.org depuis l’espace équipe, avec progression, détail par morceau et bilan. Les correspondances non confirmées restent signalées ; aucune correction automatique n’est appliquée. Doublons audio partage cette interface et compare trois extraits par fichier.'],
+ ['Skip technique du Blind Test','Skipper dû à un bug passe la manche sans réponse fausse, même si l’extrait ne démarre pas. Le bilan distingue les skips techniques des erreurs normales, et le diagnostic est conservé sur le compte connecté.'],
  ['Immersion temporairement indisponible','Le mode immersion est temporairement indisponible le temps de sa réparation. Le lecteur et les paroles restent accessibles dans leurs pages habituelles.'],
  ['Blind Test à quatre choix','Après chaque extrait, sélectionne une des quatre propositions avec pochette et titre. Une seule réponse est correcte ; les autres viennent du catalogue disponible. Le bilan conserve les temps, erreurs et performances par morceau.'],
  ['Niveaux d’affichage','L’aperçu Niveau 1 · Public masque les commandes de modération et de création, y compris les fonctionnalités récentes. Cet aperçu ne change pas les permissions du compte.'],

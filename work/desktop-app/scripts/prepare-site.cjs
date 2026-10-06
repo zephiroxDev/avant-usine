@@ -2,7 +2,7 @@ const fs=require('node:fs'),path=require('node:path');
 const {adaptCopy}=require('./desktop-copy.cjs');
 const source=path.resolve(__dirname,'../../github-sync-import'),destination=path.resolve(__dirname,'../site');
 fs.mkdirSync(destination,{recursive:true});
-const allowed=/^(index\.html|app-\d+v\d+\.js|(?:summary-rules|listening-clock|activity|blind-test|histories|metrics|statistics-engine|statistics-ui)-17v01\.js|collection-\d+v\d+\.js|styles-\d+v\d+\.css|cover-\d{2}\.webp|pochette-animee-\d{2}\.mp4|favicon\.ico|favicon-32\.png|apple-touch-icon\.png|icon-(192|512)\.png|supabase-auth-client\.js|manifest\.webmanifest|offline\.html)$/;
+const allowed=/^(index\.html|app-\d+v\d+\.js|(?:summary-rules|listening-clock|activity|blind-test|histories|metrics|statistics-engine|statistics-ui)-17v01\.js|catalog-audit-17v03\.js|collection-\d+v\d+\.js|styles-\d+v\d+\.css|cover-\d{2}\.webp|pochette-animee-\d{2}\.mp4|favicon\.ico|favicon-32\.png|apple-touch-icon\.png|icon-(192|512)\.png|supabase-auth-client\.js|manifest\.webmanifest|offline\.html)$/;
 for(const entry of fs.readdirSync(source))if(allowed.test(entry))fs.copyFileSync(path.join(source,entry),path.join(destination,entry));
 const htmlPath=path.join(destination,'index.html');let html=fs.readFileSync(htmlPath,'utf8');const active=html.match(/src="\.\/(app-\d+v\d+\.js)"/);if(!active)throw Error('Script principal introuvable');
 html=html.replace(/<aside id="desktopAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./release-download.js" defer></script>','');
