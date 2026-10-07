@@ -1,5 +1,16 @@
 [
   [
+    "17V06 · Windows 0.3.6",
+    "7 octobre 2026",
+    "Liens directs vers les morceaux, vitesse des ateliers et choix des formats importés.",
+    [
+      "Partage individuel de chaque morceau : lien direct, panneau d’arrivée, auteur et profil pour les comptes, indication anonyme et première date de création conservée. Copier le lien et partage natif lorsque disponible.",
+      "Vitesse de lecture 0,50×, 0,75×, 1× ou 2× dans Highlight Progression et synchronisation avancée, modifiable sans perdre les repères. Les timings suivent toujours la position réelle dans le morceau. Vitesse sauvegardée dans le brouillon et rétablie à la fermeture.",
+      "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé et prévisualisation complète avant approbation maintenue.",
+      "Infos, fonctionnalités & astuces complété dans Lire le reste."
+    ]
+  ],
+  [
     "17V05 · Windows 0.3.5",
     "6 octobre 2026",
     "Sélection des passages, synchronisation plus simple et panneaux mobiles accessibles.",
