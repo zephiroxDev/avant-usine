@@ -4,6 +4,8 @@ $taskPackage=Get-Content (Join-Path $PSScriptRoot '../package.json') -Raw | Conv
 $taskVersion=$taskPackage.version
 $taskReleaseId=(Get-Content (Join-Path $PSScriptRoot '../release.json') -Raw | ConvertFrom-Json).releaseId
 $taskTag="v$taskVersion"
+$taskNotesPath=Join-Path $PSScriptRoot "../NOTES-$taskReleaseId.md"
+if (-not (Test-Path -LiteralPath $taskNotesPath -PathType Leaf)) { throw "Release notes missing: $taskNotesPath" }
 $taskReleaseOutput=Join-Path $taskRoot 'outputs/application-windows'
 $taskUpdateOutput=Join-Path $taskRoot "outputs/application-windows-$taskVersion/update-assets"
 $taskManifestPath=Join-Path $taskUpdateOutput "Avant-Usine-Mise-a-jour-$taskVersion.json"
@@ -28,7 +30,7 @@ if ($LASTEXITCODE -eq 0) {
     $taskExistingRelease=$taskExisting | ConvertFrom-Json
     if (-not $taskExistingRelease.isDraft) { throw 'This version is already public; do not overwrite it' }
 } else {
-    gh release create $taskTag --draft --target $env:RELEASE_COMMIT --title "Avant l’usine — Windows $taskVersion · $taskReleaseId" --notes-file (Join-Path $PSScriptRoot "../NOTES-$taskReleaseId.md")
+    gh release create $taskTag --draft --target $env:RELEASE_COMMIT --title "Avant l’usine — Windows $taskVersion · $taskReleaseId" --notes-file $taskNotesPath
     if ($LASTEXITCODE -ne 0) { throw 'Draft creation failed' }
 }
 $taskPaths=@($taskFiles | ForEach-Object { $_.FullName })

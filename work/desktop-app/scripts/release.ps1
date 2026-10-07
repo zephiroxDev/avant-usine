@@ -2,6 +2,11 @@ param([string]$Python='python')
 $ErrorActionPreference='Stop'
 Push-Location (Split-Path -Parent $PSScriptRoot)
 try {
+    $taskReleaseInfo=Get-Content 'release.json' -Raw | ConvertFrom-Json
+    $taskPackageInfo=Get-Content 'package.json' -Raw | ConvertFrom-Json
+    $taskNotesPath="NOTES-$($taskReleaseInfo.releaseId).md"
+    if (-not (Test-Path -LiteralPath $taskNotesPath -PathType Leaf)) { throw "Notes de livraison absentes : $taskNotesPath" }
+    if ($taskReleaseInfo.desktopVersion -ne $taskPackageInfo.version) { throw 'Versions du package et de la livraison incohérentes.' }
     & $Python scripts/make-icon.py
     if ($LASTEXITCODE -ne 0) { throw 'Préparation du logo interrompue.' }
     pnpm install --frozen-lockfile
