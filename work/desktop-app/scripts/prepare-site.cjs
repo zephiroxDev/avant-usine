@@ -6,6 +6,7 @@ const allowed=/^(index\.html|app-\d+v\d+\.js|(?:summary-rules|listening-clock|ac
 for(const entry of fs.readdirSync(source))if(allowed.test(entry))fs.copyFileSync(path.join(source,entry),path.join(destination,entry));
 const htmlPath=path.join(destination,'index.html');let html=fs.readFileSync(htmlPath,'utf8');const active=html.match(/src="\.\/(app-\d+v\d+\.js)"/);if(!active)throw Error('Script principal introuvable');
 html=html.replace(/<aside id="desktopAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./release-download.js" defer></script>','');
+html=html.replace(/<aside id="androidAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./android-download.js" defer></script>','');
 html=adaptCopy(html).replace('<title>Avant l’usine — La collection</title>','<title>Avant l’usine</title>').replace('<span class="brand-mark" aria-hidden="true">AU</span>','<img class="brand-mark" src="./icon-512.png" alt="" style="object-fit:cover">');fs.writeFileSync(htmlPath,html);
 html=html.replace('</body>','<script src="./desktop-settings.js" defer></script></body>');fs.writeFileSync(htmlPath,html);
 fs.copyFileSync(path.join(__dirname,'desktop-settings.js'),path.join(destination,'desktop-settings.js'));

@@ -1,5 +1,13 @@
 [
   [
+    "18V03 · Windows 0.4.4 · Historiques mobiles",
+    "8 octobre 2026",
+    "Historiques Android et iOS indépendants.",
+    [
+      "Nouveautés : sélecteurs Application Android et Application iOS, avec historiques séparés. Une plateforme sans version publiée le signale explicitement."
+    ]
+  ],
+  [
     "18V02 · Windows 0.4.3 · Import ordonné et déplacement",
     "8 octobre 2026",
     "Classement automatique et déplacement direct des morceaux locaux.",

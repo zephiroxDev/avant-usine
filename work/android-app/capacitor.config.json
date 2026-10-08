@@ -1,0 +1,7 @@
+{
+  "appId": "dev.zephirox.avantusine.android",
+  "appName": "Avant l’usine",
+  "webDir": "site",
+  "server": { "androidScheme": "https" },
+  "android": { "allowMixedContent": false, "backgroundColor": "#121212" }
+}
