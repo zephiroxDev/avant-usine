@@ -27,7 +27,7 @@ async function check(force=false){
   const latest=choose(await response.json(),current);
   if(!latest){if(force)notify('L’application iOS est à jour.');return;}
   const version=latest.match[1];
-  if(localStorage.getItem(prefix+'skip')===version){if(force)notify('La version '+version+' est ignorée. La suivante sera proposée.');return;}
+  if(!force&&localStorage.getItem(prefix+'skip')===version){if(force)notify('La version '+version+' est ignorée. La suivante sera proposée.');return;}
   const sha=latest.a.digest?.replace(/^sha256:/,'');
   if(!/^[a-f0-9]{64}$/i.test(sha||'')||!Number.isSafeInteger(latest.a.size)||latest.a.size<=0)throw Error('Le paquet ne dispose pas des informations de vérification nécessaires.');
   offered=true;
@@ -60,4 +60,6 @@ async function check(force=false){
 const b=document.createElement('button');b.className='text-button';b.textContent='Vérifier les mises à jour iOS';b.onclick=()=>check(true);document.querySelector('.footer')?.append(b);
 setTimeout(()=>check(),10000);setInterval(()=>check(),6*60*60*1000);window.addEventListener('focus',()=>check());
 if(window.AU_IOS_TEST)window.AU_IOS_TEST.exports={compare,choose,check,current};
+const accountUpdate=document.createElement('button');accountUpdate.type='button';accountUpdate.className='button secondary';accountUpdate.id='forceAppUpdate';accountUpdate.textContent='Forcer une mise à jour';accountUpdate.onclick=async()=>{accountUpdate.disabled=true;document.querySelector('#accountDialog')?.close();try{await check(true);}finally{accountUpdate.disabled=false;}};document.querySelector('#accountMember .actions')?.append(accountUpdate);
+
 })();

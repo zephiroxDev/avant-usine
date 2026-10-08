@@ -13,12 +13,13 @@ test('Packaged iOS references and isolated history',()=>{
 function context(){
  const elements=[],storage=new Map(),timers=[];
  const element=tag=>({tag,children:[],disabled:false,append(...x){this.children.push(...x);},remove(){this.removed=true;},setAttribute(){},removeAttribute(){},addEventListener(){},showModal(){},close(){}});
- const document={documentElement:{dataset:{}},createElement:element,addEventListener(){},querySelector(){return null;},body:{append(x){elements.push(x);}}};
+ const account=element('actions'),accountDialog=element('dialog');
+ const document={documentElement:{dataset:{}},createElement:element,addEventListener(){},querySelector(s){return s==='#accountMember .actions'?account:s==='#accountDialog'?accountDialog:null;},body:{append(x){elements.push(x);}}};
  const win={AU_IOS_TEST:{},addEventListener(){},Capacitor:{Plugins:{IOSUpdates:{addListener:async()=>({remove:async()=>{}}),download:async()=>({uri:'file:///ipa'}),openIn:async()=>({opened:true})},Share:{share:async()=>{}}}}};
  const releases=[{assets:[{name:'Avant-Usine-iOS-1.1.0-non-signe.ipa',digest:'sha256:'+'a'.repeat(64),size:42,browser_download_url:'https://github.com/zephiroxDev/avant-usine/releases/download/ios-v1.1.0/Avant-Usine-iOS-1.1.0-non-signe.ipa'}]}];
  const sandbox={window:win,document,localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)},fetch:async()=>({ok:true,json:async()=>releases}),setTimeout:(fn,ms)=>timers.push(ms),setInterval(){},Date,console};
  vm.runInNewContext(fs.readFileSync(path.join(root,'site/ios.js'),'utf8'),sandbox);
- return {...win.AU_IOS_TEST.exports,elements,storage,win};
+ return {...win.AU_IOS_TEST.exports,elements,storage,win,account};
 }
 test('Only newest published iOS package selected, numeric versions',()=>{
  const c=context();assert.equal(c.compare('1.10.0','1.9.0'),1);
@@ -46,4 +47,9 @@ test('Failed download never offers installation; ESign failure shows manual fall
  assert.ok(!d.elements[0].children.some(x=>x.textContent?.includes('Ouvre ton outil de signature et importe')));
  await d.elements[0].children.find(x=>x.textContent==='Ouvrir dans un outil de signature').onclick();
  assert.ok(d.elements[0].children.some(x=>x.textContent?.includes('Ouvre ton outil de signature et importe')));
+});
+test('Account force update bypasses skipped version and postponed reminder',async()=>{
+ const c=context();c.storage.set('au-ios-skip','1.1.0');c.storage.set('au-ios-remind',String(Date.now()+86400000));
+ const button=c.account.children.find(x=>x.textContent==='Forcer une mise à jour');assert.ok(button);
+ await button.onclick();assert.equal(c.elements[0].children[0].textContent,'Mise à jour iOS 1.1.0');assert.equal(button.disabled,false);
 });
