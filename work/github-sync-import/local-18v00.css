@@ -3,3 +3,5 @@
 body[data-local-active=true] .player-dock,body[data-local-active=true] #desktopAnnouncement{display:none!important}body[data-local-active=true] .page-scroll{padding-bottom:24px}
 
 body[data-local-active=true] .player-dock,body[data-local-active=true] #desktopAnnouncement{display:none!important}body[data-local-active=true] .page-scroll{padding-bottom:24px}
+
+.local-clean-choice{display:flex;align-items:flex-start;gap:12px;margin:14px 0;overflow-wrap:anywhere}.local-clean-choice input{flex-shrink:0;margin-top:4px}
