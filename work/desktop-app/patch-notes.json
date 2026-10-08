@@ -1,5 +1,14 @@
 [
   [
+    "18V00 · Windows 0.4.1 · Import local compatible",
+    "8 octobre 2026",
+    "Création d’albums pendant l’import sans fenêtre de saisie externe.",
+    [
+      "Le nom de l’album se saisit directement dans le panneau d’import multiple. Compatible avec les navigateurs intégrés sans prise en charge de prompt().",
+      "Toutes les fonctions de la bibliothèque Local introduites dans Windows 0.4.0 sont conservées."
+    ]
+  ],
+  [
     "18V00 · Windows 0.4.0 · Bibliothèque Local",
     "8 octobre 2026",
     "Albums, playlists, pochettes, paroles et exports personnels sur l’appareil.",

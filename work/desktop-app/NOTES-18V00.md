@@ -1,4 +1,4 @@
-# Avant l’usine — Windows 0.4.0 · 18V00
+# Avant l’usine — Windows 0.4.1 · 18V00
 
 Albums, playlists, pochettes, paroles et exports personnels sur l’appareil.
 
@@ -11,3 +11,5 @@ Albums, playlists, pochettes, paroles et exports personnels sur l’appareil.
 - Infos, fonctionnalités & astuces complété dans Lire le reste ; indice initial et phrase cachée conservés.
 
 La bibliothèque Local reste sur cet appareil. Exporter les albums pour sauvegarder ses fichiers. Mise à jour des fichiers via Installer à partir de 0.2.0 ; migration initiale requise pour 0.1.x.
+
+Compatibilité : le nom des albums importés se saisit dans le panneau Local, sans fenêtre prompt(). Toutes les nouveautés Local de 0.4.0 sont incluses.
