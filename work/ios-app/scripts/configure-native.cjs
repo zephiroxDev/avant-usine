@@ -4,8 +4,8 @@ const project=xcode.project(projFile);project.parseSync();
 const group=project.findPBXGroupKey({name:'App'})||project.findPBXGroupKey({path:'App'});
 if(!group)throw Error('App Xcode group missing');
 // xcode's helpers expect these named groups even when the template has none.
-if(!project.pbxGroupByName('Plugins'))project.addPbxGroup([],'Plugins','');
-if(!project.pbxGroupByName('Resources'))project.addPbxGroup([],'Resources','');
+if(!project.pbxGroupByName('Plugins'))project.addPbxGroup([],'Plugins');
+if(!project.pbxGroupByName('Resources'))project.addPbxGroup([],'Resources');
 for(const file of ['IOSUpdates.swift','ViewController.swift']){
  fs.copyFileSync(path.join(root,'native',file),path.join(app,file));
  project.addSourceFile(file,{},group);
@@ -15,6 +15,8 @@ project.updateBuildProperty('MARKETING_VERSION',require('../release.json').versi
 project.updateBuildProperty('CURRENT_PROJECT_VERSION',String(require('../release.json').buildNumber));
 project.updateBuildProperty('TARGETED_DEVICE_FAMILY','"1,2"');
 fs.writeFileSync(projFile,project.writeSync());
+// Check the generated project before attempting a remote build.
+xcode.project(projFile).parseSync();
 const storyboard=path.join(app,'Base.lproj/Main.storyboard');
 let xml=fs.readFileSync(storyboard,'utf8');
 xml=xml.replace('customClass="CAPBridgeViewController" customModule="Capacitor"','customClass="ViewController" customModule="App" customModuleProvider="target"');

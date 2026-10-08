@@ -5,3 +5,4 @@ build/
 *.p12
 *.mobileprovision
 *.ipa
+__pycache__/
