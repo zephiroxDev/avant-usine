@@ -3,7 +3,7 @@ const web=path.resolve(__dirname,'../github-sync-import'),context={window:{},Tex
 const bytes=s=>new TextEncoder().encode(s),concat=(...s)=>Buffer.concat(s.map(x=>Buffer.from(x)));
 function wav(){const b=Buffer.alloc(44+8000);b.write('RIFF');b.writeUInt32LE(b.length-8,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(8000,24);b.writeUInt32LE(16000,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(8000,40);return b;}
 (async()=>{
-const raw=new Blob([Buffer.from([255,251,144,0,1,2,3,4])],{type:'audio/mpeg'}),meta={name:'a.mp3',title:'Été <script>',artist:'Artiste',album:'Mon album',genre:'Rap',year:'2026'};
+const ordered=api.orderImported([{name:'10 - Dix.wav',title:'10 - Dix'},{name:'02 - Deux.wav',title:'02 - Deux'},{name:'01 - Un.wav',title:'01 - Un'},{name:'Sans.wav',title:'Sans'}]);assert.equal(JSON.stringify(ordered.map(t=>t.title)),JSON.stringify(['Un','Deux','Dix','Sans']));assert.equal(JSON.stringify(api.placeTrack(['a','b','c'],'a','c',true)),JSON.stringify(['b','c','a']));assert.equal(JSON.stringify(api.placeTrack(['a','b','c'],'c','a',false)),JSON.stringify(['c','a','b']));const raw=new Blob([Buffer.from([255,251,144,0,1,2,3,4])],{type:'audio/mpeg'}),meta={name:'a.mp3',title:'Été <script>',artist:'Artiste',album:'Mon album',genre:'Rap',year:'2026'};
 for(const [before,after]of [['01 - La vie est belle','La vie est belle'],['05 01 - La vie est belle','La vie est belle'],['  03. Été 2026 - remix','Été 2026 - remix'],['[04] — À demain','À demain'],['(05) - Encore','Encore'],['07Chanson','Chanson'],['La vie - 01','La vie - 01'],['100%','100%'],['2026','2026'],['01 - ','01 - '],['Sans numéro','Sans numéro']])assert.equal(api.stripTitleNumber(before),after,before);
 const tagged=await api.writeTags(raw,meta,3),out=new Uint8Array(await tagged.arrayBuffer()),tags=api.readTags(out);assert.equal(tags.title,meta.title);assert.equal(tags.artist,'Artiste');assert.equal(tags.track,'3');assert.deepEqual(out.slice(-8),new Uint8Array(await raw.arrayBuffer()));
 const twice=await api.writeTags(tagged,{...meta,title:'Nouveau'},1);assert.equal(api.readTags(new Uint8Array(await twice.arrayBuffer())).title,'Nouveau');assert.equal(twice.size,tagged.size+Buffer.byteLength("Nouveau")-Buffer.byteLength(meta.title));
@@ -14,4 +14,5 @@ const zip=await api.zip([{name:'Album/01 - Été.mp3',blob:tagged},{name:'Album/
 assert(!/\bfetch\s*\(|XMLHttpRequest|sendBeacon|supabase|\.rpc\(/.test(fs.readFileSync(path.join(web,'local-18v00.js'),'utf8')),'Local module has no network/account API');
 console.log('PASS 18V00: MP3 UTF-8 tags and unchanged audio, WAV sizes/audio, FLAC comments/audio, overlap accepted, malformed timings rejected, LRC and ZIP export, no network API.');
 })().catch(e=>{console.error(e);process.exitCode=1;});
+
 

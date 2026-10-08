@@ -5,3 +5,5 @@ body[data-local-active=true] .player-dock,body[data-local-active=true] #desktopA
 body[data-local-active=true] .player-dock,body[data-local-active=true] #desktopAnnouncement{display:none!important}body[data-local-active=true] .page-scroll{padding-bottom:24px}
 
 .local-clean-choice{display:flex;align-items:flex-start;gap:12px;margin:14px 0;overflow-wrap:anywhere}.local-clean-choice input{flex-shrink:0;margin-top:4px}
+
+.local-reorder-handle{touch-action:none;cursor:grab;user-select:none;min-width:44px;min-height:44px;font-size:26px;flex-shrink:0}.local-dragging{opacity:.65;outline:2px solid var(--accent,#ef476f)}.local-dragging .local-reorder-handle{cursor:grabbing}.local-drop-before{box-shadow:0 -4px 0 #ef476f}.local-drop-after{box-shadow:0 4px 0 #ef476f}
