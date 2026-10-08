@@ -19,11 +19,14 @@
  </div></header>
  <div class="page-scroll" id="pageScroll">
  <main id="main">
-<aside id="desktopAnnouncement" class="au-desktop-announcement" aria-labelledby="desktopAnnouncementTitle">
- <div><span class="au-desktop-tag">NOUVEAU · WINDOWS</span><h2 id="desktopAnnouncementTitle">Avant l’usine existe maintenant en application.</h2><p>Installe la collection sur ton PC : même interface, mêmes morceaux et ton compte habituel. L’interface reste disponible sans connexion ; l’écoute en ligne et les contributions nécessitent Internet.</p></div>
- <div class="au-desktop-actions"><a id="desktopDownload" class="button" href="https://github.com/zephiroxDev/avant-usine/releases">Télécharger l’application Windows</a><a id="desktopDownloadVersion" class="text-button" href="https://github.com/zephiroxDev/avant-usine/releases" target="_blank" rel="noopener noreferrer">Dernière version · Windows 64 bits · Détails et version portable ↗</a></div>
+<aside id="desktopAnnouncement" class="au-desktop-announcement au-app-announcement" aria-labelledby="desktopAnnouncementTitle">
+ <div class="au-app-intro"><span class="au-desktop-tag">APPLICATIONS · PC ET MOBILE</span><h2 id="desktopAnnouncementTitle">Avant l’usine, sur tes appareils.</h2><p>Retrouve la collection, les paroles et ton compte habituel dans l’application de ton choix.</p></div>
+ <div class="au-app-platforms">
+  <section class="au-app-platform" aria-labelledby="windowsAppTitle"><h3 id="windowsAppTitle">Windows</h3><p>Application PC · Windows 64 bits.</p><a id="desktopDownload" class="button" href="https://github.com/zephiroxDev/avant-usine/releases">Télécharger pour Windows</a><a id="desktopDownloadVersion" class="text-button" href="https://github.com/zephiroxDev/avant-usine/releases" target="_blank" rel="noopener noreferrer">Dernière version et version portable ↗</a></section>
+  <section class="au-app-platform" aria-labelledby="androidAppTitle"><h3 id="androidAppTitle">Android</h3><p>Fichier APK · Mise à jour depuis l’application.</p><a id="androidDownload" class="button" href="https://github.com/zephiroxDev/avant-usine/releases">Télécharger pour Android</a><a id="androidDownloadVersion" class="text-button" href="https://github.com/zephiroxDev/avant-usine/releases" target="_blank" rel="noopener noreferrer">Dernière version Android ↗</a></section>
+  <section class="au-app-platform" aria-labelledby="iosAppTitle"><h3 id="iosAppTitle">iPhone et iPad</h3><p>IPA non signé · À signer dans ESign avec un certificat et un profil valides.</p><a id="iosDownload" class="button" href="https://github.com/zephiroxDev/avant-usine/releases">Télécharger l’IPA</a><a id="iosDownloadVersion" class="text-button" href="https://github.com/zephiroxDev/avant-usine/releases" target="_blank" rel="noopener noreferrer">Dernière version iOS ↗</a></section>
+ </div>
 </aside>
-<aside id="androidAnnouncement" class="au-desktop-announcement" aria-labelledby="androidAnnouncementTitle"><div><span class="au-desktop-tag">ANDROID · BÊTA</span><h2 id="androidAnnouncementTitle">L’application Android arrive.</h2><p>La première version reprend l’interface du site mobile. Son téléchargement apparaîtra ici dès que le paquet Android sera publié.</p></div><div class="au-desktop-actions"><a id="androidDownload" class="button" href="https://github.com/zephiroxDev/avant-usine/releases" hidden>Télécharger l’application Android</a><span id="androidDownloadVersion" class="au-note">Première version en préparation.</span></div></aside>
 
   <section class="page" id="accueil" aria-labelledby="homeTitle">
    <div class="hero"><div class="hero-copy"><p class="eyebrow">JuL · Les premiers sons</p><h1 id="homeTitle" tabindex="-1">AVANT<span>L’USINE.</span></h1><p class="lede">Les morceaux d’avant. Les souvenirs qui restent.<br>Explore la collection, volume après volume.</p><div class="actions"><button class="button" type="button" data-go="collection">Explorer la collection <span aria-hidden="true">↗</span></button><button class="button secondary" type="button" id="homePlay">Lancer l’écoute <span aria-hidden="true">▶</span></button></div></div>
@@ -132,5 +135,7 @@
 <script src="./local-18v00.js"></script>
 <script src="./app-17v01.js"></script>
 <script src="./release-download.js" defer></script>
-<script src="./android-download.js" defer></script></body>
+</body>
 </html>
+
+<!-- Livraison Web 18V04 : néon des pochettes. -->
