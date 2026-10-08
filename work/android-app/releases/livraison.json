@@ -1,0 +1,10 @@
+{
+  "platform": "android",
+  "version": "0.1.0",
+  "versionCode": 1,
+  "sourceCommit": "1d16ee7136bdeafcc36b9cc73ac51ee1da609dfd",
+  "file": "Avant-Usine-Android-0.1.0.apk",
+  "bytes": 10615853,
+  "sha256": "6725686f99c8a7ed85a574551dd119e11cfcff5154166488079bb91f8de62b90",
+  "certificateSha256": "c56f1a5c2043a653b57729f8ad8cb7346c95fae2917c79307c4c699398a751b3"
+}
