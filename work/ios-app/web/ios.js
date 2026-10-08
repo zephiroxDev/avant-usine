@@ -33,7 +33,7 @@ async function check(force=false){
   offered=true;
   const modal=document.createElement('dialog');modal.className='au-ios-update';
   const heading=document.createElement('h2');heading.textContent='Mise à jour iOS '+version;
-  const text=document.createElement('p');text.textContent='Télécharge le nouvel IPA, puis signe-le dans ESign avec un certificat et un profil valides avant de l’installer. Garde le même identifiant et une signature compatible pour conserver tes données.';
+  const text=document.createElement('p');text.textContent='Télécharge le nouvel IPA, puis signe-le dans l’outil de ton choix avec un certificat et un profil valides avant de l’installer. Garde le même identifiant et une signature compatible pour conserver tes données.';
   modal.append(heading,text);
   const button=(label,action)=>{const b=document.createElement('button');b.className='button';b.textContent=label;b.onclick=action;modal.append(b);return b;};
   const close=()=>{modal.close();modal.remove();offered=false;};
@@ -46,9 +46,9 @@ async function check(force=false){
    try{
     listener=await native.addListener('progress',p=>{if(p.total>0){progress.value=p.bytes/p.total*100;text.textContent='Téléchargement : '+Math.round(progress.value)+' %';}else{progress.removeAttribute('value');text.textContent='Téléchargement : '+Math.round(p.bytes/1048576)+' Mo';}});
     const result=await native.download({url:latest.a.browser_download_url,sha256:sha,size:latest.a.size,name:latest.a.name});
-    text.textContent='IPA téléchargé et vérifié. Appuie sur « Ouvrir dans ESign », puis sélectionne ESign si iOS propose plusieurs applications.';
+    text.textContent='IPA téléchargé et vérifié. Appuie sur « Ouvrir dans un outil de signature », puis sélectionne ton outil de signature si iOS propose plusieurs applications.';
     download.remove();
-    button('Ouvrir dans ESign',async()=>{try{const opened=await native.openIn({uri:result.uri});if(!opened.opened)text.textContent='Ouverture annulée. Tu peux réessayer avec « Ouvrir dans ESign ».';}catch(error){text.textContent='Ouverture impossible : '+(error.message||error)+'. Ouvre ESign et importe le fichier depuis Fichiers > Avant l’usine > MisesAJour.';}});
+    button('Ouvrir dans un outil de signature',async()=>{try{const opened=await native.openIn({uri:result.uri});if(!opened.opened)text.textContent='Ouverture annulée. Tu peux réessayer avec « Ouvrir dans un outil de signature ».';}catch(error){text.textContent='Ouverture impossible : '+(error.message||error)+'. Ouvre ton outil de signature et importe le fichier depuis Fichiers > Avant l’usine > MisesAJour.';}});
    }catch(error){text.textContent='Téléchargement interrompu : '+(error.message||error)+'. L’installation actuelle est conservée.';download.disabled=false;}
    finally{await listener?.remove();progress.remove();later.disabled=false;skip.disabled=false;}
   });

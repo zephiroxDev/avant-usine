@@ -1,10 +1,27 @@
 [
-  ["iOS 1.0", "2026-10-08", "Première version iPhone et iPad à signer avant installation.",
-    ["Interface mobile embarquée, collection, paroles, Atelier et bibliothèque locale.",
-     "Pochettes animées et néons avec réglages de réduction des effets.",
-     "Export des fichiers locaux par le menu de partage iOS.",
-     "Détection des nouvelles versions iOS sur GitHub, report ou saut d’une version.",
-     "Téléchargement natif de l’IPA avec progression et contrôle SHA-256.",
-     "Bouton « Ouvrir dans ESign » via le menu de partage pour signer et installer le fichier.",
-     "IPA non signé : certificat et profil de signature valides requis. Installation et conservation des données à confirmer sur appareil réel."]]
+  [
+    "iOS 1.0.1",
+    "2026-10-08",
+    "Choix libre de l’outil de signature pour les mises à jour.",
+    [
+      "Bouton « Ouvrir dans un outil de signature » : l’IPA téléchargé peut être transmis à toute application compatible proposée par iOS.",
+      "Instructions de signature générales ; ESign reste un exemple et n’est plus présenté comme obligatoire.",
+      "En cas d’échec d’ouverture, importer le fichier depuis Fichiers > Avant l’usine > MisesAJour dans l’outil choisi.",
+      "Détection dynamique de cette version depuis iOS 1.0, téléchargement natif avec contrôle de taille et SHA-256 ; signature et installation restent à effectuer avec un certificat et un profil valides."
+    ]
+  ],
+  [
+    "iOS 1.0",
+    "2026-10-08",
+    "Première version iPhone et iPad à signer avant installation.",
+    [
+      "Interface mobile embarquée, collection, paroles, Atelier et bibliothèque locale.",
+      "Pochettes animées et néons avec réglages de réduction des effets.",
+      "Export des fichiers locaux par le menu de partage iOS.",
+      "Détection des nouvelles versions iOS sur GitHub, report ou saut d’une version.",
+      "Téléchargement natif de l’IPA avec progression et contrôle SHA-256.",
+      "Bouton « Ouvrir dans ESign » via le menu de partage pour signer et installer le fichier.",
+      "IPA non signé : certificat et profil de signature valides requis. Installation et conservation des données à confirmer sur appareil réel."
+    ]
+  ]
 ]

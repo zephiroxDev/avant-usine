@@ -20,6 +20,6 @@ const main=html.match(/src="\.\/(app-\d+v\d+\.js)"/)[1];
 let code=fs.readFileSync(path.join(dest,main),'utf8');
 const needle='for(const [title,text]of [';
 if(!code.includes(needle))throw Error('Section Infos introuvable');
-code=code.replace(needle,needle+"\n['Mises à jour iPhone et iPad','L’application télécharge les nouveaux IPA et vérifie leur empreinte. Ouvrir dans ESign utilise le menu de partage iOS ; un certificat et un profil valides sont nécessaires pour signer puis installer. Garder le même identifiant et une signature compatible pour conserver les données.'],");
+code=code.replace(needle,needle+"\n['Mises à jour iPhone et iPad','L’application télécharge les nouveaux IPA et vérifie leur empreinte. Ouvrir dans un outil de signature utilise le menu natif iOS ; un certificat et un profil valides sont nécessaires pour signer puis installer. Garder le même identifiant et une signature compatible pour conserver les données.'],");
 fs.writeFileSync(path.join(dest,main),code);
 console.log('Interface iOS '+release.version+' préparée.');

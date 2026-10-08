@@ -5,7 +5,7 @@ test('Packaged iOS references and isolated history',()=>{
  for(const match of html.matchAll(/(?:src|href)="\.\/([^"#?]+)(?:[?#][^"]*)?"/g))assert.ok(fs.existsSync(path.join(root,'site',match[1])),match[1]);
  assert.ok(html.includes('./ios.js'));assert.ok(!html.includes('android.js'));
  const h=fs.readFileSync(path.join(root,'site/histories-17v01.js'),'utf8');
- assert.ok(h.includes('iOS 1.0'));
+ assert.ok(h.includes(require('../patch-notes.json')[0][0]));
  const main=html.match(/src="\.\/(app-\d+v\d+\.js)"/)[1];
  const code=fs.readFileSync(path.join(root,'site',main),'utf8');
  assert.ok(!code.includes("navigator.serviceWorker.register"));assert.ok(code.includes('Mises à jour iPhone et iPad'));
@@ -22,7 +22,7 @@ function context(){
 }
 test('Only newest published iOS package selected, numeric versions',()=>{
  const c=context();assert.equal(c.compare('1.10.0','1.9.0'),1);
- assert.equal(c.current,'1.0.0');
+ assert.equal(c.current,require('../release.json').version);
  assert.equal(c.choose([{draft:true,assets:[{name:'Avant-Usine-iOS-9.0.0-non-signe.ipa'}]},{assets:[{name:'Avant-Usine-Android-9.0.0.apk'}]}],'1.0.0'),undefined);
 });
 test('Skipped version suppressed; a newer real version is proposed',async()=>{
@@ -34,16 +34,16 @@ test('Later postpones; verified download provides ESign action',async()=>{
  const c=context();await c.check();const modal=c.elements[0];
  const later=modal.children.find(x=>x.textContent==='Plus tard');later.onclick();assert.ok(Number(c.storage.get('au-ios-remind'))>Date.now());
  const d=context();await d.check();await d.elements[0].children.find(x=>x.textContent==='Télécharger la mise à jour').onclick();
- assert.ok(d.elements[0].children.some(x=>x.textContent==='Ouvrir dans ESign'));
+ assert.ok(d.elements[0].children.some(x=>x.textContent==='Ouvrir dans un outil de signature'));
 });
 test('Failed download never offers installation; ESign failure shows manual fallback',async()=>{
  const c=context();c.win.Capacitor.Plugins.IOSUpdates.download=async()=>{throw Error('hash incorrect');};
  await c.check();await c.elements[0].children.find(x=>x.textContent==='Télécharger la mise à jour').onclick();
- assert.ok(!c.elements[0].children.some(x=>x.textContent==='Ouvrir dans ESign'));
+ assert.ok(!c.elements[0].children.some(x=>x.textContent==='Ouvrir dans un outil de signature'));
  assert.ok(c.elements[0].children.some(x=>x.textContent?.includes('L’installation actuelle est conservée')));
  const d=context();d.win.Capacitor.Plugins.IOSUpdates.openIn=async()=>{throw Error('absent');};
  await d.check();await d.elements[0].children.find(x=>x.textContent==='Télécharger la mise à jour').onclick();
- assert.ok(!d.elements[0].children.some(x=>x.textContent?.includes('Ouvre ESign et importe')));
- await d.elements[0].children.find(x=>x.textContent==='Ouvrir dans ESign').onclick();
- assert.ok(d.elements[0].children.some(x=>x.textContent?.includes('Ouvre ESign et importe')));
+ assert.ok(!d.elements[0].children.some(x=>x.textContent?.includes('Ouvre ton outil de signature et importe')));
+ await d.elements[0].children.find(x=>x.textContent==='Ouvrir dans un outil de signature').onclick();
+ assert.ok(d.elements[0].children.some(x=>x.textContent?.includes('Ouvre ton outil de signature et importe')));
 });
