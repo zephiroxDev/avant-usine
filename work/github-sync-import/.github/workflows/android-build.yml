@@ -1,0 +1,56 @@
+name: Android build
+on:
+  push:
+    branches: [main]
+    paths: ['work/android-app/release.json', '.github/workflows/android-build.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Prepare and test mobile sources
+        working-directory: work/android-app
+        run: |
+          npm ci --no-audit --no-fund
+          python -m pip install Pillow
+          npm run prepare:site
+          npm test
+          npx cap add android
+          npx cap sync android
+          python scripts/configure-native.py
+      - name: Build unsigned APK
+        working-directory: work/android-app/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --max-workers=2
+      - name: Save intermediate build on its dedicated branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import json,pathlib,base64,subprocess,os,hashlib
+          p=pathlib.Path('work/android-app/android/app/build/outputs/apk/release/app-release-unsigned.apk');data=p.read_bytes();repo=os.environ['GH_REPO'];commit=os.environ['GITHUB_SHA']
+          def api(endpoint,payload):
+              file=pathlib.Path(os.environ['RUNNER_TEMP'])/'github-payload.json';file.write_text(json.dumps(payload));return json.loads(subprocess.check_output(['gh','api','--method','POST','repos/'+repo+'/'+endpoint,'--input',str(file)]))
+          blob=api('git/blobs',{'encoding':'base64','content':base64.b64encode(data).decode()})
+          metadata={'sourceCommit':commit,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'unsigned':True}
+          tree=api('git/trees',{'tree':[{'path':'unsigned.apk','mode':'100644','type':'blob','sha':blob['sha']},{'path':'build.json','mode':'100644','type':'blob','content':json.dumps(metadata)}]})
+          new=api('git/commits',{'message':'Intermediate unsigned Android build '+commit[:7],'tree':tree['sha'],'parents':[]})
+          api('git/refs',{'ref':'refs/heads/build/android-'+commit[:12],'sha':new['sha']})
+          print('BUILD_BRANCH=build/android-'+commit[:12])
+          PY

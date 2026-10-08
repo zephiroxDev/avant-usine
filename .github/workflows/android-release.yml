@@ -1,0 +1,42 @@
+name: Android release
+on:
+  push:
+    branches: [main]
+    paths: ['work/android-app/releases/livraison.json']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Verify signed APK
+        run: |
+          python - <<'PY'
+          import pathlib,json,hashlib
+          r=pathlib.Path('work/android-app/releases');m=json.loads((r/'livraison.json').read_text());p=r/m['file']
+          assert p.stat().st_size==m['bytes'] and hashlib.sha256(p.read_bytes()).hexdigest()==m['sha256']
+          PY
+          file="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['file'])")"
+          signer="$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -1)"
+          "$signer" verify --verbose --print-certs "work/android-app/releases/$file"
+      - name: Publish Android beta independently
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          version="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['version'])")"
+          file="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['file'])")"
+          tag="android-v$version"
+          gh release create "$tag" --draft --prerelease --target "$GITHUB_SHA" --title "Avant l’usine — Android $version · Bêta" --notes-file "work/android-app/NOTES-$version.md"
+          gh release upload "$tag" "work/android-app/releases/$file" work/android-app/releases/livraison.json
+          python - <<'PY'
+          import json,subprocess,pathlib
+          m=json.loads(pathlib.Path('work/android-app/releases/livraison.json').read_text());r=json.loads(subprocess.check_output(['gh','api','repos/'+__import__('os').environ['GH_REPO']+'/releases/tags/android-v'+m['version']]))
+          assert r['draft']
+          a=next(a for a in r['assets'] if a['name']==m['file']);assert a['size']==m['bytes'] and a['digest']=='sha256:'+m['sha256']
+          PY
+          gh release edit "$tag" --draft=false --prerelease --latest=false

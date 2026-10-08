@@ -1,0 +1,7 @@
+{
+  "platform": "android",
+  "version": "0.1.0",
+  "versionCode": 1,
+  "channel": "beta",
+  "source": "../github-sync-import"
+}
