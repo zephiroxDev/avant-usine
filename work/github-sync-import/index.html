@@ -8,13 +8,14 @@
 <title>Avant l’usine — La collection</title>
 <link rel="stylesheet" href="./styles-17v00.css">
 <link rel="stylesheet" href="./styles-17v01.css">
+<link rel="stylesheet" href="./local-18v00.css">
 </head>
 <body>
 <noscript><p class="noscript">Active JavaScript pour afficher la collection et écouter les morceaux.</p></noscript>
 <div class="shell">
  <header class="topbar"><div class="topbar-inner">
   <button class="brand" type="button" data-go="accueil" aria-label="Avant l’usine, accueil"><span class="brand-mark" aria-hidden="true">AU</span><span class="brand-word">AVANT L’USINE<small>LA PUENTA 13 · LA COLLECTION</small></span></button>
-  <nav class="nav" aria-label="Navigation principale"><button type="button" data-go="accueil">Accueil</button><button type="button" data-go="collection">Collection</button><button type="button" data-go="bibliotheque">Ma musique</button><button type="button" data-go="decouvrir">Découvrir</button><button type="button" data-go="communaute">Communauté</button><button type="button" data-go="telechargements">Téléchargements</button><a href="https://ko-fi.com/zephirox" target="_blank" rel="noopener noreferrer" class="au-kofi-link" aria-label="Soutenir Zephirox sur Ko-fi (nouvel onglet)">Soutenir sur Ko-fi ↗</a></nav>
+  <nav class="nav" aria-label="Navigation principale"><button type="button" data-go="accueil">Accueil</button><button type="button" data-go="collection">Collection</button><button type="button" data-go="bibliotheque">Ma musique</button><button type="button" data-go="local">Local</button><button type="button" data-go="decouvrir">Découvrir</button><button type="button" data-go="communaute">Communauté</button><button type="button" data-go="telechargements">Téléchargements</button><a href="https://ko-fi.com/zephirox" target="_blank" rel="noopener noreferrer" class="au-kofi-link" aria-label="Soutenir Zephirox sur Ko-fi (nouvel onglet)">Soutenir sur Ko-fi ↗</a></nav>
  </div></header>
  <div class="page-scroll" id="pageScroll">
  <main id="main">
@@ -75,7 +76,16 @@
  <div class="page-heading"><p class="eyebrow">La collection, ensemble</p><h1 id="communityHeading" tabindex="-1">Vos pépites, vos histoires.</h1><p class="lede">Un souvenir, une archive, un morceau sous-coté. Fais vivre la collection avec les autres visiteurs.</p></div><div id="discoveryCommunity"></div>
 <aside class="au-kofi-banner" aria-label="Soutenir le créateur du site"><div><strong>Tu aimes ce projet ?</strong><p>Soutiens Zephirox, le créateur d’Avant l’usine, sur Ko-fi. Merci pour ton soutien.</p></div><a href="https://ko-fi.com/zephirox" target="_blank" rel="noopener noreferrer" class="au-kofi-link" aria-label="Soutenir Zephirox sur Ko-fi (nouvel onglet)">Soutenir sur Ko-fi ↗</a></aside></section>
 
- </main>
+ <section class="page" id="local" aria-labelledby="localHeading" hidden>
+<div class="page-heading"><p class="eyebrow">Ta bibliothèque personnelle</p><h1 id="localHeading" tabindex="-1">Local.</h1><p class="lede">Tes fichiers, tes albums, tes paroles. Sur cet appareil uniquement.</p></div>
+<aside id="localNotice" class="local-notice"><h2>Local et bibliothèque publique : deux espaces séparés</h2><p>La bibliothèque publique utilise des contenus accessibles via des serveurs. Elle est volontairement limitée concernant les contenus musicaux officiels pour respecter les droits d’auteur et les ayants droit.</p><p>Ici, tu sélectionnes tes fichiers personnels directement sur ton appareil. Tes fichiers audio ne sont ni téléversés, ni hébergés, ni stockés sur les serveurs du site. Ils restent dans la bibliothèque de cet appareil et ne deviennent pas publics.</p><p>Utilise des fichiers que tu es autorisé à lire. Le stockage du navigateur peut être effacé : exporte régulièrement tes albums pour les sauvegarder.</p></aside>
+<div class="local-drop" id="localDrop"><strong>Glisse tes fichiers audio ici</strong><label>Choisir des fichiers audio<input id="localImport" type="file" accept="audio/*,.mp3,.wav,.flac,.m4a,.aac,.ogg,.opus,.aiff" multiple></label><label>Importer un dossier audio<input id="localFolder" type="file" webkitdirectory multiple></label></div>
+<div class="actions"><button type="button" class="button" id="localCreateAlbum">Créer un album</button><button type="button" class="button secondary" id="localCreatePlaylist">Créer une playlist</button></div>
+<div class="local-tabs" aria-label="Bibliothèque locale"><button type="button" class="button secondary" data-local-view="tracks">Morceaux</button><button type="button" class="button secondary" data-local-view="albums">Albums</button><button type="button" class="button secondary" data-local-view="playlists">Playlists</button><button type="button" class="button secondary" data-local-view="favorites">Favoris ♥</button></div>
+<label>Rechercher dans les fichiers locaux <input id="localSearch" type="search" placeholder="Titre, artiste, album"></label><p id="localCount"></p><p id="localStatus" role="status" aria-live="polite">Ouverture du stockage local…</p>
+<div id="localPlayer"><div class="local-track-main"><div id="localPlayerCover"></div><strong id="localNow">Choisis un morceau local.</strong></div><div class="actions"><button type="button" class="button" id="localPlay">Écouter</button><button type="button" class="button secondary" id="localNext">Suivant</button><span id="localTime">0:00</span></div><input id="localSeek" type="range" min="0" max="0" step="0.01" value="0" aria-label="Position dans le morceau local"><div id="localLyrics"></div></div>
+<div id="localList"></div><audio id="localAudio" preload="metadata"></audio></section>
+</main>
  <footer class="footer"><span><strong>AVANT L’USINE</strong><br>La Puenta 13 · La collection</span><span>Les premiers sons, au même endroit.<br><button type="button" data-go="collection">Explorer les volumes ↗</button></span><div class="footer-shortcuts"><button data-go="decouvrir">Réseaux officiels & shop ↗</button><button data-go="communaute">Archives & signalements ↗</button></div><a href="https://ko-fi.com/zephirox" target="_blank" rel="noopener noreferrer" class="au-kofi-link" aria-label="Soutenir Zephirox sur Ko-fi (nouvel onglet)">Soutenir sur Ko-fi ↗</a></footer>
  </div>
  <aside class="player-dock" aria-label="Lecteur audio permanent">
@@ -117,6 +127,7 @@
 <script src="./statistics-ui-17v01.js"></script>
 <script src="./native-light-17v04.js" defer></script>
 <script src="./sharing-17v06.js"></script>
+<script src="./local-18v00.js"></script>
 <script src="./app-17v01.js"></script>
 <script src="./release-download.js" defer></script>
 </body>

@@ -50,6 +50,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Synchronization tests failed' }
           node work/mine-sync/test-sharing-17v06.cjs
           if ($LASTEXITCODE -ne 0) { throw 'Sharing and synchronization speed tests failed' }
+          node work/mine-sync/test-local-18v00.cjs
+          if ($LASTEXITCODE -ne 0) { throw 'Local library tests failed' }
       - name: Build and verify Windows packages
         shell: pwsh
         run: ./work/desktop-app/scripts/release.ps1 -Python python

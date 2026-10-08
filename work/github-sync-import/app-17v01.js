@@ -88,7 +88,7 @@ async function drawCover(canvas, volume) {
  catch(error) {if(coverRequests.get(canvas)!==request)return;context.fillStyle='#271336';context.fillRect(0,0,canvas.width,canvas.height);context.fillStyle='#ff9bcf';context.font=Math.max(10,canvas.width/18)+'px Arial';context.textAlign='center';context.fillText('Pochette indisponible',canvas.width/2,canvas.height/2);canvas.dataset.coverState='error';canvas.dataset.coverError=error.message;}
 }
 function navigate(next, focus=true) {
- const routes=['accueil','collection','ecoute','telechargements','paroles','bibliotheque','decouvrir','communaute','historique','repertoire','infos','blindtest','statistiques'];
+ const routes=['accueil','collection','ecoute','telechargements','paroles','bibliotheque','decouvrir','communaute','historique','repertoire','infos','blindtest','statistiques','local'];
  route=routes.includes(next)?next:'accueil';
  if(route==='paroles')renderLyrics();
  routes.forEach(id=>{if($(id))$(id).hidden=id!==route;});
@@ -1312,6 +1312,7 @@ function initProjectGuide(){
  ['Statuts et badges','Dans Mon compte, choisis En ligne, Ne pas déranger ou Hors ligne. Noir indique une sanction active ; ce statut ne se choisit pas. Les comptes créateur et modérateur disposent de presets de badges ; les animations respectent la réduction des mouvements.'],
  ['Téléchargements et application','Téléchargements propose les volumes et pochettes. Le téléchargement Windows suit automatiquement la dernière release publique. À partir de 0.2.0, Installer met à jour les fichiers modifiés, les vérifie et conserve les données ; 0.1.x exige une migration initiale.'],
  ['Performances et accessibilité','Les effets au survol sont réservés aux appareils à souris. Les sons d’interface s’arrêtent dès qu’une musique joue et se coupent depuis le pied de page. Le bouton Effets visuels propose complets, réduits ou désactivés et mémorise ce choix ; les pochettes animées peuvent être mises en pause séparément.'],
+ ['Bibliothèque Local — 18V00','Importe tes fichiers audio ou un dossier sur cet appareil uniquement, sans compte et sans transfert au serveur. Albums personnalisés, playlists, favoris, ordre, titres, artistes, genres, années et pochettes restent modifiables. Les pochettes non carrées demandent confirmation et conservent toute l’image par redimensionnement. Importe tes LRC/JSON ou utilise l’Atelier local avec réglage de vitesse et brouillons. Exporte les albums en ZIP avec audio, pochettes, métadonnées et, au choix, LRC, JSON, les deux ou aucun. Les tags MP3/WAV/FLAC sont écrits dans les copies exportées ; les autres formats conservent leurs métadonnées dans le JSON associé. Exporte régulièrement : effacer les données du navigateur efface cette bibliothèque.'],
  ['Soutien et avenir','Le site et l’application ne sont financés par personne. Maintenance et évolutions dépendent des moyens personnels du créateur et du soutien volontaire sur Ko-fi. Si les coûts deviennent trop élevés sans soutien, la maintenance et les mises à jour pourraient ne plus être possibles. Une version Android/APK et une version iPhone/iOS/IPA sont envisagées, sans confirmation ni date.']]){const card=element('article','major-card');card.append(element('h2','',title),element('p','',text));rest.append(card);}
  const support=element('a','au-kofi-link','Soutenir sur Ko-fi ↗');support.href='https://ko-fi.com/zephirox';support.target='_blank';support.rel='noopener noreferrer';rest.lastChild.append(support);page.append(zone,more,rest);document.querySelector('main').append(page);
  const nav=button('','Infos, fonctionnalités & astuces',()=>navigate('infos'));nav.dataset.go='infos';const repertoire=document.querySelector('.nav [data-go=repertoire]');if(repertoire)repertoire.after(nav);else document.querySelector('.nav').append(nav);
@@ -1435,6 +1436,7 @@ function adminAction(label,rpc,args){return button('button secondary',label,asyn
 })();
 
 window.addEventListener('au:catalog-retired',()=>{audio.pause();document.querySelectorAll('dialog[open]').forEach(d=>d.close());location.reload();});
+window.AU_INIT_LOCAL_18({navigate,publicAudio:audio,createKaraokeEditor,createBlockEditor,normaliseReviewFile,createPublicLyricsView});
 initDiscoveryCommunity();initPwaGallery();motionCovers.init();initSystemMedia();initInterfaceEffects();initProjectGuide();
 
 })();

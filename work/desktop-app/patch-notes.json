@@ -1,5 +1,19 @@
 [
   [
+    "18V00 · Windows 0.4.0 · Bibliothèque Local",
+    "8 octobre 2026",
+    "Albums, playlists, pochettes, paroles et exports personnels sur l’appareil.",
+    [
+      "Nouvel onglet Local séparé du catalogue public : fichiers personnels stockés sur l’appareil via IndexedDB, sans compte ni transfert aux serveurs. Message explicatif à chaque ouverture et rappel de sauvegarde.",
+      "Import de fichiers ou dossiers audio, choix morceaux séparés ou album lors d’un import multiple ; titres et métadonnées intégrées MP3/FLAC détectés lorsque disponibles.",
+      "Albums et playlists personnalisés : sélection des morceaux, ordre avec flèches, ajouts, retraits, renommage et suppression à tout moment. Numérotation recalculée sans modifier les titres. Favoris locaux indépendants du compte.",
+      "Pochettes classiques et animées choisies dans les fichiers de l’appareil. Vérification des dimensions, confirmation pour les formats non carrés et redimensionnement sans recadrage. Pochette d’album ou individuelle et application à tous les morceaux.",
+      "Paroles locales simples et synchronisées : import LRC/JSON, choix simple ou Highlight détaillé, lecture synchronisée et Atelier sans contribution publique, vitesses 0,50×/0,75×/1×/2× et brouillons sur l’appareil.",
+      "Export ZIP des albums dans l’ordre : copies audio, pochettes et métadonnées, avec aucun fichier de paroles, LRC, JSON ou les deux. Tags MP3, WAV et FLAC réécrits dans les copies ; autres formats conservés avec métadonnées JSON. Originaux intacts.",
+      "Infos, fonctionnalités & astuces complété dans Lire le reste ; indice initial et phrase cachée conservés."
+    ]
+  ],
+  [
     "17V06 · Windows 0.3.6",
     "7 octobre 2026",
     "Liens directs vers les morceaux, vitesse des ateliers et choix des formats importés.",
