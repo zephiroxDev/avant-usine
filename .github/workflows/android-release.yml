@@ -2,7 +2,7 @@ name: Android release
 on:
   push:
     branches: [main]
-    paths: ['work/android-app/releases/livraison.json']
+    paths: ['work/android-app/releases/livraison.json', '.github/workflows/android-release.yml']
   workflow_dispatch:
 permissions:
   contents: write
@@ -31,11 +31,12 @@ jobs:
           version="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['version'])")"
           file="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['file'])")"
           tag="android-v$version"
-          gh release create "$tag" --draft --prerelease --target "$GITHUB_SHA" --title "Avant l’usine — Android $version · Bêta" --notes-file "work/android-app/NOTES-$version.md"
-          gh release upload "$tag" "work/android-app/releases/$file" work/android-app/releases/livraison.json
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --draft --prerelease --target "$GITHUB_SHA" --title "Avant l’usine — Android $version · Bêta" --notes-file "work/android-app/NOTES-$version.md"
+          gh release upload "$tag" "work/android-app/releases/$file" work/android-app/releases/livraison.json --clobber
           python - <<'PY'
           import json,subprocess,pathlib
-          m=json.loads(pathlib.Path('work/android-app/releases/livraison.json').read_text());r=json.loads(subprocess.check_output(['gh','api','repos/'+__import__('os').environ['GH_REPO']+'/releases/tags/android-v'+m['version']]))
+          m=json.loads(pathlib.Path('work/android-app/releases/livraison.json').read_text());r=json.loads(subprocess.check_output(['gh','api','repos/'+__import__('os').environ['GH_REPO']+'/releases?per_page=100']))
+          r=next(x for x in r if x['tag_name']=='android-v'+m['version'])
           assert r['draft']
           a=next(a for a in r['assets'] if a['name']==m['file']);assert a['size']==m['bytes'] and a['digest']=='sha256:'+m['sha256']
           PY
