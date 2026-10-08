@@ -1,5 +1,15 @@
 [
   [
+    "Android 0.1.2 · 18V04 · Correctif du logo",
+    "8 octobre 2026",
+    "Résolution des icônes Android corrigée.",
+    [
+      "Logo Android reconstruit directement depuis l’image originale en haute résolution, sans réutiliser une miniature.",
+      "Icônes adaptatives corrigées : couches de 108 dp et images propres à chaque densité, jusqu’à 432 × 432 pixels. Anciennes icônes de 48 dp séparées du rendu adaptatif.",
+      "Logo de l’en-tête en PNG 1024 × 1024 ; icônes Web générées à leur taille réelle. Illustration et couleurs conservées."
+    ]
+  ],
+  [
     "Android 0.1.1 · 18V04 · Logo et néon",
     "8 octobre 2026",
     "Nouvelle icône et contour lumineux des pochettes.",

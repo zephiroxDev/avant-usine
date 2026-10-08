@@ -5,7 +5,7 @@ fs.mkdirSync(dest,{recursive:true});
 const allowed=/^(index\.html|app-\d+v\d+\.js|(?:summary-rules|listening-clock|activity|blind-test|histories|metrics|statistics-engine|statistics-ui)-17v01\.js|local-18v00\.(?:js|css)|sharing-17v06\.js|catalog-audit-17v03\.js|native-light-17v04\.js|collection-\d+v\d+\.js|styles-\d+v\d+\.css|cover-\d{2}\.webp|pochette-animee-\d{2}\.mp4|favicon\.ico|favicon-32\.png|apple-touch-icon\.png|icon-(192|512)\.png|supabase-auth-client\.js)$/;
 for(const name of fs.readdirSync(source))if(allowed.test(name))fs.copyFileSync(path.join(source,name),path.join(dest,name));
 let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
-html=html.replace(/<aside id="desktopAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./release-download.js" defer></script>','').replace('<title>Avant l’usine — La collection</title>','<title>Avant l’usine</title>').replace('<span class="brand-mark" aria-hidden="true">AU</span>','<img class="brand-mark" src="./icon-512.png" alt="" style="object-fit:cover">');
+html=html.replace(/<aside id="desktopAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./release-download.js" defer></script>','').replace('<title>Avant l’usine — La collection</title>','<title>Avant l’usine</title>').replace('<span class="brand-mark" aria-hidden="true">AU</span>','<img class="brand-mark" src="./android-logo.png" alt="" style="object-fit:cover">');
 html=html.replace(/<aside id="androidAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./android-download.js" defer></script>','');
 html=adaptCopy(html).replaceAll('sur ton ordinateur','sur ton appareil');
 html=html.replace('</head>','<link rel="stylesheet" href="./android.css"></head>').replace('</body>','<script src="./android.js" defer></script></body>');
@@ -16,6 +16,7 @@ code=code.replace("const names={'web-pc':'Site PC','desktop-pc':'Application PC'
 if(!code.includes('if(!history.length)'))code=code.replace("for(const [title,date,intro,changes]of history)","if(!history.length)list.append(element('p','','Aucune version publiée pour cette plateforme.'));for(const [title,date,intro,changes]of history)");fs.writeFileSync(path.join(dest,main),code);
 const notes=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../patch-notes.json'),'utf8'));
 const hp=path.join(dest,'histories-17v01.js'),prefix='window.AU_PLATFORM_HISTORIES=';const h=JSON.parse(fs.readFileSync(hp,'utf8').slice(prefix.length).trim().replace(/;$/,''));h.android=notes;h.ios??=[];fs.writeFileSync(hp,prefix+JSON.stringify(h)+';');
-for(const name of ['icon-512.png','icon-192.png','favicon-32.png','apple-touch-icon.png'])fs.copyFileSync(path.resolve(__dirname,'../assets/logo.png'),path.join(dest,name));
+for(const name of ['icon-512.png','icon-192.png','favicon-32.png','apple-touch-icon.png','favicon.ico'])fs.copyFileSync(path.resolve(__dirname,'../assets/generated',name),path.join(dest,name));
+fs.copyFileSync(path.resolve(__dirname,'../assets/logo.png'),path.join(dest,'android-logo.png'));
 for(const name of ['android.js','android.css'])fs.copyFileSync(path.resolve(__dirname,'../web',name),path.join(dest,name));
 console.log('Interface mobile Android préparée : '+fs.readdirSync(dest).length+' fichiers.');

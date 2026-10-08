@@ -27,7 +27,7 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           python -m pip install Pillow
-          python ../desktop-app/scripts/make-icon.py
+          python scripts/make-icons.py
           npm run prepare:site
           npm test
           npx cap add android
