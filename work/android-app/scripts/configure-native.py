@@ -7,7 +7,7 @@ manifest=android/'app/src/main/AndroidManifest.xml';s=manifest.read_text();s=s.r
 if 'REQUEST_INSTALL_PACKAGES' not in s:s=s.replace('<uses-permission android:name="android.permission.INTERNET" />','<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />')
 manifest.write_text(s)
 release=json.loads((p/'release.json').read_text());build=android/'app/build.gradle';s=build.read_text();s=re.sub(r'versionName "[^"]+"','versionName "'+release['version']+'"',s);s=re.sub(r'versionCode \d+','versionCode '+str(release['versionCode']),s);build.write_text(s)
-res=android/'app/src/main/res';image=Image.open(r/'work/desktop-app/build/icon-512.png').convert('RGBA')
+res=android/'app/src/main/res';image=Image.open(p/'assets/logo.png').convert('RGBA')
 for density,size in [('mdpi',48),('hdpi',72),('xhdpi',96),('xxhdpi',144),('xxxhdpi',192)]:
  folder=res/('mipmap-'+density);folder.mkdir(exist_ok=True)
  for name in ['ic_launcher.png','ic_launcher_round.png','ic_launcher_foreground.png']:image.resize((size,size),Image.Resampling.LANCZOS).save(folder/name)

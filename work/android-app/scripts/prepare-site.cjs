@@ -16,6 +16,6 @@ code=code.replace("const names={'web-pc':'Site PC','desktop-pc':'Application PC'
 if(!code.includes('if(!history.length)'))code=code.replace("for(const [title,date,intro,changes]of history)","if(!history.length)list.append(element('p','','Aucune version publiée pour cette plateforme.'));for(const [title,date,intro,changes]of history)");fs.writeFileSync(path.join(dest,main),code);
 const notes=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../patch-notes.json'),'utf8'));
 const hp=path.join(dest,'histories-17v01.js'),prefix='window.AU_PLATFORM_HISTORIES=';const h=JSON.parse(fs.readFileSync(hp,'utf8').slice(prefix.length).trim().replace(/;$/,''));h.android=notes;h.ios??=[];fs.writeFileSync(hp,prefix+JSON.stringify(h)+';');
-for(const name of ['icon-512.png','icon-192.png','favicon-32.png','apple-touch-icon.png'])fs.copyFileSync(path.resolve(__dirname,'../../desktop-app/build',name),path.join(dest,name));
+for(const name of ['icon-512.png','icon-192.png','favicon-32.png','apple-touch-icon.png'])fs.copyFileSync(path.resolve(__dirname,'../assets/logo.png'),path.join(dest,name));
 for(const name of ['android.js','android.css'])fs.copyFileSync(path.resolve(__dirname,'../web',name),path.join(dest,name));
 console.log('Interface mobile Android préparée : '+fs.readdirSync(dest).length+' fichiers.');
