@@ -1,0 +1,6 @@
+{
+  "appId": "dev.zephirox.avantusine.ios",
+  "appName": "Avant l’usine",
+  "webDir": "site",
+  "ios": {"backgroundColor": "#121212", "contentInset": "automatic"}
+}

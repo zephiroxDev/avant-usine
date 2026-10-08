@@ -1,0 +1,10 @@
+[
+  ["iOS 1.0", "2026-10-08", "Première version iPhone et iPad à signer avant installation.",
+    ["Interface mobile embarquée, collection, paroles, Atelier et bibliothèque locale.",
+     "Pochettes animées et néons avec réglages de réduction des effets.",
+     "Export des fichiers locaux par le menu de partage iOS.",
+     "Détection des nouvelles versions iOS sur GitHub, report ou saut d’une version.",
+     "Téléchargement natif de l’IPA avec progression et contrôle SHA-256.",
+     "Bouton « Ouvrir dans ESign » via le menu de partage pour signer et installer le fichier.",
+     "IPA non signé : certificat et profil de signature valides requis. Installation et conservation des données à confirmer sur appareil réel."]]
+]

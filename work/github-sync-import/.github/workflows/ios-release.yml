@@ -1,0 +1,74 @@
+name: iOS IPA release
+on:
+  push:
+    branches: [main]
+    paths: ['work/ios-app/release.json', '.github/workflows/ios-release.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ios-release
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install pinned package manager
+        run: npm install --global pnpm@11.25.0
+      - name: Select Xcode 26
+        run: |
+          XCODE_PATH=$(python3 - <<'PY'
+          import glob,re
+          paths=[p for p in glob.glob('/Applications/Xcode_26*.app') if re.search(r'Xcode_26[.\d]*\.app$',p)]
+          assert paths, 'Xcode 26 is unavailable'
+          print(max(paths,key=lambda p:tuple(map(int,re.search(r'Xcode_([\d.]+)\.app',p)[1].split('.')))))
+          PY
+          )
+          sudo xcode-select --switch "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
+      - name: Prepare embedded interface and test
+        run: |
+          python3 -m venv "$RUNNER_TEMP/ios-python"
+          "$RUNNER_TEMP/ios-python/bin/pip" install Pillow
+          echo "$RUNNER_TEMP/ios-python/bin" >> "$GITHUB_PATH"
+          export PATH="$RUNNER_TEMP/ios-python/bin:$PATH"
+          python work/desktop-app/scripts/make-icon.py
+          python work/android-app/scripts/make-icons.py
+          cd work/ios-app
+          pnpm install --frozen-lockfile
+          pnpm run prepare:site
+          pnpm test
+          pnpm exec cap add ios
+          pnpm exec cap sync ios
+          node scripts/configure-native.cjs
+      - name: Compile iPhone and iPad executable
+        working-directory: work/ios-app
+        run: |
+          set -o pipefail
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' \
+            build | tee build-output.log | xcbeautify
+          lipo -archs build/Build/Products/Release-iphoneos/App.app/App | grep arm64
+      - name: Package and verify unsigned IPA
+        working-directory: work/ios-app
+        run: |
+          VERSION=$(node -p 'require("./release.json").version')
+          mkdir -p build/ipa/Payload
+          ditto build/Build/Products/Release-iphoneos/App.app build/ipa/Payload/App.app
+          ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload "build/Avant-Usine-iOS-$VERSION-non-signe.ipa"
+          python scripts/verify-ipa.py "build/Avant-Usine-iOS-$VERSION-non-signe.ipa"
+      - name: Publish verified iOS distribution
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        working-directory: work/ios-app
+        run: python scripts/publish-release.py

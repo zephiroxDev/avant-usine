@@ -1,0 +1,6 @@
+html{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.au-ios-update{width:min(90vw,580px);max-height:85dvh;overflow:auto;background:#171320;color:#fff;border:1px solid #b64ce8;border-radius:16px;padding:24px}
+.au-ios-update::backdrop{background:#000b}
+.au-ios-update .button{display:block;width:100%;white-space:normal;margin-top:12px}
+.au-ios-update progress{width:100%;margin-top:16px}
+.au-ios-status{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom));left:5%;right:5%;padding:14px;background:#241431;color:white;border-radius:10px;z-index:10000}
