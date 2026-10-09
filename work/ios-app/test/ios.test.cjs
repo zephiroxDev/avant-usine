@@ -13,9 +13,9 @@ test('Packaged iOS references and isolated history',()=>{
 function context(){
  const elements=[],storage=new Map(),timers=[],events={};let now=Date.now();
  class Clock extends Date{static now(){return now;}}
- const element=tag=>({tag,children:[],disabled:false,append(...x){this.children.push(...x);},remove(){this.removed=true;},setAttribute(){},removeAttribute(){},addEventListener(){},showModal(){},close(){}});
- const account=element('actions'),accountDialog=element('dialog');
- const document={documentElement:{dataset:{}},createElement:element,addEventListener(){},querySelector(s){return s==='#accountMember .actions'?account:s==='#accountDialog'?accountDialog:null;},body:{append(x){elements.push(x);}}};
+ const element=tag=>({tag,children:[],disabled:false,append(...x){this.children.push(...x);},remove(){this.removed=true;},contains(value){return this.children.includes(value);},setAttribute(){},removeAttribute(){},addEventListener(){},showModal(){},close(){}});
+ const accountDialog=element('dialog'),account=accountDialog;
+ const document={documentElement:{dataset:{}},createElement:element,addEventListener(){},getElementById:id=>id==='accountDialog'?accountDialog:null,querySelector(s){return s==='#accountMember .actions'?account:s==='#accountDialog'?accountDialog:null;},body:{append(x){elements.push(x);}}};
  const win={AU_IOS_TEST:{},addEventListener(){},Capacitor:{Plugins:{IOSUpdates:{addListener:async()=>({remove:async()=>{}}),download:async()=>({uri:'file:///ipa'}),openIn:async()=>({opened:true})},Share:{share:async()=>{}}}}};
  const releases=[{assets:[{name:'Avant-Usine-iOS-1.1.0-non-signe.ipa',digest:'sha256:'+'a'.repeat(64),size:42,browser_download_url:'https://github.com/zephiroxDev/avant-usine/releases/download/ios-v1.1.0/Avant-Usine-iOS-1.1.0-non-signe.ipa'}]}];
  win.Capacitor.Plugins.IOSUpdates.checkReleases=async()=>({json:JSON.stringify(releases)});

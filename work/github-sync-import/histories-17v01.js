@@ -1,6 +1,18 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "18V06 · Sauvegardes protégées",
+      "9 octobre 2026",
+      "Sauvegardes portables et options de transfert de rôle.",
+      [
+        "Sauvegarde portable complète : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animées, métadonnées, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, préférences et positions de lecture inclus.",
+        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vérification des fichiers avant restauration ; anciens ZIP toujours importables. Aucun compte, mot de passe ou session n’est exporté.",
+        "Inclure le rôle est une option décochée à l’export, réservée aux comptes Créateur ou Modérateur. À l’import, le transfert sur le compte connecté est facultatif et validé automatiquement par une preuve serveur. Les données peuvent être restaurées sans transférer de rôle.",
+        "Local est réservé aux applications Windows, Android et iPhone. Les versions Internet affichent un message d’exclusivité.",
+        "Infos, fonctionnalités & astuces actualisé dans Lire le reste."
+      ]
+    ],
+    [
       "18V05.2 · Immersion réservée aux applications",
       "9 octobre 2026",
       "Message d’exclusivité sur le site PC et mobile.",
@@ -672,6 +684,18 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "18V06 · Sauvegardes protégées",
+      "9 octobre 2026",
+      "Sauvegardes portables et options de transfert de rôle.",
+      [
+        "Sauvegarde portable complète : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animées, métadonnées, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, préférences et positions de lecture inclus.",
+        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vérification des fichiers avant restauration ; anciens ZIP toujours importables. Aucun compte, mot de passe ou session n’est exporté.",
+        "Inclure le rôle est une option décochée à l’export, réservée aux comptes Créateur ou Modérateur. À l’import, le transfert sur le compte connecté est facultatif et validé automatiquement par une preuve serveur. Les données peuvent être restaurées sans transférer de rôle.",
+        "Local est réservé aux applications Windows, Android et iPhone. Les versions Internet affichent un message d’exclusivité.",
+        "Infos, fonctionnalités & astuces actualisé dans Lire le reste."
+      ]
+    ],
     [
       "18V05.2 · Immersion réservée aux applications",
       "9 octobre 2026",

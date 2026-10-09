@@ -73,6 +73,6 @@ const applyAccessibility=value=>{document.documentElement.dataset.reduceTranspar
 if(typeof native?.accessibility==='function')native.accessibility().then(applyAccessibility).catch(()=>{});
 native?.addListener('accessibility',applyAccessibility).catch(()=>{});
 if(window.AU_IOS_TEST)window.AU_IOS_TEST.exports={compare,choose,check,current};
-const accountUpdate=document.createElement('button');accountUpdate.type='button';accountUpdate.className='button secondary';accountUpdate.id='forceAppUpdate';accountUpdate.textContent='Forcer une mise à jour';accountUpdate.onclick=async()=>{accountUpdate.disabled=true;document.querySelector('#accountDialog')?.close();try{await check(true);}finally{accountUpdate.disabled=false;}};document.querySelector('#accountMember .actions')?.append(accountUpdate);
+const accountUpdate=document.createElement('button');accountUpdate.type='button';accountUpdate.className='button secondary';accountUpdate.id='forceAppUpdate';accountUpdate.textContent='Forcer une mise à jour';accountUpdate.onclick=async()=>{accountUpdate.disabled=true;document.querySelector('#accountDialog')?.close();try{await check(true);}finally{accountUpdate.disabled=false;}};function mountAccountUpdate(){const host=document.getElementById?.('accountDialog');if(host&&!host.contains(accountUpdate))host.append(accountUpdate);}mountAccountUpdate();if(typeof MutationObserver!=='undefined')if(typeof MutationObserver!=='undefined')new MutationObserver(mountAccountUpdate).observe(document.body,{childList:true,subtree:true});
 
 })();

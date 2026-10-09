@@ -66,7 +66,7 @@ const sleepButton=E('button','Minuteur de sommeil');sleepButton.className='text-
 };
 function renderSleep(){sleepButton.textContent=sleep?.end?'Minuteur : fin du morceau':sleep?.deadline?'Minuteur : '+Math.max(0,Math.ceil((sleep.deadline-Date.now())/60000))+' min':'Minuteur de sommeil';}
 document.querySelector('.footer')?.append(sleepButton);renderSleep();elapsed();
-let diagnostic={platform:'web',current:'18V05',latest:null,checked:null,error:null};
+let diagnostic={platform:'web',current:'18V06',latest:null,checked:null,error:null};
 window.AU_UPDATE_DIAGNOSTIC={configure(value){Object.assign(diagnostic,value);},record(value){Object.assign(diagnostic,value,{checked:new Date().toISOString()});},snapshot(){return {...diagnostic};}};
 if(window.AU_WINDOWS_DIAGNOSTIC)window.AU_UPDATE_DIAGNOSTIC.configure({platform:'desktop',search:async()=>window.AU_UPDATE_DIAGNOSTIC.record(await window.AU_WINDOWS_DIAGNOSTIC.search())});
 const diag=E('button','Diagnostic des mises à jour');diag.className='text-button';diag.onclick=()=>{
