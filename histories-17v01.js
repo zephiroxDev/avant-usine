@@ -421,6 +421,18 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "18V05 · Windows 0.4.6",
+      "9 octobre 2026",
+      "Écoute, sauvegardes locales et diagnostic des versions.",
+      [
+        "Minuteur de sommeil : arrêt après 15, 30 ou 60 minutes, ou à la fin du morceau sans enchaîner. Contrôle par échéance réelle, événements audio et retour dans l’interface.",
+        "Local : reprise du dernier morceau à sa position mémorisée, proposée sans lecture automatique. Reprise du catalogue conservée.",
+        "Sauvegarde complète Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, métadonnées et brouillons. Empreintes SHA-256 vérifiées avant restauration.",
+        "Restauration après aperçu : ajout atomique d’une copie complète avec nouveaux identifiants, sans remplacer les données existantes. Sauvegarde corrompue refusée ; limite ZIP de 4 Go.",
+        "Diagnostic des mises à jour : version installée, dernière version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalités & astuces est complété dans Lire le reste."
+      ]
+    ],
+    [
       "18V04 · Windows 0.4.5 · Néon des pochettes",
       "8 octobre 2026",
       "Un contour lumineux animé sur les pochettes.",
@@ -1109,6 +1121,18 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "iOS 1.0.4 · 18V05",
+      "9 octobre 2026",
+      "Écoute, sauvegardes locales et diagnostic des versions.",
+      [
+        "Minuteur de sommeil : arrêt après 15, 30 ou 60 minutes, ou à la fin du morceau sans enchaîner. Contrôle par échéance réelle, événements audio et retour dans l’interface.",
+        "Local : reprise du dernier morceau à sa position mémorisée, proposée sans lecture automatique. Reprise du catalogue conservée.",
+        "Sauvegarde complète Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, métadonnées et brouillons. Empreintes SHA-256 vérifiées avant restauration.",
+        "Restauration après aperçu : ajout atomique d’une copie complète avec nouveaux identifiants, sans remplacer les données existantes. Sauvegarde corrompue refusée ; limite ZIP de 4 Go.",
+        "Diagnostic des mises à jour : version installée, dernière version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalités & astuces est complété dans Lire le reste."
+      ]
+    ],
     [
       "iOS 1.0.3 · Interface verre",
       "2026-10-09",
