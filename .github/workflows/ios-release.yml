@@ -1,5 +1,5 @@
 name: iOS IPA release
-# Validate generated Xcode project syntax and read simulator readiness directly before publication.
+# Verify native services and account update control before publishing the iOS package.
 on:
   push:
     branches: [main]

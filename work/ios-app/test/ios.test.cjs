@@ -10,7 +10,7 @@ test('Packaged iOS references and isolated history',()=>{
  const code=fs.readFileSync(path.join(root,'site',main),'utf8');
  assert.ok(!code.includes("navigator.serviceWorker.register"));assert.ok(code.includes('Mises à jour iPhone et iPad'));
 });
-function context(){
+function context(listenerMode){
  const elements=[],storage=new Map(),timers=[],events={};let now=Date.now();
  class Clock extends Date{static now(){return now;}}
  const element=tag=>({tag,children:[],disabled:false,append(...x){this.children.push(...x);},remove(){this.removed=true;},contains(value){return this.children.includes(value);},setAttribute(){},removeAttribute(){},addEventListener(){},showModal(){},close(){}});
@@ -20,6 +20,8 @@ function context(){
  const releases=[{assets:[{name:'Avant-Usine-iOS-1.1.0-non-signe.ipa',digest:'sha256:'+'a'.repeat(64),size:42,browser_download_url:'https://github.com/zephiroxDev/avant-usine/releases/download/ios-v1.1.0/Avant-Usine-iOS-1.1.0-non-signe.ipa'}]}];
  win.Capacitor.Plugins.IOSUpdates.checkReleases=async()=>({json:JSON.stringify(releases)});
  win.Capacitor.Plugins.IOSUpdates.addListener=async(name,fn)=>{events[name]=fn;return {remove:async()=>{}};};
+ if(listenerMode==='synchronous')win.Capacitor.Plugins.IOSUpdates.addListener=(name,fn)=>{events[name]=fn;return {remove:async()=>{}};};
+ if(listenerMode==='throws')win.Capacitor.Plugins.IOSUpdates.addListener=()=>{throw Error('Listener not ready');};
  const sandbox={window:win,document,localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)},fetch:async()=>{throw Error('Web request must not be used');},setTimeout:(fn,ms)=>timers.push(ms),setInterval(){},Date:Clock,console};
  vm.runInNewContext(fs.readFileSync(path.join(root,'site/ios.js'),'utf8'),sandbox);
  return {...win.AU_IOS_TEST.exports,elements,storage,win,account,events,releases,advance(ms){now+=ms;}};
@@ -85,3 +87,5 @@ test('Native transparency preference reaches the interface',async()=>{
  const code=fs.readFileSync(path.join(root,'native/IOSUpdates.swift'),'utf8');assert.ok(code.includes('UIAccessibility.isReduceTransparencyEnabled'));
 });
 
+
+test('Manual update button remains usable with synchronous or unavailable native listeners',async()=>{for(const mode of ['synchronous','throws']){const c=context(mode),button=c.account.children.find(x=>x.id==='forceAppUpdate');assert.ok(button);await button.onclick();assert.equal(c.elements.length,1);assert.ok(c.elements[0].children.some(x=>x.textContent==='Mise � jour iOS 1.1.0'));}});

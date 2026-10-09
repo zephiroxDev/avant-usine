@@ -18,6 +18,7 @@ document.addEventListener('click',async event=>{
  }catch(error){notify('Export : '+(error.message||error));}
  finally{if(path)await files.deleteFile({path,directory:'CACHE'}).catch(()=>{});}
 },true);
+const accountUpdate=document.createElement('button');accountUpdate.type='button';accountUpdate.className='button secondary';accountUpdate.id='forceAppUpdate';accountUpdate.textContent='Forcer une mise à jour';accountUpdate.onclick=async()=>{accountUpdate.disabled=true;document.querySelector('#accountDialog')?.close();try{await check(true);}finally{accountUpdate.disabled=false;}};function mountAccountUpdate(){const host=document.getElementById?.('accountDialog');if(host&&!host.contains(accountUpdate))host.append(accountUpdate);}mountAccountUpdate();if(typeof MutationObserver!=='undefined')new MutationObserver(mountAccountUpdate).observe(document.body,{childList:true,subtree:true});
 let checking=false,offered=false,lastCheck=0,reportedFailure=false;window.AU_UPDATE_DIAGNOSTIC?.configure({platform:'ios',current,search:()=>check(true,true)});
 async function check(force=false,diagnose=false){
  if(!native){const error='Le service de mise à jour iOS est absent de cette installation. Télécharge puis signe la dernière IPA depuis le site pour réparer cette installation.';window.AU_UPDATE_DIAGNOSTIC?.record({error});if(force)notify(error);return;}
@@ -68,11 +69,11 @@ async function check(force=false,diagnose=false){
 const b=document.createElement('button');b.className='text-button';b.textContent='Vérifier les mises à jour iOS';b.onclick=()=>check(true);document.querySelector('.footer')?.append(b);
 setTimeout(()=>check(),10000);setInterval(()=>check(),6*60*60*1000);window.addEventListener('focus',()=>check());
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
-native?.addListener('resume',()=>check()).catch(()=>{});
+try{Promise.resolve(native?.addListener('resume',()=>check())).catch(()=>{});}catch{}
 const applyAccessibility=value=>{document.documentElement.dataset.reduceTransparency=String(!!value.reduceTransparency);document.documentElement.dataset.increaseContrast=String(!!value.increaseContrast);};
-if(typeof native?.accessibility==='function')native.accessibility().then(applyAccessibility).catch(()=>{});
-native?.addListener('accessibility',applyAccessibility).catch(()=>{});
+try{if(typeof native?.accessibility==='function')Promise.resolve(native.accessibility()).then(applyAccessibility).catch(()=>{});}catch{}
+try{Promise.resolve(native?.addListener('accessibility',applyAccessibility)).catch(()=>{});}catch{}
 if(window.AU_IOS_TEST)window.AU_IOS_TEST.exports={compare,choose,check,current};
-const accountUpdate=document.createElement('button');accountUpdate.type='button';accountUpdate.className='button secondary';accountUpdate.id='forceAppUpdate';accountUpdate.textContent='Forcer une mise à jour';accountUpdate.onclick=async()=>{accountUpdate.disabled=true;document.querySelector('#accountDialog')?.close();try{await check(true);}finally{accountUpdate.disabled=false;}};function mountAccountUpdate(){const host=document.getElementById?.('accountDialog');if(host&&!host.contains(accountUpdate))host.append(accountUpdate);}mountAccountUpdate();if(typeof MutationObserver!=='undefined')if(typeof MutationObserver!=='undefined')new MutationObserver(mountAccountUpdate).observe(document.body,{childList:true,subtree:true});
+
 
 })();
