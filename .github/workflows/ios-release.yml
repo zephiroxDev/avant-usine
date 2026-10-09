@@ -1,5 +1,5 @@
 name: iOS IPA release
-# Validate generated Xcode project syntax before compilation.
+# Validate generated Xcode project syntax and read simulator readiness directly before publication.
 on:
   push:
     branches: [main]
