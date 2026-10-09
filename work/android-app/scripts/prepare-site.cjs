@@ -2,7 +2,7 @@ const fs=require('node:fs'),path=require('node:path');
 const source=path.resolve(__dirname,'../../github-sync-import'),dest=path.resolve(__dirname,'../site');
 const {adaptCopy}=require('../../desktop-app/scripts/desktop-copy.cjs');
 fs.mkdirSync(dest,{recursive:true});
-const allowed=/^(index\.html|app-\d+v\d+\.js|(?:summary-rules|listening-clock|activity|blind-test|histories|metrics|statistics-engine|statistics-ui)-17v01\.js|local-18v00\.(?:js|css)|sharing-17v06\.js|catalog-audit-17v03\.js|native-light-17v04\.js|collection-\d+v\d+\.js|styles-\d+v\d+\.css|cover-\d{2}\.webp|pochette-animee-\d{2}\.mp4|favicon\.ico|favicon-32\.png|apple-touch-icon\.png|icon-(192|512)\.png|supabase-auth-client\.js)$/;
+const allowed=/^(index\.html|app-\d+v\d+\.js|(?:summary-rules|listening-clock|activity|blind-test|histories|metrics|statistics-engine|statistics-ui)-17v01\.js|local-18v00\.(?:js|css)|comfort-18v05\.(?:js|css)|sharing-17v06\.js|catalog-audit-17v03\.js|native-light-17v04\.js|collection-\d+v\d+\.js|styles-\d+v\d+\.css|cover-\d{2}\.webp|pochette-animee-\d{2}\.mp4|favicon\.ico|favicon-32\.png|apple-touch-icon\.png|icon-(192|512)\.png|supabase-auth-client\.js)$/;
 for(const name of fs.readdirSync(source))if(allowed.test(name))fs.copyFileSync(path.join(source,name),path.join(dest,name));
 let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
 html=html.replace(/<aside id="desktopAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./release-download.js" defer></script>','').replace('<title>Avant l’usine — La collection</title>','<title>Avant l’usine</title>').replace('<span class="brand-mark" aria-hidden="true">AU</span>','<img class="brand-mark" src="./android-logo.png" alt="" style="object-fit:cover">');

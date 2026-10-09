@@ -18,8 +18,8 @@ document.addEventListener('click',async event=>{
  }catch(error){notify('Export : '+(error.message||error));}
  finally{if(path)await files.deleteFile({path,directory:'CACHE'}).catch(()=>{});}
 },true);
-let checking=false,offered=false,lastCheck=0,reportedFailure=false;
-async function check(force=false){
+let checking=false,offered=false,lastCheck=0,reportedFailure=false;window.AU_UPDATE_DIAGNOSTIC?.configure({platform:'ios',current,search:()=>check(true,true)});
+async function check(force=false,diagnose=false){
  if(!native){if(force)notify('Le service de mise à jour iOS est indisponible. Ferme puis rouvre l’application.');return;}
  if(checking||offered||(!force&&(Date.now()<Number(localStorage.getItem(prefix+'remind')||0)||Date.now()-lastCheck<60000)))return;
  checking=true;try{
@@ -32,7 +32,7 @@ async function check(force=false){
   }
   if(!Array.isArray(releases))throw Error('Réponse de mise à jour invalide.');
   lastCheck=Date.now();reportedFailure=false;
-  const latest=choose(releases,current);
+  const latest=choose(releases,current);window.AU_UPDATE_DIAGNOSTIC?.record({latest:latest?.match[1]||current,error:null,state:latest?'Nouvelle version disponible.':'Application à jour.'});if(diagnose)return;
   if(!latest){if(force)notify('L’application iOS est à jour.');return;}
   const version=latest.match[1];
   if(!force&&localStorage.getItem(prefix+'skip')===version){if(force)notify('La version '+version+' est ignorée. La suivante sera proposée.');return;}
@@ -63,7 +63,7 @@ async function check(force=false){
   modal.addEventListener('cancel',e=>{if(download.disabled){e.preventDefault();return;}localStorage.setItem(prefix+'remind',String(Date.now()+day));});
   modal.addEventListener('close',()=>{offered=false;modal.remove();});
   document.body.append(modal);modal.showModal();
- }catch(error){lastCheck=Date.now();if(force||!reportedFailure)notify((error.message||String(error))+' Réessaie depuis Compte → Forcer une mise à jour.');reportedFailure=true;}finally{checking=false;}
+ }catch(error){window.AU_UPDATE_DIAGNOSTIC?.record({error:error.message||String(error)});lastCheck=Date.now();if(force||!reportedFailure)notify((error.message||String(error))+' Réessaie depuis Compte → Forcer une mise à jour.');reportedFailure=true;}finally{checking=false;}
 }
 const b=document.createElement('button');b.className='text-button';b.textContent='Vérifier les mises à jour iOS';b.onclick=()=>check(true);document.querySelector('.footer')?.append(b);
 setTimeout(()=>check(),10000);setInterval(()=>check(),6*60*60*1000);window.addEventListener('focus',()=>check());

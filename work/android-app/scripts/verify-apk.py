@@ -10,7 +10,9 @@ with zipfile.ZipFile(apk) as z:
  prefix='window.AU_PLATFORM_HISTORIES=';h=json.loads(z.read('assets/public/histories-17v01.js').decode()[len(prefix):].strip().rstrip(';'));assert h['android'][0][0].startswith('Android '+m['version']) and isinstance(h['ios'],list)
 tools=Path.home()/'.cache/avant-usine-android-tools';paths=json.loads((tools/'paths.json').read_text());env=os.environ.copy();env['JAVA_HOME']=paths['java'];env['PATH']=str(Path(paths['java'])/'bin')+os.pathsep+env['PATH'];bt=Path(paths['sdk'])/'build-tools/36.0.0'
 badging=subprocess.check_output([str(bt/'aapt2.exe'),'dump','badging',str(apk)],env=env,text=True);assert "name='dev.zephirox.avantusine.android'" in badging and ("versionName='"+m['version']+"'") in badging;assert "android.permission.REQUEST_INSTALL_PACKAGES" in badging
-verify=subprocess.check_output(['cmd.exe','/d','/c',str(bt/'apksigner.bat'),'verify','--verbose','--print-certs',str(apk)],env=env,text=True);cert=re.search(r'Signer #1 certificate SHA-256 digest: (\w+)',verify);assert cert;m['certificateSha256']=cert[1];(out/'livraison.json').write_text(json.dumps(m,indent=2))
+verify=subprocess.check_output(['cmd.exe','/d','/c',str(bt/'apksigner.bat'),'verify','--verbose','--print-certs',str(apk)],env=env,text=True,errors='replace');cert=re.search(r'Signer #1 certificate SHA-256 digest: (\w+)',verify);assert cert
+assert cert[1]=='c56f1a5c2043a653b57729f8ad8cb7346c95fae2917c79307c4c699398a751b3', 'Signing identity changed'
+m['certificateSha256']=cert[1];(out/'livraison.json').write_text(json.dumps(m,indent=2))
 private=Path.home()/'.codex/signing/avant-usine-android';private.mkdir(parents=True,exist_ok=True)
 for name in ['signing.json','avant-usine-android.jks']:
  source=tools/name;target=private/name

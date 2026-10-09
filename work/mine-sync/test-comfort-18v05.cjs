@@ -1,0 +1,23 @@
+const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),crypto=require('node:crypto').webcrypto;
+process.chdir(require('node:path').resolve(__dirname,'../..'));
+const sandbox={window:{},Blob,TextEncoder,TextDecoder,DataView,Uint8Array,crypto,structuredClone,setTimeout,clearTimeout,console};
+vm.runInNewContext(fs.readFileSync('work/github-sync-import/local-18v00.js','utf8'),sandbox);
+vm.runInNewContext(fs.readFileSync('work/github-sync-import/comfort-18v05.js','utf8'),sandbox);
+const api=sandbox.window.AU_COMFORT_18;
+const sample=()=>({tracks:[{id:'first',title:'Premier',name:'01.mp3',duration:30,blob:new Blob(['audio original'],{type:'audio/mpeg'}),cover:{blob:new Blob(['cover'],{type:'image/png'}),width:2,height:2},favorite:true,order:1,plain:'Paroles',draft:{lines:['Paroles'],mode:'blocks',times:[1]},lyrics:{sync_mode:'blocks',lines:['Paroles'],times:[1],end_time:5}}],albums:[{id:'album',name:'Album',ids:['first']}],playlists:[{id:'playlist',name:'Playlist',ids:['first']}]});
+test('Complete backup retains binaries, lyrics, drafts, favorites and group order',async()=>{const state=sample(),blob=await api.pack(state),restored=await api.unpack(blob);assert.equal(await restored.tracks[0].blob.text(),'audio original');assert.equal(await restored.tracks[0].cover.blob.text(),'cover');assert.equal(restored.tracks[0].favorite,true);assert.equal(restored.tracks[0].draft.times[0],1);assert.equal(restored.tracks[0].lyrics.end_time,5);assert.equal(restored.albums[0].ids[0],'first');});
+test('Binary corruption and interrupted ZIP refused before restore',async()=>{const b=await api.pack(sample()),bytes=new Uint8Array(await b.arrayBuffer());bytes[40]^=1;await assert.rejects(api.unpack(new Blob([bytes])),/corrompu|incohérent/);await assert.rejects(api.unpack(b.slice(0,b.size-10)),/incomplet/);});
+test('Metadata corruption is detected through ZIP CRC',async()=>{const b=await api.pack(sample()),bytes=new Uint8Array(await b.arrayBuffer()),needle=new TextEncoder().encode('Premier');let at=-1;for(let i=0;i<bytes.length-needle.length;i++)if(needle.every((n,j)=>bytes[i+j]===n)){at=i;break;}assert.ok(at>=0);bytes[at]=88;await assert.rejects(api.unpack(new Blob([bytes])),/corrompu/);});
+test('Restore IDs are fresh and relationships intact without touching source',()=>{const state=sample(),restored=api.remap(state,20);assert.notEqual(restored.tracks[0].id,'first');assert.equal(restored.albums[0].ids[0],restored.tracks[0].id);assert.equal(restored.playlists[0].ids[0],restored.tracks[0].id);assert.equal(restored.tracks[0].order,21);assert.equal(state.tracks[0].id,'first');});
+test('Unknown group members and invalid covers rejected',()=>{const state=sample();state.albums[0].ids=['missing'];assert.throws(()=>api.validate(state),/playlist invalide/);const other=sample();other.tracks[0].cover={blob:'not a binary'};assert.throws(()=>api.validate(other),/Pochette invalide/);});
+test('Sleep timer expires by wall clock and end-of-track intercepts before queue',()=>{
+ let now=10000;class Clock extends Date{static now(){return now;}}
+ const elements=[],events={},store=new Map(),audio={id:'audio',paused:false,events:{},pause(){this.paused=true;},addEventListener(n,fn,capture){this.events[n]={fn,capture};}};
+ const local={...audio,id:'localAudio',events:{}};
+ const make=tag=>({tag,children:[],append(...a){this.children.push(...a);},addEventListener(n,fn){events[n]=fn;},showModal(){},close(){},remove(){}});
+ const footer=make('footer'),document={getElementById:id=>id==='audio'?audio:id==='localAudio'?local:null,querySelector:()=>footer,createElement:make,addEventListener(){},body:{append(e){elements.push(e);}}};
+ const context={...sandbox,window:{AU_LOCAL_18:sandbox.window.AU_LOCAL_18,addEventListener(){}},document,Date:Clock,localStorage:{getItem:k=>store.get(k),setItem:(k,v)=>store.set(k,v)},setInterval(){},matchMedia:()=>({matches:false})};
+ vm.runInNewContext(fs.readFileSync('work/github-sync-import/comfort-18v05.js','utf8'),context);
+ footer.children.find(b=>b.textContent==='Minuteur de sommeil').onclick();const dialog=elements[0];dialog.children.find(b=>b.textContent==='15 minutes').onclick();now+=900001;audio.events.timeupdate.fn();assert.equal(audio.paused,true);assert.equal(JSON.parse(store.get('au-sleep-18v05')),null);
+ audio.paused=false;dialog.children.find(b=>b.textContent==='À la fin du morceau').onclick();let stopped=false;audio.events.ended.fn({currentTarget:audio,stopImmediatePropagation(){stopped=true;}});assert.equal(stopped,true);assert.equal(audio.events.ended.capture,true);
+});
