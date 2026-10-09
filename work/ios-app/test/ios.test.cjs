@@ -89,3 +89,5 @@ test('Native transparency preference reaches the interface',async()=>{
 
 
 test('Manual update button remains usable with synchronous or unavailable native listeners',async()=>{for(const mode of ['synchronous','throws']){const c=context(mode),button=c.account.children.find(x=>x.id==='forceAppUpdate');assert.ok(button);await button.onclick();assert.equal(c.elements.length,1);assert.ok(c.elements[0].children.some(x=>String(x.textContent).includes('1.1.0')));}});
+
+test('Embedded platform histories retain original Unicode text',()=>{const text=fs.readFileSync(path.join(root,'site/histories-17v01.js'),'utf8');assert.ok(!text.includes('\u00c3\u00a9'));assert.ok(!text.includes('\u00c2\u00b7'));assert.ok(!text.includes('\ufffd'));});
