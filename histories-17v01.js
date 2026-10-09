@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "18V05.2 · Immersion réservée aux applications",
+      "9 octobre 2026",
+      "Message d’exclusivité sur le site PC et mobile.",
+      [
+        "Le bouton Immersion indique que le mode est exclusivement disponible dans les applications Windows, Android et iPhone.",
+        "Les autres fonctions du lecteur Web sont conservées. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
+      ]
+    ],
+    [
       "18V05 · Écoute et sauvegardes",
       "9 octobre 2026",
       "Des contrôles d’écoute et une sauvegarde complète de la bibliothèque personnelle.",
@@ -652,6 +661,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "18V05.2 · Immersion réservée aux applications",
+      "9 octobre 2026",
+      "Message d’exclusivité sur le site PC et mobile.",
+      [
+        "Le bouton Immersion indique que le mode est exclusivement disponible dans les applications Windows, Android et iPhone.",
+        "Les autres fonctions du lecteur Web sont conservées. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
+      ]
+    ],
     [
       "18V05 · Écoute et sauvegardes",
       "9 octobre 2026",

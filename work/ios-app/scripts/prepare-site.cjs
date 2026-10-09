@@ -7,6 +7,7 @@ for(const file of fs.readdirSync(path.join(android,'site'))){
   fs.copyFileSync(path.join(android,'site',file),path.join(dest,file));
 }
 let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
+html=html.replace('dataset.auApp="android"','dataset.auApp="ios"');
 html=html.replace('./android-logo.png','./icon-512.png').replace('./android.css','./ios.css').replace('./android.js','./ios.js');
 fs.writeFileSync(path.join(dest,'index.html'),html);
 for(const file of ['icon-512.png','icon-192.png','apple-touch-icon.png','favicon-32.png'])

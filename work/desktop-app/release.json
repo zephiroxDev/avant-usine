@@ -1,6 +1,6 @@
 {
-  "releaseId": "18V05",
-  "desktopVersion": "0.4.6",
+  "releaseId": "18V05.2",
+  "desktopVersion": "0.4.7",
   "websiteSource": "../github-sync-import",
   "publicationPolicy": "Historiques indÃ©pendants : publier chaque plateforme dÃ¨s quâ€™elle est prÃªte. Publier tous les fichiers de mise Ã  jour et leur manifest avant de rendre la release Windows publique."
 }

@@ -270,7 +270,7 @@ window.addEventListener('message',event=>{
  if(Number.isFinite(d.height))frame.style.height=Math.max(180,Math.min(30000,d.height+16))+'px';
  $('lyricsState').textContent=d.ready?(frame.dataset.manual==='true'?'Paroles ajoutées par le créateur · Défilement manuel.':'Paroles fournies par Genius · Défilement manuel.'):'Si les paroles ne s’affichent pas, utilise le lien Genius ci-dessous.';
 });
-$('openLyrics').addEventListener('click',()=>{if($('auImmersiveDialog')?.open)window.dispatchEvent(new Event('au:immersive-toggle-lyrics'));else navigate('paroles');});
+$('openLyrics').addEventListener('click',()=>{if($('auImmersionApp')?.open)window.dispatchEvent(new Event('au:immersive-toggle-lyrics'));else navigate('paroles');});
 
 $ ('albumTitle').after(button('button secondary catalog-edit-button','Modifier cet album',()=>window.dispatchEvent(new CustomEvent('au:edit-volume',{detail:COLLECTION[selectedVolume].number}))));
 renderHome();renderCollection();renderDownloads();renderAlbum();updateNow();navigate('accueil',false);
@@ -541,41 +541,6 @@ async function applyCoverAtmosphere(host,volume){
  if(host._coverAtmosphere===token)host.style.setProperty('--lyrics-accent',accent);
 }
 
-function initImmersiveLyrics({dialog,copy,button,make,action}){
- let enabled=false,automatic=true,key='',signature='',sync=null,latest=null,nodes=[],frame=0,active=-1,lyricsView=null;
- const panel=make('section','au-immersive-lyrics'),note=make('p','au-immersive-lyrics-note'),viewport=make('div','au-immersive-lyrics-scroll'),content=make('div','au-immersive-lyrics-content');
- panel.hidden=true;panel.setAttribute('aria-label','Paroles du morceau');note.setAttribute('role','status');viewport.tabIndex=0;viewport.setAttribute('aria-label','Paroles défilantes');viewport.append(content);
- const follow=action('au-art-option','Défilement automatique : activé',()=>{automatic=!automatic;updateFollow();tick();});follow.setAttribute('aria-pressed','true');panel.append(viewport);copy.append(panel);dialog.querySelector('.au-immersive-copy').append(note);dialog.querySelector('.au-immersive-options').append(follow);
- function songKey(){const t=track();return t?COLLECTION[playingVolume].number+':'+t.number:'';}
- function updateFollow(){follow.textContent='Défilement automatique : '+(automatic?'activé':'en pause');follow.setAttribute('aria-pressed',String(automatic));}
- function pauseFollow(){if(automatic){automatic=false;updateFollow();}}
- viewport.addEventListener('wheel',pauseFollow,{passive:true});viewport.addEventListener('touchstart',pauseFollow,{passive:true});viewport.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key))pauseFollow();});
- function requestWidget(){const t=track(),f=$('lyricsFrame');if(enabled&&dialog.open&&t?.genius?.id&&f.dataset.manual!=='true')f.contentWindow?.postMessage({type:'avant-usine-sync-request',request:f.dataset.request},'*');}
- function rebuild(text,data){lyricsView?.dispose();lyricsView=null;sync=data||null;active=-1;const lines=data?.lines||AU_LYRICS.lines(text);content.replaceChildren();nodes=lines.map((line,i)=>{const row=make(data?'button':'p','au-immersive-lyric-line',line);if(data){row.type='button';row.setAttribute('aria-label',clock(data.times[i])+' — '+line);row.addEventListener('click',()=>{if(Number.isFinite(audio.duration))audio.currentTime=data.times[i];tick();});AU_KARAOKE.text(row,line,true);}else AU_KARAOKE.text(row,line,true);content.append(row);return row;});
-  note.textContent=data?'Paroles synchronisées avec le morceau.':lines.length?'Paroles non synchronisées · Défilement approximatif.':track()?.genius?.id?'Chargement des paroles…':'Pas encore de paroles pour ce morceau. Elles apparaîtront ici dès qu’elles seront ajoutées.';
-  if(data){lyricsView=createPublicLyricsView(viewport,data,{automatic:()=>automatic,seek:time=>{if(Number.isFinite(audio.duration))audio.currentTime=time;tick();}});nodes=lyricsView.rows;}else{viewport.replaceChildren(content);viewport.classList.remove('au-lyrics-viewport');}follow.hidden=!lines.length;viewport.scrollTop=0;tick();
- }
- function refresh(force=false){if(!enabled||!dialog.open)return;const t=track(),nextKey=songKey(),nextSignature=nextKey+'|'+(t?.lyrics||'')+'|'+(t?.genius?.id||'');
-  if(nextSignature!==signature||force){const changed=nextKey!==key;key=nextKey;signature=nextSignature;if(changed){automatic=true;updateFollow();}const data=latest?.track===key?latest.data:null;rebuild(t?.lyrics||AU_GENIUS_SYNC.peek(key)||'',data);if(changed){renderLyrics();requestWidget();}}
- }
- function scrollTo(top){top=Math.max(0,top);if(Math.abs(viewport.scrollTop-top)>1)viewport.scrollTo({top,behavior:'auto'});}
- function tick(){if(!enabled||!dialog.open||document.hidden||!nodes.length)return;
-  if(sync){active=lyricsView.paint(audio.currentTime);
-  }else if(automatic&&Number.isFinite(audio.duration)&&audio.duration>0){const intro=Math.min(8,audio.duration*.06),end=audio.duration*.95,ratio=Math.max(0,Math.min(1,(audio.currentTime-intro)/Math.max(1,end-intro)));scrollTo(Math.max(0,viewport.scrollHeight-viewport.clientHeight)*ratio);}
- }
- function animate(){cancelAnimationFrame(frame);frame=0;if(!enabled||!dialog.open||audio.paused||document.hidden)return;tick();frame=requestAnimationFrame(animate);}
- function toggle(){enabled=!enabled;dialog.classList.toggle('has-lyrics',enabled);panel.hidden=!enabled;button.setAttribute('aria-pressed',String(enabled));button.textContent=enabled?'Masquer les paroles':'Paroles';if(enabled){refresh(true);renderLyrics();requestWidget();animate();}else{cancelAnimationFrame(frame);frame=0;}}
- button.setAttribute('aria-pressed','false');button.textContent='Paroles';button.setAttribute('aria-controls','auImmersiveLyrics');panel.id='auImmersiveLyrics';
- window.addEventListener('au:immersive-toggle-lyrics',toggle);
- window.addEventListener('au:sync-published',e=>{latest=e.detail;if(enabled&&dialog.open&&latest?.track===songKey()){key=songKey();rebuild(track()?.lyrics||AU_GENIUS_SYNC.peek(key)||'',latest.data);}});
- window.addEventListener('au:lyrics-render',()=>queueMicrotask(()=>refresh()));
- $('lyricsFrame').addEventListener('load',requestWidget);
- window.addEventListener('message',e=>{const f=$('lyricsFrame'),d=e.data;if(e.source!==f.contentWindow||d?.request!==f.dataset.request||!enabled||!dialog.open)return;if(d.type==='avant-usine-lyrics'&&d.ready){requestWidget();return;}if(d.type==='avant-usine-sync-text'&&typeof d.text==='string'&&d.text.length<=40000&&key===songKey()&&!sync&&track()?.genius?.id&&f.dataset.manual!=='true')rebuild(d.text,null);});
- for(const name of ['timeupdate','seeked','loadedmetadata','durationchange'])audio.addEventListener(name,()=>{refresh();tick();});audio.addEventListener('play',animate);audio.addEventListener('pause',()=>{cancelAnimationFrame(frame);frame=0;tick();});document.addEventListener('visibilitychange',()=>{refresh();animate();});
- dialog.addEventListener('close',()=>{cancelAnimationFrame(frame);frame=0;});
- return {toggle,refresh(){refresh();tick();if(!frame)animate();}};
-}
-
 function initPwaGallery() {
  if(document.getElementById('auGalleryDialog'))return;
  const make=(tag,classes,text)=>{const e=document.createElement(tag);if(classes)e.className=classes;if(text!==undefined)e.textContent=text;return e;};
@@ -612,41 +577,7 @@ function initPwaGallery() {
  const galleryOpen=action('button secondary au-gallery-open','Explorer les pochettes',()=>{chooseCover(selectedVolume);show(gallery);});
  document.querySelector('#collection .page-heading')?.append(galleryOpen);
 
- const immersive=dialog('auImmersiveDialog','Écoute immersive.','au-immersive');immersive.querySelector('h2').remove();immersive.removeAttribute('aria-labelledby');immersive.setAttribute('aria-label','Lecteur immersif');
- const immersiveBody=make('div','au-immersive-body'),immersiveCanvas=make('canvas');immersiveCanvas.width=immersiveCanvas.height=800;immersiveCanvas.setAttribute('role','img');
- const immersiveCopy=make('div','au-immersive-copy'),immersiveArtist=make('p','eyebrow'),immersiveTitle=make('h3'),immersiveVolume=make('p','au-immersive-volume');
- const transport=make('div','au-immersive-transport');
- const previous=action('au-art-control','⏮',()=>move(-1)),play=action('au-art-control au-art-play','▶',()=>togglePlay()),next=action('au-art-control','⏭',()=>move(1));
- previous.setAttribute('aria-label','Morceau précédent');next.setAttribute('aria-label','Morceau suivant');transport.append(previous,play,next);
- const seekRow=make('div','au-immersive-seek'),elapsed=make('span','','0:00'),duration=make('span','','0:00'),seek=make('input');seek.type='range';seek.min=0;seek.max=100;seek.step=.1;seek.value=0;seek.setAttribute('aria-label','Position dans le morceau');seek.disabled=true;seekRow.append(elapsed,seek,duration);
- let immersiveSeeking=false,lastCover=-1;
- seek.addEventListener('input',()=>{immersiveSeeking=true;elapsed.textContent=clock(Number(seek.value));});
- seek.addEventListener('change',()=>{if(Number.isFinite(audio.duration))audio.currentTime=Math.max(0,Math.min(audio.duration,Number(seek.value)));immersiveSeeking=false;syncImmersive();});
- const options=make('div','au-immersive-options');
- const shuffleButton=action('au-art-option','Aléatoire',()=>{$('shuffle').click();syncImmersive();}),repeatButton=action('au-art-option','Répéter',()=>{$('repeat').click();syncImmersive();});
- const lyricsButton=action('au-art-option','Paroles',()=>immersiveLyrics.toggle());options.append(shuffleButton,repeatButton,lyricsButton);
- const volumeRow=make('label','au-immersive-volume-control'),volume=make('input');volume.type='range';volume.min=0;volume.max=1;volume.step=.02;volume.value=audio.volume;volume.setAttribute('aria-label','Volume sonore');volume.addEventListener('input',()=>{audio.volume=Number(volume.value);audio.muted=false;});volumeRow.append(make('span','','Volume'),volume);
- const immersiveStatus=make('p','au-immersive-status');immersiveStatus.setAttribute('role','status');
- immersiveCopy.append(immersiveArtist,immersiveTitle,immersiveVolume,transport,seekRow,options,volumeRow,immersiveStatus);immersiveBody.append(immersiveCanvas,immersiveCopy);immersive.append(immersiveBody);
- const immersiveLyrics=initImmersiveLyrics({dialog:immersive,copy:immersiveBody,button:lyricsButton,make,action});
- const secondary=make('section','au-immersive-secondary');secondary.setAttribute('aria-label','Informations et commandes');secondary.append(immersive.querySelector('.au-art-header'),immersiveCopy);immersive.append(secondary);immersiveLyrics.toggle();
- function syncImmersive(){
-  if(!immersive.open)return;
-  immersiveLyrics.refresh();
-  const t=track(),v=COLLECTION[playingVolume],on=playing(),hasTrack=!!t&&!!mediaURL(t.src),length=Number.isFinite(audio.duration)?audio.duration:0;
-  immersiveArtist.textContent=t?.artist||'JuL';immersiveTitle.textContent=t?.title||'Choisis un morceau';immersiveVolume.textContent=(t?.artist||'JuL')+' · '+v.title+(t?' · Piste '+number(t.number):'');
-  if(lastCover!==playingVolume){applyCoverAtmosphere(immersive,v);drawCover(immersiveCanvas,v);immersiveCanvas.setAttribute('aria-label','Pochette — '+v.title);lastCover=playingVolume;}
-  immersive.classList.toggle('is-playing',on);play.textContent=on?'Ⅱ':'▶';play.setAttribute('aria-label',on?'Mettre en pause':'Lire le morceau');play.disabled=!hasTrack;previous.disabled=next.disabled=!hasTrack;
-  seek.disabled=!length;seek.max=length||100;if(!immersiveSeeking){seek.value=audio.currentTime||0;elapsed.textContent=clock(audio.currentTime);}duration.textContent=clock(length);seek.setAttribute('aria-valuetext',clock(Number(seek.value))+' sur '+clock(length));
-  shuffleButton.setAttribute('aria-pressed',String(shuffle));repeatButton.setAttribute('aria-pressed',String(repeat));volume.value=audio.muted?0:audio.volume;immersiveStatus.textContent=$('status').textContent;
- }
- for(const name of ['loadedmetadata','durationchange','timeupdate','play','pause','volumechange','emptied','error','waiting','playing'])audio.addEventListener(name,syncImmersive);
- new MutationObserver(syncImmersive).observe($('nowTitle'),{childList:true,subtree:true,characterData:true});
- new MutationObserver(syncImmersive).observe($('status'),{childList:true,subtree:true,characterData:true});
- const immersionUnavailable=make('dialog','au-dialog'),immersionMessage=make('p');immersionMessage.textContent='Le mode immersion est temporairement indisponible le temps de sa réparation.';immersionUnavailable.append(immersionMessage,action('button secondary','Fermer',()=>immersionUnavailable.close()));document.body.append(immersionUnavailable);
- function enterImmersion(){show(immersionUnavailable);}
- const immersiveOpen=action('lyrics-button au-immersive-open','Immersion ⛶',enterImmersion);immersiveOpen.setAttribute('aria-label','Ouvrir le mode écoute immersive');document.querySelector('.dock-status')?.insertBefore(immersiveOpen,$('status'));
- immersive.addEventListener('close',()=>{immersiveSeeking=false;});
+ window.initAppImmersion({audio,track,getVolume:()=>COLLECTION[playingVolume],AU_GENIUS_SYNC,move,startPlayback,canvasFor,clock,AU_LYRICS,createPublicLyricsView,renderLyrics});
 
  const installDialog=dialog('auInstallDialog','Toujours à portée de main.','au-install-dialog');
  const installBody=make('div','au-install-body');installBody.append(make('p','','Ajoute Avant l’usine à ton écran d’accueil pour retrouver le lecteur comme une application.'));
@@ -1262,7 +1193,7 @@ function initProjectGuide(){
  ['Écouter','Dans Écoute, ouvre un volume et choisis un morceau. Le lecteur permanent continue pendant la navigation.'],
  ['Commandes','Sous le lecteur : lecture/pause, précédent/suivant, position, volume, aléatoire et répétition. Les touches et commandes système compatibles contrôlent aussi la lecture.'],
  ['Bibliothèque','Ma musique regroupe favoris et playlists. ♡ ajoute un favori, ＋ ajoute un morceau à une playlist. Sans compte, tes choix restent sur cet appareil ; avec compte, ils se synchronisent.'],
- ['Immersion','Le bouton Immersion du lecteur ouvre la pochette à gauche et les paroles à droite. Descends pour atteindre les informations, commandes et la fermeture. Le plein écran dépend du navigateur.'],
+ ['Immersion','Dans les applications, le bouton Immersion ouvre la pochette à gauche et les paroles à droite. Les commandes et la fermeture restent accessibles. Le site PC et mobile affiche un message d’exclusivité.'],
  ['Paroles','Le bouton Paroles ouvre le texte du morceau. Les versions synchronisées suivent le chant ; les textes non synchronisés défilent approximativement en immersion.'],
  ['Suivi','Le défilement automatique maintient le passage chanté à l’écran. Un défilement manuel le met en pause ; le bouton de suivi le réactive.'],
  ['Compte','Mon compte permet de se connecter, créer un compte et retrouver ses choix. La confirmation de l’adresse e-mail est nécessaire pour les fonctions communautaires.'],
@@ -1303,7 +1234,7 @@ function initProjectGuide(){
  ['Éclairage animé des pochettes','La lumière déjà présente dans chaque pochette est fortement animée ; les détails proviennent de l’image HD originale. Les titres des volumes suivent cet éclairage. Aucun zoom ni reflet ajouté. Pause et effets réduits restent disponibles ; les pochettes hors écran ne sont pas calculées.'],
  ['Diagnostic du catalogue audio','Créateur et modérateurs peuvent vérifier tous les liens Archive.org depuis l’espace équipe, avec progression, détail par morceau et bilan. Les correspondances non confirmées restent signalées ; aucune correction automatique n’est appliquée. Doublons audio partage cette interface et compare trois extraits par fichier.'],
  ['Skip technique du Blind Test','Skipper dû à un bug passe la manche sans réponse fausse, même si l’extrait ne démarre pas. Le bilan distingue les skips techniques des erreurs normales, et le diagnostic est conservé sur le compte connecté.'],
- ['Immersion temporairement indisponible','Le mode immersion est temporairement indisponible le temps de sa réparation. Le lecteur et les paroles restent accessibles dans leurs pages habituelles.'],
+ ['Immersion dans les applications','Écran reconstruit pour Windows, Android et iPhone : pochette carrée à gauche, paroles à droite, commandes visibles. Les minutages pilotent les paroles synchronisées ; le texte simple défile approximativement selon la position dans le morceau. Le défilement se met en pause lors d’un déplacement manuel et peut être repris. Les morceaux sans paroles affichent un message et prennent en charge les futurs ajouts. Disponible aussi pour Local. Sur le site PC et mobile, un message indique que ce mode est exclusif aux applications.'],
  ['Blind Test à quatre choix','Après chaque extrait, sélectionne une des quatre propositions avec pochette et titre. Une seule réponse est correcte ; les autres viennent du catalogue disponible. Le bilan conserve les temps, erreurs et performances par morceau.'],
  ['Niveaux d’affichage','L’aperçu Niveau 1 · Public masque les commandes de modération et de création, y compris les fonctionnalités récentes. Cet aperçu ne change pas les permissions du compte.'],
  ['Statistiques et résumés','Statistiques présente les 19 catégories du bilan, avec 276 mesures demandées. Choisis une année ou un mois et ouvre chaque catégorie pour accéder aux détails. Une donnée inaccessible affiche 0 (indisponible). Le suivi d’écoute exclut pauses, chargements et déplacements dans le morceau ; les informations anciennes non enregistrées ne sont pas inventées.'],
@@ -1425,7 +1356,7 @@ async function adminCall(name,args){if(!(creatorAccess||AU_ACCESS.can(name.start
 async function loadAdmin(){if(!(creatorAccess||AU_ACCESS.can('administration'))){clearCreator();return;}const generation=++adminGeneration;adminItems.replaceChildren();adminStatus.textContent='Chargement…';adminPrev.disabled=true;adminNext.disabled=true;for(const tab of adminTabs.children)tab.setAttribute('aria-pressed',String(tab.dataset.adminKind===adminKind));try{const data=await adminCall('au_admin_list',{p_kind:adminKind,p_offset:adminPage*50});if(generation!==adminGeneration)return;const rows=data.items||[];adminStatus.textContent=rows.length?'Page '+(adminPage+1)+' · '+rows.length+' éléments':'Aucun élément sur cette page.';for(const item of rows){const card=element('article','au-admin-card');card.append(element('h3','',item.title||'Sans titre'));if(adminKind==='members'){card.append(element('p','au-note',item.email||''),element('p','',item.role==='creator'?'Créateur du site':item.role==='supporter'?'Soutien du site':'Membre'));if(item.role!=='creator')card.append(adminAction(item.role==='supporter'?'Retirer le statut de soutien':'Attribuer le statut de soutien','au_admin_supporter',{p_id:item.id,p_enabled:item.role!=='supporter'}));}else{card.append(element('p','au-note',(item.author_name||'')+' · '+(item.reference||'')),element('p','au-admin-body',item.body||''),element('p','au-note',item.hidden_at?'Masqué / classé':adminKind==='reports'?'Signalement privé':'Visible'));card.append(adminAction(item.hidden_at?'Restaurer':adminKind==='reports'?'Classer le signalement':'Masquer ce contenu','au_admin_moderate',{p_kind:adminKind,p_id:item.id,p_hidden:!item.hidden_at}));}adminItems.append(card);}adminPrev.disabled=adminPage===0;adminNext.disabled=rows.length<50;}catch(e){if(generation===adminGeneration)adminStatus.textContent=e.message;}}
 function adminAction(label,rpc,args){return button('button secondary',label,async e=>{const action=e.currentTarget;action.disabled=true;const generation=adminGeneration;try{await adminCall(rpc,args);if(generation===adminGeneration)await loadAdmin();}catch(error){if(generation===adminGeneration)adminStatus.textContent=error.message;}finally{action.disabled=false;}});}
 
- window.addEventListener('au:lyrics-end-action',async event=>{const vi=playingVolume,ti=playingTrack;document.getElementById('auImmersiveDialog')?.close();if(event.detail==='comments')await majorSocial.openComments(vi,ti);else if(event.detail==='vote'){navigate('decouvrir');const choice=document.querySelector('[aria-label="Morceau pour lequel voter"]');if(choice){choice.value=COLLECTION[vi].number+':'+COLLECTION[vi].tracks[ti].number;choice.dispatchEvent(new Event('change'));choice.scrollIntoView({block:'center',behavior:'smooth'});}}else{navigate('paroles');document.getElementById('communityPanel')?.scrollIntoView({block:'start',behavior:'smooth'});if(community.song){if(community.selection)openAnnotationDialog(community.selection);else communityNotice('Sélectionne un passage des paroles pour lire ou ajouter une explication.');}}});
+ window.addEventListener('au:lyrics-end-action',async event=>{const vi=playingVolume,ti=playingTrack;document.getElementById('auImmersionApp')?.close();if(event.detail==='comments')await majorSocial.openComments(vi,ti);else if(event.detail==='vote'){navigate('decouvrir');const choice=document.querySelector('[aria-label="Morceau pour lequel voter"]');if(choice){choice.value=COLLECTION[vi].number+':'+COLLECTION[vi].tracks[ti].number;choice.dispatchEvent(new Event('change'));choice.scrollIntoView({block:'center',behavior:'smooth'});}}else{navigate('paroles');document.getElementById('communityPanel')?.scrollIntoView({block:'start',behavior:'smooth'});if(community.song){if(community.selection)openAnnotationDialog(community.selection);else communityNotice('Sélectionne un passage des paroles pour lire ou ajouter une explication.');}}});
  const majorSocial=initMajorSocial({getClient:()=>client,getUser:()=>user,isCreator:()=>creatorAccess});
  const sharedSong=key=>{for(let vi=0;vi<COLLECTION.length;vi++){const v=COLLECTION[vi],ti=v.tracks.findIndex(t=>v.number+':'+t.number===key);if(ti>=0)return {vi,ti,title:v.tracks[ti].title,volumeLabel:v.title,play:()=>selectTrack(vi,ti,true)};}return null;};
  const trackSharing=window.AU_INIT_TRACK_SHARING({getClient:()=>client,getUser:()=>user,getSong:sharedSong,currentKey:()=>COLLECTION[playingVolume].number+':'+track().number,selectSong:key=>{const song=sharedSong(key);if(song){openVolume(song.vi,false);selectTrack(song.vi,song.ti,false);}},openProfile:id=>majorSocial.openProfile(id),tracklist:$('tracklist'),playerHost:document.querySelector('.dock-status')});
