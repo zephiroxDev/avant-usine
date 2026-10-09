@@ -1,1308 +1,1321 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
-      "18V06 Â· Sauvegardes protÃ©gÃ©es",
+      "18V06 · Sauvegardes protégées",
       "9 octobre 2026",
-      "Sauvegardes portables et options de transfert de rÃ´le.",
+      "Sauvegardes portables et options de transfert de rôle.",
       [
-        "Sauvegarde portable complÃ¨te : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animÃ©es, mÃ©tadonnÃ©es, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, prÃ©fÃ©rences et positions de lecture inclus.",
-        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vÃ©rification des fichiers avant restauration ; seules les sauvegardes .au-backup protÃ©gÃ©es sont importables. Aucun compte, mot de passe ou session nâ€™est exportÃ©.",
-        "Inclure le rÃ´le est une option dÃ©cochÃ©e Ã  lâ€™export, rÃ©servÃ©e aux comptes CrÃ©ateur ou ModÃ©rateur. Ã€ lâ€™import, le transfert sur le compte connectÃ© est facultatif et validÃ© automatiquement par une preuve serveur. Les donnÃ©es peuvent Ãªtre restaurÃ©es sans transfÃ©rer de rÃ´le.",
-        "Local est rÃ©servÃ© aux applications Windows, Android et iPhone. Les versions Internet affichent un message dâ€™exclusivitÃ©.",
-        "Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Sauvegarde portable complète : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animées, métadonnées, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, préférences et positions de lecture inclus.",
+        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vérification des fichiers avant restauration ; seules les sauvegardes .au-backup protégées sont importables. Aucun compte, mot de passe ou session n’est exporté.",
+        "Inclure le rôle est une option décochée à l’export, réservée aux comptes Créateur ou Modérateur. À l’import, le transfert sur le compte connecté est facultatif et validé automatiquement par une preuve serveur. Les données peuvent être restaurées sans transférer de rôle.",
+        "Local est réservé aux applications Windows, Android et iPhone. Les versions Internet affichent un message d’exclusivité.",
+        "Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "18V05.2 Â· Immersion rÃ©servÃ©e aux applications",
+      "18V05.2 · Immersion réservée aux applications",
       "9 octobre 2026",
-      "Message dâ€™exclusivitÃ© sur le site PC et mobile.",
+      "Message d’exclusivité sur le site PC et mobile.",
       [
         "Le bouton Immersion indique que le mode est exclusivement disponible dans les applications Windows, Android et iPhone.",
-        "Les autres fonctions du lecteur Web sont conservÃ©es. Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Les autres fonctions du lecteur Web sont conservées. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "18V05 Â· Ã‰coute et sauvegardes",
+      "18V05 · Écoute et sauvegardes",
       "9 octobre 2026",
-      "Des contrÃ´les dâ€™Ã©coute et une sauvegarde complÃ¨te de la bibliothÃ¨que personnelle.",
+      "Des contrôles d’écoute et une sauvegarde complète de la bibliothèque personnelle.",
       [
-        "Minuteur de sommeil : arrÃªt aprÃ¨s 15, 30 ou 60 minutes, ou Ã  la fin du morceau sans enchaÃ®ner. ContrÃ´le par Ã©chÃ©ance rÃ©elle, Ã©vÃ©nements audio et retour dans lâ€™interface.",
-        "Local : reprise du dernier morceau Ã  sa position mÃ©morisÃ©e, proposÃ©e sans lecture automatique. Reprise du catalogue conservÃ©e.",
-        "Sauvegarde complÃ¨te Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, mÃ©tadonnÃ©es et brouillons. Empreintes SHA-256 vÃ©rifiÃ©es avant restauration.",
-        "Restauration aprÃ¨s aperÃ§u : ajout atomique dâ€™une copie complÃ¨te avec nouveaux identifiants, sans remplacer les donnÃ©es existantes. Sauvegarde corrompue refusÃ©e ; limite ZIP de 4 Go.",
-        "Diagnostic des mises Ã  jour : version installÃ©e, derniÃ¨re version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalitÃ©s & astuces est complÃ©tÃ© dans Lire le reste."
+        "Minuteur de sommeil : arrêt après 15, 30 ou 60 minutes, ou à la fin du morceau sans enchaîner. Contrôle par échéance réelle, événements audio et retour dans l’interface.",
+        "Local : reprise du dernier morceau à sa position mémorisée, proposée sans lecture automatique. Reprise du catalogue conservée.",
+        "Sauvegarde complète Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, métadonnées et brouillons. Empreintes SHA-256 vérifiées avant restauration.",
+        "Restauration après aperçu : ajout atomique d’une copie complète avec nouveaux identifiants, sans remplacer les données existantes. Sauvegarde corrompue refusée ; limite ZIP de 4 Go.",
+        "Diagnostic des mises à jour : version installée, dernière version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalités & astuces est complété dans Lire le reste."
       ]
     ],
     [
-      "18V04 Â· NÃ©on des pochettes",
+      "18V04 · Néon des pochettes",
       "8 octobre 2026",
-      "Un contour lumineux animÃ© sur les pochettes.",
+      "Un contour lumineux animé sur les pochettes.",
       [
-        "Halo nÃ©on rose et cyan animÃ© autour des pochettes du catalogue, du lecteur, du Blind Test et de la bibliothÃ¨que Local. Format carrÃ© et animation lumineuse des images conservÃ©s, sans modification de leur contraste.",
-        "Effets rÃ©duits : contour fixe discret. Effets dÃ©sactivÃ©s : contour retirÃ©. Pause des animations et prÃ©fÃ©rence systÃ¨me de rÃ©duction des mouvements respectÃ©es.",
-        "Guide Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste.",
-        "Applications Windows, Android et iPhone/iPad rÃ©unies dans un panneau compact. Chaque bouton rÃ©cupÃ¨re automatiquement la derniÃ¨re version de sa plateforme sur GitHub ; lâ€™IPA nÃ©cessite une signature avant installation."
+        "Halo néon rose et cyan animé autour des pochettes du catalogue, du lecteur, du Blind Test et de la bibliothèque Local. Format carré et animation lumineuse des images conservés, sans modification de leur contraste.",
+        "Effets réduits : contour fixe discret. Effets désactivés : contour retiré. Pause des animations et préférence système de réduction des mouvements respectées.",
+        "Guide Infos, fonctionnalités & astuces complété dans Lire le reste.",
+        "Applications Windows, Android et iPhone/iPad réunies dans un panneau compact. Chaque bouton récupère automatiquement la dernière version de sa plateforme sur GitHub ; l’IPA nécessite une signature avant installation."
       ]
     ],
     [
-      "18V03 Â· Applications mobiles",
+      "18V03 · Applications mobiles",
       "8 octobre 2026",
       "Historiques mobiles et annonce Android.",
       [
-        "NouveautÃ©s : sÃ©lecteurs Application Android et Application iOS, avec historiques sÃ©parÃ©s. Une plateforme sans version publiÃ©e le signale explicitement.",
-        "Annonce Android Ã  cÃ´tÃ© de lâ€™application PC. Le lien APK est rÃ©cupÃ©rÃ© automatiquement depuis les versions Android publiÃ©es sur GitHub, sans modifier son adresse Ã  chaque mise Ã  jour."
+        "Nouveautés : sélecteurs Application Android et Application iOS, avec historiques séparés. Une plateforme sans version publiée le signale explicitement.",
+        "Annonce Android à côté de l’application PC. Le lien APK est récupéré automatiquement depuis les versions Android publiées sur GitHub, sans modifier son adresse à chaque mise à jour."
       ]
     ],
     [
-      "18V02 Â· Import ordonnÃ© et dÃ©placement",
+      "18V02 · Import ordonné et déplacement",
       "8 octobre 2026",
-      "Classement automatique et dÃ©placement direct des morceaux locaux.",
+      "Classement automatique et déplacement direct des morceaux locaux.",
       [
-        "Import local de plusieurs fichiers ou dâ€™un dossier : tri numÃ©rique suivant les numÃ©ros initiaux des fichiers, avec repli sur le titre ou le numÃ©ro de piste intÃ©grÃ©. Les morceaux sans numÃ©ro suivent dans leur ordre de sÃ©lection.",
-        "Les numÃ©ros et sÃ©parateurs initiaux sont retirÃ©s des titres aprÃ¨s le classement. Avant lâ€™usine affiche sa propre numÃ©rotation suivant lâ€™ordre de lâ€™album ; le ZIP conserve une seule numÃ©rotation cohÃ©rente.",
-        "Maintenir la poignÃ©e â ¿ puis dÃ©placer et relÃ¢cher pour rÃ©ordonner les morceaux Ã  la souris ou au doigt. RepÃ¨re de position, dÃ©filement prÃ¨s des bords et sauvegarde locale ; flÃ¨ches conservÃ©es pour le clavier.",
-        "MÃ©tadonnÃ©es communes : appliquer artiste, album, genre et annÃ©e Ã  toutes les pistes ou seulement Ã  la sÃ©lection, avec choix explicite des champs Ã  remplacer. Titres, ordre et fichiers originaux conservÃ©s.",
-        "SÃ©lection multiple des morceaux, sÃ©lection de tous les morceaux affichÃ©s et suppression groupÃ©e aprÃ¨s confirmation. Retrait cohÃ©rent des albums et playlists ; les fichiers dâ€™origine restent conservÃ©s."
+        "Import local de plusieurs fichiers ou d’un dossier : tri numérique suivant les numéros initiaux des fichiers, avec repli sur le titre ou le numéro de piste intégré. Les morceaux sans numéro suivent dans leur ordre de sélection.",
+        "Les numéros et séparateurs initiaux sont retirés des titres après le classement. Avant l’usine affiche sa propre numérotation suivant l’ordre de l’album ; le ZIP conserve une seule numérotation cohérente.",
+        "Maintenir la poignée ⠿ puis déplacer et relâcher pour réordonner les morceaux à la souris ou au doigt. Repère de position, défilement près des bords et sauvegarde locale ; flèches conservées pour le clavier.",
+        "Métadonnées communes : appliquer artiste, album, genre et année à toutes les pistes ou seulement à la sélection, avec choix explicite des champs à remplacer. Titres, ordre et fichiers originaux conservés.",
+        "Sélection multiple des morceaux, sélection de tous les morceaux affichés et suppression groupée après confirmation. Retrait cohérent des albums et playlists ; les fichiers d’origine restent conservés."
       ]
     ],
     [
-      "18V01 Â· Nettoyage des titres locaux",
+      "18V01 · Nettoyage des titres locaux",
       "8 octobre 2026",
-      "Retrait des doubles numÃ©rotations avec aperÃ§u.",
+      "Retrait des doubles numérotations avec aperçu.",
       [
-        "Local : bouton Â« Supprimer les numÃ©rotations des titres Â» pour nettoyer les numÃ©ros et sÃ©parateurs initiaux, dont les tirets, sans modifier le reste du titre.",
-        "AperÃ§u avant/aprÃ¨s puis nettoyage de tous les titres concernÃ©s, sans sÃ©lection partielle. Aucun nettoyage automatique Ã  lâ€™import.",
-        "Ordre, appartenance aux albums, favoris, paroles et fichiers dâ€™origine conservÃ©s. Lâ€™export ZIP retire systÃ©matiquement les anciens prÃ©fixes, mÃªme sans utiliser le bouton, puis numÃ©rote les pistes uniquement selon lâ€™ordre actuel de lâ€™album, avec titres nettoyÃ©s dans les noms et mÃ©tadonnÃ©es."
+        "Local : bouton « Supprimer les numérotations des titres » pour nettoyer les numéros et séparateurs initiaux, dont les tirets, sans modifier le reste du titre.",
+        "Aperçu avant/après puis nettoyage de tous les titres concernés, sans sélection partielle. Aucun nettoyage automatique à l’import.",
+        "Ordre, appartenance aux albums, favoris, paroles et fichiers d’origine conservés. L’export ZIP retire systématiquement les anciens préfixes, même sans utiliser le bouton, puis numérote les pistes uniquement selon l’ordre actuel de l’album, avec titres nettoyés dans les noms et métadonnées."
       ]
     ],
     [
-      "18V00 Â· BibliothÃ¨que personnelle Local",
+      "18V00 · Bibliothèque personnelle Local",
       "8 octobre 2026",
-      "Albums, playlists, pochettes, paroles et exports personnels sur lâ€™appareil.",
+      "Albums, playlists, pochettes, paroles et exports personnels sur l’appareil.",
       [
-        "Nouvel onglet Local sÃ©parÃ© du catalogue public : fichiers personnels stockÃ©s sur lâ€™appareil via IndexedDB, sans compte ni transfert aux serveurs. Message explicatif Ã  chaque ouverture et rappel de sauvegarde.",
-        "Import de fichiers ou dossiers audio, choix morceaux sÃ©parÃ©s ou album lors dâ€™un import multiple ; titres et mÃ©tadonnÃ©es intÃ©grÃ©es MP3/FLAC dÃ©tectÃ©s lorsque disponibles.",
-        "Albums et playlists personnalisÃ©s : sÃ©lection des morceaux, ordre avec flÃ¨ches, ajouts, retraits, renommage et suppression Ã  tout moment. NumÃ©rotation recalculÃ©e sans modifier les titres. Favoris locaux indÃ©pendants du compte.",
-        "Pochettes classiques et animÃ©es choisies dans les fichiers de lâ€™appareil. VÃ©rification des dimensions, confirmation pour les formats non carrÃ©s et redimensionnement sans recadrage. Pochette dâ€™album ou individuelle et application Ã  tous les morceaux.",
-        "Paroles locales simples et synchronisÃ©es : import LRC/JSON, choix simple ou Highlight dÃ©taillÃ©, lecture synchronisÃ©e et Atelier sans contribution publique, vitesses 0,50Ã—/0,75Ã—/1Ã—/2Ã— et brouillons sur lâ€™appareil.",
-        "Export ZIP des albums dans lâ€™ordre : copies audio, pochettes et mÃ©tadonnÃ©es, avec aucun fichier de paroles, LRC, JSON ou les deux. Tags MP3, WAV et FLAC rÃ©Ã©crits dans les copies ; autres formats conservÃ©s avec mÃ©tadonnÃ©es JSON. Originaux intacts.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste ; indice initial et phrase cachÃ©e conservÃ©s.",
-        "CrÃ©ation dâ€™un album lors dâ€™un import multiple : nom saisi directement dans le panneau, sans fenÃªtre de saisie externe, pour assurer la compatibilitÃ© avec les navigateurs intÃ©grÃ©s."
+        "Nouvel onglet Local séparé du catalogue public : fichiers personnels stockés sur l’appareil via IndexedDB, sans compte ni transfert aux serveurs. Message explicatif à chaque ouverture et rappel de sauvegarde.",
+        "Import de fichiers ou dossiers audio, choix morceaux séparés ou album lors d’un import multiple ; titres et métadonnées intégrées MP3/FLAC détectés lorsque disponibles.",
+        "Albums et playlists personnalisés : sélection des morceaux, ordre avec flèches, ajouts, retraits, renommage et suppression à tout moment. Numérotation recalculée sans modifier les titres. Favoris locaux indépendants du compte.",
+        "Pochettes classiques et animées choisies dans les fichiers de l’appareil. Vérification des dimensions, confirmation pour les formats non carrés et redimensionnement sans recadrage. Pochette d’album ou individuelle et application à tous les morceaux.",
+        "Paroles locales simples et synchronisées : import LRC/JSON, choix simple ou Highlight détaillé, lecture synchronisée et Atelier sans contribution publique, vitesses 0,50×/0,75×/1×/2× et brouillons sur l’appareil.",
+        "Export ZIP des albums dans l’ordre : copies audio, pochettes et métadonnées, avec aucun fichier de paroles, LRC, JSON ou les deux. Tags MP3, WAV et FLAC réécrits dans les copies ; autres formats conservés avec métadonnées JSON. Originaux intacts.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste ; indice initial et phrase cachée conservés.",
+        "Création d’un album lors d’un import multiple : nom saisi directement dans le panneau, sans fenêtre de saisie externe, pour assurer la compatibilité avec les navigateurs intégrés."
       ]
     ],
     [
-      "17V06 Â· Partage et vitesse de synchronisation",
+      "17V06 · Partage et vitesse de synchronisation",
       "7 octobre 2026",
-      "Liens directs vers les morceaux, vitesse des ateliers et choix des formats importÃ©s.",
+      "Liens directs vers les morceaux, vitesse des ateliers et choix des formats importés.",
       [
-        "Partage individuel de chaque morceau : lien direct, panneau dâ€™arrivÃ©e, auteur et profil pour les comptes, indication anonyme et premiÃ¨re date de crÃ©ation conservÃ©e. Copier le lien et partage natif lorsque disponible.",
-        "Vitesse de lecture 0,50Ã—, 0,75Ã—, 1Ã— ou 2Ã— dans Highlight Progression et synchronisation avancÃ©e, modifiable sans perdre les repÃ¨res. Les timings suivent toujours la position rÃ©elle dans le morceau. Vitesse sauvegardÃ©e dans le brouillon et rÃ©tablie Ã  la fermeture.",
-        "Import avec choix prÃ©alable : Highlight Progression accepte les JSON dÃ©taillÃ©s et refuse le LRC ou les JSON de simples dÃ©parts de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservÃ© et prÃ©visualisation complÃ¨te avant approbation maintenue.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste."
+        "Partage individuel de chaque morceau : lien direct, panneau d’arrivée, auteur et profil pour les comptes, indication anonyme et première date de création conservée. Copier le lien et partage natif lorsque disponible.",
+        "Vitesse de lecture 0,50×, 0,75×, 1× ou 2× dans Highlight Progression et synchronisation avancée, modifiable sans perdre les repères. Les timings suivent toujours la position réelle dans le morceau. Vitesse sauvegardée dans le brouillon et rétablie à la fermeture.",
+        "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé et prévisualisation complète avant approbation maintenue.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste."
       ]
     ],
     [
-      "17V05 Â· Paroles et ateliers simplifiÃ©s",
+      "17V05 · Paroles et ateliers simplifiés",
       "6 octobre 2026",
-      "SÃ©lection des passages, synchronisation plus simple et panneaux mobiles accessibles.",
+      "Sélection des passages, synchronisation plus simple et panneaux mobiles accessibles.",
       [
-        "Paroles synchronisÃ©es sÃ©lectionnables au mot, Ã  la phrase ou sur plusieurs lignes : Lire / expliquer le passage ouvre les annotations avec les positions du texte original. La surbrillance continue ; le suivi attend pendant la sÃ©lection.",
-        "Highlight Progression : une seule phrase visible. Terminer cette phrase met la musique en pause, masque la phrase terminÃ©e et rÃ©vÃ¨le uniquement la suivante. Les phrases suivantes restent masquÃ©es ; la phrase actuelle peut dÃ©filer sur mobile.",
-        "Synchronisation avancÃ©e : toutes les paroles visibles et deux flÃ¨ches. La lecture dÃ©marre Ã  lâ€™ouverture de lâ€™atelier ; â†“ marque le dÃ©part de la phrase et avance, puis marque la fin aprÃ¨s la derniÃ¨re phrase. â†‘ efface les repÃ¨res Ã  reprendre, revient juste avant la phrase prÃ©cÃ©dente et relance la lecture. Aucun minutage Ã  saisir ni raccourci requis.",
-        "FenÃªtres mobiles : dimensions adaptÃ©es Ã  la zone visible et au clavier, contenu dÃ©filant, en-tÃªtes et fermeture accessibles. Les fenÃªtres superposÃ©es gardent la fermeture et le retour au panneau prÃ©cÃ©dent.",
-        "Brouillons, validation des synchronisations et vÃ©rification complÃ¨te avant approbation conservÃ©s. Guide actualisÃ© dans Lire le reste."
+        "Paroles synchronisées sélectionnables au mot, à la phrase ou sur plusieurs lignes : Lire / expliquer le passage ouvre les annotations avec les positions du texte original. La surbrillance continue ; le suivi attend pendant la sélection.",
+        "Highlight Progression : une seule phrase visible. Terminer cette phrase met la musique en pause, masque la phrase terminée et révèle uniquement la suivante. Les phrases suivantes restent masquées ; la phrase actuelle peut défiler sur mobile.",
+        "Synchronisation avancée : toutes les paroles visibles et deux flèches. La lecture démarre à l’ouverture de l’atelier ; ↓ marque le départ de la phrase et avance, puis marque la fin après la dernière phrase. ↑ efface les repères à reprendre, revient juste avant la phrase précédente et relance la lecture. Aucun minutage à saisir ni raccourci requis.",
+        "Fenêtres mobiles : dimensions adaptées à la zone visible et au clavier, contenu défilant, en-têtes et fermeture accessibles. Les fenêtres superposées gardent la fermeture et le retour au panneau précédent.",
+        "Brouillons, validation des synchronisations et vérification complète avant approbation conservés. Guide actualisé dans Lire le reste."
       ]
     ],
     [
-      "17V04 Â· LumiÃ¨re et pochettes HD",
+      "17V04 · Lumière et pochettes HD",
       "6 octobre 2026",
-      "Ã‰clairage renforcÃ© et tÃ©lÃ©chargements des pochettes simplifiÃ©s.",
+      "Éclairage renforcé et téléchargements des pochettes simplifiés.",
       [
-        "Ã‰clairage des pochettes fortement renforcÃ© Ã  partir des variations lumineuses de chaque image, sans zoom, dÃ©placement ou reflet ajoutÃ©. Les titres de volume suivent la lumiÃ¨re.",
-        "DÃ©tails conservÃ©s depuis les pochettes HD originales, Ã©clairage lissÃ© et limitation de la saturation des couleurs. Calcul partagÃ© par volume et limitÃ© aux pochettes visibles.",
-        "Pause, effets rÃ©duits ou dÃ©sactivÃ©s et rÃ©duction des animations respectÃ©s. Une pochette fixe HD reste affichÃ©e si le rendu animÃ© est indisponible.",
-        "Anciens tÃ©lÃ©chargements directs des MP4 retirÃ©s. Liens MEGA conservÃ©s pour permettre le remplacement de leur contenu sans modifier le site.",
-        "Guide Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Éclairage des pochettes fortement renforcé à partir des variations lumineuses de chaque image, sans zoom, déplacement ou reflet ajouté. Les titres de volume suivent la lumière.",
+        "Détails conservés depuis les pochettes HD originales, éclairage lissé et limitation de la saturation des couleurs. Calcul partagé par volume et limité aux pochettes visibles.",
+        "Pause, effets réduits ou désactivés et réduction des animations respectés. Une pochette fixe HD reste affichée si le rendu animé est indisponible.",
+        "Anciens téléchargements directs des MP4 retirés. Liens MEGA conservés pour permettre le remplacement de leur contenu sans modifier le site.",
+        "Guide Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "17V03 Â· Pochettes et diagnostics",
+      "17V03 · Pochettes et diagnostics",
       "6 octobre 2026",
-      "Animations renforcÃ©es, skip technique et contrÃ´les du catalogue.",
+      "Animations renforcées, skip technique et contrôles du catalogue.",
       [
-        "Pochettes animÃ©es : mouvement de zoom et dÃ©placement nettement plus visible, reflet lumineux animÃ©, uniquement sur les pochettes visibles. Pause, effets rÃ©duits/dÃ©sactivÃ©s et rÃ©duction des mouvements respectÃ©s.",
-        "Blind Test : bouton Skipper dÃ» Ã  un bug utilisable mÃªme si lâ€™extrait ne dÃ©marre pas. La manche est exclue des rÃ©ponses et du taux de rÃ©ussite ; le bilan affiche le nombre et les titres concernÃ©s. Diagnostic distinct conservÃ© pour les comptes connectÃ©s.",
-        "CrÃ©ateur et modÃ©rateurs : contrÃ´le global des liens Archive.org, mÃ©tadonnÃ©es regroupÃ©es par archive, lectures MP3 partielles, noms et numÃ©rotation, titres incorporÃ©s et empreintes dupliquÃ©es. RÃ©sultats confirmÃ©s, incorrects, inaccessibles et Ã  confirmer clairement sÃ©parÃ©s.",
-        "Objectif de dix secondes pour le contrÃ´le des liens, avec requÃªtes parallÃ¨les limitÃ©es ; les dÃ©lais rÃ©seau ou lâ€™absence dâ€™informations ne sont jamais remplacÃ©s par une validation fictive.",
-        "Doublons audio : lancement manuel dans la mÃªme interface de progression, compteur et pourcentage, arrÃªt, bilan et diagnostic JSON. Comparaison sonore sur trois extraits conservÃ©e ; aucune suppression automatique.",
-        "Guide complÃ©tÃ© dans Lire le reste ; niveau Public masque les nouveaux contrÃ´les rÃ©servÃ©s."
+        "Pochettes animées : mouvement de zoom et déplacement nettement plus visible, reflet lumineux animé, uniquement sur les pochettes visibles. Pause, effets réduits/désactivés et réduction des mouvements respectés.",
+        "Blind Test : bouton Skipper dû à un bug utilisable même si l’extrait ne démarre pas. La manche est exclue des réponses et du taux de réussite ; le bilan affiche le nombre et les titres concernés. Diagnostic distinct conservé pour les comptes connectés.",
+        "Créateur et modérateurs : contrôle global des liens Archive.org, métadonnées regroupées par archive, lectures MP3 partielles, noms et numérotation, titres incorporés et empreintes dupliquées. Résultats confirmés, incorrects, inaccessibles et à confirmer clairement séparés.",
+        "Objectif de dix secondes pour le contrôle des liens, avec requêtes parallèles limitées ; les délais réseau ou l’absence d’informations ne sont jamais remplacés par une validation fictive.",
+        "Doublons audio : lancement manuel dans la même interface de progression, compteur et pourcentage, arrêt, bilan et diagnostic JSON. Comparaison sonore sur trois extraits conservée ; aucune suppression automatique.",
+        "Guide complété dans Lire le reste ; niveau Public masque les nouveaux contrôles réservés."
       ]
     ],
     [
-      "17V02 Â· QCM musical et affichage",
+      "17V02 · QCM musical et affichage",
       "6 octobre 2026",
-      "RÃ©ponses visuelles, immersion en rÃ©paration et niveaux dâ€™affichage corrigÃ©s.",
+      "Réponses visuelles, immersion en réparation et niveaux d’affichage corrigés.",
       [
-        "Immersion temporairement indisponible : le bouton affiche le message de rÃ©paration, sans ouvrir le mode existant. Le lecteur et les pages de paroles restent accessibles.",
-        "Blind Test musical Ã  quatre choix : bonne rÃ©ponse et trois morceaux distincts tirÃ©s du catalogue, ordre alÃ©atoire, titres et pochettes animÃ©es, sÃ©lection au clic ou au toucher aprÃ¨s lâ€™extrait.",
-        "ChronomÃ¨tre dÃ©marrÃ© Ã  lâ€™apparition des rÃ©ponses ; correction immÃ©diate, bilan et statistiques par morceau conservÃ©s. RÃ©Ã©couter ne remet pas le temps de rÃ©ponse Ã  zÃ©ro.",
-        "Voile blanc animÃ© conservÃ© sur les Ã©lÃ©ments encadrÃ©s ; aucun voile sur les textes cliquables sans cadre.",
-        "Niveau 1 Â· Public : commandes de modÃ©ration et de crÃ©ation rÃ©centes masquÃ©es, sans modifier les permissions rÃ©elles du compte.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste ; indice initial et Easter egg conservÃ©s."
+        "Immersion temporairement indisponible : le bouton affiche le message de réparation, sans ouvrir le mode existant. Le lecteur et les pages de paroles restent accessibles.",
+        "Blind Test musical à quatre choix : bonne réponse et trois morceaux distincts tirés du catalogue, ordre aléatoire, titres et pochettes animées, sélection au clic ou au toucher après l’extrait.",
+        "Chronomètre démarré à l’apparition des réponses ; correction immédiate, bilan et statistiques par morceau conservés. Réécouter ne remet pas le temps de réponse à zéro.",
+        "Voile blanc animé conservé sur les éléments encadrés ; aucun voile sur les textes cliquables sans cadre.",
+        "Niveau 1 · Public : commandes de modération et de création récentes masquées, sans modifier les permissions réelles du compte.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste ; indice initial et Easter egg conservés."
       ]
     ],
     [
-      "17V01 Â· Bilans et reconnaissance musicale",
+      "17V01 · Bilans et reconnaissance musicale",
       "6 octobre 2026",
-      "Statistiques personnelles, rÃ©sumÃ©s conservÃ©s, trophÃ©es annuels et Blind Test.",
+      "Statistiques personnelles, résumés conservés, trophées annuels et Blind Test.",
       [
-        "NouveautÃ©s regroupe trois historiques indÃ©pendants : Site PC, Application PC et Site mobile. Le bouton Historique des mises Ã  jour ouvre le choix sans plateforme prÃ©sÃ©lectionnÃ©e.",
-        "Blind Test : sÃ©lection sans limite fixÃ©e, ordre alÃ©atoire et un passage par morceau ; extraits de dix secondes, cinq secondes ou du premier son audible selon la difficultÃ©. ChronomÃ¨tre et bilan dÃ©taillÃ© par rÃ©ponse, morceau et volume. Les extraits indisponibles sont exclus des erreurs.",
-        "Statistiques et rÃ©sumÃ©s : 19 catÃ©gories et 276 mesures demandÃ©es, dÃ©tails accessibles pour les comptes membres, modÃ©rateurs et crÃ©ateur. Une donnÃ©e inaccessible affiche 0 (indisponible). Les donnÃ©es anciennes non enregistrÃ©es ne sont pas inventÃ©es.",
-        "Suivi dâ€™Ã©coute : pauses, chargements, dÃ©placements dans la piste et longues suspensions exclus ; mesures dÃ©doublonnÃ©es et chevauchements entre appareils empÃªchÃ©s.",
-        "RÃ©sumÃ©s programmables de six mois calendaires maximum, bilans mensuels et rÃ©sumÃ©s annuels conservÃ©s sans remplacement. RÃ©vÃ©lation annuelle au 1er janvier Ã  minuit, heure de Paris ; nouveaux compteurs et conservation de lâ€™historique.",
-        "2026 reste une Ã©dition privÃ©e de test, sans trophÃ©es exposables. Le classement public devient automatiquement disponible pour les bilans de 2027 et des annÃ©es suivantes. Une fiche publique conserve son contenu privÃ© : demande, acceptation, refus et rÃ©vocation pour chaque rÃ©sumÃ© individuel.",
-        "TrophÃ©es : 14 familles, 12 raretÃ©s par famille, conditions et progression visibles ; attribution Ã  la rÃ©vÃ©lation annuelle et collection permanente. Le niveau maximal du temps dâ€™Ã©coute demande 3 000 heures sur lâ€™annÃ©e complÃ¨te, sans rÃ©duction en 2026. Exposition au profil limitÃ©e aux trophÃ©es obtenus de 2027 et des annÃ©es suivantes.",
-        "Lâ€™immersion sâ€™ouvre sans imposer le plein Ã©cran et conserve la disposition existante.",
-        "Indice des astuces rendu plus discret dans le contenu initial ; fonctionnement de lâ€™Easter egg conservÃ©. Guide complÃ©tÃ© dans Lire le reste."
+        "Nouveautés regroupe trois historiques indépendants : Site PC, Application PC et Site mobile. Le bouton Historique des mises à jour ouvre le choix sans plateforme présélectionnée.",
+        "Blind Test : sélection sans limite fixée, ordre aléatoire et un passage par morceau ; extraits de dix secondes, cinq secondes ou du premier son audible selon la difficulté. Chronomètre et bilan détaillé par réponse, morceau et volume. Les extraits indisponibles sont exclus des erreurs.",
+        "Statistiques et résumés : 19 catégories et 276 mesures demandées, détails accessibles pour les comptes membres, modérateurs et créateur. Une donnée inaccessible affiche 0 (indisponible). Les données anciennes non enregistrées ne sont pas inventées.",
+        "Suivi d’écoute : pauses, chargements, déplacements dans la piste et longues suspensions exclus ; mesures dédoublonnées et chevauchements entre appareils empêchés.",
+        "Résumés programmables de six mois calendaires maximum, bilans mensuels et résumés annuels conservés sans remplacement. Révélation annuelle au 1er janvier à minuit, heure de Paris ; nouveaux compteurs et conservation de l’historique.",
+        "2026 reste une édition privée de test, sans trophées exposables. Le classement public devient automatiquement disponible pour les bilans de 2027 et des années suivantes. Une fiche publique conserve son contenu privé : demande, acceptation, refus et révocation pour chaque résumé individuel.",
+        "Trophées : 14 familles, 12 raretés par famille, conditions et progression visibles ; attribution à la révélation annuelle et collection permanente. Le niveau maximal du temps d’écoute demande 3 000 heures sur l’année complète, sans réduction en 2026. Exposition au profil limitée aux trophées obtenus de 2027 et des années suivantes.",
+        "L’immersion s’ouvre sans imposer le plein écran et conserve la disposition existante.",
+        "Indice des astuces rendu plus discret dans le contenu initial ; fonctionnement de l’Easter egg conservé. Guide complété dans Lire le reste."
       ]
     ],
     [
-      "17V00 Â· Nouvelle dimension",
+      "17V00 · Nouvelle dimension",
       "5 octobre 2026",
       "Une interface futuriste et de nouveaux outils communautaires.",
       [
-        "Nouvelle interface technologique, effets PC, transitions rapides et sons courts coupÃ©s automatiquement pendant toute lecture musicale.",
-        "Immersion reconstruite : Ã©cran partagÃ© Ã  parts Ã©gales entre pochette et paroles ; commandes et informations dans une section accessible en descendant.",
-        "Corrections communautaires des synchronisations publiques, file dÃ©diÃ©e et publication autonome par les modÃ©rateurs.",
-        "Demandes de permissions crÃ©ateur limitÃ©es Ã  une fonctionnalitÃ©, avec acceptation ou refus et journal des actions des modÃ©rateurs.",
-        "Statuts En ligne, Ne pas dÃ©ranger, Hors ligne et Compte sanctionnÃ© ; messages privÃ©s bloquÃ©s en Ne pas dÃ©ranger. Badges animÃ©s personnalisables.",
-        "Guide Infos, fonctionnalitÃ©s & astuces : documentation permanente, soutien Ko-fi, projets Android/iOS envisagÃ©s et indice protÃ©gÃ© derriÃ¨re une suite distincte.",
-        "MÃ©tadonnÃ©es multimÃ©dias : titre rÃ©el, artiste Jul, volume, pochette, progression et commandes pour les environnements compatibles.",
-        "Nettoyage renforcÃ© des intitulÃ©s de structure avant lâ€™atelier ; paroles chantÃ©es conservÃ©es.",
-        "Signalements IA confirmÃ©s, un vote de sept jours Ã  la fois, file chronologique, rÃ©sultat automatique et historique crÃ©ateur en lecture seule. Un vote par compte ; Ã©galitÃ© ou aucun vote conserve le morceau.",
-        "AprÃ¨s un vote IA positif, retrait et renumÃ©rotation affichÃ©e cohÃ©rents ; identifiants et liens audio des morceaux restants conservÃ©s.",
-        "Identifiants complets dans les Patch Notes ; historiques Web et Windows indÃ©pendants."
+        "Nouvelle interface technologique, effets PC, transitions rapides et sons courts coupés automatiquement pendant toute lecture musicale.",
+        "Immersion reconstruite : écran partagé à parts égales entre pochette et paroles ; commandes et informations dans une section accessible en descendant.",
+        "Corrections communautaires des synchronisations publiques, file dédiée et publication autonome par les modérateurs.",
+        "Demandes de permissions créateur limitées à une fonctionnalité, avec acceptation ou refus et journal des actions des modérateurs.",
+        "Statuts En ligne, Ne pas déranger, Hors ligne et Compte sanctionné ; messages privés bloqués en Ne pas déranger. Badges animés personnalisables.",
+        "Guide Infos, fonctionnalités & astuces : documentation permanente, soutien Ko-fi, projets Android/iOS envisagés et indice protégé derrière une suite distincte.",
+        "Métadonnées multimédias : titre réel, artiste Jul, volume, pochette, progression et commandes pour les environnements compatibles.",
+        "Nettoyage renforcé des intitulés de structure avant l’atelier ; paroles chantées conservées.",
+        "Signalements IA confirmés, un vote de sept jours à la fois, file chronologique, résultat automatique et historique créateur en lecture seule. Un vote par compte ; égalité ou aucun vote conserve le morceau.",
+        "Après un vote IA positif, retrait et renumérotation affichée cohérents ; identifiants et liens audio des morceaux restants conservés.",
+        "Identifiants complets dans les Patch Notes ; historiques Web et Windows indépendants."
       ]
     ],
     [
-      "16V00 Â· Historiques sÃ©parÃ©s et espace Ã©quipe",
+      "16V00 · Historiques séparés et espace équipe",
       "4 octobre 2026",
-      "Lecture, synchronisation et outils privÃ©s mieux organisÃ©s.",
+      "Lecture, synchronisation et outils privés mieux organisés.",
       [
-        "Historique du site rÃ©servÃ© aux changements Web ; historique Windows indÃ©pendant dÃ©marrant Ã  13v09.",
-        "Pendant la synchronisation, le morceau reste verrouillÃ© ; sa fin arrÃªte la lecture sans effacer le travail. Retour Ã  00:00 disponible dans lâ€™atelier.",
-        "Une fin de paroles explicite est enregistrÃ©e pour les blocs. La derniÃ¨re phrase sâ€™efface progressivement avant les actions dâ€™avis, de commentaire et dâ€™explication. Les anciens timings sans fin explicite restent conservÃ©s.",
-        "Immersion : pochette et paroles occupent chacune environ la moitiÃ© de la zone principale ; commandes et informations compactes placÃ©es en bas.",
-        "Suppression du titre visible Ã‰coute immersive. Espace Ã©quipe regroupÃ© dans le compte, avec outils de contributions et de gestion distincts.",
-        "Permissions crÃ©ateur, modÃ©rateur et public inchangÃ©es ; les actions contextuelles restent accessibles sur les Ã©lÃ©ments concernÃ©s.",
-        "Nom harmonisÃ© : Avant lâ€™usine, avec un u minuscule."
+        "Historique du site réservé aux changements Web ; historique Windows indépendant démarrant à 13v09.",
+        "Pendant la synchronisation, le morceau reste verrouillé ; sa fin arrête la lecture sans effacer le travail. Retour à 00:00 disponible dans l’atelier.",
+        "Une fin de paroles explicite est enregistrée pour les blocs. La dernière phrase s’efface progressivement avant les actions d’avis, de commentaire et d’explication. Les anciens timings sans fin explicite restent conservés.",
+        "Immersion : pochette et paroles occupent chacune environ la moitié de la zone principale ; commandes et informations compactes placées en bas.",
+        "Suppression du titre visible Écoute immersive. Espace équipe regroupé dans le compte, avec outils de contributions et de gestion distincts.",
+        "Permissions créateur, modérateur et public inchangées ; les actions contextuelles restent accessibles sur les éléments concernés.",
+        "Nom harmonisé : Avant l’usine, avec un u minuscule."
       ]
     ],
     [
-      "15V00 Â· Paroles visibles et immersion repensÃ©e",
+      "15V00 · Paroles visibles et immersion repensée",
       "4 octobre 2026",
-      "Un rendu partagÃ© entre Ã©coute publique et vÃ©rification des contributions.",
+      "Un rendu partagé entre écoute publique et vérification des contributions.",
       [
-        "Le suivi maintient la phrase ou le bloc chantÃ© dans la zone visible avec un dÃ©filement progressif, y compris les longues phrases et les backs.",
-        "Immersion sur une grande pochette floutÃ©e, avec voile sombre pour la lisibilitÃ© et disparition des fonds gris.",
-        "Transitions en fondu et lÃ©ger flou, teintÃ©es par une couleur extraite de la pochette ; suppression du cadre autour des paroles.",
-        "Les synchronisations du site, de lâ€™application et les fichiers LRC/JSON utilisent le mÃªme moteur public pendant leur vÃ©rification : timings, backs, styles et suivi identiques.",
-        "Les corrections de timings sont regroupÃ©es dans un panneau repliable. Approuver reste disponible uniquement aprÃ¨s Ã©coute complÃ¨te ; les passages sautÃ©s ne sont pas validÃ©s.",
-        "Arrondi uniforme des pochettes portÃ© de 4 Ã  10 pixels, avec format carrÃ© conservÃ©. Les prÃ©fÃ©rences de rÃ©duction des animations sont respectÃ©es."
+        "Le suivi maintient la phrase ou le bloc chanté dans la zone visible avec un défilement progressif, y compris les longues phrases et les backs.",
+        "Immersion sur une grande pochette floutée, avec voile sombre pour la lisibilité et disparition des fonds gris.",
+        "Transitions en fondu et léger flou, teintées par une couleur extraite de la pochette ; suppression du cadre autour des paroles.",
+        "Les synchronisations du site, de l’application et les fichiers LRC/JSON utilisent le même moteur public pendant leur vérification : timings, backs, styles et suivi identiques.",
+        "Les corrections de timings sont regroupées dans un panneau repliable. Approuver reste disponible uniquement après écoute complète ; les passages sautés ne sont pas validés.",
+        "Arrondi uniforme des pochettes porté de 4 à 10 pixels, avec format carré conservé. Les préférences de réduction des animations sont respectées."
       ]
     ],
     [
-      "14V00 Â· TÃ©lÃ©chargement dynamique et pochettes",
+      "14V00 · Téléchargement dynamique et pochettes",
       "4 octobre 2026",
-      "Le tÃ©lÃ©chargement Windows suit les versions publiÃ©es.",
+      "Le téléchargement Windows suit les versions publiées.",
       [
-        "Le bouton de tÃ©lÃ©chargement rÃ©cupÃ¨re la derniÃ¨re version publique au chargement et au clic, sans modifier le lien dans le code du site.",
-        "Arrondi discret de quatre pixels sur les quatre coins des pochettes carrÃ©es."
+        "Le bouton de téléchargement récupère la dernière version publique au chargement et au clic, sans modifier le lien dans le code du site.",
+        "Arrondi discret de quatre pixels sur les quatre coins des pochettes carrées."
       ]
     ],
     [
-      "13v09 Â· TÃ©lÃ©chargement Windows",
+      "13v09 · Téléchargement Windows",
       "3 octobre 2026",
-      "Un accÃ¨s visible Ã  lâ€™application Windows.",
+      "Un accès visible à l’application Windows.",
       [
-        "Bandeau de tÃ©lÃ©chargement sur le site avec accÃ¨s Ã  lâ€™installateur et Ã  la version portable."
+        "Bandeau de téléchargement sur le site avec accès à l’installateur et à la version portable."
       ]
     ],
     [
-      "13v08 Â· Ressources sÃ©parÃ©es et page allÃ©gÃ©e",
+      "13v08 · Ressources séparées et page allégée",
       "3 octobre 2026",
-      "MÃªme interface et mÃªmes fonctions, avec un HTML beaucoup plus lÃ©ger.",
+      "Même interface et mêmes fonctions, avec un HTML beaucoup plus léger.",
       [
-        "Les huit pochettes WebP sont dÃ©sormais des fichiers sÃ©parÃ©s, reconstruits Ã  lâ€™identique sans recompression.",
-        "Le catalogue initial, le JavaScript et les styles sont chargÃ©s depuis des fichiers dÃ©diÃ©s ; les donnÃ©es et lâ€™ordre de dÃ©marrage sont conservÃ©s.",
-        "Chemins relatifs compatibles avec /avant-usine/ et tÃ©lÃ©chargement des pochettes conservÃ© au format WebP.",
-        "Cache hors connexion actualisÃ© pour inclure les nouvelles ressources de lâ€™interface et les pochettes."
+        "Les huit pochettes WebP sont désormais des fichiers séparés, reconstruits à l’identique sans recompression.",
+        "Le catalogue initial, le JavaScript et les styles sont chargés depuis des fichiers dédiés ; les données et l’ordre de démarrage sont conservés.",
+        "Chemins relatifs compatibles avec /avant-usine/ et téléchargement des pochettes conservé au format WebP.",
+        "Cache hors connexion actualisé pour inclure les nouvelles ressources de l’interface et les pochettes."
       ]
     ],
     [
-      "13v07 Â· PrÃ©visualisation et approbation des propositions",
+      "13v07 · Prévisualisation et approbation des propositions",
       "3 octobre 2026",
-      "VÃ©rifie le rendu complet avant de publier une synchronisation.",
+      "Vérifie le rendu complet avant de publier une synchronisation.",
       [
-        "AperÃ§u privÃ© des fichiers LRC/JSON et des synchronisations reÃ§ues avec la musique, les backs, la progression et le dÃ©filement.",
-        "Le bouton Approuver et publier apparaÃ®t uniquement aprÃ¨s lecture de tous les passages ; avancer Ã  la fin ne valide pas les passages sautÃ©s.",
-        "Une modification des paroles, des timings ou du morceau choisi impose une nouvelle prÃ©visualisation complÃ¨te.",
-        "Publication directe des fichiers vÃ©rifiÃ©s, avec choix manuel du morceau et correction des timings, sans imposer une correspondance automatique avec le texte du catalogue.",
-        "Retrait des propositions de sa propre liste, archives consultables et restauration, sans supprimer les fichiers ni retirer une synchronisation publiÃ©e.",
-        "Les fonctions de vÃ©rification restent accessibles au crÃ©ateur et aux modÃ©rateurs ; les fonctions exclusives du crÃ©ateur sont conservÃ©es."
+        "Aperçu privé des fichiers LRC/JSON et des synchronisations reçues avec la musique, les backs, la progression et le défilement.",
+        "Le bouton Approuver et publier apparaît uniquement après lecture de tous les passages ; avancer à la fin ne valide pas les passages sautés.",
+        "Une modification des paroles, des timings ou du morceau choisi impose une nouvelle prévisualisation complète.",
+        "Publication directe des fichiers vérifiés, avec choix manuel du morceau et correction des timings, sans imposer une correspondance automatique avec le texte du catalogue.",
+        "Retrait des propositions de sa propre liste, archives consultables et restauration, sans supprimer les fichiers ni retirer une synchronisation publiée.",
+        "Les fonctions de vérification restent accessibles au créateur et aux modérateurs ; les fonctions exclusives du créateur sont conservées."
       ]
     ],
     [
-      "13v06 Â· Paroles, fluiditÃ© et contributions",
+      "13v06 · Paroles, fluidité et contributions",
       "3 octobre 2026",
-      "Deux modes de synchronisation et une vÃ©rification humaine des fichiers.",
+      "Deux modes de synchronisation et une vérification humaine des fichiers.",
       [
-        "Progression optimisÃ©e : recherche rapide des timings et mise Ã  jour des seules lettres qui changent.",
-        "Backs entre parenthÃ¨ses affichÃ©s sous leur phrase, avec les positions et timings originaux conservÃ©s dans Highlight Progression.",
-        "Choix entre Highlight Progression et Synchronisation avancÃ©e par blocs de une Ã  trois lignes.",
-        "Copie avec Espace pour le texte complet ou EntrÃ©e pour le texte pur ; bouton vert pour ouvrir le clavier sur mobile.",
-        "Le mode immersion exige dÃ©sormais le plein Ã©cran ; une aide apparaÃ®t si le navigateur le refuse.",
-        "DÃ©pÃ´t des fichiers originaux sans validation bloquante de leur contenu, analyse indicative et vÃ©rification par le crÃ©ateur ou les modÃ©rateurs.",
-        "NumÃ©rotation rÃ©troactive des patchs 13v03, 13v04 et 13v05. Les fonctions exclusives du crÃ©ateur restent inchangÃ©es."
+        "Progression optimisée : recherche rapide des timings et mise à jour des seules lettres qui changent.",
+        "Backs entre parenthèses affichés sous leur phrase, avec les positions et timings originaux conservés dans Highlight Progression.",
+        "Choix entre Highlight Progression et Synchronisation avancée par blocs de une à trois lignes.",
+        "Copie avec Espace pour le texte complet ou Entrée pour le texte pur ; bouton vert pour ouvrir le clavier sur mobile.",
+        "Le mode immersion exige désormais le plein écran ; une aide apparaît si le navigateur le refuse.",
+        "Dépôt des fichiers originaux sans validation bloquante de leur contenu, analyse indicative et vérification par le créateur ou les modérateurs.",
+        "Numérotation rétroactive des patchs 13v03, 13v04 et 13v05. Les fonctions exclusives du créateur restent inchangées."
       ]
     ],
     [
-      "13v05 Â· Immersion avec paroles",
+      "13v05 · Immersion avec paroles",
       "1 octobre 2026",
-      "La pochette et les paroles restent ensemble pendant lâ€™Ã©coute.",
+      "La pochette et les paroles restent ensemble pendant l’écoute.",
       [
-        "Le bouton Paroles du mode immersion conserve la pochette Ã  gauche et affiche le texte dÃ©filant Ã  droite, y compris sur tÃ©lÃ©phone.",
-        "Les paroles synchronisÃ©es suivent les timings et la progression du morceau.",
-        "Les paroles non synchronisÃ©es dÃ©filent progressivement pendant lâ€™Ã©coute, avec une indication de dÃ©filement approximatif.",
-        "DÃ©filement automatique dÃ©sactivable et lecture manuelle possibles. Les paroles ajoutÃ©es plus tard apparaissent dans ce mode sans autre mise Ã  jour."
+        "Le bouton Paroles du mode immersion conserve la pochette à gauche et affiche le texte défilant à droite, y compris sur téléphone.",
+        "Les paroles synchronisées suivent les timings et la progression du morceau.",
+        "Les paroles non synchronisées défilent progressivement pendant l’écoute, avec une indication de défilement approximatif.",
+        "Défilement automatique désactivable et lecture manuelle possibles. Les paroles ajoutées plus tard apparaissent dans ce mode sans autre mise à jour."
       ]
     ],
     [
-      "13v04 Â· Synchronisation en continu",
+      "13v04 · Synchronisation en continu",
       "1 octobre 2026",
-      "Suis le texte, lâ€™atelier enchaÃ®ne les phrases pour toi.",
+      "Suis le texte, l’atelier enchaîne les phrases pour toi.",
       [
-        "Toutes les phrases restent affichÃ©es, avec la phrase active mise en Ã©vidence et la suivante dÃ©jÃ  visible.",
-        "Un seul dÃ©marrage : sÃ©lection, enregistrement et passage Ã  la phrase suivante automatiques, sans boutons entre les phrases.",
-        "Sur tÃ©lÃ©phone, relever le doigt met la musique en pause ; toucher de nouveau le texte reprend la synchronisation.",
-        "Une commande permet de reprendre la phrase active en conservant les autres. Import de fichiers et validation des contributions conservÃ©s."
+        "Toutes les phrases restent affichées, avec la phrase active mise en évidence et la suivante déjà visible.",
+        "Un seul démarrage : sélection, enregistrement et passage à la phrase suivante automatiques, sans boutons entre les phrases.",
+        "Sur téléphone, relever le doigt met la musique en pause ; toucher de nouveau le texte reprend la synchronisation.",
+        "Une commande permet de reprendre la phrase active en conservant les autres. Import de fichiers et validation des contributions conservés."
       ]
     ],
     [
-      "13v03 Â· Import de paroles synchronisÃ©es",
+      "13v03 · Import de paroles synchronisées",
       "1 octobre 2026",
       "Propose une synchronisation depuis un fichier, puis fais-la valider.",
       [
-        "Import de fichiers JSON dans lâ€™atelier, initialement proposÃ© au crÃ©ateur puis ouvert Ã  tous les membres connectÃ©s.",
-        "Ajout du glisser-dÃ©poser et des fichiers LRC avec horodatages de lignes ; progression des mots estimÃ©e pour ce format.",
-        "VÃ©rification du morceau, des paroles, de la durÃ©e et des timings avant import.",
-        "Les fichiers importÃ©s restent des brouillons ; les contributions restent privÃ©es jusquâ€™Ã  validation dans le compte crÃ©ateur. Les synchronisations publiÃ©es peuvent Ãªtre retirÃ©es."
+        "Import de fichiers JSON dans l’atelier, initialement proposé au créateur puis ouvert à tous les membres connectés.",
+        "Ajout du glisser-déposer et des fichiers LRC avec horodatages de lignes ; progression des mots estimée pour ce format.",
+        "Vérification du morceau, des paroles, de la durée et des timings avant import.",
+        "Les fichiers importés restent des brouillons ; les contributions restent privées jusqu’à validation dans le compte créateur. Les synchronisations publiées peuvent être retirées."
       ]
     ],
     [
-      "13v02 Â· Paroles et gestion intelligente",
+      "13v02 · Paroles et gestion intelligente",
       "30 septembre 2026",
       "Nettoyage prudent, ordre des pistes et comparaison audio.",
       [
-        "Nomination et retrait des modÃ©rateurs directement depuis leur profil par le crÃ©ateur. Leur rÃ´le se limite aux synchronisations et ajouts de paroles.",
-        "Les titres de section reconnus sont retirÃ©s automatiquement de lâ€™atelier, y compris pour les anciens textes. Les paroles originales sont conservÃ©es.",
-        "Les paroles transmises par un widget Genius chargÃ© peuvent Ãªtre proposÃ©es Ã  la synchronisation et restent soumises Ã  la validation du crÃ©ateur.",
-        "Gestion crÃ©ateur : dÃ©placer une piste, la retirer ou la restaurer depuis la corbeille ; les numÃ©ros affichÃ©s sont recalculÃ©s sans dÃ©placer les favoris ni les contributions.",
-        "Analyse sonore progressive de la collection depuis le compte crÃ©ateur. Les ressemblances sont signalÃ©es, jamais supprimÃ©es automatiquement. Les fichiers inaccessibles restent signalÃ©s comme non analysÃ©s.",
-        "Volume 2 : retrait de lâ€™ancienne piste 44 et rÃ©ajustement des positions suivantes."
+        "Nomination et retrait des modérateurs directement depuis leur profil par le créateur. Leur rôle se limite aux synchronisations et ajouts de paroles.",
+        "Les titres de section reconnus sont retirés automatiquement de l’atelier, y compris pour les anciens textes. Les paroles originales sont conservées.",
+        "Les paroles transmises par un widget Genius chargé peuvent être proposées à la synchronisation et restent soumises à la validation du créateur.",
+        "Gestion créateur : déplacer une piste, la retirer ou la restaurer depuis la corbeille ; les numéros affichés sont recalculés sans déplacer les favoris ni les contributions.",
+        "Analyse sonore progressive de la collection depuis le compte créateur. Les ressemblances sont signalées, jamais supprimées automatiquement. Les fichiers inaccessibles restent signalés comme non analysés.",
+        "Volume 2 : retrait de l’ancienne piste 44 et réajustement des positions suivantes."
       ]
     ],
     [
-      "V13 Â· RÃ©pertoire et synchronisation mobile",
+      "V13 · Répertoire et synchronisation mobile",
       "30 septembre 2026",
       "Dates communautaires et atelier plus simple.",
       [
-        "RÃ©pertoire : tous les titres classÃ©s par annÃ©e, dates modifiables immÃ©diatement par les membres, signatures et historique.",
-        "Journal dÃ©taillÃ© du RÃ©pertoire rÃ©servÃ© au crÃ©ateur, sans validation ni modÃ©ration des dates.",
-        "Synchronisation : dÃ©marrage unique, passage automatique Ã  la ligne suivante, pause au relÃ¢chement du doigt et reprise au toucher.",
-        "RGB dÃ©sactivÃ© pour le crÃ©ateur et les modÃ©rateurs ; outils privÃ©s en jaune.",
-        "AperÃ§us public et modÃ©rateur sans modification des droits rÃ©els du compte."
+        "Répertoire : tous les titres classés par année, dates modifiables immédiatement par les membres, signatures et historique.",
+        "Journal détaillé du Répertoire réservé au créateur, sans validation ni modération des dates.",
+        "Synchronisation : démarrage unique, passage automatique à la ligne suivante, pause au relâchement du doigt et reprise au toucher.",
+        "RGB désactivé pour le créateur et les modérateurs ; outils privés en jaune.",
+        "Aperçus public et modérateur sans modification des droits réels du compte."
       ]
     ],
     [
-      "V12 Â· Contributions et modÃ©ration",
+      "V12 · Contributions et modération",
       "30 septembre 2026",
-      "Les contributions Ã©voluent, avec un contrÃ´le avant publication.",
+      "Les contributions évoluent, avec un contrôle avant publication.",
       [
-        "Candidatures : suivi personnel, statut reportÃ©, notifications, suppression et badge ModÃ©rateur.",
-        "Comptes : questionnaire de dÃ©part et confirmation avant suppression ; gestion privÃ©e des comptes par le crÃ©ateur.",
-        "Signalements : suspension temporaire, motif enregistrÃ©, bannissement et rÃ©activation. Les pages publiques restent accessibles sans compte.",
-        "Paroles absentes : proposition par saisie ou copier-coller, suivi, correction et validation par le crÃ©ateur.",
-        "KaraokÃ© : enregistrement au doigt ou Ã  la souris, reprise de chaque ligne, corrections du crÃ©ateur et remplissage progressif aprÃ¨s validation.",
-        "Lâ€™atelier utilise les textes enregistrÃ©s dans le catalogue. Les paroles uniquement affichÃ©es par le widget Genius ne sont pas encore prises en charge.",
-        "La chronologie de carriÃ¨re a Ã©tÃ© retirÃ©e. Un message dâ€™accueil explique que le site est toujours en dÃ©veloppement."
+        "Candidatures : suivi personnel, statut reporté, notifications, suppression et badge Modérateur.",
+        "Comptes : questionnaire de départ et confirmation avant suppression ; gestion privée des comptes par le créateur.",
+        "Signalements : suspension temporaire, motif enregistré, bannissement et réactivation. Les pages publiques restent accessibles sans compte.",
+        "Paroles absentes : proposition par saisie ou copier-coller, suivi, correction et validation par le créateur.",
+        "Karaoké : enregistrement au doigt ou à la souris, reprise de chaque ligne, corrections du créateur et remplissage progressif après validation.",
+        "L’atelier utilise les textes enregistrés dans le catalogue. Les paroles uniquement affichées par le widget Genius ne sont pas encore prises en charge.",
+        "La chronologie de carrière a été retirée. Un message d’accueil explique que le site est toujours en développement."
       ]
     ],
     [
-      "V11 Â· Paroles synchronisÃ©es",
+      "V11 · Paroles synchronisées",
       "29 septembre 2026",
-      "Un atelier ouvert Ã  tous les membres, avec validation du crÃ©ateur.",
+      "Un atelier ouvert à tous les membres, avec validation du créateur.",
       [
-        "Contribution ligne par ligne : lecture, marquage du temps, retour Ã  la ligne prÃ©cÃ©dente et rÃ©glage prÃ©cis en secondes.",
-        "Brouillon conservÃ© sur cet appareil, suivi des contributions et validation avant publication.",
-        "Le crÃ©ateur peut Ã©couter, corriger les temps, approuver ou renvoyer une proposition.",
-        "AprÃ¨s validation, la ligne active suit la musique et dÃ©file automatiquement. Le dÃ©filement peut Ãªtre mis en pause.",
-        "Disponible pour les paroles enregistrÃ©es par le crÃ©ateur dans la fiche du morceau ; les widgets Genius seuls restent en lecture manuelle."
+        "Contribution ligne par ligne : lecture, marquage du temps, retour à la ligne précédente et réglage précis en secondes.",
+        "Brouillon conservé sur cet appareil, suivi des contributions et validation avant publication.",
+        "Le créateur peut écouter, corriger les temps, approuver ou renvoyer une proposition.",
+        "Après validation, la ligne active suit la musique et défile automatiquement. Le défilement peut être mis en pause.",
+        "Disponible pour les paroles enregistrées par le créateur dans la fiche du morceau ; les widgets Genius seuls restent en lecture manuelle."
       ]
     ],
     [
-      "V10.1 Â· Corrections aprÃ¨s vÃ©rification",
+      "V10.1 · Corrections après vérification",
       "28 septembre 2026",
-      "LisibilitÃ© et liens audio corrigÃ©s.",
+      "Lisibilité et liens audio corrigés.",
       [
-        "Lecteur immersif : flÃ¨ches, minutages et informations secondaires plus lisibles en mode clair.",
-        "Volume 3 : rÃ©paration des adresses des pistes 2 Ã  9 pour correspondre aux noms des fichiers Archive.org, sans changer les titres ni les favoris."
+        "Lecteur immersif : flèches, minutages et informations secondaires plus lisibles en mode clair.",
+        "Volume 3 : réparation des adresses des pistes 2 à 9 pour correspondre aux noms des fichiers Archive.org, sans changer les titres ni les favoris."
       ]
     ],
     [
-      "V10 Â· Ã‰dition CommunautÃ©",
+      "V10 · Édition Communauté",
       "28 septembre 2026",
-      "La plus grosse mise Ã  jour du site Ã  ce jour.",
+      "La plus grosse mise à jour du site à ce jour.",
       [
         "Comptes : affichage et masquage des mots de passe, sans perdre la saisie.",
-        "Profils : photo et banniÃ¨re importÃ©es depuis ton appareil, aperÃ§u, prÃ©sentation, couleur et trois ambiances visuelles. Les images sont optimisÃ©es avant enregistrement.",
-        "Apparence : modes clair et sombre mÃ©morisÃ©s, effet de verre sur mobile et marges adaptÃ©es aux encoches et aux coins arrondis.",
-        "Messages privÃ©s : discussions entre membres, historique, messages non lus, accÃ¨s depuis un profil, blocage et dÃ©sactivation des nouveaux messages. Les Ã©changes sont visibles uniquement par leurs participants.",
-        "Protection : limites dâ€™envoi appliquÃ©es cÃ´tÃ© serveur et signalement dâ€™un message ou commentaire au crÃ©ateur.",
-        "Commentaires par musique : profils, dates et repÃ¨res comme 1:45 qui emmÃ¨nent le lecteur au bon moment du bon morceau.",
-        "Administration : rÃ©ception et suivi des candidatures de modÃ©ration, rÃ©servÃ©s exclusivement au compte crÃ©ateur ; gestion des signalements communautaires.",
-        "Navigation : annuaire des membres, historique rÃ©trospectif et icÃ´nes adaptÃ©es aux onglets, favoris et raccourcis mobiles.",
-        "Conservation du lecteur, des paroles, des explications, des favoris, des playlists, des tÃ©lÃ©chargements, des animations et de la gestion des volumes."
+        "Profils : photo et bannière importées depuis ton appareil, aperçu, présentation, couleur et trois ambiances visuelles. Les images sont optimisées avant enregistrement.",
+        "Apparence : modes clair et sombre mémorisés, effet de verre sur mobile et marges adaptées aux encoches et aux coins arrondis.",
+        "Messages privés : discussions entre membres, historique, messages non lus, accès depuis un profil, blocage et désactivation des nouveaux messages. Les échanges sont visibles uniquement par leurs participants.",
+        "Protection : limites d’envoi appliquées côté serveur et signalement d’un message ou commentaire au créateur.",
+        "Commentaires par musique : profils, dates et repères comme 1:45 qui emmènent le lecteur au bon moment du bon morceau.",
+        "Administration : réception et suivi des candidatures de modération, réservés exclusivement au compte créateur ; gestion des signalements communautaires.",
+        "Navigation : annuaire des membres, historique rétrospectif et icônes adaptées aux onglets, favoris et raccourcis mobiles.",
+        "Conservation du lecteur, des paroles, des explications, des favoris, des playlists, des téléchargements, des animations et de la gestion des volumes."
       ]
     ],
     [
-      "V9 Â· Modification directe et paroles",
+      "V9 · Modification directe et paroles",
       "27 septembre 2026",
-      "Le crÃ©ateur peut modifier les albums plus directement.",
+      "Le créateur peut modifier les albums plus directement.",
       [
-        "Boutons Modifier sur les albums, visibles uniquement par le crÃ©ateur.",
-        "Paroles saisies par copier-coller dans la gestion des pistes, avec prioritÃ© sur le widget Genius.",
-        "Affichage du texte sans exÃ©cuter de HTML, couleurs du volume et sÃ©lection des mots pour les explications."
+        "Boutons Modifier sur les albums, visibles uniquement par le créateur.",
+        "Paroles saisies par copier-coller dans la gestion des pistes, avec priorité sur le widget Genius.",
+        "Affichage du texte sans exécuter de HTML, couleurs du volume et sélection des mots pour les explications."
       ]
     ],
     [
-      "V8 Â· Gestion autonome du catalogue",
+      "V8 · Gestion autonome du catalogue",
       "26 septembre 2026",
-      "Ajouter et gÃ©rer les volumes depuis le site.",
+      "Ajouter et gérer les volumes depuis le site.",
       [
-        "Espace crÃ©ateur : import des pistes Archive.org, titres, pochettes, vidÃ©os et liens de tÃ©lÃ©chargement.",
-        "Gestion des liens Genius, brouillons, aperÃ§u, publication et export du catalogue.",
-        "Permissions serveur et protection contre lâ€™Ã©crasement de modifications simultanÃ©es."
+        "Espace créateur : import des pistes Archive.org, titres, pochettes, vidéos et liens de téléchargement.",
+        "Gestion des liens Genius, brouillons, aperçu, publication et export du catalogue.",
+        "Permissions serveur et protection contre l’écrasement de modifications simultanées."
       ]
     ],
     [
-      "V6â€“V7 Â· Pochettes HD et mouvement",
+      "V6–V7 · Pochettes HD et mouvement",
       "26 septembre 2026",
-      "Des pochettes animÃ©es et un site plus vivant.",
+      "Des pochettes animées et un site plus vivant.",
       [
-        "Pochettes vidÃ©o en 1080 Ã— 1080, images de secours haute dÃ©finition et tÃ©lÃ©chargement des versions animÃ©es.",
-        "Animations de navigation, cartes et lecteur ; pause des vidÃ©os hors Ã©cran et respect de la rÃ©duction des animations.",
-        "Effet RGB au survol des textes et couleurs des paroles adaptÃ©es aux pochettes, sur un fond moins Ã©blouissant."
+        "Pochettes vidéo en 1080 × 1080, images de secours haute définition et téléchargement des versions animées.",
+        "Animations de navigation, cartes et lecteur ; pause des vidéos hors écran et respect de la réduction des animations.",
+        "Effet RGB au survol des textes et couleurs des paroles adaptées aux pochettes, sur un fond moins éblouissant."
       ]
     ],
     [
-      "V5 Â· Ã‰dition rouge",
+      "V5 · Édition rouge",
       "25 septembre 2026",
       "Nouvelle direction artistique.",
       [
-        "Palette noir, crÃ¨me et rouge, grands titres, navigation latÃ©rale sur ordinateur et navigation horizontale sur mobile.",
-        "Harmonisation des fenÃªtres, du lecteur et des rubriques tout en conservant les fonctions existantes."
+        "Palette noir, crème et rouge, grands titres, navigation latérale sur ordinateur et navigation horizontale sur mobile.",
+        "Harmonisation des fenêtres, du lecteur et des rubriques tout en conservant les fonctions existantes."
       ]
     ],
     [
       "Comptes et synchronisation",
       "24 septembre 2026",
-      "Une bibliothÃ¨que qui suit les membres.",
+      "Une bibliothèque qui suit les membres.",
       [
-        "CrÃ©ation de compte, connexion, confirmation par e-mail et rÃ©cupÃ©ration du mot de passe.",
-        "Favoris et playlists privÃ©s synchronisÃ©s entre appareils, avec gestion des conflits.",
+        "Création de compte, connexion, confirmation par e-mail et récupération du mot de passe.",
+        "Favoris et playlists privés synchronisés entre appareils, avec gestion des conflits.",
         "Messages de validation plus clairs dans les formulaires."
       ]
     ],
     [
-      "Les premiÃ¨res Ã©volutions",
-      "Date exacte non documentÃ©e",
-      "Ã‰tapes antÃ©rieures reconstituÃ©es Ã  partir du projet et de son historique.",
+      "Les premières évolutions",
+      "Date exacte non documentée",
+      "Étapes antérieures reconstituées à partir du projet et de son historique.",
       [
-        "CrÃ©ation du lecteur Avant lâ€™usine, avec accueil, collection, Ã©coute et tÃ©lÃ©chargements ; passage de Google Sites Ã  un site autonome sur GitHub Pages.",
-        "IntÃ©gration des trois volumes disponibles et de leurs 119 pistes depuis Archive.org, pochettes et liens MEGA.",
-        "Paroles via le widget officiel Genius, sÃ©lection de passages, explications communautaires et votes.",
-        "BibliothÃ¨que personnelle, favoris, playlists, dÃ©couverte, contributions et liens officiels.",
-        "Ajout du soutien Ko-fi, du statut crÃ©ateur et des outils de modÃ©ration.",
-        "Galerie de pochettes, lecteur immersif, installation sur lâ€™Ã©cran dâ€™accueil et interface hors connexion.",
-        "Corrections successives des pochettes manquantes et de lâ€™affichage mobile ; retrait du bouton Â« Les archives Ã  redÃ©couvrir Â»."
+        "Création du lecteur Avant l’usine, avec accueil, collection, écoute et téléchargements ; passage de Google Sites à un site autonome sur GitHub Pages.",
+        "Intégration des trois volumes disponibles et de leurs 119 pistes depuis Archive.org, pochettes et liens MEGA.",
+        "Paroles via le widget officiel Genius, sélection de passages, explications communautaires et votes.",
+        "Bibliothèque personnelle, favoris, playlists, découverte, contributions et liens officiels.",
+        "Ajout du soutien Ko-fi, du statut créateur et des outils de modération.",
+        "Galerie de pochettes, lecteur immersif, installation sur l’écran d’accueil et interface hors connexion.",
+        "Corrections successives des pochettes manquantes et de l’affichage mobile ; retrait du bouton « Les archives à redécouvrir »."
       ]
     ]
   ],
   "desktop-pc": [
     [
-      "18V06 Â· Windows 0.4.8",
+      "18V06 · Windows 0.4.8",
       "9 octobre 2026",
-      "Sauvegardes protÃ©gÃ©es et immersion Ã©purÃ©e.",
+      "Sauvegardes protégées et immersion épurée.",
       [
-        "Sauvegarde portable complÃ¨te : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animÃ©es, mÃ©tadonnÃ©es, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, prÃ©fÃ©rences et positions de lecture inclus.",
-        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vÃ©rification des fichiers avant restauration ; seules les sauvegardes .au-backup protÃ©gÃ©es sont importables. Aucun compte, mot de passe ou session nâ€™est exportÃ©.",
-        "Inclure le rÃ´le est une option dÃ©cochÃ©e Ã  lâ€™export, rÃ©servÃ©e aux comptes CrÃ©ateur ou ModÃ©rateur. Ã€ lâ€™import, le transfert sur le compte connectÃ© est facultatif et validÃ© automatiquement par une preuve serveur. Les donnÃ©es peuvent Ãªtre restaurÃ©es sans transfÃ©rer de rÃ´le.",
-        "Immersion : seule la phrase synchronisÃ©e actuellement chantÃ©e est visible. Les paroles et leurs minutages sont conservÃ©s.",
-        "AprÃ¨s dix secondes sans interaction, les commandes et informations disparaissent : pochette carrÃ©e Ã  gauche et paroles Ã  droite, ou pochette seule centrÃ©e et agrandie. Tout geste rÃ©affiche immÃ©diatement lâ€™interface et remet le dÃ©lai Ã  zÃ©ro."
+        "Sauvegarde portable complète : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animées, métadonnées, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, préférences et positions de lecture inclus.",
+        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vérification des fichiers avant restauration ; seules les sauvegardes .au-backup protégées sont importables. Aucun compte, mot de passe ou session n’est exporté.",
+        "Inclure le rôle est une option décochée à l’export, réservée aux comptes Créateur ou Modérateur. À l’import, le transfert sur le compte connecté est facultatif et validé automatiquement par une preuve serveur. Les données peuvent être restaurées sans transférer de rôle.",
+        "Immersion : seule la phrase synchronisée actuellement chantée est visible. Les paroles et leurs minutages sont conservés.",
+        "Après dix secondes sans interaction, les commandes et informations disparaissent : pochette carrée à gauche et paroles à droite, ou pochette seule centrée et agrandie. Tout geste réaffiche immédiatement l’interface et remet le délai à zéro."
       ]
     ],
     [
-      "18V05.2 Â· Windows 0.4.7",
+      "18V05.2 · Windows 0.4.7",
       "9 octobre 2026",
-      "Immersion reconstruite et rÃ©servÃ©e aux applications.",
+      "Immersion reconstruite et réservée aux applications.",
       [
-        "Immersion rÃ©servÃ©e aux applications Windows, Android et iPhone. Ã‰cran reconstruit : pochette carrÃ©e Ã  gauche, paroles Ã  droite, commandes et fermeture accessibles sans faire dÃ©filer toute la page.",
-        "Paroles synchronisÃ©es : minutages, progression et suivi automatique conservÃ©s. Paroles simples : dÃ©filement approximatif selon la position audio. DÃ©filement manuel et reprise automatique possibles.",
+        "Immersion réservée aux applications Windows, Android et iPhone. Écran reconstruit : pochette carrée à gauche, paroles à droite, commandes et fermeture accessibles sans faire défiler toute la page.",
+        "Paroles synchronisées : minutages, progression et suivi automatique conservés. Paroles simples : défilement approximatif selon la position audio. Défilement manuel et reprise automatique possibles.",
         "Prise en charge des morceaux Local et des futurs ajouts de paroles ; message explicite pour les morceaux sans paroles.",
-        "Site PC et mobile : le bouton Immersion affiche le message dâ€™exclusivitÃ© aux applications. Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Site PC et mobile : le bouton Immersion affiche le message d’exclusivité aux applications. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "18V05 Â· Windows 0.4.6",
+      "18V05 · Windows 0.4.6",
       "9 octobre 2026",
-      "Ã‰coute, sauvegardes locales et diagnostic des versions.",
+      "Écoute, sauvegardes locales et diagnostic des versions.",
       [
-        "Minuteur de sommeil : arrÃªt aprÃ¨s 15, 30 ou 60 minutes, ou Ã  la fin du morceau sans enchaÃ®ner. ContrÃ´le par Ã©chÃ©ance rÃ©elle, Ã©vÃ©nements audio et retour dans lâ€™interface.",
-        "Local : reprise du dernier morceau Ã  sa position mÃ©morisÃ©e, proposÃ©e sans lecture automatique. Reprise du catalogue conservÃ©e.",
-        "Sauvegarde complÃ¨te Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, mÃ©tadonnÃ©es et brouillons. Empreintes SHA-256 vÃ©rifiÃ©es avant restauration.",
-        "Restauration aprÃ¨s aperÃ§u : ajout atomique dâ€™une copie complÃ¨te avec nouveaux identifiants, sans remplacer les donnÃ©es existantes. Sauvegarde corrompue refusÃ©e ; limite ZIP de 4 Go.",
-        "Diagnostic des mises Ã  jour : version installÃ©e, derniÃ¨re version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalitÃ©s & astuces est complÃ©tÃ© dans Lire le reste."
+        "Minuteur de sommeil : arrêt après 15, 30 ou 60 minutes, ou à la fin du morceau sans enchaîner. Contrôle par échéance réelle, événements audio et retour dans l’interface.",
+        "Local : reprise du dernier morceau à sa position mémorisée, proposée sans lecture automatique. Reprise du catalogue conservée.",
+        "Sauvegarde complète Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, métadonnées et brouillons. Empreintes SHA-256 vérifiées avant restauration.",
+        "Restauration après aperçu : ajout atomique d’une copie complète avec nouveaux identifiants, sans remplacer les données existantes. Sauvegarde corrompue refusée ; limite ZIP de 4 Go.",
+        "Diagnostic des mises à jour : version installée, dernière version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalités & astuces est complété dans Lire le reste."
       ]
     ],
     [
-      "18V04 Â· Windows 0.4.5 Â· NÃ©on des pochettes",
+      "18V04 · Windows 0.4.5 · Néon des pochettes",
       "8 octobre 2026",
-      "Un contour lumineux animÃ© sur les pochettes.",
+      "Un contour lumineux animé sur les pochettes.",
       [
-        "Halo nÃ©on rose et cyan animÃ© autour des pochettes du catalogue, du lecteur, du Blind Test et de la bibliothÃ¨que Local. Format carrÃ© et animation lumineuse des images conservÃ©s, sans modification de leur contraste.",
-        "Effets rÃ©duits : contour fixe discret. Effets dÃ©sactivÃ©s : contour retirÃ©. Pause des animations et prÃ©fÃ©rence systÃ¨me de rÃ©duction des mouvements respectÃ©es.",
-        "Guide Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste."
+        "Halo néon rose et cyan animé autour des pochettes du catalogue, du lecteur, du Blind Test et de la bibliothèque Local. Format carré et animation lumineuse des images conservés, sans modification de leur contraste.",
+        "Effets réduits : contour fixe discret. Effets désactivés : contour retiré. Pause des animations et préférence système de réduction des mouvements respectées.",
+        "Guide Infos, fonctionnalités & astuces complété dans Lire le reste."
       ]
     ],
     [
-      "18V03 Â· Windows 0.4.4 Â· Historiques mobiles",
+      "18V03 · Windows 0.4.4 · Historiques mobiles",
       "8 octobre 2026",
-      "Historiques Android et iOS indÃ©pendants.",
+      "Historiques Android et iOS indépendants.",
       [
-        "NouveautÃ©s : sÃ©lecteurs Application Android et Application iOS, avec historiques sÃ©parÃ©s. Une plateforme sans version publiÃ©e le signale explicitement."
+        "Nouveautés : sélecteurs Application Android et Application iOS, avec historiques séparés. Une plateforme sans version publiée le signale explicitement."
       ]
     ],
     [
-      "18V02 Â· Windows 0.4.3 Â· Import ordonnÃ© et dÃ©placement",
+      "18V02 · Windows 0.4.3 · Import ordonné et déplacement",
       "8 octobre 2026",
-      "Classement automatique et dÃ©placement direct des morceaux locaux.",
+      "Classement automatique et déplacement direct des morceaux locaux.",
       [
-        "Import local de plusieurs fichiers ou dâ€™un dossier : tri numÃ©rique suivant les numÃ©ros initiaux des fichiers, avec repli sur le titre ou le numÃ©ro de piste intÃ©grÃ©. Les morceaux sans numÃ©ro suivent dans leur ordre de sÃ©lection.",
-        "Les numÃ©ros et sÃ©parateurs initiaux sont retirÃ©s des titres aprÃ¨s le classement. Avant lâ€™usine affiche sa propre numÃ©rotation suivant lâ€™ordre de lâ€™album ; le ZIP conserve une seule numÃ©rotation cohÃ©rente.",
-        "Maintenir la poignÃ©e â ¿ puis dÃ©placer et relÃ¢cher pour rÃ©ordonner les morceaux Ã  la souris ou au doigt. RepÃ¨re de position, dÃ©filement prÃ¨s des bords et sauvegarde locale ; flÃ¨ches conservÃ©es pour le clavier.",
-        "MÃ©tadonnÃ©es communes : appliquer artiste, album, genre et annÃ©e Ã  toutes les pistes ou seulement Ã  la sÃ©lection, avec choix explicite des champs Ã  remplacer. Titres, ordre et fichiers originaux conservÃ©s.",
-        "SÃ©lection multiple des morceaux, sÃ©lection de tous les morceaux affichÃ©s et suppression groupÃ©e aprÃ¨s confirmation. Retrait cohÃ©rent des albums et playlists ; les fichiers dâ€™origine restent conservÃ©s."
+        "Import local de plusieurs fichiers ou d’un dossier : tri numérique suivant les numéros initiaux des fichiers, avec repli sur le titre ou le numéro de piste intégré. Les morceaux sans numéro suivent dans leur ordre de sélection.",
+        "Les numéros et séparateurs initiaux sont retirés des titres après le classement. Avant l’usine affiche sa propre numérotation suivant l’ordre de l’album ; le ZIP conserve une seule numérotation cohérente.",
+        "Maintenir la poignée ⠿ puis déplacer et relâcher pour réordonner les morceaux à la souris ou au doigt. Repère de position, défilement près des bords et sauvegarde locale ; flèches conservées pour le clavier.",
+        "Métadonnées communes : appliquer artiste, album, genre et année à toutes les pistes ou seulement à la sélection, avec choix explicite des champs à remplacer. Titres, ordre et fichiers originaux conservés.",
+        "Sélection multiple des morceaux, sélection de tous les morceaux affichés et suppression groupée après confirmation. Retrait cohérent des albums et playlists ; les fichiers d’origine restent conservés."
       ]
     ],
     [
-      "18V01 Â· Windows 0.4.2 Â· Titres locaux nettoyÃ©s",
+      "18V01 · Windows 0.4.2 · Titres locaux nettoyés",
       "8 octobre 2026",
-      "Retrait des doubles numÃ©rotations avec aperÃ§u.",
+      "Retrait des doubles numérotations avec aperçu.",
       [
-        "Local : bouton Â« Supprimer les numÃ©rotations des titres Â» pour nettoyer les numÃ©ros et sÃ©parateurs initiaux, dont les tirets, sans modifier le reste du titre.",
-        "AperÃ§u avant/aprÃ¨s puis nettoyage de tous les titres concernÃ©s, sans sÃ©lection partielle. Aucun nettoyage automatique Ã  lâ€™import.",
-        "Ordre, appartenance aux albums, favoris, paroles et fichiers dâ€™origine conservÃ©s. Lâ€™export ZIP retire systÃ©matiquement les anciens prÃ©fixes, mÃªme sans utiliser le bouton, puis ajoute uniquement la numÃ©rotation de lâ€™ordre actuel de lâ€™album, dans les noms et mÃ©tadonnÃ©es."
+        "Local : bouton « Supprimer les numérotations des titres » pour nettoyer les numéros et séparateurs initiaux, dont les tirets, sans modifier le reste du titre.",
+        "Aperçu avant/après puis nettoyage de tous les titres concernés, sans sélection partielle. Aucun nettoyage automatique à l’import.",
+        "Ordre, appartenance aux albums, favoris, paroles et fichiers d’origine conservés. L’export ZIP retire systématiquement les anciens préfixes, même sans utiliser le bouton, puis ajoute uniquement la numérotation de l’ordre actuel de l’album, dans les noms et métadonnées."
       ]
     ],
     [
-      "18V00 Â· Windows 0.4.1 Â· Import local compatible",
+      "18V00 · Windows 0.4.1 · Import local compatible",
       "8 octobre 2026",
-      "CrÃ©ation dâ€™albums pendant lâ€™import sans fenÃªtre de saisie externe.",
+      "Création d’albums pendant l’import sans fenêtre de saisie externe.",
       [
-        "Le nom de lâ€™album se saisit directement dans le panneau dâ€™import multiple. Compatible avec les navigateurs intÃ©grÃ©s sans prise en charge de prompt().",
-        "Toutes les fonctions de la bibliothÃ¨que Local introduites dans Windows 0.4.0 sont conservÃ©es."
+        "Le nom de l’album se saisit directement dans le panneau d’import multiple. Compatible avec les navigateurs intégrés sans prise en charge de prompt().",
+        "Toutes les fonctions de la bibliothèque Local introduites dans Windows 0.4.0 sont conservées."
       ]
     ],
     [
-      "18V00 Â· Windows 0.4.0 Â· BibliothÃ¨que Local",
+      "18V00 · Windows 0.4.0 · Bibliothèque Local",
       "8 octobre 2026",
-      "Albums, playlists, pochettes, paroles et exports personnels sur lâ€™appareil.",
+      "Albums, playlists, pochettes, paroles et exports personnels sur l’appareil.",
       [
-        "Nouvel onglet Local sÃ©parÃ© du catalogue public : fichiers personnels stockÃ©s sur lâ€™appareil via IndexedDB, sans compte ni transfert aux serveurs. Message explicatif Ã  chaque ouverture et rappel de sauvegarde.",
-        "Import de fichiers ou dossiers audio, choix morceaux sÃ©parÃ©s ou album lors dâ€™un import multiple ; titres et mÃ©tadonnÃ©es intÃ©grÃ©es MP3/FLAC dÃ©tectÃ©s lorsque disponibles.",
-        "Albums et playlists personnalisÃ©s : sÃ©lection des morceaux, ordre avec flÃ¨ches, ajouts, retraits, renommage et suppression Ã  tout moment. NumÃ©rotation recalculÃ©e sans modifier les titres. Favoris locaux indÃ©pendants du compte.",
-        "Pochettes classiques et animÃ©es choisies dans les fichiers de lâ€™appareil. VÃ©rification des dimensions, confirmation pour les formats non carrÃ©s et redimensionnement sans recadrage. Pochette dâ€™album ou individuelle et application Ã  tous les morceaux.",
-        "Paroles locales simples et synchronisÃ©es : import LRC/JSON, choix simple ou Highlight dÃ©taillÃ©, lecture synchronisÃ©e et Atelier sans contribution publique, vitesses 0,50Ã—/0,75Ã—/1Ã—/2Ã— et brouillons sur lâ€™appareil.",
-        "Export ZIP des albums dans lâ€™ordre : copies audio, pochettes et mÃ©tadonnÃ©es, avec aucun fichier de paroles, LRC, JSON ou les deux. Tags MP3, WAV et FLAC rÃ©Ã©crits dans les copies ; autres formats conservÃ©s avec mÃ©tadonnÃ©es JSON. Originaux intacts.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste ; indice initial et phrase cachÃ©e conservÃ©s."
+        "Nouvel onglet Local séparé du catalogue public : fichiers personnels stockés sur l’appareil via IndexedDB, sans compte ni transfert aux serveurs. Message explicatif à chaque ouverture et rappel de sauvegarde.",
+        "Import de fichiers ou dossiers audio, choix morceaux séparés ou album lors d’un import multiple ; titres et métadonnées intégrées MP3/FLAC détectés lorsque disponibles.",
+        "Albums et playlists personnalisés : sélection des morceaux, ordre avec flèches, ajouts, retraits, renommage et suppression à tout moment. Numérotation recalculée sans modifier les titres. Favoris locaux indépendants du compte.",
+        "Pochettes classiques et animées choisies dans les fichiers de l’appareil. Vérification des dimensions, confirmation pour les formats non carrés et redimensionnement sans recadrage. Pochette d’album ou individuelle et application à tous les morceaux.",
+        "Paroles locales simples et synchronisées : import LRC/JSON, choix simple ou Highlight détaillé, lecture synchronisée et Atelier sans contribution publique, vitesses 0,50×/0,75×/1×/2× et brouillons sur l’appareil.",
+        "Export ZIP des albums dans l’ordre : copies audio, pochettes et métadonnées, avec aucun fichier de paroles, LRC, JSON ou les deux. Tags MP3, WAV et FLAC réécrits dans les copies ; autres formats conservés avec métadonnées JSON. Originaux intacts.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste ; indice initial et phrase cachée conservés."
       ]
     ],
     [
-      "17V06 Â· Windows 0.3.6",
+      "17V06 · Windows 0.3.6",
       "7 octobre 2026",
-      "Liens directs vers les morceaux, vitesse des ateliers et choix des formats importÃ©s.",
+      "Liens directs vers les morceaux, vitesse des ateliers et choix des formats importés.",
       [
-        "Partage individuel de chaque morceau : lien direct, panneau dâ€™arrivÃ©e, auteur et profil pour les comptes, indication anonyme et premiÃ¨re date de crÃ©ation conservÃ©e. Copier le lien et partage natif lorsque disponible.",
-        "Vitesse de lecture 0,50Ã—, 0,75Ã—, 1Ã— ou 2Ã— dans Highlight Progression et synchronisation avancÃ©e, modifiable sans perdre les repÃ¨res. Les timings suivent toujours la position rÃ©elle dans le morceau. Vitesse sauvegardÃ©e dans le brouillon et rÃ©tablie Ã  la fermeture.",
-        "Import avec choix prÃ©alable : Highlight Progression accepte les JSON dÃ©taillÃ©s et refuse le LRC ou les JSON de simples dÃ©parts de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservÃ© et prÃ©visualisation complÃ¨te avant approbation maintenue.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste."
+        "Partage individuel de chaque morceau : lien direct, panneau d’arrivée, auteur et profil pour les comptes, indication anonyme et première date de création conservée. Copier le lien et partage natif lorsque disponible.",
+        "Vitesse de lecture 0,50×, 0,75×, 1× ou 2× dans Highlight Progression et synchronisation avancée, modifiable sans perdre les repères. Les timings suivent toujours la position réelle dans le morceau. Vitesse sauvegardée dans le brouillon et rétablie à la fermeture.",
+        "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé et prévisualisation complète avant approbation maintenue.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste."
       ]
     ],
     [
-      "17V05 Â· Windows 0.3.5",
+      "17V05 · Windows 0.3.5",
       "6 octobre 2026",
-      "SÃ©lection des passages, synchronisation plus simple et panneaux mobiles accessibles.",
+      "Sélection des passages, synchronisation plus simple et panneaux mobiles accessibles.",
       [
-        "Paroles synchronisÃ©es sÃ©lectionnables au mot, Ã  la phrase ou sur plusieurs lignes : Lire / expliquer le passage ouvre les annotations avec les positions du texte original. La surbrillance continue ; le suivi attend pendant la sÃ©lection.",
-        "Highlight Progression : une seule phrase visible. Terminer cette phrase met la musique en pause, masque la phrase terminÃ©e et rÃ©vÃ¨le uniquement la suivante. Les phrases suivantes restent masquÃ©es ; la phrase actuelle peut dÃ©filer sur mobile.",
-        "Synchronisation avancÃ©e : toutes les paroles visibles et deux flÃ¨ches. La lecture dÃ©marre Ã  lâ€™ouverture de lâ€™atelier ; â†“ marque le dÃ©part de la phrase et avance, puis marque la fin aprÃ¨s la derniÃ¨re phrase. â†‘ efface les repÃ¨res Ã  reprendre, revient juste avant la phrase prÃ©cÃ©dente et relance la lecture. Aucun minutage Ã  saisir ni raccourci requis.",
-        "FenÃªtres mobiles : dimensions adaptÃ©es Ã  la zone visible et au clavier, contenu dÃ©filant, en-tÃªtes et fermeture accessibles. Les fenÃªtres superposÃ©es gardent la fermeture et le retour au panneau prÃ©cÃ©dent.",
-        "Brouillons, validation des synchronisations et vÃ©rification complÃ¨te avant approbation conservÃ©s. Guide actualisÃ© dans Lire le reste."
+        "Paroles synchronisées sélectionnables au mot, à la phrase ou sur plusieurs lignes : Lire / expliquer le passage ouvre les annotations avec les positions du texte original. La surbrillance continue ; le suivi attend pendant la sélection.",
+        "Highlight Progression : une seule phrase visible. Terminer cette phrase met la musique en pause, masque la phrase terminée et révèle uniquement la suivante. Les phrases suivantes restent masquées ; la phrase actuelle peut défiler sur mobile.",
+        "Synchronisation avancée : toutes les paroles visibles et deux flèches. La lecture démarre à l’ouverture de l’atelier ; ↓ marque le départ de la phrase et avance, puis marque la fin après la dernière phrase. ↑ efface les repères à reprendre, revient juste avant la phrase précédente et relance la lecture. Aucun minutage à saisir ni raccourci requis.",
+        "Fenêtres mobiles : dimensions adaptées à la zone visible et au clavier, contenu défilant, en-têtes et fermeture accessibles. Les fenêtres superposées gardent la fermeture et le retour au panneau précédent.",
+        "Brouillons, validation des synchronisations et vérification complète avant approbation conservés. Guide actualisé dans Lire le reste."
       ]
     ],
     [
-      "17V04 Â· Windows 0.3.4",
+      "17V04 · Windows 0.3.4",
       "6 octobre 2026",
-      "Ã‰clairage renforcÃ© et tÃ©lÃ©chargements des pochettes simplifiÃ©s.",
+      "Éclairage renforcé et téléchargements des pochettes simplifiés.",
       [
-        "Ã‰clairage des pochettes fortement renforcÃ© Ã  partir des variations lumineuses de chaque image, sans zoom, dÃ©placement ou reflet ajoutÃ©. Les titres de volume suivent la lumiÃ¨re.",
-        "DÃ©tails conservÃ©s depuis les pochettes HD originales, Ã©clairage lissÃ© et limitation de la saturation des couleurs. Calcul partagÃ© par volume et limitÃ© aux pochettes visibles.",
-        "Pause, effets rÃ©duits ou dÃ©sactivÃ©s et rÃ©duction des animations respectÃ©s. Une pochette fixe HD reste affichÃ©e si le rendu animÃ© est indisponible.",
-        "Anciens tÃ©lÃ©chargements directs des MP4 retirÃ©s. Liens MEGA conservÃ©s pour permettre le remplacement de leur contenu sans modifier le site.",
-        "Guide Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Éclairage des pochettes fortement renforcé à partir des variations lumineuses de chaque image, sans zoom, déplacement ou reflet ajouté. Les titres de volume suivent la lumière.",
+        "Détails conservés depuis les pochettes HD originales, éclairage lissé et limitation de la saturation des couleurs. Calcul partagé par volume et limité aux pochettes visibles.",
+        "Pause, effets réduits ou désactivés et réduction des animations respectés. Une pochette fixe HD reste affichée si le rendu animé est indisponible.",
+        "Anciens téléchargements directs des MP4 retirés. Liens MEGA conservés pour permettre le remplacement de leur contenu sans modifier le site.",
+        "Guide Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "17V03 Â· Windows 0.3.3",
+      "17V03 · Windows 0.3.3",
       "6 octobre 2026",
-      "Animations renforcÃ©es, skip technique et contrÃ´les du catalogue.",
+      "Animations renforcées, skip technique et contrôles du catalogue.",
       [
-        "Pochettes animÃ©es : mouvement de zoom et dÃ©placement nettement plus visible, reflet lumineux animÃ©, uniquement sur les pochettes visibles. Pause, effets rÃ©duits/dÃ©sactivÃ©s et rÃ©duction des mouvements respectÃ©s.",
-        "Blind Test : bouton Skipper dÃ» Ã  un bug utilisable mÃªme si lâ€™extrait ne dÃ©marre pas. La manche est exclue des rÃ©ponses et du taux de rÃ©ussite ; le bilan affiche le nombre et les titres concernÃ©s. Diagnostic distinct conservÃ© pour les comptes connectÃ©s.",
-        "CrÃ©ateur et modÃ©rateurs : contrÃ´le global des liens Archive.org, mÃ©tadonnÃ©es regroupÃ©es par archive, lectures MP3 partielles, noms et numÃ©rotation, titres incorporÃ©s et empreintes dupliquÃ©es. RÃ©sultats confirmÃ©s, incorrects, inaccessibles et Ã  confirmer clairement sÃ©parÃ©s.",
-        "Objectif de dix secondes pour le contrÃ´le des liens, avec requÃªtes parallÃ¨les limitÃ©es ; les dÃ©lais rÃ©seau ou lâ€™absence dâ€™informations ne sont jamais remplacÃ©s par une validation fictive.",
-        "Doublons audio : lancement manuel dans la mÃªme interface de progression, compteur et pourcentage, arrÃªt, bilan et diagnostic JSON. Comparaison sonore sur trois extraits conservÃ©e ; aucune suppression automatique.",
-        "Guide complÃ©tÃ© dans Lire le reste ; niveau Public masque les nouveaux contrÃ´les rÃ©servÃ©s."
+        "Pochettes animées : mouvement de zoom et déplacement nettement plus visible, reflet lumineux animé, uniquement sur les pochettes visibles. Pause, effets réduits/désactivés et réduction des mouvements respectés.",
+        "Blind Test : bouton Skipper dû à un bug utilisable même si l’extrait ne démarre pas. La manche est exclue des réponses et du taux de réussite ; le bilan affiche le nombre et les titres concernés. Diagnostic distinct conservé pour les comptes connectés.",
+        "Créateur et modérateurs : contrôle global des liens Archive.org, métadonnées regroupées par archive, lectures MP3 partielles, noms et numérotation, titres incorporés et empreintes dupliquées. Résultats confirmés, incorrects, inaccessibles et à confirmer clairement séparés.",
+        "Objectif de dix secondes pour le contrôle des liens, avec requêtes parallèles limitées ; les délais réseau ou l’absence d’informations ne sont jamais remplacés par une validation fictive.",
+        "Doublons audio : lancement manuel dans la même interface de progression, compteur et pourcentage, arrêt, bilan et diagnostic JSON. Comparaison sonore sur trois extraits conservée ; aucune suppression automatique.",
+        "Guide complété dans Lire le reste ; niveau Public masque les nouveaux contrôles réservés."
       ]
     ],
     [
-      "17V02 Â· Windows 0.3.2",
+      "17V02 · Windows 0.3.2",
       "6 octobre 2026",
-      "RÃ©ponses visuelles, immersion en rÃ©paration et niveaux dâ€™affichage corrigÃ©s.",
+      "Réponses visuelles, immersion en réparation et niveaux d’affichage corrigés.",
       [
-        "Immersion temporairement indisponible : le bouton affiche le message de rÃ©paration, sans ouvrir le mode existant. Le lecteur et les pages de paroles restent accessibles.",
-        "Blind Test musical Ã  quatre choix : bonne rÃ©ponse et trois morceaux distincts tirÃ©s du catalogue, ordre alÃ©atoire, titres et pochettes animÃ©es, sÃ©lection au clic ou au toucher aprÃ¨s lâ€™extrait.",
-        "ChronomÃ¨tre dÃ©marrÃ© Ã  lâ€™apparition des rÃ©ponses ; correction immÃ©diate, bilan et statistiques par morceau conservÃ©s. RÃ©Ã©couter ne remet pas le temps de rÃ©ponse Ã  zÃ©ro.",
-        "Voile blanc animÃ© conservÃ© sur les Ã©lÃ©ments encadrÃ©s ; aucun voile sur les textes cliquables sans cadre.",
-        "Niveau 1 Â· Public : commandes de modÃ©ration et de crÃ©ation rÃ©centes masquÃ©es, sans modifier les permissions rÃ©elles du compte.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste ; indice initial et Easter egg conservÃ©s."
+        "Immersion temporairement indisponible : le bouton affiche le message de réparation, sans ouvrir le mode existant. Le lecteur et les pages de paroles restent accessibles.",
+        "Blind Test musical à quatre choix : bonne réponse et trois morceaux distincts tirés du catalogue, ordre aléatoire, titres et pochettes animées, sélection au clic ou au toucher après l’extrait.",
+        "Chronomètre démarré à l’apparition des réponses ; correction immédiate, bilan et statistiques par morceau conservés. Réécouter ne remet pas le temps de réponse à zéro.",
+        "Voile blanc animé conservé sur les éléments encadrés ; aucun voile sur les textes cliquables sans cadre.",
+        "Niveau 1 · Public : commandes de modération et de création récentes masquées, sans modifier les permissions réelles du compte.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste ; indice initial et Easter egg conservés."
       ]
     ],
     [
-      "17V01 Â· Windows 0.3.1",
+      "17V01 · Windows 0.3.1",
       "6 octobre 2026",
-      "Bilans personnels et Blind Test dans lâ€™application locale.",
+      "Bilans personnels et Blind Test dans l’application locale.",
       [
-        "NouveautÃ©s regroupe trois historiques indÃ©pendants : Site PC, Application PC et Site mobile. Le bouton Historique des mises Ã  jour ouvre le choix sans plateforme prÃ©sÃ©lectionnÃ©e.",
-        "Blind Test : sÃ©lection sans limite fixÃ©e, ordre alÃ©atoire et un passage par morceau ; extraits de dix secondes, cinq secondes ou du premier son audible selon la difficultÃ©. ChronomÃ¨tre et bilan dÃ©taillÃ© par rÃ©ponse, morceau et volume. Les extraits indisponibles sont exclus des erreurs.",
-        "Statistiques et rÃ©sumÃ©s : 19 catÃ©gories et 276 mesures demandÃ©es, dÃ©tails accessibles pour les comptes membres, modÃ©rateurs et crÃ©ateur. Une donnÃ©e inaccessible affiche 0 (indisponible). Les donnÃ©es anciennes non enregistrÃ©es ne sont pas inventÃ©es.",
-        "Suivi dâ€™Ã©coute : pauses, chargements, dÃ©placements dans la piste et longues suspensions exclus ; mesures dÃ©doublonnÃ©es et chevauchements entre appareils empÃªchÃ©s.",
-        "RÃ©sumÃ©s programmables de six mois calendaires maximum, bilans mensuels et rÃ©sumÃ©s annuels conservÃ©s sans remplacement. RÃ©vÃ©lation annuelle au 1er janvier Ã  minuit, heure de Paris ; nouveaux compteurs et conservation de lâ€™historique.",
-        "2026 reste une Ã©dition privÃ©e de test, sans trophÃ©es exposables. Le classement public devient automatiquement disponible pour les bilans de 2027 et des annÃ©es suivantes. Une fiche publique conserve son contenu privÃ© : demande, acceptation, refus et rÃ©vocation pour chaque rÃ©sumÃ© individuel.",
-        "TrophÃ©es : 14 familles, 12 raretÃ©s par famille, conditions et progression visibles ; attribution Ã  la rÃ©vÃ©lation annuelle et collection permanente. Le niveau maximal du temps dâ€™Ã©coute demande 3 000 heures sur lâ€™annÃ©e complÃ¨te, sans rÃ©duction en 2026. Exposition au profil limitÃ©e aux trophÃ©es obtenus de 2027 et des annÃ©es suivantes.",
-        "Lâ€™immersion sâ€™ouvre sans imposer le plein Ã©cran et conserve la disposition existante.",
-        "Indice des astuces rendu plus discret dans le contenu initial ; fonctionnement de lâ€™Easter egg conservÃ©. Guide complÃ©tÃ© dans Lire le reste."
+        "Nouveautés regroupe trois historiques indépendants : Site PC, Application PC et Site mobile. Le bouton Historique des mises à jour ouvre le choix sans plateforme présélectionnée.",
+        "Blind Test : sélection sans limite fixée, ordre aléatoire et un passage par morceau ; extraits de dix secondes, cinq secondes ou du premier son audible selon la difficulté. Chronomètre et bilan détaillé par réponse, morceau et volume. Les extraits indisponibles sont exclus des erreurs.",
+        "Statistiques et résumés : 19 catégories et 276 mesures demandées, détails accessibles pour les comptes membres, modérateurs et créateur. Une donnée inaccessible affiche 0 (indisponible). Les données anciennes non enregistrées ne sont pas inventées.",
+        "Suivi d’écoute : pauses, chargements, déplacements dans la piste et longues suspensions exclus ; mesures dédoublonnées et chevauchements entre appareils empêchés.",
+        "Résumés programmables de six mois calendaires maximum, bilans mensuels et résumés annuels conservés sans remplacement. Révélation annuelle au 1er janvier à minuit, heure de Paris ; nouveaux compteurs et conservation de l’historique.",
+        "2026 reste une édition privée de test, sans trophées exposables. Le classement public devient automatiquement disponible pour les bilans de 2027 et des années suivantes. Une fiche publique conserve son contenu privé : demande, acceptation, refus et révocation pour chaque résumé individuel.",
+        "Trophées : 14 familles, 12 raretés par famille, conditions et progression visibles ; attribution à la révélation annuelle et collection permanente. Le niveau maximal du temps d’écoute demande 3 000 heures sur l’année complète, sans réduction en 2026. Exposition au profil limitée aux trophées obtenus de 2027 et des années suivantes.",
+        "L’immersion s’ouvre sans imposer le plein écran et conserve la disposition existante.",
+        "Indice des astuces rendu plus discret dans le contenu initial ; fonctionnement de l’Easter egg conservé. Guide complété dans Lire le reste."
       ]
     ],
     [
-      "17V00 Â· Windows 0.3.0",
+      "17V00 · Windows 0.3.0",
       "5 octobre 2026",
       "Une interface futuriste et de nouveaux outils communautaires.",
       [
-        "Nouvelle interface technologique, effets PC, transitions rapides et sons courts coupÃ©s automatiquement pendant toute lecture musicale.",
-        "Immersion reconstruite : Ã©cran partagÃ© Ã  parts Ã©gales entre pochette et paroles ; commandes et informations dans une section accessible en descendant.",
-        "Corrections communautaires des synchronisations publiques, file dÃ©diÃ©e et publication autonome par les modÃ©rateurs.",
-        "Demandes de permissions crÃ©ateur limitÃ©es Ã  une fonctionnalitÃ©, avec acceptation ou refus et journal des actions des modÃ©rateurs.",
-        "Statuts En ligne, Ne pas dÃ©ranger, Hors ligne et Compte sanctionnÃ© ; messages privÃ©s bloquÃ©s en Ne pas dÃ©ranger. Badges animÃ©s personnalisables.",
-        "Guide Infos, fonctionnalitÃ©s & astuces : documentation permanente, soutien Ko-fi, projets Android/iOS envisagÃ©s et indice protÃ©gÃ© derriÃ¨re une suite distincte.",
-        "MÃ©tadonnÃ©es multimÃ©dias : titre rÃ©el, artiste Jul, volume, pochette, progression et commandes pour les environnements compatibles.",
-        "Nettoyage renforcÃ© des intitulÃ©s de structure avant lâ€™atelier ; paroles chantÃ©es conservÃ©es.",
-        "Signalements IA confirmÃ©s, un vote de sept jours Ã  la fois, file chronologique, rÃ©sultat automatique et historique crÃ©ateur en lecture seule. Un vote par compte ; Ã©galitÃ© ou aucun vote conserve le morceau.",
-        "AprÃ¨s un vote IA positif, retrait et renumÃ©rotation affichÃ©e cohÃ©rents ; identifiants et liens audio des morceaux restants conservÃ©s.",
-        "Identifiants complets dans les Patch Notes ; historiques Web et Windows indÃ©pendants.",
-        "Effets visuels complets, rÃ©duits ou dÃ©sactivÃ©s, avec prÃ©fÃ©rence mÃ©morisÃ©e et pause indÃ©pendante des pochettes animÃ©es."
+        "Nouvelle interface technologique, effets PC, transitions rapides et sons courts coupés automatiquement pendant toute lecture musicale.",
+        "Immersion reconstruite : écran partagé à parts égales entre pochette et paroles ; commandes et informations dans une section accessible en descendant.",
+        "Corrections communautaires des synchronisations publiques, file dédiée et publication autonome par les modérateurs.",
+        "Demandes de permissions créateur limitées à une fonctionnalité, avec acceptation ou refus et journal des actions des modérateurs.",
+        "Statuts En ligne, Ne pas déranger, Hors ligne et Compte sanctionné ; messages privés bloqués en Ne pas déranger. Badges animés personnalisables.",
+        "Guide Infos, fonctionnalités & astuces : documentation permanente, soutien Ko-fi, projets Android/iOS envisagés et indice protégé derrière une suite distincte.",
+        "Métadonnées multimédias : titre réel, artiste Jul, volume, pochette, progression et commandes pour les environnements compatibles.",
+        "Nettoyage renforcé des intitulés de structure avant l’atelier ; paroles chantées conservées.",
+        "Signalements IA confirmés, un vote de sept jours à la fois, file chronologique, résultat automatique et historique créateur en lecture seule. Un vote par compte ; égalité ou aucun vote conserve le morceau.",
+        "Après un vote IA positif, retrait et renumérotation affichée cohérents ; identifiants et liens audio des morceaux restants conservés.",
+        "Identifiants complets dans les Patch Notes ; historiques Web et Windows indépendants.",
+        "Effets visuels complets, réduits ou désactivés, avec préférence mémorisée et pause indépendante des pochettes animées."
       ]
     ],
     [
-      "16V00 Â· Windows 0.2.2 Â· Lecture et espace Ã©quipe",
+      "16V00 · Windows 0.2.2 · Lecture et espace équipe",
       "4 octobre 2026",
-      "Historiques indÃ©pendants et outils organisÃ©s.",
+      "Historiques indépendants et outils organisés.",
       [
-        "Pendant la synchronisation, le morceau reste verrouillÃ© ; sa fin arrÃªte la lecture sans effacer le travail. Retour Ã  00:00 disponible dans lâ€™atelier.",
-        "Une fin de paroles explicite est enregistrÃ©e pour les blocs. La derniÃ¨re phrase sâ€™efface progressivement avant les actions dâ€™avis, de commentaire et dâ€™explication. Les anciens timings sans fin explicite restent conservÃ©s.",
-        "Immersion : pochette et paroles occupent chacune environ la moitiÃ© de la zone principale ; commandes et informations compactes placÃ©es en bas.",
-        "Suppression du titre visible Ã‰coute immersive. Espace Ã©quipe regroupÃ© dans le compte, avec outils de contributions et de gestion distincts.",
-        "Permissions crÃ©ateur, modÃ©rateur et public inchangÃ©es ; les actions contextuelles restent accessibles sur les Ã©lÃ©ments concernÃ©s.",
-        "Historique Windows indÃ©pendant : premiÃ¨re version 13v09, aucun patch antÃ©rieur ni changement rÃ©servÃ© au site.",
-        "Nom de lâ€™application harmonisÃ© : Avant lâ€™usine, avec un u minuscule."
+        "Pendant la synchronisation, le morceau reste verrouillé ; sa fin arrête la lecture sans effacer le travail. Retour à 00:00 disponible dans l’atelier.",
+        "Une fin de paroles explicite est enregistrée pour les blocs. La dernière phrase s’efface progressivement avant les actions d’avis, de commentaire et d’explication. Les anciens timings sans fin explicite restent conservés.",
+        "Immersion : pochette et paroles occupent chacune environ la moitié de la zone principale ; commandes et informations compactes placées en bas.",
+        "Suppression du titre visible Écoute immersive. Espace équipe regroupé dans le compte, avec outils de contributions et de gestion distincts.",
+        "Permissions créateur, modérateur et public inchangées ; les actions contextuelles restent accessibles sur les éléments concernés.",
+        "Historique Windows indépendant : première version 13v09, aucun patch antérieur ni changement réservé au site.",
+        "Nom de l’application harmonisé : Avant l’usine, avec un u minuscule."
       ]
     ],
     [
-      "15V00 Â· Windows 0.2.1 Â· Paroles visibles et immersion",
+      "15V00 · Windows 0.2.1 · Paroles visibles et immersion",
       "4 octobre 2026",
-      "Un rendu partagÃ© entre Ã©coute publique et vÃ©rification des contributions.",
+      "Un rendu partagé entre écoute publique et vérification des contributions.",
       [
-        "Le suivi maintient la phrase ou le bloc chantÃ© dans la zone visible avec un dÃ©filement progressif, y compris les longues phrases et les backs.",
-        "Immersion sur une grande pochette floutÃ©e, avec voile sombre pour la lisibilitÃ© et disparition des fonds gris.",
-        "Transitions en fondu et lÃ©ger flou, teintÃ©es par une couleur extraite de la pochette ; suppression du cadre autour des paroles.",
-        "Les synchronisations du site, de lâ€™application et les fichiers LRC/JSON utilisent le mÃªme moteur public pendant leur vÃ©rification : timings, backs, styles et suivi identiques.",
-        "Les corrections de timings sont regroupÃ©es dans un panneau repliable. Approuver reste disponible uniquement aprÃ¨s Ã©coute complÃ¨te ; les passages sautÃ©s ne sont pas validÃ©s.",
-        "Arrondi uniforme des pochettes portÃ© de 4 Ã  10 pixels, avec format carrÃ© conservÃ©. Les prÃ©fÃ©rences de rÃ©duction des animations sont respectÃ©es."
+        "Le suivi maintient la phrase ou le bloc chanté dans la zone visible avec un défilement progressif, y compris les longues phrases et les backs.",
+        "Immersion sur une grande pochette floutée, avec voile sombre pour la lisibilité et disparition des fonds gris.",
+        "Transitions en fondu et léger flou, teintées par une couleur extraite de la pochette ; suppression du cadre autour des paroles.",
+        "Les synchronisations du site, de l’application et les fichiers LRC/JSON utilisent le même moteur public pendant leur vérification : timings, backs, styles et suivi identiques.",
+        "Les corrections de timings sont regroupées dans un panneau repliable. Approuver reste disponible uniquement après écoute complète ; les passages sautés ne sont pas validés.",
+        "Arrondi uniforme des pochettes porté de 4 à 10 pixels, avec format carré conservé. Les préférences de réduction des animations sont respectées."
       ]
     ],
     [
-      "14V00 Â· Windows 0.2.0 Â· Mises Ã  jour intÃ©grÃ©es",
+      "14V00 · Windows 0.2.0 · Mises à jour intégrées",
       "4 octobre 2026",
-      "Installation des fichiers du produit sans rÃ©installation du launcher.",
+      "Installation des fichiers du produit sans réinstallation du launcher.",
       [
-        "Application 0.2.0 : choix Plus tard, Sauter la version affichÃ©e et Installer, avec numÃ©ro rÃ©el de la version.",
-        "Installer tÃ©lÃ©charge uniquement les fichiers modifiÃ©s, affiche une progression, vÃ©rifie les fichiers puis redÃ©marre lâ€™appli sur la nouvelle version.",
-        "Ancienne version conservÃ©e et retour arriÃ¨re si le premier dÃ©marrage est interrompu ; paramÃ¨tres et donnÃ©es locales prÃ©servÃ©s.",
-        "Les versions 0.1.x nÃ©cessitent une installation initiale de la nouvelle base 0.2.0 pour utiliser ce systÃ¨me.",
-        "Arrondi discret de 4 pixels sur les quatre coins des pochettes carrÃ©es, partout dans le site et lâ€™application."
+        "Application 0.2.0 : choix Plus tard, Sauter la version affichée et Installer, avec numéro réel de la version.",
+        "Installer télécharge uniquement les fichiers modifiés, affiche une progression, vérifie les fichiers puis redémarre l’appli sur la nouvelle version.",
+        "Ancienne version conservée et retour arrière si le premier démarrage est interrompu ; paramètres et données locales préservés.",
+        "Les versions 0.1.x nécessitent une installation initiale de la nouvelle base 0.2.0 pour utiliser ce système.",
+        "Arrondi discret de 4 pixels sur les quatre coins des pochettes carrées, partout dans le site et l’application."
       ]
     ],
     [
-      "13V10 Â· Windows 0.1.1 Â· IdentitÃ© de lâ€™appli",
+      "13V10 · Windows 0.1.1 · Identité de l’appli",
       "3 octobre 2026",
-      "Logo et textes adaptÃ©s Ã  lâ€™application.",
+      "Logo et textes adaptés à l’application.",
       [
-        "IcÃ´ne Windows, raccourci et logo de lâ€™en-tÃªte personnalisÃ©s.",
-        "Messages et navigation adaptÃ©s Ã  lâ€™appli.",
-        "Au dÃ©marrage, proposition de tÃ©lÃ©chargement des nouvelles versions ; cette premiÃ¨re Ã©tape nÃ©cessite encore une installation manuelle."
+        "Icône Windows, raccourci et logo de l’en-tête personnalisés.",
+        "Messages et navigation adaptés à l’appli.",
+        "Au démarrage, proposition de téléchargement des nouvelles versions ; cette première étape nécessite encore une installation manuelle."
       ]
     ],
     [
-      "13V09 Â· Windows 0.1.0",
+      "13V09 · Windows 0.1.0",
       "3 octobre 2026",
-      "PremiÃ¨re version de lâ€™application Windows.",
+      "Première version de l’application Windows.",
       [
-        "Interface, catalogue initial, pochettes et animations intÃ©grÃ©s localement.",
-        "Comptes et contributions reliÃ©s aux services existants ; les musiques en ligne nÃ©cessitent Internet.",
-        "Installateur Windows et version portable ; session de compte propre Ã  lâ€™application."
+        "Interface, catalogue initial, pochettes et animations intégrés localement.",
+        "Comptes et contributions reliés aux services existants ; les musiques en ligne nécessitent Internet.",
+        "Installateur Windows et version portable ; session de compte propre à l’application."
       ]
     ]
   ],
   "web-mobile": [
     [
-      "18V06 Â· Sauvegardes protÃ©gÃ©es",
+      "18V06 · Sauvegardes protégées",
       "9 octobre 2026",
-      "Sauvegardes portables et options de transfert de rÃ´le.",
+      "Sauvegardes portables et options de transfert de rôle.",
       [
-        "Sauvegarde portable complÃ¨te : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animÃ©es, mÃ©tadonnÃ©es, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, prÃ©fÃ©rences et positions de lecture inclus.",
-        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vÃ©rification des fichiers avant restauration ; seules les sauvegardes .au-backup protÃ©gÃ©es sont importables. Aucun compte, mot de passe ou session nâ€™est exportÃ©.",
-        "Inclure le rÃ´le est une option dÃ©cochÃ©e Ã  lâ€™export, rÃ©servÃ©e aux comptes CrÃ©ateur ou ModÃ©rateur. Ã€ lâ€™import, le transfert sur le compte connectÃ© est facultatif et validÃ© automatiquement par une preuve serveur. Les donnÃ©es peuvent Ãªtre restaurÃ©es sans transfÃ©rer de rÃ´le.",
-        "Local est rÃ©servÃ© aux applications Windows, Android et iPhone. Les versions Internet affichent un message dâ€™exclusivitÃ©.",
-        "Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Sauvegarde portable complète : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animées, métadonnées, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, préférences et positions de lecture inclus.",
+        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vérification des fichiers avant restauration ; seules les sauvegardes .au-backup protégées sont importables. Aucun compte, mot de passe ou session n’est exporté.",
+        "Inclure le rôle est une option décochée à l’export, réservée aux comptes Créateur ou Modérateur. À l’import, le transfert sur le compte connecté est facultatif et validé automatiquement par une preuve serveur. Les données peuvent être restaurées sans transférer de rôle.",
+        "Local est réservé aux applications Windows, Android et iPhone. Les versions Internet affichent un message d’exclusivité.",
+        "Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "18V05.2 Â· Immersion rÃ©servÃ©e aux applications",
+      "18V05.2 · Immersion réservée aux applications",
       "9 octobre 2026",
-      "Message dâ€™exclusivitÃ© sur le site PC et mobile.",
+      "Message d’exclusivité sur le site PC et mobile.",
       [
         "Le bouton Immersion indique que le mode est exclusivement disponible dans les applications Windows, Android et iPhone.",
-        "Les autres fonctions du lecteur Web sont conservÃ©es. Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Les autres fonctions du lecteur Web sont conservées. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "18V05 Â· Ã‰coute et sauvegardes",
+      "18V05 · Écoute et sauvegardes",
       "9 octobre 2026",
-      "Des contrÃ´les dâ€™Ã©coute et une sauvegarde complÃ¨te de la bibliothÃ¨que personnelle.",
+      "Des contrôles d’écoute et une sauvegarde complète de la bibliothèque personnelle.",
       [
-        "Minuteur de sommeil : arrÃªt aprÃ¨s 15, 30 ou 60 minutes, ou Ã  la fin du morceau sans enchaÃ®ner. ContrÃ´le par Ã©chÃ©ance rÃ©elle, Ã©vÃ©nements audio et retour dans lâ€™interface.",
-        "Local : reprise du dernier morceau Ã  sa position mÃ©morisÃ©e, proposÃ©e sans lecture automatique. Reprise du catalogue conservÃ©e.",
-        "Sauvegarde complÃ¨te Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, mÃ©tadonnÃ©es et brouillons. Empreintes SHA-256 vÃ©rifiÃ©es avant restauration.",
-        "Restauration aprÃ¨s aperÃ§u : ajout atomique dâ€™une copie complÃ¨te avec nouveaux identifiants, sans remplacer les donnÃ©es existantes. Sauvegarde corrompue refusÃ©e ; limite ZIP de 4 Go.",
-        "Diagnostic des mises Ã  jour : version installÃ©e, derniÃ¨re version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalitÃ©s & astuces est complÃ©tÃ© dans Lire le reste."
+        "Minuteur de sommeil : arrêt après 15, 30 ou 60 minutes, ou à la fin du morceau sans enchaîner. Contrôle par échéance réelle, événements audio et retour dans l’interface.",
+        "Local : reprise du dernier morceau à sa position mémorisée, proposée sans lecture automatique. Reprise du catalogue conservée.",
+        "Sauvegarde complète Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, métadonnées et brouillons. Empreintes SHA-256 vérifiées avant restauration.",
+        "Restauration après aperçu : ajout atomique d’une copie complète avec nouveaux identifiants, sans remplacer les données existantes. Sauvegarde corrompue refusée ; limite ZIP de 4 Go.",
+        "Diagnostic des mises à jour : version installée, dernière version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalités & astuces est complété dans Lire le reste."
       ]
     ],
     [
-      "18V04 Â· NÃ©on des pochettes",
+      "18V04 · Néon des pochettes",
       "8 octobre 2026",
-      "Un contour lumineux animÃ© sur les pochettes.",
+      "Un contour lumineux animé sur les pochettes.",
       [
-        "Halo nÃ©on rose et cyan animÃ© autour des pochettes du catalogue, du lecteur, du Blind Test et de la bibliothÃ¨que Local. Format carrÃ© et animation lumineuse des images conservÃ©s, sans modification de leur contraste.",
-        "Effets rÃ©duits : contour fixe discret. Effets dÃ©sactivÃ©s : contour retirÃ©. Pause des animations et prÃ©fÃ©rence systÃ¨me de rÃ©duction des mouvements respectÃ©es.",
-        "Guide Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste.",
-        "Applications Windows, Android et iPhone/iPad rÃ©unies dans un panneau compact. Chaque bouton rÃ©cupÃ¨re automatiquement la derniÃ¨re version de sa plateforme sur GitHub ; lâ€™IPA nÃ©cessite une signature avant installation."
+        "Halo néon rose et cyan animé autour des pochettes du catalogue, du lecteur, du Blind Test et de la bibliothèque Local. Format carré et animation lumineuse des images conservés, sans modification de leur contraste.",
+        "Effets réduits : contour fixe discret. Effets désactivés : contour retiré. Pause des animations et préférence système de réduction des mouvements respectées.",
+        "Guide Infos, fonctionnalités & astuces complété dans Lire le reste.",
+        "Applications Windows, Android et iPhone/iPad réunies dans un panneau compact. Chaque bouton récupère automatiquement la dernière version de sa plateforme sur GitHub ; l’IPA nécessite une signature avant installation."
       ]
     ],
     [
-      "18V03 Â· Applications mobiles",
+      "18V03 · Applications mobiles",
       "8 octobre 2026",
       "Historiques mobiles et annonce Android.",
       [
-        "NouveautÃ©s : sÃ©lecteurs Application Android et Application iOS, avec historiques sÃ©parÃ©s. Une plateforme sans version publiÃ©e le signale explicitement.",
-        "Annonce Android Ã  cÃ´tÃ© de lâ€™application PC. Le lien APK est rÃ©cupÃ©rÃ© automatiquement depuis les versions Android publiÃ©es sur GitHub, sans modifier son adresse Ã  chaque mise Ã  jour."
+        "Nouveautés : sélecteurs Application Android et Application iOS, avec historiques séparés. Une plateforme sans version publiée le signale explicitement.",
+        "Annonce Android à côté de l’application PC. Le lien APK est récupéré automatiquement depuis les versions Android publiées sur GitHub, sans modifier son adresse à chaque mise à jour."
       ]
     ],
     [
-      "18V02 Â· Import ordonnÃ© et dÃ©placement",
+      "18V02 · Import ordonné et déplacement",
       "8 octobre 2026",
-      "Classement automatique et dÃ©placement direct des morceaux locaux.",
+      "Classement automatique et déplacement direct des morceaux locaux.",
       [
-        "Import local de plusieurs fichiers ou dâ€™un dossier : tri numÃ©rique suivant les numÃ©ros initiaux des fichiers, avec repli sur le titre ou le numÃ©ro de piste intÃ©grÃ©. Les morceaux sans numÃ©ro suivent dans leur ordre de sÃ©lection.",
-        "Les numÃ©ros et sÃ©parateurs initiaux sont retirÃ©s des titres aprÃ¨s le classement. Avant lâ€™usine affiche sa propre numÃ©rotation suivant lâ€™ordre de lâ€™album ; le ZIP conserve une seule numÃ©rotation cohÃ©rente.",
-        "Maintenir la poignÃ©e â ¿ puis dÃ©placer et relÃ¢cher pour rÃ©ordonner les morceaux Ã  la souris ou au doigt. RepÃ¨re de position, dÃ©filement prÃ¨s des bords et sauvegarde locale ; flÃ¨ches conservÃ©es pour le clavier.",
-        "MÃ©tadonnÃ©es communes : appliquer artiste, album, genre et annÃ©e Ã  toutes les pistes ou seulement Ã  la sÃ©lection, avec choix explicite des champs Ã  remplacer. Titres, ordre et fichiers originaux conservÃ©s.",
-        "SÃ©lection multiple des morceaux, sÃ©lection de tous les morceaux affichÃ©s et suppression groupÃ©e aprÃ¨s confirmation. Retrait cohÃ©rent des albums et playlists ; les fichiers dâ€™origine restent conservÃ©s."
+        "Import local de plusieurs fichiers ou d’un dossier : tri numérique suivant les numéros initiaux des fichiers, avec repli sur le titre ou le numéro de piste intégré. Les morceaux sans numéro suivent dans leur ordre de sélection.",
+        "Les numéros et séparateurs initiaux sont retirés des titres après le classement. Avant l’usine affiche sa propre numérotation suivant l’ordre de l’album ; le ZIP conserve une seule numérotation cohérente.",
+        "Maintenir la poignée ⠿ puis déplacer et relâcher pour réordonner les morceaux à la souris ou au doigt. Repère de position, défilement près des bords et sauvegarde locale ; flèches conservées pour le clavier.",
+        "Métadonnées communes : appliquer artiste, album, genre et année à toutes les pistes ou seulement à la sélection, avec choix explicite des champs à remplacer. Titres, ordre et fichiers originaux conservés.",
+        "Sélection multiple des morceaux, sélection de tous les morceaux affichés et suppression groupée après confirmation. Retrait cohérent des albums et playlists ; les fichiers d’origine restent conservés."
       ]
     ],
     [
-      "18V01 Â· Nettoyage des titres locaux",
+      "18V01 · Nettoyage des titres locaux",
       "8 octobre 2026",
-      "Retrait des doubles numÃ©rotations avec aperÃ§u.",
+      "Retrait des doubles numérotations avec aperçu.",
       [
-        "Local : bouton Â« Supprimer les numÃ©rotations des titres Â» pour nettoyer les numÃ©ros et sÃ©parateurs initiaux, dont les tirets, sans modifier le reste du titre.",
-        "AperÃ§u avant/aprÃ¨s puis nettoyage de tous les titres concernÃ©s, sans sÃ©lection partielle. Aucun nettoyage automatique Ã  lâ€™import.",
-        "Ordre, appartenance aux albums, favoris, paroles et fichiers dâ€™origine conservÃ©s. Lâ€™export ZIP retire systÃ©matiquement les anciens prÃ©fixes, mÃªme sans utiliser le bouton, puis numÃ©rote les pistes uniquement selon lâ€™ordre actuel de lâ€™album, avec titres nettoyÃ©s dans les noms et mÃ©tadonnÃ©es."
+        "Local : bouton « Supprimer les numérotations des titres » pour nettoyer les numéros et séparateurs initiaux, dont les tirets, sans modifier le reste du titre.",
+        "Aperçu avant/après puis nettoyage de tous les titres concernés, sans sélection partielle. Aucun nettoyage automatique à l’import.",
+        "Ordre, appartenance aux albums, favoris, paroles et fichiers d’origine conservés. L’export ZIP retire systématiquement les anciens préfixes, même sans utiliser le bouton, puis numérote les pistes uniquement selon l’ordre actuel de l’album, avec titres nettoyés dans les noms et métadonnées."
       ]
     ],
     [
-      "18V00 Â· BibliothÃ¨que personnelle Local",
+      "18V00 · Bibliothèque personnelle Local",
       "8 octobre 2026",
-      "Albums, playlists, pochettes, paroles et exports personnels sur lâ€™appareil.",
+      "Albums, playlists, pochettes, paroles et exports personnels sur l’appareil.",
       [
-        "Nouvel onglet Local sÃ©parÃ© du catalogue public : fichiers personnels stockÃ©s sur lâ€™appareil via IndexedDB, sans compte ni transfert aux serveurs. Message explicatif Ã  chaque ouverture et rappel de sauvegarde.",
-        "Import de fichiers ou dossiers audio, choix morceaux sÃ©parÃ©s ou album lors dâ€™un import multiple ; titres et mÃ©tadonnÃ©es intÃ©grÃ©es MP3/FLAC dÃ©tectÃ©s lorsque disponibles.",
-        "Albums et playlists personnalisÃ©s : sÃ©lection des morceaux, ordre avec flÃ¨ches, ajouts, retraits, renommage et suppression Ã  tout moment. NumÃ©rotation recalculÃ©e sans modifier les titres. Favoris locaux indÃ©pendants du compte.",
-        "Pochettes classiques et animÃ©es choisies dans les fichiers de lâ€™appareil. VÃ©rification des dimensions, confirmation pour les formats non carrÃ©s et redimensionnement sans recadrage. Pochette dâ€™album ou individuelle et application Ã  tous les morceaux.",
-        "Paroles locales simples et synchronisÃ©es : import LRC/JSON, choix simple ou Highlight dÃ©taillÃ©, lecture synchronisÃ©e et Atelier sans contribution publique, vitesses 0,50Ã—/0,75Ã—/1Ã—/2Ã— et brouillons sur lâ€™appareil.",
-        "Export ZIP des albums dans lâ€™ordre : copies audio, pochettes et mÃ©tadonnÃ©es, avec aucun fichier de paroles, LRC, JSON ou les deux. Tags MP3, WAV et FLAC rÃ©Ã©crits dans les copies ; autres formats conservÃ©s avec mÃ©tadonnÃ©es JSON. Originaux intacts.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste ; indice initial et phrase cachÃ©e conservÃ©s.",
-        "CrÃ©ation dâ€™un album lors dâ€™un import multiple : nom saisi directement dans le panneau, sans fenÃªtre de saisie externe, pour assurer la compatibilitÃ© avec les navigateurs intÃ©grÃ©s."
+        "Nouvel onglet Local séparé du catalogue public : fichiers personnels stockés sur l’appareil via IndexedDB, sans compte ni transfert aux serveurs. Message explicatif à chaque ouverture et rappel de sauvegarde.",
+        "Import de fichiers ou dossiers audio, choix morceaux séparés ou album lors d’un import multiple ; titres et métadonnées intégrées MP3/FLAC détectés lorsque disponibles.",
+        "Albums et playlists personnalisés : sélection des morceaux, ordre avec flèches, ajouts, retraits, renommage et suppression à tout moment. Numérotation recalculée sans modifier les titres. Favoris locaux indépendants du compte.",
+        "Pochettes classiques et animées choisies dans les fichiers de l’appareil. Vérification des dimensions, confirmation pour les formats non carrés et redimensionnement sans recadrage. Pochette d’album ou individuelle et application à tous les morceaux.",
+        "Paroles locales simples et synchronisées : import LRC/JSON, choix simple ou Highlight détaillé, lecture synchronisée et Atelier sans contribution publique, vitesses 0,50×/0,75×/1×/2× et brouillons sur l’appareil.",
+        "Export ZIP des albums dans l’ordre : copies audio, pochettes et métadonnées, avec aucun fichier de paroles, LRC, JSON ou les deux. Tags MP3, WAV et FLAC réécrits dans les copies ; autres formats conservés avec métadonnées JSON. Originaux intacts.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste ; indice initial et phrase cachée conservés.",
+        "Création d’un album lors d’un import multiple : nom saisi directement dans le panneau, sans fenêtre de saisie externe, pour assurer la compatibilité avec les navigateurs intégrés."
       ]
     ],
     [
-      "17V06 Â· Partage et vitesse de synchronisation",
+      "17V06 · Partage et vitesse de synchronisation",
       "7 octobre 2026",
-      "Liens directs vers les morceaux, vitesse des ateliers et choix des formats importÃ©s.",
+      "Liens directs vers les morceaux, vitesse des ateliers et choix des formats importés.",
       [
-        "Partage individuel de chaque morceau : lien direct, panneau dâ€™arrivÃ©e, auteur et profil pour les comptes, indication anonyme et premiÃ¨re date de crÃ©ation conservÃ©e. Copier le lien et partage natif lorsque disponible.",
-        "Vitesse de lecture 0,50Ã—, 0,75Ã—, 1Ã— ou 2Ã— dans Highlight Progression et synchronisation avancÃ©e, modifiable sans perdre les repÃ¨res. Les timings suivent toujours la position rÃ©elle dans le morceau. Vitesse sauvegardÃ©e dans le brouillon et rÃ©tablie Ã  la fermeture.",
-        "Import avec choix prÃ©alable : Highlight Progression accepte les JSON dÃ©taillÃ©s et refuse le LRC ou les JSON de simples dÃ©parts de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservÃ© et prÃ©visualisation complÃ¨te avant approbation maintenue.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste."
+        "Partage individuel de chaque morceau : lien direct, panneau d’arrivée, auteur et profil pour les comptes, indication anonyme et première date de création conservée. Copier le lien et partage natif lorsque disponible.",
+        "Vitesse de lecture 0,50×, 0,75×, 1× ou 2× dans Highlight Progression et synchronisation avancée, modifiable sans perdre les repères. Les timings suivent toujours la position réelle dans le morceau. Vitesse sauvegardée dans le brouillon et rétablie à la fermeture.",
+        "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé et prévisualisation complète avant approbation maintenue.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste."
       ]
     ],
     [
-      "17V05 Â· Paroles et ateliers simplifiÃ©s",
+      "17V05 · Paroles et ateliers simplifiés",
       "6 octobre 2026",
-      "SÃ©lection des passages, synchronisation plus simple et panneaux mobiles accessibles.",
+      "Sélection des passages, synchronisation plus simple et panneaux mobiles accessibles.",
       [
-        "Paroles synchronisÃ©es sÃ©lectionnables au mot, Ã  la phrase ou sur plusieurs lignes : Lire / expliquer le passage ouvre les annotations avec les positions du texte original. La surbrillance continue ; le suivi attend pendant la sÃ©lection.",
-        "Highlight Progression : une seule phrase visible. Terminer cette phrase met la musique en pause, masque la phrase terminÃ©e et rÃ©vÃ¨le uniquement la suivante. Les phrases suivantes restent masquÃ©es ; la phrase actuelle peut dÃ©filer sur mobile.",
-        "Synchronisation avancÃ©e : toutes les paroles visibles et deux flÃ¨ches. La lecture dÃ©marre Ã  lâ€™ouverture de lâ€™atelier ; â†“ marque le dÃ©part de la phrase et avance, puis marque la fin aprÃ¨s la derniÃ¨re phrase. â†‘ efface les repÃ¨res Ã  reprendre, revient juste avant la phrase prÃ©cÃ©dente et relance la lecture. Aucun minutage Ã  saisir ni raccourci requis.",
-        "FenÃªtres mobiles : dimensions adaptÃ©es Ã  la zone visible et au clavier, contenu dÃ©filant, en-tÃªtes et fermeture accessibles. Les fenÃªtres superposÃ©es gardent la fermeture et le retour au panneau prÃ©cÃ©dent.",
-        "Brouillons, validation des synchronisations et vÃ©rification complÃ¨te avant approbation conservÃ©s. Guide actualisÃ© dans Lire le reste."
+        "Paroles synchronisées sélectionnables au mot, à la phrase ou sur plusieurs lignes : Lire / expliquer le passage ouvre les annotations avec les positions du texte original. La surbrillance continue ; le suivi attend pendant la sélection.",
+        "Highlight Progression : une seule phrase visible. Terminer cette phrase met la musique en pause, masque la phrase terminée et révèle uniquement la suivante. Les phrases suivantes restent masquées ; la phrase actuelle peut défiler sur mobile.",
+        "Synchronisation avancée : toutes les paroles visibles et deux flèches. La lecture démarre à l’ouverture de l’atelier ; ↓ marque le départ de la phrase et avance, puis marque la fin après la dernière phrase. ↑ efface les repères à reprendre, revient juste avant la phrase précédente et relance la lecture. Aucun minutage à saisir ni raccourci requis.",
+        "Fenêtres mobiles : dimensions adaptées à la zone visible et au clavier, contenu défilant, en-têtes et fermeture accessibles. Les fenêtres superposées gardent la fermeture et le retour au panneau précédent.",
+        "Brouillons, validation des synchronisations et vérification complète avant approbation conservés. Guide actualisé dans Lire le reste."
       ]
     ],
     [
-      "17V04 Â· LumiÃ¨re et pochettes HD",
+      "17V04 · Lumière et pochettes HD",
       "6 octobre 2026",
-      "Ã‰clairage renforcÃ© et tÃ©lÃ©chargements des pochettes simplifiÃ©s.",
+      "Éclairage renforcé et téléchargements des pochettes simplifiés.",
       [
-        "Ã‰clairage des pochettes fortement renforcÃ© Ã  partir des variations lumineuses de chaque image, sans zoom, dÃ©placement ou reflet ajoutÃ©. Les titres de volume suivent la lumiÃ¨re.",
-        "DÃ©tails conservÃ©s depuis les pochettes HD originales, Ã©clairage lissÃ© et limitation de la saturation des couleurs. Calcul partagÃ© par volume et limitÃ© aux pochettes visibles.",
-        "Pause, effets rÃ©duits ou dÃ©sactivÃ©s et rÃ©duction des animations respectÃ©s. Une pochette fixe HD reste affichÃ©e si le rendu animÃ© est indisponible.",
-        "Anciens tÃ©lÃ©chargements directs des MP4 retirÃ©s. Liens MEGA conservÃ©s pour permettre le remplacement de leur contenu sans modifier le site.",
-        "Guide Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Éclairage des pochettes fortement renforcé à partir des variations lumineuses de chaque image, sans zoom, déplacement ou reflet ajouté. Les titres de volume suivent la lumière.",
+        "Détails conservés depuis les pochettes HD originales, éclairage lissé et limitation de la saturation des couleurs. Calcul partagé par volume et limité aux pochettes visibles.",
+        "Pause, effets réduits ou désactivés et réduction des animations respectés. Une pochette fixe HD reste affichée si le rendu animé est indisponible.",
+        "Anciens téléchargements directs des MP4 retirés. Liens MEGA conservés pour permettre le remplacement de leur contenu sans modifier le site.",
+        "Guide Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "17V03 Â· Pochettes et diagnostics",
+      "17V03 · Pochettes et diagnostics",
       "6 octobre 2026",
-      "Animations renforcÃ©es, skip technique et contrÃ´les du catalogue.",
+      "Animations renforcées, skip technique et contrôles du catalogue.",
       [
-        "Pochettes animÃ©es : mouvement de zoom et dÃ©placement nettement plus visible, reflet lumineux animÃ©, uniquement sur les pochettes visibles. Pause, effets rÃ©duits/dÃ©sactivÃ©s et rÃ©duction des mouvements respectÃ©s.",
-        "Blind Test : bouton Skipper dÃ» Ã  un bug utilisable mÃªme si lâ€™extrait ne dÃ©marre pas. La manche est exclue des rÃ©ponses et du taux de rÃ©ussite ; le bilan affiche le nombre et les titres concernÃ©s. Diagnostic distinct conservÃ© pour les comptes connectÃ©s.",
-        "CrÃ©ateur et modÃ©rateurs : contrÃ´le global des liens Archive.org, mÃ©tadonnÃ©es regroupÃ©es par archive, lectures MP3 partielles, noms et numÃ©rotation, titres incorporÃ©s et empreintes dupliquÃ©es. RÃ©sultats confirmÃ©s, incorrects, inaccessibles et Ã  confirmer clairement sÃ©parÃ©s.",
-        "Objectif de dix secondes pour le contrÃ´le des liens, avec requÃªtes parallÃ¨les limitÃ©es ; les dÃ©lais rÃ©seau ou lâ€™absence dâ€™informations ne sont jamais remplacÃ©s par une validation fictive.",
-        "Doublons audio : lancement manuel dans la mÃªme interface de progression, compteur et pourcentage, arrÃªt, bilan et diagnostic JSON. Comparaison sonore sur trois extraits conservÃ©e ; aucune suppression automatique.",
-        "Guide complÃ©tÃ© dans Lire le reste ; niveau Public masque les nouveaux contrÃ´les rÃ©servÃ©s."
+        "Pochettes animées : mouvement de zoom et déplacement nettement plus visible, reflet lumineux animé, uniquement sur les pochettes visibles. Pause, effets réduits/désactivés et réduction des mouvements respectés.",
+        "Blind Test : bouton Skipper dû à un bug utilisable même si l’extrait ne démarre pas. La manche est exclue des réponses et du taux de réussite ; le bilan affiche le nombre et les titres concernés. Diagnostic distinct conservé pour les comptes connectés.",
+        "Créateur et modérateurs : contrôle global des liens Archive.org, métadonnées regroupées par archive, lectures MP3 partielles, noms et numérotation, titres incorporés et empreintes dupliquées. Résultats confirmés, incorrects, inaccessibles et à confirmer clairement séparés.",
+        "Objectif de dix secondes pour le contrôle des liens, avec requêtes parallèles limitées ; les délais réseau ou l’absence d’informations ne sont jamais remplacés par une validation fictive.",
+        "Doublons audio : lancement manuel dans la même interface de progression, compteur et pourcentage, arrêt, bilan et diagnostic JSON. Comparaison sonore sur trois extraits conservée ; aucune suppression automatique.",
+        "Guide complété dans Lire le reste ; niveau Public masque les nouveaux contrôles réservés."
       ]
     ],
     [
-      "17V02 Â· QCM musical et affichage",
+      "17V02 · QCM musical et affichage",
       "6 octobre 2026",
-      "RÃ©ponses visuelles, immersion en rÃ©paration et niveaux dâ€™affichage corrigÃ©s.",
+      "Réponses visuelles, immersion en réparation et niveaux d’affichage corrigés.",
       [
-        "Immersion temporairement indisponible : le bouton affiche le message de rÃ©paration, sans ouvrir le mode existant. Le lecteur et les pages de paroles restent accessibles.",
-        "Blind Test musical Ã  quatre choix : bonne rÃ©ponse et trois morceaux distincts tirÃ©s du catalogue, ordre alÃ©atoire, titres et pochettes animÃ©es, sÃ©lection au clic ou au toucher aprÃ¨s lâ€™extrait.",
-        "ChronomÃ¨tre dÃ©marrÃ© Ã  lâ€™apparition des rÃ©ponses ; correction immÃ©diate, bilan et statistiques par morceau conservÃ©s. RÃ©Ã©couter ne remet pas le temps de rÃ©ponse Ã  zÃ©ro.",
-        "Voile blanc animÃ© conservÃ© sur les Ã©lÃ©ments encadrÃ©s ; aucun voile sur les textes cliquables sans cadre.",
-        "Niveau 1 Â· Public : commandes de modÃ©ration et de crÃ©ation rÃ©centes masquÃ©es, sans modifier les permissions rÃ©elles du compte.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste ; indice initial et Easter egg conservÃ©s."
+        "Immersion temporairement indisponible : le bouton affiche le message de réparation, sans ouvrir le mode existant. Le lecteur et les pages de paroles restent accessibles.",
+        "Blind Test musical à quatre choix : bonne réponse et trois morceaux distincts tirés du catalogue, ordre aléatoire, titres et pochettes animées, sélection au clic ou au toucher après l’extrait.",
+        "Chronomètre démarré à l’apparition des réponses ; correction immédiate, bilan et statistiques par morceau conservés. Réécouter ne remet pas le temps de réponse à zéro.",
+        "Voile blanc animé conservé sur les éléments encadrés ; aucun voile sur les textes cliquables sans cadre.",
+        "Niveau 1 · Public : commandes de modération et de création récentes masquées, sans modifier les permissions réelles du compte.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste ; indice initial et Easter egg conservés."
       ]
     ],
     [
-      "17V01 Â· Bilans et reconnaissance musicale",
+      "17V01 · Bilans et reconnaissance musicale",
       "6 octobre 2026",
-      "Statistiques personnelles, rÃ©sumÃ©s conservÃ©s, trophÃ©es annuels et Blind Test.",
+      "Statistiques personnelles, résumés conservés, trophées annuels et Blind Test.",
       [
-        "NouveautÃ©s regroupe trois historiques indÃ©pendants : Site PC, Application PC et Site mobile. Le bouton Historique des mises Ã  jour ouvre le choix sans plateforme prÃ©sÃ©lectionnÃ©e.",
-        "Blind Test : sÃ©lection sans limite fixÃ©e, ordre alÃ©atoire et un passage par morceau ; extraits de dix secondes, cinq secondes ou du premier son audible selon la difficultÃ©. ChronomÃ¨tre et bilan dÃ©taillÃ© par rÃ©ponse, morceau et volume. Les extraits indisponibles sont exclus des erreurs.",
-        "Statistiques et rÃ©sumÃ©s : 19 catÃ©gories et 276 mesures demandÃ©es, dÃ©tails accessibles pour les comptes membres, modÃ©rateurs et crÃ©ateur. Une donnÃ©e inaccessible affiche 0 (indisponible). Les donnÃ©es anciennes non enregistrÃ©es ne sont pas inventÃ©es.",
-        "Suivi dâ€™Ã©coute : pauses, chargements, dÃ©placements dans la piste et longues suspensions exclus ; mesures dÃ©doublonnÃ©es et chevauchements entre appareils empÃªchÃ©s.",
-        "RÃ©sumÃ©s programmables de six mois calendaires maximum, bilans mensuels et rÃ©sumÃ©s annuels conservÃ©s sans remplacement. RÃ©vÃ©lation annuelle au 1er janvier Ã  minuit, heure de Paris ; nouveaux compteurs et conservation de lâ€™historique.",
-        "2026 reste une Ã©dition privÃ©e de test, sans trophÃ©es exposables. Le classement public devient automatiquement disponible pour les bilans de 2027 et des annÃ©es suivantes. Une fiche publique conserve son contenu privÃ© : demande, acceptation, refus et rÃ©vocation pour chaque rÃ©sumÃ© individuel.",
-        "TrophÃ©es : 14 familles, 12 raretÃ©s par famille, conditions et progression visibles ; attribution Ã  la rÃ©vÃ©lation annuelle et collection permanente. Le niveau maximal du temps dâ€™Ã©coute demande 3 000 heures sur lâ€™annÃ©e complÃ¨te, sans rÃ©duction en 2026. Exposition au profil limitÃ©e aux trophÃ©es obtenus de 2027 et des annÃ©es suivantes.",
-        "Lâ€™immersion sâ€™ouvre sans imposer le plein Ã©cran et conserve la disposition existante.",
-        "Indice des astuces rendu plus discret dans le contenu initial ; fonctionnement de lâ€™Easter egg conservÃ©. Guide complÃ©tÃ© dans Lire le reste."
+        "Nouveautés regroupe trois historiques indépendants : Site PC, Application PC et Site mobile. Le bouton Historique des mises à jour ouvre le choix sans plateforme présélectionnée.",
+        "Blind Test : sélection sans limite fixée, ordre aléatoire et un passage par morceau ; extraits de dix secondes, cinq secondes ou du premier son audible selon la difficulté. Chronomètre et bilan détaillé par réponse, morceau et volume. Les extraits indisponibles sont exclus des erreurs.",
+        "Statistiques et résumés : 19 catégories et 276 mesures demandées, détails accessibles pour les comptes membres, modérateurs et créateur. Une donnée inaccessible affiche 0 (indisponible). Les données anciennes non enregistrées ne sont pas inventées.",
+        "Suivi d’écoute : pauses, chargements, déplacements dans la piste et longues suspensions exclus ; mesures dédoublonnées et chevauchements entre appareils empêchés.",
+        "Résumés programmables de six mois calendaires maximum, bilans mensuels et résumés annuels conservés sans remplacement. Révélation annuelle au 1er janvier à minuit, heure de Paris ; nouveaux compteurs et conservation de l’historique.",
+        "2026 reste une édition privée de test, sans trophées exposables. Le classement public devient automatiquement disponible pour les bilans de 2027 et des années suivantes. Une fiche publique conserve son contenu privé : demande, acceptation, refus et révocation pour chaque résumé individuel.",
+        "Trophées : 14 familles, 12 raretés par famille, conditions et progression visibles ; attribution à la révélation annuelle et collection permanente. Le niveau maximal du temps d’écoute demande 3 000 heures sur l’année complète, sans réduction en 2026. Exposition au profil limitée aux trophées obtenus de 2027 et des années suivantes.",
+        "L’immersion s’ouvre sans imposer le plein écran et conserve la disposition existante.",
+        "Indice des astuces rendu plus discret dans le contenu initial ; fonctionnement de l’Easter egg conservé. Guide complété dans Lire le reste."
       ]
     ],
     [
-      "17V00 Â· Nouvelle dimension",
+      "17V00 · Nouvelle dimension",
       "5 octobre 2026",
       "Une interface futuriste et de nouveaux outils communautaires.",
       [
-        "Nouvelle interface technologique, effets PC, transitions rapides et sons courts coupÃ©s automatiquement pendant toute lecture musicale.",
-        "Immersion reconstruite : Ã©cran partagÃ© Ã  parts Ã©gales entre pochette et paroles ; commandes et informations dans une section accessible en descendant.",
-        "Corrections communautaires des synchronisations publiques, file dÃ©diÃ©e et publication autonome par les modÃ©rateurs.",
-        "Demandes de permissions crÃ©ateur limitÃ©es Ã  une fonctionnalitÃ©, avec acceptation ou refus et journal des actions des modÃ©rateurs.",
-        "Statuts En ligne, Ne pas dÃ©ranger, Hors ligne et Compte sanctionnÃ© ; messages privÃ©s bloquÃ©s en Ne pas dÃ©ranger. Badges animÃ©s personnalisables.",
-        "Guide Infos, fonctionnalitÃ©s & astuces : documentation permanente, soutien Ko-fi, projets Android/iOS envisagÃ©s et indice protÃ©gÃ© derriÃ¨re une suite distincte.",
-        "MÃ©tadonnÃ©es multimÃ©dias : titre rÃ©el, artiste Jul, volume, pochette, progression et commandes pour les environnements compatibles.",
-        "Nettoyage renforcÃ© des intitulÃ©s de structure avant lâ€™atelier ; paroles chantÃ©es conservÃ©es.",
-        "Signalements IA confirmÃ©s, un vote de sept jours Ã  la fois, file chronologique, rÃ©sultat automatique et historique crÃ©ateur en lecture seule. Un vote par compte ; Ã©galitÃ© ou aucun vote conserve le morceau.",
-        "AprÃ¨s un vote IA positif, retrait et renumÃ©rotation affichÃ©e cohÃ©rents ; identifiants et liens audio des morceaux restants conservÃ©s.",
-        "Identifiants complets dans les Patch Notes ; historiques Web et Windows indÃ©pendants."
+        "Nouvelle interface technologique, effets PC, transitions rapides et sons courts coupés automatiquement pendant toute lecture musicale.",
+        "Immersion reconstruite : écran partagé à parts égales entre pochette et paroles ; commandes et informations dans une section accessible en descendant.",
+        "Corrections communautaires des synchronisations publiques, file dédiée et publication autonome par les modérateurs.",
+        "Demandes de permissions créateur limitées à une fonctionnalité, avec acceptation ou refus et journal des actions des modérateurs.",
+        "Statuts En ligne, Ne pas déranger, Hors ligne et Compte sanctionné ; messages privés bloqués en Ne pas déranger. Badges animés personnalisables.",
+        "Guide Infos, fonctionnalités & astuces : documentation permanente, soutien Ko-fi, projets Android/iOS envisagés et indice protégé derrière une suite distincte.",
+        "Métadonnées multimédias : titre réel, artiste Jul, volume, pochette, progression et commandes pour les environnements compatibles.",
+        "Nettoyage renforcé des intitulés de structure avant l’atelier ; paroles chantées conservées.",
+        "Signalements IA confirmés, un vote de sept jours à la fois, file chronologique, résultat automatique et historique créateur en lecture seule. Un vote par compte ; égalité ou aucun vote conserve le morceau.",
+        "Après un vote IA positif, retrait et renumérotation affichée cohérents ; identifiants et liens audio des morceaux restants conservés.",
+        "Identifiants complets dans les Patch Notes ; historiques Web et Windows indépendants."
       ]
     ],
     [
-      "16V00 Â· Historiques sÃ©parÃ©s et espace Ã©quipe",
+      "16V00 · Historiques séparés et espace équipe",
       "4 octobre 2026",
-      "Lecture, synchronisation et outils privÃ©s mieux organisÃ©s.",
+      "Lecture, synchronisation et outils privés mieux organisés.",
       [
-        "Historique du site rÃ©servÃ© aux changements Web ; historique Windows indÃ©pendant dÃ©marrant Ã  13v09.",
-        "Pendant la synchronisation, le morceau reste verrouillÃ© ; sa fin arrÃªte la lecture sans effacer le travail. Retour Ã  00:00 disponible dans lâ€™atelier.",
-        "Une fin de paroles explicite est enregistrÃ©e pour les blocs. La derniÃ¨re phrase sâ€™efface progressivement avant les actions dâ€™avis, de commentaire et dâ€™explication. Les anciens timings sans fin explicite restent conservÃ©s.",
-        "Immersion : pochette et paroles occupent chacune environ la moitiÃ© de la zone principale ; commandes et informations compactes placÃ©es en bas.",
-        "Suppression du titre visible Ã‰coute immersive. Espace Ã©quipe regroupÃ© dans le compte, avec outils de contributions et de gestion distincts.",
-        "Permissions crÃ©ateur, modÃ©rateur et public inchangÃ©es ; les actions contextuelles restent accessibles sur les Ã©lÃ©ments concernÃ©s.",
-        "Nom harmonisÃ© : Avant lâ€™usine, avec un u minuscule."
+        "Historique du site réservé aux changements Web ; historique Windows indépendant démarrant à 13v09.",
+        "Pendant la synchronisation, le morceau reste verrouillé ; sa fin arrête la lecture sans effacer le travail. Retour à 00:00 disponible dans l’atelier.",
+        "Une fin de paroles explicite est enregistrée pour les blocs. La dernière phrase s’efface progressivement avant les actions d’avis, de commentaire et d’explication. Les anciens timings sans fin explicite restent conservés.",
+        "Immersion : pochette et paroles occupent chacune environ la moitié de la zone principale ; commandes et informations compactes placées en bas.",
+        "Suppression du titre visible Écoute immersive. Espace équipe regroupé dans le compte, avec outils de contributions et de gestion distincts.",
+        "Permissions créateur, modérateur et public inchangées ; les actions contextuelles restent accessibles sur les éléments concernés.",
+        "Nom harmonisé : Avant l’usine, avec un u minuscule."
       ]
     ],
     [
-      "15V00 Â· Paroles visibles et immersion repensÃ©e",
+      "15V00 · Paroles visibles et immersion repensée",
       "4 octobre 2026",
-      "Un rendu partagÃ© entre Ã©coute publique et vÃ©rification des contributions.",
+      "Un rendu partagé entre écoute publique et vérification des contributions.",
       [
-        "Le suivi maintient la phrase ou le bloc chantÃ© dans la zone visible avec un dÃ©filement progressif, y compris les longues phrases et les backs.",
-        "Immersion sur une grande pochette floutÃ©e, avec voile sombre pour la lisibilitÃ© et disparition des fonds gris.",
-        "Transitions en fondu et lÃ©ger flou, teintÃ©es par une couleur extraite de la pochette ; suppression du cadre autour des paroles.",
-        "Les synchronisations du site, de lâ€™application et les fichiers LRC/JSON utilisent le mÃªme moteur public pendant leur vÃ©rification : timings, backs, styles et suivi identiques.",
-        "Les corrections de timings sont regroupÃ©es dans un panneau repliable. Approuver reste disponible uniquement aprÃ¨s Ã©coute complÃ¨te ; les passages sautÃ©s ne sont pas validÃ©s.",
-        "Arrondi uniforme des pochettes portÃ© de 4 Ã  10 pixels, avec format carrÃ© conservÃ©. Les prÃ©fÃ©rences de rÃ©duction des animations sont respectÃ©es."
+        "Le suivi maintient la phrase ou le bloc chanté dans la zone visible avec un défilement progressif, y compris les longues phrases et les backs.",
+        "Immersion sur une grande pochette floutée, avec voile sombre pour la lisibilité et disparition des fonds gris.",
+        "Transitions en fondu et léger flou, teintées par une couleur extraite de la pochette ; suppression du cadre autour des paroles.",
+        "Les synchronisations du site, de l’application et les fichiers LRC/JSON utilisent le même moteur public pendant leur vérification : timings, backs, styles et suivi identiques.",
+        "Les corrections de timings sont regroupées dans un panneau repliable. Approuver reste disponible uniquement après écoute complète ; les passages sautés ne sont pas validés.",
+        "Arrondi uniforme des pochettes porté de 4 à 10 pixels, avec format carré conservé. Les préférences de réduction des animations sont respectées."
       ]
     ],
     [
-      "14V00 Â· TÃ©lÃ©chargement dynamique et pochettes",
+      "14V00 · Téléchargement dynamique et pochettes",
       "4 octobre 2026",
-      "Le tÃ©lÃ©chargement Windows suit les versions publiÃ©es.",
+      "Le téléchargement Windows suit les versions publiées.",
       [
-        "Le bouton de tÃ©lÃ©chargement rÃ©cupÃ¨re la derniÃ¨re version publique au chargement et au clic, sans modifier le lien dans le code du site.",
-        "Arrondi discret de quatre pixels sur les quatre coins des pochettes carrÃ©es."
+        "Le bouton de téléchargement récupère la dernière version publique au chargement et au clic, sans modifier le lien dans le code du site.",
+        "Arrondi discret de quatre pixels sur les quatre coins des pochettes carrées."
       ]
     ],
     [
-      "13v09 Â· TÃ©lÃ©chargement Windows",
+      "13v09 · Téléchargement Windows",
       "3 octobre 2026",
-      "Un accÃ¨s visible Ã  lâ€™application Windows.",
+      "Un accès visible à l’application Windows.",
       [
-        "Bandeau de tÃ©lÃ©chargement sur le site avec accÃ¨s Ã  lâ€™installateur et Ã  la version portable."
+        "Bandeau de téléchargement sur le site avec accès à l’installateur et à la version portable."
       ]
     ],
     [
-      "13v08 Â· Ressources sÃ©parÃ©es et page allÃ©gÃ©e",
+      "13v08 · Ressources séparées et page allégée",
       "3 octobre 2026",
-      "MÃªme interface et mÃªmes fonctions, avec un HTML beaucoup plus lÃ©ger.",
+      "Même interface et mêmes fonctions, avec un HTML beaucoup plus léger.",
       [
-        "Les huit pochettes WebP sont dÃ©sormais des fichiers sÃ©parÃ©s, reconstruits Ã  lâ€™identique sans recompression.",
-        "Le catalogue initial, le JavaScript et les styles sont chargÃ©s depuis des fichiers dÃ©diÃ©s ; les donnÃ©es et lâ€™ordre de dÃ©marrage sont conservÃ©s.",
-        "Chemins relatifs compatibles avec /avant-usine/ et tÃ©lÃ©chargement des pochettes conservÃ© au format WebP.",
-        "Cache hors connexion actualisÃ© pour inclure les nouvelles ressources de lâ€™interface et les pochettes."
+        "Les huit pochettes WebP sont désormais des fichiers séparés, reconstruits à l’identique sans recompression.",
+        "Le catalogue initial, le JavaScript et les styles sont chargés depuis des fichiers dédiés ; les données et l’ordre de démarrage sont conservés.",
+        "Chemins relatifs compatibles avec /avant-usine/ et téléchargement des pochettes conservé au format WebP.",
+        "Cache hors connexion actualisé pour inclure les nouvelles ressources de l’interface et les pochettes."
       ]
     ],
     [
-      "13v07 Â· PrÃ©visualisation et approbation des propositions",
+      "13v07 · Prévisualisation et approbation des propositions",
       "3 octobre 2026",
-      "VÃ©rifie le rendu complet avant de publier une synchronisation.",
+      "Vérifie le rendu complet avant de publier une synchronisation.",
       [
-        "AperÃ§u privÃ© des fichiers LRC/JSON et des synchronisations reÃ§ues avec la musique, les backs, la progression et le dÃ©filement.",
-        "Le bouton Approuver et publier apparaÃ®t uniquement aprÃ¨s lecture de tous les passages ; avancer Ã  la fin ne valide pas les passages sautÃ©s.",
-        "Une modification des paroles, des timings ou du morceau choisi impose une nouvelle prÃ©visualisation complÃ¨te.",
-        "Publication directe des fichiers vÃ©rifiÃ©s, avec choix manuel du morceau et correction des timings, sans imposer une correspondance automatique avec le texte du catalogue.",
-        "Retrait des propositions de sa propre liste, archives consultables et restauration, sans supprimer les fichiers ni retirer une synchronisation publiÃ©e.",
-        "Les fonctions de vÃ©rification restent accessibles au crÃ©ateur et aux modÃ©rateurs ; les fonctions exclusives du crÃ©ateur sont conservÃ©es."
+        "Aperçu privé des fichiers LRC/JSON et des synchronisations reçues avec la musique, les backs, la progression et le défilement.",
+        "Le bouton Approuver et publier apparaît uniquement après lecture de tous les passages ; avancer à la fin ne valide pas les passages sautés.",
+        "Une modification des paroles, des timings ou du morceau choisi impose une nouvelle prévisualisation complète.",
+        "Publication directe des fichiers vérifiés, avec choix manuel du morceau et correction des timings, sans imposer une correspondance automatique avec le texte du catalogue.",
+        "Retrait des propositions de sa propre liste, archives consultables et restauration, sans supprimer les fichiers ni retirer une synchronisation publiée.",
+        "Les fonctions de vérification restent accessibles au créateur et aux modérateurs ; les fonctions exclusives du créateur sont conservées."
       ]
     ],
     [
-      "13v06 Â· Paroles, fluiditÃ© et contributions",
+      "13v06 · Paroles, fluidité et contributions",
       "3 octobre 2026",
-      "Deux modes de synchronisation et une vÃ©rification humaine des fichiers.",
+      "Deux modes de synchronisation et une vérification humaine des fichiers.",
       [
-        "Progression optimisÃ©e : recherche rapide des timings et mise Ã  jour des seules lettres qui changent.",
-        "Backs entre parenthÃ¨ses affichÃ©s sous leur phrase, avec les positions et timings originaux conservÃ©s dans Highlight Progression.",
-        "Choix entre Highlight Progression et Synchronisation avancÃ©e par blocs de une Ã  trois lignes.",
-        "Copie avec Espace pour le texte complet ou EntrÃ©e pour le texte pur ; bouton vert pour ouvrir le clavier sur mobile.",
-        "Le mode immersion exige dÃ©sormais le plein Ã©cran ; une aide apparaÃ®t si le navigateur le refuse.",
-        "DÃ©pÃ´t des fichiers originaux sans validation bloquante de leur contenu, analyse indicative et vÃ©rification par le crÃ©ateur ou les modÃ©rateurs.",
-        "NumÃ©rotation rÃ©troactive des patchs 13v03, 13v04 et 13v05. Les fonctions exclusives du crÃ©ateur restent inchangÃ©es."
+        "Progression optimisée : recherche rapide des timings et mise à jour des seules lettres qui changent.",
+        "Backs entre parenthèses affichés sous leur phrase, avec les positions et timings originaux conservés dans Highlight Progression.",
+        "Choix entre Highlight Progression et Synchronisation avancée par blocs de une à trois lignes.",
+        "Copie avec Espace pour le texte complet ou Entrée pour le texte pur ; bouton vert pour ouvrir le clavier sur mobile.",
+        "Le mode immersion exige désormais le plein écran ; une aide apparaît si le navigateur le refuse.",
+        "Dépôt des fichiers originaux sans validation bloquante de leur contenu, analyse indicative et vérification par le créateur ou les modérateurs.",
+        "Numérotation rétroactive des patchs 13v03, 13v04 et 13v05. Les fonctions exclusives du créateur restent inchangées."
       ]
     ],
     [
-      "13v05 Â· Immersion avec paroles",
+      "13v05 · Immersion avec paroles",
       "1 octobre 2026",
-      "La pochette et les paroles restent ensemble pendant lâ€™Ã©coute.",
+      "La pochette et les paroles restent ensemble pendant l’écoute.",
       [
-        "Le bouton Paroles du mode immersion conserve la pochette Ã  gauche et affiche le texte dÃ©filant Ã  droite, y compris sur tÃ©lÃ©phone.",
-        "Les paroles synchronisÃ©es suivent les timings et la progression du morceau.",
-        "Les paroles non synchronisÃ©es dÃ©filent progressivement pendant lâ€™Ã©coute, avec une indication de dÃ©filement approximatif.",
-        "DÃ©filement automatique dÃ©sactivable et lecture manuelle possibles. Les paroles ajoutÃ©es plus tard apparaissent dans ce mode sans autre mise Ã  jour."
+        "Le bouton Paroles du mode immersion conserve la pochette à gauche et affiche le texte défilant à droite, y compris sur téléphone.",
+        "Les paroles synchronisées suivent les timings et la progression du morceau.",
+        "Les paroles non synchronisées défilent progressivement pendant l’écoute, avec une indication de défilement approximatif.",
+        "Défilement automatique désactivable et lecture manuelle possibles. Les paroles ajoutées plus tard apparaissent dans ce mode sans autre mise à jour."
       ]
     ],
     [
-      "13v04 Â· Synchronisation en continu",
+      "13v04 · Synchronisation en continu",
       "1 octobre 2026",
-      "Suis le texte, lâ€™atelier enchaÃ®ne les phrases pour toi.",
+      "Suis le texte, l’atelier enchaîne les phrases pour toi.",
       [
-        "Toutes les phrases restent affichÃ©es, avec la phrase active mise en Ã©vidence et la suivante dÃ©jÃ  visible.",
-        "Un seul dÃ©marrage : sÃ©lection, enregistrement et passage Ã  la phrase suivante automatiques, sans boutons entre les phrases.",
-        "Sur tÃ©lÃ©phone, relever le doigt met la musique en pause ; toucher de nouveau le texte reprend la synchronisation.",
-        "Une commande permet de reprendre la phrase active en conservant les autres. Import de fichiers et validation des contributions conservÃ©s."
+        "Toutes les phrases restent affichées, avec la phrase active mise en évidence et la suivante déjà visible.",
+        "Un seul démarrage : sélection, enregistrement et passage à la phrase suivante automatiques, sans boutons entre les phrases.",
+        "Sur téléphone, relever le doigt met la musique en pause ; toucher de nouveau le texte reprend la synchronisation.",
+        "Une commande permet de reprendre la phrase active en conservant les autres. Import de fichiers et validation des contributions conservés."
       ]
     ],
     [
-      "13v03 Â· Import de paroles synchronisÃ©es",
+      "13v03 · Import de paroles synchronisées",
       "1 octobre 2026",
       "Propose une synchronisation depuis un fichier, puis fais-la valider.",
       [
-        "Import de fichiers JSON dans lâ€™atelier, initialement proposÃ© au crÃ©ateur puis ouvert Ã  tous les membres connectÃ©s.",
-        "Ajout du glisser-dÃ©poser et des fichiers LRC avec horodatages de lignes ; progression des mots estimÃ©e pour ce format.",
-        "VÃ©rification du morceau, des paroles, de la durÃ©e et des timings avant import.",
-        "Les fichiers importÃ©s restent des brouillons ; les contributions restent privÃ©es jusquâ€™Ã  validation dans le compte crÃ©ateur. Les synchronisations publiÃ©es peuvent Ãªtre retirÃ©es."
+        "Import de fichiers JSON dans l’atelier, initialement proposé au créateur puis ouvert à tous les membres connectés.",
+        "Ajout du glisser-déposer et des fichiers LRC avec horodatages de lignes ; progression des mots estimée pour ce format.",
+        "Vérification du morceau, des paroles, de la durée et des timings avant import.",
+        "Les fichiers importés restent des brouillons ; les contributions restent privées jusqu’à validation dans le compte créateur. Les synchronisations publiées peuvent être retirées."
       ]
     ],
     [
-      "13v02 Â· Paroles et gestion intelligente",
+      "13v02 · Paroles et gestion intelligente",
       "30 septembre 2026",
       "Nettoyage prudent, ordre des pistes et comparaison audio.",
       [
-        "Nomination et retrait des modÃ©rateurs directement depuis leur profil par le crÃ©ateur. Leur rÃ´le se limite aux synchronisations et ajouts de paroles.",
-        "Les titres de section reconnus sont retirÃ©s automatiquement de lâ€™atelier, y compris pour les anciens textes. Les paroles originales sont conservÃ©es.",
-        "Les paroles transmises par un widget Genius chargÃ© peuvent Ãªtre proposÃ©es Ã  la synchronisation et restent soumises Ã  la validation du crÃ©ateur.",
-        "Gestion crÃ©ateur : dÃ©placer une piste, la retirer ou la restaurer depuis la corbeille ; les numÃ©ros affichÃ©s sont recalculÃ©s sans dÃ©placer les favoris ni les contributions.",
-        "Analyse sonore progressive de la collection depuis le compte crÃ©ateur. Les ressemblances sont signalÃ©es, jamais supprimÃ©es automatiquement. Les fichiers inaccessibles restent signalÃ©s comme non analysÃ©s.",
-        "Volume 2 : retrait de lâ€™ancienne piste 44 et rÃ©ajustement des positions suivantes."
+        "Nomination et retrait des modérateurs directement depuis leur profil par le créateur. Leur rôle se limite aux synchronisations et ajouts de paroles.",
+        "Les titres de section reconnus sont retirés automatiquement de l’atelier, y compris pour les anciens textes. Les paroles originales sont conservées.",
+        "Les paroles transmises par un widget Genius chargé peuvent être proposées à la synchronisation et restent soumises à la validation du créateur.",
+        "Gestion créateur : déplacer une piste, la retirer ou la restaurer depuis la corbeille ; les numéros affichés sont recalculés sans déplacer les favoris ni les contributions.",
+        "Analyse sonore progressive de la collection depuis le compte créateur. Les ressemblances sont signalées, jamais supprimées automatiquement. Les fichiers inaccessibles restent signalés comme non analysés.",
+        "Volume 2 : retrait de l’ancienne piste 44 et réajustement des positions suivantes."
       ]
     ],
     [
-      "V13 Â· RÃ©pertoire et synchronisation mobile",
+      "V13 · Répertoire et synchronisation mobile",
       "30 septembre 2026",
       "Dates communautaires et atelier plus simple.",
       [
-        "RÃ©pertoire : tous les titres classÃ©s par annÃ©e, dates modifiables immÃ©diatement par les membres, signatures et historique.",
-        "Journal dÃ©taillÃ© du RÃ©pertoire rÃ©servÃ© au crÃ©ateur, sans validation ni modÃ©ration des dates.",
-        "Synchronisation : dÃ©marrage unique, passage automatique Ã  la ligne suivante, pause au relÃ¢chement du doigt et reprise au toucher.",
-        "RGB dÃ©sactivÃ© pour le crÃ©ateur et les modÃ©rateurs ; outils privÃ©s en jaune.",
-        "AperÃ§us public et modÃ©rateur sans modification des droits rÃ©els du compte."
+        "Répertoire : tous les titres classés par année, dates modifiables immédiatement par les membres, signatures et historique.",
+        "Journal détaillé du Répertoire réservé au créateur, sans validation ni modération des dates.",
+        "Synchronisation : démarrage unique, passage automatique à la ligne suivante, pause au relâchement du doigt et reprise au toucher.",
+        "RGB désactivé pour le créateur et les modérateurs ; outils privés en jaune.",
+        "Aperçus public et modérateur sans modification des droits réels du compte."
       ]
     ],
     [
-      "V12 Â· Contributions et modÃ©ration",
+      "V12 · Contributions et modération",
       "30 septembre 2026",
-      "Les contributions Ã©voluent, avec un contrÃ´le avant publication.",
+      "Les contributions évoluent, avec un contrôle avant publication.",
       [
-        "Candidatures : suivi personnel, statut reportÃ©, notifications, suppression et badge ModÃ©rateur.",
-        "Comptes : questionnaire de dÃ©part et confirmation avant suppression ; gestion privÃ©e des comptes par le crÃ©ateur.",
-        "Signalements : suspension temporaire, motif enregistrÃ©, bannissement et rÃ©activation. Les pages publiques restent accessibles sans compte.",
-        "Paroles absentes : proposition par saisie ou copier-coller, suivi, correction et validation par le crÃ©ateur.",
-        "KaraokÃ© : enregistrement au doigt ou Ã  la souris, reprise de chaque ligne, corrections du crÃ©ateur et remplissage progressif aprÃ¨s validation.",
-        "Lâ€™atelier utilise les textes enregistrÃ©s dans le catalogue. Les paroles uniquement affichÃ©es par le widget Genius ne sont pas encore prises en charge.",
-        "La chronologie de carriÃ¨re a Ã©tÃ© retirÃ©e. Un message dâ€™accueil explique que le site est toujours en dÃ©veloppement."
+        "Candidatures : suivi personnel, statut reporté, notifications, suppression et badge Modérateur.",
+        "Comptes : questionnaire de départ et confirmation avant suppression ; gestion privée des comptes par le créateur.",
+        "Signalements : suspension temporaire, motif enregistré, bannissement et réactivation. Les pages publiques restent accessibles sans compte.",
+        "Paroles absentes : proposition par saisie ou copier-coller, suivi, correction et validation par le créateur.",
+        "Karaoké : enregistrement au doigt ou à la souris, reprise de chaque ligne, corrections du créateur et remplissage progressif après validation.",
+        "L’atelier utilise les textes enregistrés dans le catalogue. Les paroles uniquement affichées par le widget Genius ne sont pas encore prises en charge.",
+        "La chronologie de carrière a été retirée. Un message d’accueil explique que le site est toujours en développement."
       ]
     ],
     [
-      "V11 Â· Paroles synchronisÃ©es",
+      "V11 · Paroles synchronisées",
       "29 septembre 2026",
-      "Un atelier ouvert Ã  tous les membres, avec validation du crÃ©ateur.",
+      "Un atelier ouvert à tous les membres, avec validation du créateur.",
       [
-        "Contribution ligne par ligne : lecture, marquage du temps, retour Ã  la ligne prÃ©cÃ©dente et rÃ©glage prÃ©cis en secondes.",
-        "Brouillon conservÃ© sur cet appareil, suivi des contributions et validation avant publication.",
-        "Le crÃ©ateur peut Ã©couter, corriger les temps, approuver ou renvoyer une proposition.",
-        "AprÃ¨s validation, la ligne active suit la musique et dÃ©file automatiquement. Le dÃ©filement peut Ãªtre mis en pause.",
-        "Disponible pour les paroles enregistrÃ©es par le crÃ©ateur dans la fiche du morceau ; les widgets Genius seuls restent en lecture manuelle."
+        "Contribution ligne par ligne : lecture, marquage du temps, retour à la ligne précédente et réglage précis en secondes.",
+        "Brouillon conservé sur cet appareil, suivi des contributions et validation avant publication.",
+        "Le créateur peut écouter, corriger les temps, approuver ou renvoyer une proposition.",
+        "Après validation, la ligne active suit la musique et défile automatiquement. Le défilement peut être mis en pause.",
+        "Disponible pour les paroles enregistrées par le créateur dans la fiche du morceau ; les widgets Genius seuls restent en lecture manuelle."
       ]
     ],
     [
-      "V10.1 Â· Corrections aprÃ¨s vÃ©rification",
+      "V10.1 · Corrections après vérification",
       "28 septembre 2026",
-      "LisibilitÃ© et liens audio corrigÃ©s.",
+      "Lisibilité et liens audio corrigés.",
       [
-        "Lecteur immersif : flÃ¨ches, minutages et informations secondaires plus lisibles en mode clair.",
-        "Volume 3 : rÃ©paration des adresses des pistes 2 Ã  9 pour correspondre aux noms des fichiers Archive.org, sans changer les titres ni les favoris."
+        "Lecteur immersif : flèches, minutages et informations secondaires plus lisibles en mode clair.",
+        "Volume 3 : réparation des adresses des pistes 2 à 9 pour correspondre aux noms des fichiers Archive.org, sans changer les titres ni les favoris."
       ]
     ],
     [
-      "V10 Â· Ã‰dition CommunautÃ©",
+      "V10 · Édition Communauté",
       "28 septembre 2026",
-      "La plus grosse mise Ã  jour du site Ã  ce jour.",
+      "La plus grosse mise à jour du site à ce jour.",
       [
         "Comptes : affichage et masquage des mots de passe, sans perdre la saisie.",
-        "Profils : photo et banniÃ¨re importÃ©es depuis ton appareil, aperÃ§u, prÃ©sentation, couleur et trois ambiances visuelles. Les images sont optimisÃ©es avant enregistrement.",
-        "Apparence : modes clair et sombre mÃ©morisÃ©s, effet de verre sur mobile et marges adaptÃ©es aux encoches et aux coins arrondis.",
-        "Messages privÃ©s : discussions entre membres, historique, messages non lus, accÃ¨s depuis un profil, blocage et dÃ©sactivation des nouveaux messages. Les Ã©changes sont visibles uniquement par leurs participants.",
-        "Protection : limites dâ€™envoi appliquÃ©es cÃ´tÃ© serveur et signalement dâ€™un message ou commentaire au crÃ©ateur.",
-        "Commentaires par musique : profils, dates et repÃ¨res comme 1:45 qui emmÃ¨nent le lecteur au bon moment du bon morceau.",
-        "Administration : rÃ©ception et suivi des candidatures de modÃ©ration, rÃ©servÃ©s exclusivement au compte crÃ©ateur ; gestion des signalements communautaires.",
-        "Navigation : annuaire des membres, historique rÃ©trospectif et icÃ´nes adaptÃ©es aux onglets, favoris et raccourcis mobiles.",
-        "Conservation du lecteur, des paroles, des explications, des favoris, des playlists, des tÃ©lÃ©chargements, des animations et de la gestion des volumes."
+        "Profils : photo et bannière importées depuis ton appareil, aperçu, présentation, couleur et trois ambiances visuelles. Les images sont optimisées avant enregistrement.",
+        "Apparence : modes clair et sombre mémorisés, effet de verre sur mobile et marges adaptées aux encoches et aux coins arrondis.",
+        "Messages privés : discussions entre membres, historique, messages non lus, accès depuis un profil, blocage et désactivation des nouveaux messages. Les échanges sont visibles uniquement par leurs participants.",
+        "Protection : limites d’envoi appliquées côté serveur et signalement d’un message ou commentaire au créateur.",
+        "Commentaires par musique : profils, dates et repères comme 1:45 qui emmènent le lecteur au bon moment du bon morceau.",
+        "Administration : réception et suivi des candidatures de modération, réservés exclusivement au compte créateur ; gestion des signalements communautaires.",
+        "Navigation : annuaire des membres, historique rétrospectif et icônes adaptées aux onglets, favoris et raccourcis mobiles.",
+        "Conservation du lecteur, des paroles, des explications, des favoris, des playlists, des téléchargements, des animations et de la gestion des volumes."
       ]
     ],
     [
-      "V9 Â· Modification directe et paroles",
+      "V9 · Modification directe et paroles",
       "27 septembre 2026",
-      "Le crÃ©ateur peut modifier les albums plus directement.",
+      "Le créateur peut modifier les albums plus directement.",
       [
-        "Boutons Modifier sur les albums, visibles uniquement par le crÃ©ateur.",
-        "Paroles saisies par copier-coller dans la gestion des pistes, avec prioritÃ© sur le widget Genius.",
-        "Affichage du texte sans exÃ©cuter de HTML, couleurs du volume et sÃ©lection des mots pour les explications."
+        "Boutons Modifier sur les albums, visibles uniquement par le créateur.",
+        "Paroles saisies par copier-coller dans la gestion des pistes, avec priorité sur le widget Genius.",
+        "Affichage du texte sans exécuter de HTML, couleurs du volume et sélection des mots pour les explications."
       ]
     ],
     [
-      "V8 Â· Gestion autonome du catalogue",
+      "V8 · Gestion autonome du catalogue",
       "26 septembre 2026",
-      "Ajouter et gÃ©rer les volumes depuis le site.",
+      "Ajouter et gérer les volumes depuis le site.",
       [
-        "Espace crÃ©ateur : import des pistes Archive.org, titres, pochettes, vidÃ©os et liens de tÃ©lÃ©chargement.",
-        "Gestion des liens Genius, brouillons, aperÃ§u, publication et export du catalogue.",
-        "Permissions serveur et protection contre lâ€™Ã©crasement de modifications simultanÃ©es."
+        "Espace créateur : import des pistes Archive.org, titres, pochettes, vidéos et liens de téléchargement.",
+        "Gestion des liens Genius, brouillons, aperçu, publication et export du catalogue.",
+        "Permissions serveur et protection contre l’écrasement de modifications simultanées."
       ]
     ],
     [
-      "V6â€“V7 Â· Pochettes HD et mouvement",
+      "V6–V7 · Pochettes HD et mouvement",
       "26 septembre 2026",
-      "Des pochettes animÃ©es et un site plus vivant.",
+      "Des pochettes animées et un site plus vivant.",
       [
-        "Pochettes vidÃ©o en 1080 Ã— 1080, images de secours haute dÃ©finition et tÃ©lÃ©chargement des versions animÃ©es.",
-        "Animations de navigation, cartes et lecteur ; pause des vidÃ©os hors Ã©cran et respect de la rÃ©duction des animations.",
-        "Effet RGB au survol des textes et couleurs des paroles adaptÃ©es aux pochettes, sur un fond moins Ã©blouissant."
+        "Pochettes vidéo en 1080 × 1080, images de secours haute définition et téléchargement des versions animées.",
+        "Animations de navigation, cartes et lecteur ; pause des vidéos hors écran et respect de la réduction des animations.",
+        "Effet RGB au survol des textes et couleurs des paroles adaptées aux pochettes, sur un fond moins éblouissant."
       ]
     ],
     [
-      "V5 Â· Ã‰dition rouge",
+      "V5 · Édition rouge",
       "25 septembre 2026",
       "Nouvelle direction artistique.",
       [
-        "Palette noir, crÃ¨me et rouge, grands titres, navigation latÃ©rale sur ordinateur et navigation horizontale sur mobile.",
-        "Harmonisation des fenÃªtres, du lecteur et des rubriques tout en conservant les fonctions existantes."
+        "Palette noir, crème et rouge, grands titres, navigation latérale sur ordinateur et navigation horizontale sur mobile.",
+        "Harmonisation des fenêtres, du lecteur et des rubriques tout en conservant les fonctions existantes."
       ]
     ],
     [
       "Comptes et synchronisation",
       "24 septembre 2026",
-      "Une bibliothÃ¨que qui suit les membres.",
+      "Une bibliothèque qui suit les membres.",
       [
-        "CrÃ©ation de compte, connexion, confirmation par e-mail et rÃ©cupÃ©ration du mot de passe.",
-        "Favoris et playlists privÃ©s synchronisÃ©s entre appareils, avec gestion des conflits.",
+        "Création de compte, connexion, confirmation par e-mail et récupération du mot de passe.",
+        "Favoris et playlists privés synchronisés entre appareils, avec gestion des conflits.",
         "Messages de validation plus clairs dans les formulaires."
       ]
     ],
     [
-      "Les premiÃ¨res Ã©volutions",
-      "Date exacte non documentÃ©e",
-      "Ã‰tapes antÃ©rieures reconstituÃ©es Ã  partir du projet et de son historique.",
+      "Les premières évolutions",
+      "Date exacte non documentée",
+      "Étapes antérieures reconstituées à partir du projet et de son historique.",
       [
-        "CrÃ©ation du lecteur Avant lâ€™usine, avec accueil, collection, Ã©coute et tÃ©lÃ©chargements ; passage de Google Sites Ã  un site autonome sur GitHub Pages.",
-        "IntÃ©gration des trois volumes disponibles et de leurs 119 pistes depuis Archive.org, pochettes et liens MEGA.",
-        "Paroles via le widget officiel Genius, sÃ©lection de passages, explications communautaires et votes.",
-        "BibliothÃ¨que personnelle, favoris, playlists, dÃ©couverte, contributions et liens officiels.",
-        "Ajout du soutien Ko-fi, du statut crÃ©ateur et des outils de modÃ©ration.",
-        "Galerie de pochettes, lecteur immersif, installation sur lâ€™Ã©cran dâ€™accueil et interface hors connexion.",
-        "Corrections successives des pochettes manquantes et de lâ€™affichage mobile ; retrait du bouton Â« Les archives Ã  redÃ©couvrir Â»."
+        "Création du lecteur Avant l’usine, avec accueil, collection, écoute et téléchargements ; passage de Google Sites à un site autonome sur GitHub Pages.",
+        "Intégration des trois volumes disponibles et de leurs 119 pistes depuis Archive.org, pochettes et liens MEGA.",
+        "Paroles via le widget officiel Genius, sélection de passages, explications communautaires et votes.",
+        "Bibliothèque personnelle, favoris, playlists, découverte, contributions et liens officiels.",
+        "Ajout du soutien Ko-fi, du statut créateur et des outils de modération.",
+        "Galerie de pochettes, lecteur immersif, installation sur l’écran d’accueil et interface hors connexion.",
+        "Corrections successives des pochettes manquantes et de l’affichage mobile ; retrait du bouton « Les archives à redécouvrir »."
       ]
     ]
   ],
   "android": [
     [
-      "Android 0.1.6 Â· 18V06",
+      "Android 0.1.6 · 18V06",
       "9 octobre 2026",
-      "Sauvegardes protÃ©gÃ©es et immersion Ã©purÃ©e.",
+      "Sauvegardes protégées et immersion épurée.",
       [
-        "Sauvegarde portable complÃ¨te : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animÃ©es, mÃ©tadonnÃ©es, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, prÃ©fÃ©rences et positions de lecture inclus.",
-        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vÃ©rification des fichiers avant restauration ; seules les sauvegardes .au-backup protÃ©gÃ©es sont importables. Aucun compte, mot de passe ou session nâ€™est exportÃ©.",
-        "Inclure le rÃ´le est une option dÃ©cochÃ©e Ã  lâ€™export, rÃ©servÃ©e aux comptes CrÃ©ateur ou ModÃ©rateur. Ã€ lâ€™import, le transfert sur le compte connectÃ© est facultatif et validÃ© automatiquement par une preuve serveur. Les donnÃ©es peuvent Ãªtre restaurÃ©es sans transfÃ©rer de rÃ´le.",
-        "Immersion : seule la phrase synchronisÃ©e actuellement chantÃ©e est visible. Les paroles et leurs minutages sont conservÃ©s.",
-        "AprÃ¨s dix secondes sans interaction, les commandes et informations disparaissent : pochette carrÃ©e Ã  gauche et paroles Ã  droite, ou pochette seule centrÃ©e et agrandie. Tout geste rÃ©affiche immÃ©diatement lâ€™interface et remet le dÃ©lai Ã  zÃ©ro.",
-        "Le bouton Forcer une mise Ã  jour est accessible dans Mon compte, y compris sans connexion, pour rechercher immÃ©diatement une nouvelle version et suivre le parcours habituel."
+        "Sauvegarde portable complète : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animées, métadonnées, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, préférences et positions de lecture inclus.",
+        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vérification des fichiers avant restauration ; seules les sauvegardes .au-backup protégées sont importables. Aucun compte, mot de passe ou session n’est exporté.",
+        "Inclure le rôle est une option décochée à l’export, réservée aux comptes Créateur ou Modérateur. À l’import, le transfert sur le compte connecté est facultatif et validé automatiquement par une preuve serveur. Les données peuvent être restaurées sans transférer de rôle.",
+        "Immersion : seule la phrase synchronisée actuellement chantée est visible. Les paroles et leurs minutages sont conservés.",
+        "Après dix secondes sans interaction, les commandes et informations disparaissent : pochette carrée à gauche et paroles à droite, ou pochette seule centrée et agrandie. Tout geste réaffiche immédiatement l’interface et remet le délai à zéro.",
+        "Le bouton Forcer une mise à jour est accessible dans Mon compte, y compris sans connexion, pour rechercher immédiatement une nouvelle version et suivre le parcours habituel."
       ]
     ],
     [
-      "Android 0.1.5 Â· 18V05.2",
+      "Android 0.1.5 · 18V05.2",
       "9 octobre 2026",
-      "Immersion reconstruite et rÃ©servÃ©e aux applications.",
+      "Immersion reconstruite et réservée aux applications.",
       [
-        "Immersion rÃ©servÃ©e aux applications Windows, Android et iPhone. Ã‰cran reconstruit : pochette carrÃ©e Ã  gauche, paroles Ã  droite, commandes et fermeture accessibles sans faire dÃ©filer toute la page.",
-        "Paroles synchronisÃ©es : minutages, progression et suivi automatique conservÃ©s. Paroles simples : dÃ©filement approximatif selon la position audio. DÃ©filement manuel et reprise automatique possibles.",
+        "Immersion réservée aux applications Windows, Android et iPhone. Écran reconstruit : pochette carrée à gauche, paroles à droite, commandes et fermeture accessibles sans faire défiler toute la page.",
+        "Paroles synchronisées : minutages, progression et suivi automatique conservés. Paroles simples : défilement approximatif selon la position audio. Défilement manuel et reprise automatique possibles.",
         "Prise en charge des morceaux Local et des futurs ajouts de paroles ; message explicite pour les morceaux sans paroles.",
-        "Site PC et mobile : le bouton Immersion affiche le message dâ€™exclusivitÃ© aux applications. Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Site PC et mobile : le bouton Immersion affiche le message d’exclusivité aux applications. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "Android 0.1.4 Â· 18V05",
+      "Android 0.1.4 · 18V05",
       "9 octobre 2026",
-      "Ã‰coute, sauvegardes locales et diagnostic des versions.",
+      "Écoute, sauvegardes locales et diagnostic des versions.",
       [
-        "Minuteur de sommeil : arrÃªt aprÃ¨s 15, 30 ou 60 minutes, ou Ã  la fin du morceau sans enchaÃ®ner. ContrÃ´le par Ã©chÃ©ance rÃ©elle, Ã©vÃ©nements audio et retour dans lâ€™interface.",
-        "Local : reprise du dernier morceau Ã  sa position mÃ©morisÃ©e, proposÃ©e sans lecture automatique. Reprise du catalogue conservÃ©e.",
-        "Sauvegarde complÃ¨te Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, mÃ©tadonnÃ©es et brouillons. Empreintes SHA-256 vÃ©rifiÃ©es avant restauration.",
-        "Restauration aprÃ¨s aperÃ§u : ajout atomique dâ€™une copie complÃ¨te avec nouveaux identifiants, sans remplacer les donnÃ©es existantes. Sauvegarde corrompue refusÃ©e ; limite ZIP de 4 Go.",
-        "Diagnostic des mises Ã  jour : version installÃ©e, derniÃ¨re version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalitÃ©s & astuces est complÃ©tÃ© dans Lire le reste."
+        "Minuteur de sommeil : arrêt après 15, 30 ou 60 minutes, ou à la fin du morceau sans enchaîner. Contrôle par échéance réelle, événements audio et retour dans l’interface.",
+        "Local : reprise du dernier morceau à sa position mémorisée, proposée sans lecture automatique. Reprise du catalogue conservée.",
+        "Sauvegarde complète Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, métadonnées et brouillons. Empreintes SHA-256 vérifiées avant restauration.",
+        "Restauration après aperçu : ajout atomique d’une copie complète avec nouveaux identifiants, sans remplacer les données existantes. Sauvegarde corrompue refusée ; limite ZIP de 4 Go.",
+        "Diagnostic des mises à jour : version installée, dernière version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalités & astuces est complété dans Lire le reste."
       ]
     ],
     [
       "Android 0.1.3",
       "2026-10-08",
-      "Recherche de mise Ã  jour depuis le compte.",
+      "Recherche de mise à jour depuis le compte.",
       [
-        "Bouton Â« Forcer une mise Ã  jour Â» dans le panneau Compte : recherche immÃ©diate de la derniÃ¨re version disponible.",
-        "La recherche manuelle contourne le report et le saut dâ€™une version, tout en conservant les choix habituels de mise Ã  jour.",
-        "Si aucune version plus rÃ©cente nâ€™existe, un message confirme que lâ€™application est Ã  jour.",
-        "TÃ©lÃ©chargement vÃ©rifiÃ© ; paramÃ¨tres et donnÃ©es locales conservÃ©s. Installation aprÃ¨s confirmation Android."
+        "Bouton « Forcer une mise à jour » dans le panneau Compte : recherche immédiate de la dernière version disponible.",
+        "La recherche manuelle contourne le report et le saut d’une version, tout en conservant les choix habituels de mise à jour.",
+        "Si aucune version plus récente n’existe, un message confirme que l’application est à jour.",
+        "Téléchargement vérifié ; paramètres et données locales conservés. Installation après confirmation Android."
       ]
     ],
     [
-      "Android 0.1.2 Â· 18V04 Â· Correctif du logo",
+      "Android 0.1.2 · 18V04 · Correctif du logo",
       "8 octobre 2026",
-      "RÃ©solution des icÃ´nes Android corrigÃ©e.",
+      "Résolution des icônes Android corrigée.",
       [
-        "Logo Android reconstruit directement depuis lâ€™image originale en haute rÃ©solution, sans rÃ©utiliser une miniature.",
-        "IcÃ´nes adaptatives corrigÃ©es : couches de 108 dp et images propres Ã  chaque densitÃ©, jusquâ€™Ã  432 Ã— 432 pixels. Anciennes icÃ´nes de 48 dp sÃ©parÃ©es du rendu adaptatif.",
-        "Logo de lâ€™en-tÃªte en PNG 1024 Ã— 1024 ; icÃ´nes Web gÃ©nÃ©rÃ©es Ã  leur taille rÃ©elle. Illustration et couleurs conservÃ©es."
+        "Logo Android reconstruit directement depuis l’image originale en haute résolution, sans réutiliser une miniature.",
+        "Icônes adaptatives corrigées : couches de 108 dp et images propres à chaque densité, jusqu’à 432 × 432 pixels. Anciennes icônes de 48 dp séparées du rendu adaptatif.",
+        "Logo de l’en-tête en PNG 1024 × 1024 ; icônes Web générées à leur taille réelle. Illustration et couleurs conservées."
       ]
     ],
     [
-      "Android 0.1.1 Â· 18V04 Â· Logo et nÃ©on",
+      "Android 0.1.1 · 18V04 · Logo et néon",
       "8 octobre 2026",
-      "Nouvelle icÃ´ne et contour lumineux des pochettes.",
+      "Nouvelle icône et contour lumineux des pochettes.",
       [
-        "Nouvelle icÃ´ne Android et nouveau logo dans lâ€™en-tÃªte Ã  partir de lâ€™illustration Avant lâ€™usine.",
-        "Halo nÃ©on rose et cyan animÃ© autour des pochettes du catalogue, du lecteur, du Blind Test et de la bibliothÃ¨que Local. Format carrÃ© et animation lumineuse des images conservÃ©s, sans modification de leur contraste.",
-        "Effets rÃ©duits : contour fixe discret. Effets dÃ©sactivÃ©s : contour retirÃ©. Pause des animations et prÃ©fÃ©rence systÃ¨me de rÃ©duction des mouvements respectÃ©es.",
-        "Guide Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste.",
-        "Version proposÃ©e automatiquement aux installations Android 0.1.0 : tÃ©lÃ©chargement contrÃ´lÃ© puis confirmation Android. ParamÃ¨tres et donnÃ©es conservÃ©s."
+        "Nouvelle icône Android et nouveau logo dans l’en-tête à partir de l’illustration Avant l’usine.",
+        "Halo néon rose et cyan animé autour des pochettes du catalogue, du lecteur, du Blind Test et de la bibliothèque Local. Format carré et animation lumineuse des images conservés, sans modification de leur contraste.",
+        "Effets réduits : contour fixe discret. Effets désactivés : contour retiré. Pause des animations et préférence système de réduction des mouvements respectées.",
+        "Guide Infos, fonctionnalités & astuces complété dans Lire le reste.",
+        "Version proposée automatiquement aux installations Android 0.1.0 : téléchargement contrôlé puis confirmation Android. Paramètres et données conservés."
       ]
     ],
     [
-      "Android 0.1.0 Â· PremiÃ¨re bÃªta",
+      "Android 0.1.0 · Première bêta",
       "8 octobre 2026",
-      "Avant lâ€™usine sur Android, avec lâ€™interface du site mobile.",
+      "Avant l’usine sur Android, avec l’interface du site mobile.",
       [
-        "Interface mobile et ressources embarquÃ©es dans lâ€™APK ; comptes, catalogue, paroles, Atelier et onglet Local issus des sources communes.",
-        "Logo de lâ€™application et prÃ©sentation adaptÃ©e Ã  Android.",
-        "Historique Android indÃ©pendant ; historique iOS disponible sans version publiÃ©e.",
-        "Bouton Retour Android : fermer le panneau ouvert ou revenir Ã  lâ€™Ã©cran prÃ©cÃ©dent avant de quitter.",
-        "Mises Ã  jour depuis lâ€™application : numÃ©ro de version, Plus tard, saut de la version ou Installer ; tÃ©lÃ©chargement vÃ©rifiÃ© avant la confirmation systÃ¨me Android.",
-        "Import de fichiers via le sÃ©lecteur Android et export des fichiers locaux via le panneau dâ€™enregistrement Android.",
-        "PremiÃ¨re bÃªta : les comportements sur appareil rÃ©el, notamment Ã©cran verrouillÃ© et lecture en arriÃ¨re-plan, restent Ã  valider."
+        "Interface mobile et ressources embarquées dans l’APK ; comptes, catalogue, paroles, Atelier et onglet Local issus des sources communes.",
+        "Logo de l’application et présentation adaptée à Android.",
+        "Historique Android indépendant ; historique iOS disponible sans version publiée.",
+        "Bouton Retour Android : fermer le panneau ouvert ou revenir à l’écran précédent avant de quitter.",
+        "Mises à jour depuis l’application : numéro de version, Plus tard, saut de la version ou Installer ; téléchargement vérifié avant la confirmation système Android.",
+        "Import de fichiers via le sélecteur Android et export des fichiers locaux via le panneau d’enregistrement Android.",
+        "Première bêta : les comportements sur appareil réel, notamment écran verrouillé et lecture en arrière-plan, restent à valider."
       ]
     ]
   ],
   "ios": [
     [
-      "iOS 1.0.6 Â· 18V05.2",
+      "iOS 1.0.7 · 18V06",
       "9 octobre 2026",
-      "Immersion reconstruite et rÃ©servÃ©e aux applications.",
+      "Sauvegardes protégées et immersion épurée.",
       [
-        "Immersion rÃ©servÃ©e aux applications Windows, Android et iPhone. Ã‰cran reconstruit : pochette carrÃ©e Ã  gauche, paroles Ã  droite, commandes et fermeture accessibles sans faire dÃ©filer toute la page.",
-        "Paroles synchronisÃ©es : minutages, progression et suivi automatique conservÃ©s. Paroles simples : dÃ©filement approximatif selon la position audio. DÃ©filement manuel et reprise automatique possibles.",
+        "Sauvegarde portable complète : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animées, métadonnées, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, préférences et positions de lecture inclus.",
+        "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vérification des fichiers avant restauration ; seules les sauvegardes .au-backup protégées sont importables. Aucun compte, mot de passe ou session n’est exporté.",
+        "Inclure le rôle est une option décochée à l’export, réservée aux comptes Créateur ou Modérateur. À l’import, le transfert sur le compte connecté est facultatif et validé automatiquement par une preuve serveur. Les données peuvent être restaurées sans transférer de rôle.",
+        "Immersion : seule la phrase synchronisée actuellement chantée est visible. Les paroles et leurs minutages sont conservés.",
+        "Après dix secondes sans interaction, les commandes et informations disparaissent : pochette carrée à gauche et paroles à droite, ou pochette seule centrée et agrandie. Tout geste réaffiche immédiatement l’interface et remet le délai à zéro.",
+        "Le bouton Forcer une mise à jour est accessible dans Mon compte, y compris sans connexion, pour rechercher immédiatement une nouvelle version et suivre le parcours habituel."
+      ]
+    ],
+    [
+      "iOS 1.0.6 · 18V05.2",
+      "9 octobre 2026",
+      "Immersion reconstruite et réservée aux applications.",
+      [
+        "Immersion réservée aux applications Windows, Android et iPhone. Écran reconstruit : pochette carrée à gauche, paroles à droite, commandes et fermeture accessibles sans faire défiler toute la page.",
+        "Paroles synchronisées : minutages, progression et suivi automatique conservés. Paroles simples : défilement approximatif selon la position audio. Défilement manuel et reprise automatique possibles.",
         "Prise en charge des morceaux Local et des futurs ajouts de paroles ; message explicite pour les morceaux sans paroles.",
-        "Site PC et mobile : le bouton Immersion affiche le message dâ€™exclusivitÃ© aux applications. Infos, fonctionnalitÃ©s & astuces actualisÃ© dans Lire le reste."
+        "Site PC et mobile : le bouton Immersion affiche le message d’exclusivité aux applications. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
       ]
     ],
     [
-      "iOS 1.0.5 Â· Service natif rÃ©parÃ©",
+      "iOS 1.0.5 · Service natif réparé",
       "9 octobre 2026",
-      "Correction de lâ€™initialisation du service de mise Ã  jour iPhone et iPad.",
+      "Correction de l’initialisation du service de mise à jour iPhone et iPad.",
       [
-        "La scÃ¨ne iOS ouvre dÃ©sormais le contrÃ´leur personnalisÃ© qui enregistre le service IOSUpdates. Le contrÃ´leur standard contournait cette initialisation malgrÃ© la modification du storyboard.",
-        "RÃ©tablissement de la recherche native, du tÃ©lÃ©chargement vÃ©rifiÃ© de lâ€™IPA et de lâ€™ouverture dans un outil de signature. Les rÃ©glages natifs de transparence et de contraste sont Ã©galement accessibles.",
-        "Les anciennes installations privÃ©es du service nÃ©cessitent une installation manuelle de cet IPA pour recevoir ce correctif. Signature et confirmation dâ€™installation restent nÃ©cessaires sur iOS.",
-        "FonctionnalitÃ©s 18V05 et prÃ©sentation verre conservÃ©es. Aucun changement de version des autres plateformes."
+        "La scène iOS ouvre désormais le contrôleur personnalisé qui enregistre le service IOSUpdates. Le contrôleur standard contournait cette initialisation malgré la modification du storyboard.",
+        "Rétablissement de la recherche native, du téléchargement vérifié de l’IPA et de l’ouverture dans un outil de signature. Les réglages natifs de transparence et de contraste sont également accessibles.",
+        "Les anciennes installations privées du service nécessitent une installation manuelle de cet IPA pour recevoir ce correctif. Signature et confirmation d’installation restent nécessaires sur iOS.",
+        "Fonctionnalités 18V05 et présentation verre conservées. Aucun changement de version des autres plateformes."
       ]
     ],
     [
-      "iOS 1.0.4 Â· 18V05",
+      "iOS 1.0.4 · 18V05",
       "9 octobre 2026",
-      "Ã‰coute, sauvegardes locales et diagnostic des versions.",
+      "Écoute, sauvegardes locales et diagnostic des versions.",
       [
-        "Minuteur de sommeil : arrÃªt aprÃ¨s 15, 30 ou 60 minutes, ou Ã  la fin du morceau sans enchaÃ®ner. ContrÃ´le par Ã©chÃ©ance rÃ©elle, Ã©vÃ©nements audio et retour dans lâ€™interface.",
-        "Local : reprise du dernier morceau Ã  sa position mÃ©morisÃ©e, proposÃ©e sans lecture automatique. Reprise du catalogue conservÃ©e.",
-        "Sauvegarde complÃ¨te Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, mÃ©tadonnÃ©es et brouillons. Empreintes SHA-256 vÃ©rifiÃ©es avant restauration.",
-        "Restauration aprÃ¨s aperÃ§u : ajout atomique dâ€™une copie complÃ¨te avec nouveaux identifiants, sans remplacer les donnÃ©es existantes. Sauvegarde corrompue refusÃ©e ; limite ZIP de 4 Go.",
-        "Diagnostic des mises Ã  jour : version installÃ©e, derniÃ¨re version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalitÃ©s & astuces est complÃ©tÃ© dans Lire le reste."
+        "Minuteur de sommeil : arrêt après 15, 30 ou 60 minutes, ou à la fin du morceau sans enchaîner. Contrôle par échéance réelle, événements audio et retour dans l’interface.",
+        "Local : reprise du dernier morceau à sa position mémorisée, proposée sans lecture automatique. Reprise du catalogue conservée.",
+        "Sauvegarde complète Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, métadonnées et brouillons. Empreintes SHA-256 vérifiées avant restauration.",
+        "Restauration après aperçu : ajout atomique d’une copie complète avec nouveaux identifiants, sans remplacer les données existantes. Sauvegarde corrompue refusée ; limite ZIP de 4 Go.",
+        "Diagnostic des mises à jour : version installée, dernière version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalités & astuces est complété dans Lire le reste."
       ]
     ],
     [
-      "iOS 1.0.3 Â· Interface verre",
+      "iOS 1.0.3 · Interface verre",
       "2026-10-09",
-      "PrÃ©sentation translucide dÃ©diÃ©e Ã  iPhone et iPad et recherche de mise Ã  jour renforcÃ©e.",
+      "Présentation translucide dédiée à iPhone et iPad et recherche de mise à jour renforcée.",
       [
-        "Rendu inspirÃ© du Liquid Glass : navigation, lecteur, boutons, panneaux, cartes, formulaires et fenÃªtres translucides avec reflets subtils. Pochettes et contrastes des images conservÃ©s.",
-        "Apparence iOS dÃ©diÃ©e : bouton jour/sombre dÃ©sactivÃ©, y compris aprÃ¨s connexion. RÃ©duction de la transparence et augmentation du contraste iOS prises en compte ; effets rÃ©duits et rÃ©duction des mouvements conservÃ©s.",
-        "NouveautÃ©s : historique iOS en premier, autres applications ensuite, historiques Site mobile et Site PC en bas.",
-        "Recherche des versions par le rÃ©seau natif iOS, sans cache local et avec dÃ©lai limitÃ©. VÃ©rification au retour dans lâ€™application ; une erreur de recherche est signalÃ©e au lieu de rester silencieuse.",
-        "Compte â†’ Forcer une mise Ã  jour conserve la recherche immÃ©diate, le tÃ©lÃ©chargement vÃ©rifiÃ© et lâ€™ouverture dans un outil de signature compatible. Signature et installation de lâ€™IPA restent nÃ©cessaires.",
-        "Infos, fonctionnalitÃ©s & astuces complÃ©tÃ© dans Lire le reste. Les autres plateformes conservent leurs versions et leur interface."
+        "Rendu inspiré du Liquid Glass : navigation, lecteur, boutons, panneaux, cartes, formulaires et fenêtres translucides avec reflets subtils. Pochettes et contrastes des images conservés.",
+        "Apparence iOS dédiée : bouton jour/sombre désactivé, y compris après connexion. Réduction de la transparence et augmentation du contraste iOS prises en compte ; effets réduits et réduction des mouvements conservés.",
+        "Nouveautés : historique iOS en premier, autres applications ensuite, historiques Site mobile et Site PC en bas.",
+        "Recherche des versions par le réseau natif iOS, sans cache local et avec délai limité. Vérification au retour dans l’application ; une erreur de recherche est signalée au lieu de rester silencieuse.",
+        "Compte → Forcer une mise à jour conserve la recherche immédiate, le téléchargement vérifié et l’ouverture dans un outil de signature compatible. Signature et installation de l’IPA restent nécessaires.",
+        "Infos, fonctionnalités & astuces complété dans Lire le reste. Les autres plateformes conservent leurs versions et leur interface."
       ]
     ],
     [
       "iOS 1.0.2",
       "2026-10-08",
-      "Recherche de mise Ã  jour depuis le compte.",
+      "Recherche de mise à jour depuis le compte.",
       [
-        "Bouton Â« Forcer une mise Ã  jour Â» dans le panneau Compte : recherche immÃ©diate de la derniÃ¨re version disponible.",
-        "La recherche manuelle contourne le report et le saut dâ€™une version, tout en conservant les choix habituels de mise Ã  jour.",
-        "Si aucune version plus rÃ©cente nâ€™existe, un message confirme que lâ€™application est Ã  jour.",
-        "TÃ©lÃ©chargement vÃ©rifiÃ© ; paramÃ¨tres et donnÃ©es locales conservÃ©s. Lâ€™IPA est ensuite transmis Ã  un outil de signature compatible ; signature et installation restent manuelles."
+        "Bouton « Forcer une mise à jour » dans le panneau Compte : recherche immédiate de la dernière version disponible.",
+        "La recherche manuelle contourne le report et le saut d’une version, tout en conservant les choix habituels de mise à jour.",
+        "Si aucune version plus récente n’existe, un message confirme que l’application est à jour.",
+        "Téléchargement vérifié ; paramètres et données locales conservés. L’IPA est ensuite transmis à un outil de signature compatible ; signature et installation restent manuelles."
       ]
     ],
     [
       "iOS 1.0.1",
       "2026-10-08",
-      "Choix libre de lâ€™outil de signature pour les mises Ã  jour.",
+      "Choix libre de l’outil de signature pour les mises à jour.",
       [
-        "Bouton Â« Ouvrir dans un outil de signature Â» : lâ€™IPA tÃ©lÃ©chargÃ© peut Ãªtre transmis Ã  toute application compatible proposÃ©e par iOS.",
-        "Instructions de signature gÃ©nÃ©rales ; ESign reste un exemple et nâ€™est plus prÃ©sentÃ© comme obligatoire.",
-        "En cas dâ€™Ã©chec dâ€™ouverture, importer le fichier depuis Fichiers > Avant lâ€™usine > MisesAJour dans lâ€™outil choisi.",
-        "DÃ©tection dynamique de cette version depuis iOS 1.0, tÃ©lÃ©chargement natif avec contrÃ´le de taille et SHA-256 ; signature et installation restent Ã  effectuer avec un certificat et un profil valides."
+        "Bouton « Ouvrir dans un outil de signature » : l’IPA téléchargé peut être transmis à toute application compatible proposée par iOS.",
+        "Instructions de signature générales ; ESign reste un exemple et n’est plus présenté comme obligatoire.",
+        "En cas d’échec d’ouverture, importer le fichier depuis Fichiers > Avant l’usine > MisesAJour dans l’outil choisi.",
+        "Détection dynamique de cette version depuis iOS 1.0, téléchargement natif avec contrôle de taille et SHA-256 ; signature et installation restent à effectuer avec un certificat et un profil valides."
       ]
     ],
     [
       "iOS 1.0",
       "2026-10-08",
-      "PremiÃ¨re version iPhone et iPad Ã  signer avant installation.",
+      "Première version iPhone et iPad à signer avant installation.",
       [
-        "Interface mobile embarquÃ©e, collection, paroles, Atelier et bibliothÃ¨que locale.",
-        "Pochettes animÃ©es et nÃ©ons avec rÃ©glages de rÃ©duction des effets.",
+        "Interface mobile embarquée, collection, paroles, Atelier et bibliothèque locale.",
+        "Pochettes animées et néons avec réglages de réduction des effets.",
         "Export des fichiers locaux par le menu de partage iOS.",
-        "DÃ©tection des nouvelles versions iOS sur GitHub, report ou saut dâ€™une version.",
-        "TÃ©lÃ©chargement natif de lâ€™IPA avec progression et contrÃ´le SHA-256.",
-        "Bouton Â« Ouvrir dans ESign Â» via le menu de partage pour signer et installer le fichier.",
-        "IPA non signÃ© : certificat et profil de signature valides requis. Installation et conservation des donnÃ©es Ã  confirmer sur appareil rÃ©el."
+        "Détection des nouvelles versions iOS sur GitHub, report ou saut d’une version.",
+        "Téléchargement natif de l’IPA avec progression et contrôle SHA-256.",
+        "Bouton « Ouvrir dans ESign » via le menu de partage pour signer et installer le fichier.",
+        "IPA non signé : certificat et profil de signature valides requis. Installation et conservation des données à confirmer sur appareil réel."
       ]
     ]
   ]
