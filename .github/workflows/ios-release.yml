@@ -1,5 +1,5 @@
 name: iOS IPA release
-# Verify native services and account update control before publishing the iOS package.
+# Verify native services, account update control and listener compatibility before publication.
 on:
   push:
     branches: [main]

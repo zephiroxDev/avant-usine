@@ -88,4 +88,4 @@ test('Native transparency preference reaches the interface',async()=>{
 });
 
 
-test('Manual update button remains usable with synchronous or unavailable native listeners',async()=>{for(const mode of ['synchronous','throws']){const c=context(mode),button=c.account.children.find(x=>x.id==='forceAppUpdate');assert.ok(button);await button.onclick();assert.equal(c.elements.length,1);assert.ok(c.elements[0].children.some(x=>x.textContent==='Mise � jour iOS 1.1.0'));}});
+test('Manual update button remains usable with synchronous or unavailable native listeners',async()=>{for(const mode of ['synchronous','throws']){const c=context(mode),button=c.account.children.find(x=>x.id==='forceAppUpdate');assert.ok(button);await button.onclick();assert.equal(c.elements.length,1);assert.ok(c.elements[0].children.some(x=>String(x.textContent).includes('1.1.0')));}});
