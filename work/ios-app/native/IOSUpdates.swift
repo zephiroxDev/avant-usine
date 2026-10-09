@@ -8,6 +8,8 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
     public let identifier = "IOSUpdatesPlugin"
     public let jsName = "IOSUpdates"
     public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "checkReleases", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "accessibility", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "download", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "openIn", returnType: CAPPluginReturnPromise)
     ]
@@ -19,6 +21,39 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
     private var lastProgress = Date.distantPast
     private var documentController: UIDocumentInteractionController?
     private var openCall: CAPPluginCall?
+
+    public override func load() {
+        NotificationCenter.default.addObserver(self, selector: #selector(resumed), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(accessibilityChanged), name: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(accessibilityChanged), name: UIAccessibility.darkerSystemColorsStatusDidChangeNotification, object: nil)
+    }
+
+    deinit { NotificationCenter.default.removeObserver(self) }
+
+    @objc private func resumed() { notifyListeners("resume", data: [:]) }
+    @objc private func accessibilityChanged() { notifyListeners("accessibility", data: accessibilityValues()) }
+    private func accessibilityValues() -> [String: Any] {
+        return ["reduceTransparency": UIAccessibility.isReduceTransparencyEnabled, "increaseContrast": UIAccessibility.isDarkerSystemColorsEnabled]
+    }
+    @objc func accessibility(_ call: CAPPluginCall) {
+        DispatchQueue.main.async { call.resolve(self.accessibilityValues()) }
+    }
+
+    @objc func checkReleases(_ call: CAPPluginCall) {
+        let url = URL(string: "https://api.github.com/repos/zephiroxDev/avant-usine/releases?per_page=100")!
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 25)
+        request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+        request.setValue("Avant-usine-iOS", forHTTPHeaderField: "User-Agent")
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error { call.reject("Recherche de mise à jour : " + error.localizedDescription); return }
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200,
+                  let data = data, let json = String(data: data, encoding: .utf8) else {
+                let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+                call.reject("Recherche de mise à jour indisponible (HTTP \(status)). Réessaie plus tard."); return
+            }
+            call.resolve(["json": json])
+        }.resume()
+    }
 
     @objc func openIn(_ call: CAPPluginCall) {
         DispatchQueue.main.async {

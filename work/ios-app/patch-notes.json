@@ -1,5 +1,18 @@
 [
   [
+    "iOS 1.0.3 · Interface verre",
+    "2026-10-09",
+    "Présentation translucide dédiée à iPhone et iPad et recherche de mise à jour renforcée.",
+    [
+      "Rendu inspiré du Liquid Glass : navigation, lecteur, boutons, panneaux, cartes, formulaires et fenêtres translucides avec reflets subtils. Pochettes et contrastes des images conservés.",
+      "Apparence iOS dédiée : bouton jour/sombre désactivé, y compris après connexion. Réduction de la transparence et augmentation du contraste iOS prises en compte ; effets réduits et réduction des mouvements conservés.",
+      "Nouveautés : historique iOS en premier, autres applications ensuite, historiques Site mobile et Site PC en bas.",
+      "Recherche des versions par le réseau natif iOS, sans cache local et avec délai limité. Vérification au retour dans l’application ; une erreur de recherche est signalée au lieu de rester silencieuse.",
+      "Compte → Forcer une mise à jour conserve la recherche immédiate, le téléchargement vérifié et l’ouverture dans un outil de signature compatible. Signature et installation de l’IPA restent nécessaires.",
+      "Infos, fonctionnalités & astuces complété dans Lire le reste. Les autres plateformes conservent leurs versions et leur interface."
+    ]
+  ],
+  [
     "iOS 1.0.2",
     "2026-10-08",
     "Recherche de mise à jour depuis le compte.",

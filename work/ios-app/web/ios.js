@@ -18,13 +18,21 @@ document.addEventListener('click',async event=>{
  }catch(error){notify('Export : '+(error.message||error));}
  finally{if(path)await files.deleteFile({path,directory:'CACHE'}).catch(()=>{});}
 },true);
-let checking=false,offered=false;
+let checking=false,offered=false,lastCheck=0,reportedFailure=false;
 async function check(force=false){
- if(!native||checking||offered||(!force&&Date.now()<Number(localStorage.getItem(prefix+'remind')||0)))return;
+ if(!native){if(force)notify('Le service de mise à jour iOS est indisponible. Ferme puis rouvre l’application.');return;}
+ if(checking||offered||(!force&&(Date.now()<Number(localStorage.getItem(prefix+'remind')||0)||Date.now()-lastCheck<60000)))return;
  checking=true;try{
-  const response=await fetch('https://api.github.com/repos/zephiroxDev/avant-usine/releases?per_page=100',{headers:{Accept:'application/vnd.github+json'}});
-  if(!response.ok)throw Error('Vérification des mises à jour indisponible.');
-  const latest=choose(await response.json(),current);
+  let releases;
+  if(typeof native.checkReleases==='function')releases=JSON.parse((await native.checkReleases()).json);
+  else{
+   const response=await fetch('https://api.github.com/repos/zephiroxDev/avant-usine/releases?per_page=100',{cache:'no-store',headers:{Accept:'application/vnd.github+json'},signal:AbortSignal.timeout(25000)});
+   if(!response.ok)throw Error('Vérification des mises à jour indisponible (HTTP '+response.status+').');
+   releases=await response.json();
+  }
+  if(!Array.isArray(releases))throw Error('Réponse de mise à jour invalide.');
+  lastCheck=Date.now();reportedFailure=false;
+  const latest=choose(releases,current);
   if(!latest){if(force)notify('L’application iOS est à jour.');return;}
   const version=latest.match[1];
   if(!force&&localStorage.getItem(prefix+'skip')===version){if(force)notify('La version '+version+' est ignorée. La suivante sera proposée.');return;}
@@ -55,10 +63,15 @@ async function check(force=false){
   modal.addEventListener('cancel',e=>{if(download.disabled){e.preventDefault();return;}localStorage.setItem(prefix+'remind',String(Date.now()+day));});
   modal.addEventListener('close',()=>{offered=false;modal.remove();});
   document.body.append(modal);modal.showModal();
- }catch(error){if(force)notify(error.message||String(error));}finally{checking=false;}
+ }catch(error){lastCheck=Date.now();if(force||!reportedFailure)notify((error.message||String(error))+' Réessaie depuis Compte → Forcer une mise à jour.');reportedFailure=true;}finally{checking=false;}
 }
 const b=document.createElement('button');b.className='text-button';b.textContent='Vérifier les mises à jour iOS';b.onclick=()=>check(true);document.querySelector('.footer')?.append(b);
 setTimeout(()=>check(),10000);setInterval(()=>check(),6*60*60*1000);window.addEventListener('focus',()=>check());
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
+native?.addListener('resume',()=>check()).catch(()=>{});
+const applyAccessibility=value=>{document.documentElement.dataset.reduceTransparency=String(!!value.reduceTransparency);document.documentElement.dataset.increaseContrast=String(!!value.increaseContrast);};
+if(typeof native?.accessibility==='function')native.accessibility().then(applyAccessibility).catch(()=>{});
+native?.addListener('accessibility',applyAccessibility).catch(()=>{});
 if(window.AU_IOS_TEST)window.AU_IOS_TEST.exports={compare,choose,check,current};
 const accountUpdate=document.createElement('button');accountUpdate.type='button';accountUpdate.className='button secondary';accountUpdate.id='forceAppUpdate';accountUpdate.textContent='Forcer une mise à jour';accountUpdate.onclick=async()=>{accountUpdate.disabled=true;document.querySelector('#accountDialog')?.close();try{await check(true);}finally{accountUpdate.disabled=false;}};document.querySelector('#accountMember .actions')?.append(accountUpdate);
 

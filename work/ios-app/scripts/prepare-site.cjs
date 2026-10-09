@@ -18,8 +18,16 @@ const history=JSON.parse(fs.readFileSync(path.resolve(root,'../github-sync-impor
 history.ios=require('../patch-notes.json');fs.writeFileSync(path.join(dest,historyFile),prefix+JSON.stringify(history)+';');
 const main=html.match(/src="\.\/(app-\d+v\d+\.js)"/)[1];
 let code=fs.readFileSync(path.join(dest,main),'utf8');
+const platformNames="const names={'web-pc':'Site PC','desktop-pc':'Application PC','web-mobile':'Site mobile','android':'Application Android','ios':'Application iOS'};";
+if(!code.includes(platformNames))throw Error('Sélecteur des plateformes introuvable');
+code=code.replace(platformNames,"const names={'ios':'Application iOS','android':'Application Android','desktop-pc':'Application PC','web-mobile':'Site mobile','web-pc':'Site PC'};");
+code=code.replace("root.dataset.theme=t==='light'?'light':'dark';","root.dataset.theme='dark';");
+const themePlacement="$('accountHeading').parentElement.after(themeButton);";
+if(!code.includes(themePlacement))throw Error('Bouton de thème introuvable');
+code=code.replace(themePlacement,themePlacement+"themeButton.disabled=true;themeButton.hidden=true;");
 const needle='for(const [title,text]of [';
 if(!code.includes(needle))throw Error('Section Infos introuvable');
 code=code.replace(needle,needle+"\n['Mises à jour iPhone et iPad','L’application télécharge les nouveaux IPA et vérifie leur empreinte. Ouvrir dans un outil de signature utilise le menu natif iOS ; un certificat et un profil valides sont nécessaires pour signer puis installer. Garder le même identifiant et une signature compatible pour conserver les données.'],");
+code=code.replace(needle,needle+"\n['Interface verre iOS','Sur iPhone et iPad, les commandes, panneaux et cartes utilisent un verre translucide. L’apparence dédiée remplace le bouton jour/sombre. Réduire la transparence et augmenter le contraste dans les réglages iOS renforcent les surfaces ; les effets réduits restent disponibles. Les historiques des applications apparaissent avant ceux du site.'],");
 fs.writeFileSync(path.join(dest,main),code);
 console.log('Interface iOS '+release.version+' préparée.');
