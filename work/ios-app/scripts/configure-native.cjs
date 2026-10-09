@@ -22,4 +22,10 @@ let xml=fs.readFileSync(storyboard,'utf8');
 xml=xml.replace('customClass="CAPBridgeViewController" customModule="Capacitor"','customClass="ViewController" customModule="App" customModuleProvider="target"');
 if(!xml.includes('customClass="ViewController"'))throw Error('Bridge storyboard was not adapted');
 fs.writeFileSync(storyboard,xml);
+// Capacitor 8 creates the root controller in SceneDelegate, bypassing Main.storyboard.
+const sceneFile=path.join(app,'SceneDelegate.swift');
+let scene=fs.readFileSync(sceneFile,'utf8');
+scene=scene.replace('window?.rootViewController = CAPBridgeViewController()','window?.rootViewController = ViewController()');
+if(!scene.includes('window?.rootViewController = ViewController()'))throw Error('iOS scene does not initialize the custom bridge');
+fs.writeFileSync(sceneFile,scene);
 cp.execFileSync('python',['scripts/configure-plist.py'],{cwd:root,stdio:'inherit'});

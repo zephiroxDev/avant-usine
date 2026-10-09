@@ -84,3 +84,4 @@ test('Native transparency preference reaches the interface',async()=>{
  const c=context();c.events.accessibility({reduceTransparency:true,increaseContrast:true});
  const code=fs.readFileSync(path.join(root,'native/IOSUpdates.swift'),'utf8');assert.ok(code.includes('UIAccessibility.isReduceTransparencyEnabled'));
 });
+

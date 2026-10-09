@@ -20,7 +20,7 @@ document.addEventListener('click',async event=>{
 },true);
 let checking=false,offered=false,lastCheck=0,reportedFailure=false;window.AU_UPDATE_DIAGNOSTIC?.configure({platform:'ios',current,search:()=>check(true,true)});
 async function check(force=false,diagnose=false){
- if(!native){if(force)notify('Le service de mise à jour iOS est indisponible. Ferme puis rouvre l’application.');return;}
+ if(!native){const error='Le service de mise à jour iOS est absent de cette installation. Télécharge puis signe la dernière IPA depuis le site pour réparer cette installation.';window.AU_UPDATE_DIAGNOSTIC?.record({error});if(force)notify(error);return;}
  if(checking||offered||(!force&&(Date.now()<Number(localStorage.getItem(prefix+'remind')||0)||Date.now()-lastCheck<60000)))return;
  checking=true;try{
   let releases;

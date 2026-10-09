@@ -50,6 +50,9 @@ jobs:
           pnpm exec cap add ios
           pnpm exec cap sync ios
           node scripts/configure-native.cjs
+      - name: Verify native update service in running iOS simulator
+        working-directory: work/ios-app
+        run: python scripts/smoke-simulator.py
       - name: Compile iPhone and iPad executable
         working-directory: work/ios-app
         run: |

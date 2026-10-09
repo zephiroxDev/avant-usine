@@ -1,5 +1,16 @@
 [
   [
+    "iOS 1.0.5 · Service natif réparé",
+    "9 octobre 2026",
+    "Correction de l’initialisation du service de mise à jour iPhone et iPad.",
+    [
+      "La scène iOS ouvre désormais le contrôleur personnalisé qui enregistre le service IOSUpdates. Le contrôleur standard contournait cette initialisation malgré la modification du storyboard.",
+      "Rétablissement de la recherche native, du téléchargement vérifié de l’IPA et de l’ouverture dans un outil de signature. Les réglages natifs de transparence et de contraste sont également accessibles.",
+      "Les anciennes installations privées du service nécessitent une installation manuelle de cet IPA pour recevoir ce correctif. Signature et confirmation d’installation restent nécessaires sur iOS.",
+      "Fonctionnalités 18V05 et présentation verre conservées. Aucun changement de version des autres plateformes."
+    ]
+  ],
+  [
     "iOS 1.0.4 · 18V05",
     "9 octobre 2026",
     "Écoute, sauvegardes locales et diagnostic des versions.",

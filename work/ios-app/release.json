@@ -1,8 +1,8 @@
 {
   "platform": "ios",
-  "version": "1.0.4",
-  "buildNumber": 5,
-  "releaseId": "iOS 1.0.4 · 18V05",
+  "version": "1.0.5",
+  "buildNumber": 6,
+  "releaseId": "iOS 1.0.5 · 18V05 · Correction du service natif",
   "channel": "unsigned-beta",
   "source": "../github-sync-import"
 }
