@@ -430,6 +430,17 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "18V05.2 · Windows 0.4.7",
+      "9 octobre 2026",
+      "Immersion reconstruite et réservée aux applications.",
+      [
+        "Immersion réservée aux applications Windows, Android et iPhone. Écran reconstruit : pochette carrée à gauche, paroles à droite, commandes et fermeture accessibles sans faire défiler toute la page.",
+        "Paroles synchronisées : minutages, progression et suivi automatique conservés. Paroles simples : défilement approximatif selon la position audio. Défilement manuel et reprise automatique possibles.",
+        "Prise en charge des morceaux Local et des futurs ajouts de paroles ; message explicite pour les morceaux sans paroles.",
+        "Site PC et mobile : le bouton Immersion affiche le message d’exclusivité aux applications. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
+      ]
+    ],
+    [
       "18V05 · Windows 0.4.6",
       "9 octobre 2026",
       "Écoute, sauvegardes locales et diagnostic des versions.",
@@ -1151,6 +1162,17 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "iOS 1.0.6 · 18V05.2",
+      "9 octobre 2026",
+      "Immersion reconstruite et réservée aux applications.",
+      [
+        "Immersion réservée aux applications Windows, Android et iPhone. Écran reconstruit : pochette carrée à gauche, paroles à droite, commandes et fermeture accessibles sans faire défiler toute la page.",
+        "Paroles synchronisées : minutages, progression et suivi automatique conservés. Paroles simples : défilement approximatif selon la position audio. Défilement manuel et reprise automatique possibles.",
+        "Prise en charge des morceaux Local et des futurs ajouts de paroles ; message explicite pour les morceaux sans paroles.",
+        "Site PC et mobile : le bouton Immersion affiche le message d’exclusivité aux applications. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
+      ]
+    ],
     [
       "iOS 1.0.5 · Service natif réparé",
       "9 octobre 2026",

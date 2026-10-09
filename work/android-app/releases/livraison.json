@@ -1,10 +1,9 @@
 {
   "platform": "android",
-  "version": "0.1.4",
-  "versionCode": 5,
-  "sourceCommit": "92ade407962b392c95ce876751a7cd9ef70ac219",
-  "file": "Avant-Usine-Android-0.1.4.apk",
-  "bytes": 11865362,
-  "sha256": "78c1b7fe9a09ae318791b6692c62f6a1fb48fa08cef774c244c6aebf04a23ef7",
-  "certificateSha256": "c56f1a5c2043a653b57729f8ad8cb7346c95fae2917c79307c4c699398a751b3"
+  "version": "0.1.5",
+  "versionCode": 6,
+  "sourceCommit": "629dfa2ef9fa24c5fd0acdc324c1a999423cb52b",
+  "file": "Avant-Usine-Android-0.1.5.apk",
+  "bytes": 11865523,
+  "sha256": "5ba09e65fccb24711befbae60c9aea1b7b3b35a61babb301e389273cfa643aa7"
 }
