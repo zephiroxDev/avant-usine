@@ -1,0 +1,27 @@
+{
+  "format": 1,
+  "images": [
+    {
+      "id": "18v08-all",
+      "patch": "18V08",
+      "image": "promo-18v08.png",
+      "platforms": [
+        "Site 18V08",
+        "Windows 0.4.10",
+        "Android 0.1.8",
+        "iOS 1.0.10"
+      ]
+    },
+    {
+      "id": "18v07-all",
+      "patch": "18V07",
+      "image": "promo-18v07.png",
+      "platforms": [
+        "Site 18V07",
+        "Windows 0.4.9",
+        "Android 0.1.7",
+        "iOS 1.0.9"
+      ]
+    }
+  ]
+}

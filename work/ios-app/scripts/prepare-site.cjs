@@ -1,3 +1,4 @@
+require('../../mine-sync/check-promo.cjs')(require('../release.json').releaseId);
 const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process');
 const root=path.resolve(__dirname,'..'),dest=path.join(root,'site'),android=path.resolve(root,'../android-app');
 cp.execFileSync(process.execPath,[path.join(android,'scripts/prepare-site.cjs')],{stdio:'inherit'});

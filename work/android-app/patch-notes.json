@@ -1,5 +1,16 @@
 [
   [
+    "Android 0.1.8 · 18V08",
+    "10 octobre 2026",
+    "Paroles au bon moment et historiques publics clarifiés.",
+    [
+      "Paroles synchronisées : seules les lignes actuellement prononcées restent affichées dans le lecteur normal et le mode immersion des applications. Les lignes précédentes et suivantes sont masquées.",
+      "Les lignes dont les timings se chevauchent restent visibles ensemble. Le Highlight Progression continue sur chacune d’elles, sans masquer une phrase encore chantée.",
+      "Les silences entre des lignes possédant une fin précise n’affichent plus une ancienne phrase. Un retour en arrière retrouve les paroles correspondant à la position audio.",
+      "Les anciennes Patch Notes ont été relues pour ne conserver que les fonctionnalités destinées au public."
+    ]
+  ],
+  [
     "Android 0.1.7 · 18V07",
     "10 octobre 2026",
     "Lecteur mobile temporairement masquable et fichiers Local durables.",
@@ -21,7 +32,6 @@
     [
       "Sauvegarde portable complète : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animées, métadonnées, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, préférences et positions de lecture inclus.",
       "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vérification des fichiers avant restauration ; seules les sauvegardes .au-backup protégées sont importables. Aucun compte, mot de passe ou session n’est exporté.",
-      "Inclure le rôle est une option décochée à l’export, réservée aux comptes Créateur ou Modérateur. À l’import, le transfert sur le compte connecté est facultatif et validé automatiquement par une preuve serveur. Les données peuvent être restaurées sans transférer de rôle.",
       "Immersion : seule la phrase synchronisée actuellement chantée est visible. Les paroles et leurs minutages sont conservés.",
       "Après dix secondes sans interaction, les commandes et informations disparaissent : pochette carrée à gauche et paroles à droite, ou pochette seule centrée et agrandie. Tout geste réaffiche immédiatement l’interface et remet le délai à zéro.",
       "Le bouton Forcer une mise à jour est accessible dans Mon compte, y compris sans connexion, pour rechercher immédiatement une nouvelle version et suivre le parcours habituel."

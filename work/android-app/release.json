@@ -1,8 +1,8 @@
 {
   "platform": "android",
-  "version": "0.1.7",
-  "versionCode": 8,
+  "version": "0.1.8",
+  "versionCode": 9,
   "channel": "beta",
   "source": "../github-sync-import",
-  "releaseId": "18V07"
+  "releaseId": "18V08"
 }

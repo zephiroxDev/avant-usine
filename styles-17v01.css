@@ -39,3 +39,6 @@
 .au-app-platform .button{width:100%;font-size:12px;padding:11px 9px;text-align:center}
 .au-app-platform .text-button{font-size:11px;color:#c8dceb;text-align:center;line-height:1.5}
 @media(max-width:680px){.au-app-platforms{grid-template-columns:1fr;gap:10px}.au-app-platform{padding:12px}.au-app-announcement{padding:18px}}
+
+.au-current-lyrics-only .au-lyric-line[hidden]{display:none!important}
+.au-current-lyrics-only .au-lyric-line{opacity:1;transform:none}
