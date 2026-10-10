@@ -117,7 +117,7 @@ window.AU_PLATFORM_HISTORIES={
       [
         "Partage individuel de chaque morceau : lien direct, panneau d’arrivée, auteur et profil pour les comptes, indication anonyme et première date de création conservée. Copier le lien et partage natif lorsque disponible.",
         "Vitesse de lecture 0,50×, 0,75×, 1× ou 2× dans Highlight Progression et synchronisation avancée, modifiable sans perdre les repères. Les timings suivent toujours la position réelle dans le morceau. Vitesse sauvegardée dans le brouillon et rétablie à la fermeture.",
-        "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé et prévisualisation complète avant approbation maintenue.",
+        "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé.",
         "Infos, fonctionnalités & astuces complété dans Lire le reste."
       ]
     ],
@@ -130,7 +130,7 @@ window.AU_PLATFORM_HISTORIES={
         "Highlight Progression : une seule phrase visible. Terminer cette phrase met la musique en pause, masque la phrase terminée et révèle uniquement la suivante. Les phrases suivantes restent masquées ; la phrase actuelle peut défiler sur mobile.",
         "Synchronisation avancée : toutes les paroles visibles et deux flèches. La lecture démarre à l’ouverture de l’atelier ; ↓ marque le départ de la phrase et avance, puis marque la fin après la dernière phrase. ↑ efface les repères à reprendre, revient juste avant la phrase précédente et relance la lecture. Aucun minutage à saisir ni raccourci requis.",
         "Fenêtres mobiles : dimensions adaptées à la zone visible et au clavier, contenu défilant, en-têtes et fermeture accessibles. Les fenêtres superposées gardent la fermeture et le retour au panneau précédent.",
-        "Brouillons, validation des synchronisations et vérification complète avant approbation conservés. Guide actualisé dans Lire le reste."
+        "Brouillons et envoi des contributions conservés. Guide actualisé dans Lire le reste."
       ]
     ],
     [
@@ -223,7 +223,6 @@ window.AU_PLATFORM_HISTORIES={
         "Immersion sur une grande pochette floutée, avec voile sombre pour la lisibilité et disparition des fonds gris.",
         "Transitions en fondu et léger flou, teintées par une couleur extraite de la pochette ; suppression du cadre autour des paroles.",
         "Les synchronisations du site, de l’application et les fichiers LRC/JSON utilisent le même moteur public pendant leur vérification : timings, backs, styles et suivi identiques.",
-        "Les corrections de timings sont regroupées dans un panneau repliable. Approuver reste disponible uniquement après écoute complète ; les passages sautés ne sont pas validés.",
         "Arrondi uniforme des pochettes porté de 4 à 10 pixels, avec format carré conservé. Les préférences de réduction des animations sont respectées."
       ]
     ],
@@ -253,18 +252,6 @@ window.AU_PLATFORM_HISTORIES={
         "Le catalogue initial, le JavaScript et les styles sont chargés depuis des fichiers dédiés ; les données et l’ordre de démarrage sont conservés.",
         "Chemins relatifs compatibles avec /avant-usine/ et téléchargement des pochettes conservé au format WebP.",
         "Cache hors connexion actualisé pour inclure les nouvelles ressources de l’interface et les pochettes."
-      ]
-    ],
-    [
-      "13v07 · Suivi des propositions",
-      "3 octobre 2026",
-      "Suivi des contributions de paroles.",
-      [
-        "Aperçu privé des fichiers LRC/JSON et des synchronisations reçues avec la musique, les backs, la progression et le défilement.",
-        "Le bouton Approuver et publier apparaît uniquement après lecture de tous les passages ; avancer à la fin ne valide pas les passages sautés.",
-        "Une modification des paroles, des timings ou du morceau choisi impose une nouvelle prévisualisation complète.",
-        "Publication directe des fichiers vérifiés, avec choix manuel du morceau et correction des timings, sans imposer une correspondance automatique avec le texte du catalogue.",
-        "Retrait des propositions de sa propre liste, archives consultables et restauration, sans supprimer les fichiers ni retirer une synchronisation publiée."
       ]
     ],
     [
@@ -446,6 +433,17 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "18V08 · Windows 0.4.11",
+      "10 octobre 2026",
+      "Paroles au bon moment et historiques publics entièrement clarifiés.",
+      [
+        "Paroles synchronisées : seules les lignes actuellement prononcées restent affichées dans le lecteur normal et le mode immersion des applications. Les lignes précédentes et suivantes sont masquées.",
+        "Les lignes dont les timings se chevauchent restent visibles ensemble. Le Highlight Progression continue sur chacune d’elles, sans masquer une phrase encore chantée.",
+        "Les silences entre des lignes possédant une fin précise n’affichent plus une ancienne phrase. Un retour en arrière retrouve les paroles correspondant à la position audio.",
+        "Les anciennes Patch Notes ont été relues pour ne conserver que les fonctionnalités destinées au public."
+      ]
+    ],
+    [
       "18V08 · Windows 0.4.10",
       "10 octobre 2026",
       "Paroles au bon moment et historiques publics clarifiés.",
@@ -572,7 +570,7 @@ window.AU_PLATFORM_HISTORIES={
       [
         "Partage individuel de chaque morceau : lien direct, panneau d’arrivée, auteur et profil pour les comptes, indication anonyme et première date de création conservée. Copier le lien et partage natif lorsque disponible.",
         "Vitesse de lecture 0,50×, 0,75×, 1× ou 2× dans Highlight Progression et synchronisation avancée, modifiable sans perdre les repères. Les timings suivent toujours la position réelle dans le morceau. Vitesse sauvegardée dans le brouillon et rétablie à la fermeture.",
-        "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé et prévisualisation complète avant approbation maintenue.",
+        "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé.",
         "Infos, fonctionnalités & astuces complété dans Lire le reste."
       ]
     ],
@@ -585,7 +583,7 @@ window.AU_PLATFORM_HISTORIES={
         "Highlight Progression : une seule phrase visible. Terminer cette phrase met la musique en pause, masque la phrase terminée et révèle uniquement la suivante. Les phrases suivantes restent masquées ; la phrase actuelle peut défiler sur mobile.",
         "Synchronisation avancée : toutes les paroles visibles et deux flèches. La lecture démarre à l’ouverture de l’atelier ; ↓ marque le départ de la phrase et avance, puis marque la fin après la dernière phrase. ↑ efface les repères à reprendre, revient juste avant la phrase précédente et relance la lecture. Aucun minutage à saisir ni raccourci requis.",
         "Fenêtres mobiles : dimensions adaptées à la zone visible et au clavier, contenu défilant, en-têtes et fermeture accessibles. Les fenêtres superposées gardent la fermeture et le retour au panneau précédent.",
-        "Brouillons, validation des synchronisations et vérification complète avant approbation conservés. Guide actualisé dans Lire le reste."
+        "Brouillons et envoi des contributions conservés. Guide actualisé dans Lire le reste."
       ]
     ],
     [
@@ -679,7 +677,6 @@ window.AU_PLATFORM_HISTORIES={
         "Immersion sur une grande pochette floutée, avec voile sombre pour la lisibilité et disparition des fonds gris.",
         "Transitions en fondu et léger flou, teintées par une couleur extraite de la pochette ; suppression du cadre autour des paroles.",
         "Les synchronisations du site, de l’application et les fichiers LRC/JSON utilisent le même moteur public pendant leur vérification : timings, backs, styles et suivi identiques.",
-        "Les corrections de timings sont regroupées dans un panneau repliable. Approuver reste disponible uniquement après écoute complète ; les passages sautés ne sont pas validés.",
         "Arrondi uniforme des pochettes porté de 4 à 10 pixels, avec format carré conservé. Les préférences de réduction des animations sont respectées."
       ]
     ],
@@ -836,7 +833,7 @@ window.AU_PLATFORM_HISTORIES={
       [
         "Partage individuel de chaque morceau : lien direct, panneau d’arrivée, auteur et profil pour les comptes, indication anonyme et première date de création conservée. Copier le lien et partage natif lorsque disponible.",
         "Vitesse de lecture 0,50×, 0,75×, 1× ou 2× dans Highlight Progression et synchronisation avancée, modifiable sans perdre les repères. Les timings suivent toujours la position réelle dans le morceau. Vitesse sauvegardée dans le brouillon et rétablie à la fermeture.",
-        "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé et prévisualisation complète avant approbation maintenue.",
+        "Import avec choix préalable : Highlight Progression accepte les JSON détaillés et refuse le LRC ou les JSON de simples départs de lignes ; synchronisation simple accepte LRC et JSON. Fichier original conservé.",
         "Infos, fonctionnalités & astuces complété dans Lire le reste."
       ]
     ],
@@ -849,7 +846,7 @@ window.AU_PLATFORM_HISTORIES={
         "Highlight Progression : une seule phrase visible. Terminer cette phrase met la musique en pause, masque la phrase terminée et révèle uniquement la suivante. Les phrases suivantes restent masquées ; la phrase actuelle peut défiler sur mobile.",
         "Synchronisation avancée : toutes les paroles visibles et deux flèches. La lecture démarre à l’ouverture de l’atelier ; ↓ marque le départ de la phrase et avance, puis marque la fin après la dernière phrase. ↑ efface les repères à reprendre, revient juste avant la phrase précédente et relance la lecture. Aucun minutage à saisir ni raccourci requis.",
         "Fenêtres mobiles : dimensions adaptées à la zone visible et au clavier, contenu défilant, en-têtes et fermeture accessibles. Les fenêtres superposées gardent la fermeture et le retour au panneau précédent.",
-        "Brouillons, validation des synchronisations et vérification complète avant approbation conservés. Guide actualisé dans Lire le reste."
+        "Brouillons et envoi des contributions conservés. Guide actualisé dans Lire le reste."
       ]
     ],
     [
@@ -942,7 +939,6 @@ window.AU_PLATFORM_HISTORIES={
         "Immersion sur une grande pochette floutée, avec voile sombre pour la lisibilité et disparition des fonds gris.",
         "Transitions en fondu et léger flou, teintées par une couleur extraite de la pochette ; suppression du cadre autour des paroles.",
         "Les synchronisations du site, de l’application et les fichiers LRC/JSON utilisent le même moteur public pendant leur vérification : timings, backs, styles et suivi identiques.",
-        "Les corrections de timings sont regroupées dans un panneau repliable. Approuver reste disponible uniquement après écoute complète ; les passages sautés ne sont pas validés.",
         "Arrondi uniforme des pochettes porté de 4 à 10 pixels, avec format carré conservé. Les préférences de réduction des animations sont respectées."
       ]
     ],
@@ -972,18 +968,6 @@ window.AU_PLATFORM_HISTORIES={
         "Le catalogue initial, le JavaScript et les styles sont chargés depuis des fichiers dédiés ; les données et l’ordre de démarrage sont conservés.",
         "Chemins relatifs compatibles avec /avant-usine/ et téléchargement des pochettes conservé au format WebP.",
         "Cache hors connexion actualisé pour inclure les nouvelles ressources de l’interface et les pochettes."
-      ]
-    ],
-    [
-      "13v07 · Suivi des propositions",
-      "3 octobre 2026",
-      "Suivi des contributions de paroles.",
-      [
-        "Aperçu privé des fichiers LRC/JSON et des synchronisations reçues avec la musique, les backs, la progression et le défilement.",
-        "Le bouton Approuver et publier apparaît uniquement après lecture de tous les passages ; avancer à la fin ne valide pas les passages sautés.",
-        "Une modification des paroles, des timings ou du morceau choisi impose une nouvelle prévisualisation complète.",
-        "Publication directe des fichiers vérifiés, avec choix manuel du morceau et correction des timings, sans imposer une correspondance automatique avec le texte du catalogue.",
-        "Retrait des propositions de sa propre liste, archives consultables et restauration, sans supprimer les fichiers ni retirer une synchronisation publiée."
       ]
     ],
     [
@@ -1165,6 +1149,17 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "Android 0.1.9 · 18V08",
+      "10 octobre 2026",
+      "Paroles au bon moment et historiques publics entièrement clarifiés.",
+      [
+        "Paroles synchronisées : seules les lignes actuellement prononcées restent affichées dans le lecteur normal et le mode immersion des applications. Les lignes précédentes et suivantes sont masquées.",
+        "Les lignes dont les timings se chevauchent restent visibles ensemble. Le Highlight Progression continue sur chacune d’elles, sans masquer une phrase encore chantée.",
+        "Les silences entre des lignes possédant une fin précise n’affichent plus une ancienne phrase. Un retour en arrière retrouve les paroles correspondant à la position audio.",
+        "Les anciennes Patch Notes ont été relues pour ne conserver que les fonctionnalités destinées au public."
+      ]
+    ],
+    [
       "Android 0.1.8 · 18V08",
       "10 octobre 2026",
       "Paroles au bon moment et historiques publics clarifiés.",
@@ -1274,6 +1269,17 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "iOS 1.0.11 · 18V08",
+      "10 octobre 2026",
+      "Paroles au bon moment et historiques publics entièrement clarifiés.",
+      [
+        "Paroles synchronisées : seules les lignes actuellement prononcées restent affichées dans le lecteur normal et le mode immersion des applications. Les lignes précédentes et suivantes sont masquées.",
+        "Les lignes dont les timings se chevauchent restent visibles ensemble. Le Highlight Progression continue sur chacune d’elles, sans masquer une phrase encore chantée.",
+        "Les silences entre des lignes possédant une fin précise n’affichent plus une ancienne phrase. Un retour en arrière retrouve les paroles correspondant à la position audio.",
+        "Les anciennes Patch Notes ont été relues pour ne conserver que les fonctionnalités destinées au public."
+      ]
+    ],
     [
       "iOS 1.0.10 · 18V08",
       "10 octobre 2026",

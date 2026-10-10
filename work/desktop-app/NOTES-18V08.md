@@ -1,4 +1,4 @@
-# 18V08 · Windows 0.4.10
+# 18V08 · Windows 0.4.11
 
 10 octobre 2026
 

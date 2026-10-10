@@ -4,12 +4,12 @@
     {
       "id": "18v08-all",
       "patch": "18V08",
-      "image": "promo-18v08.png",
+      "image": "promo-18v08-final.png",
       "platforms": [
         "Site 18V08",
-        "Windows 0.4.10",
-        "Android 0.1.8",
-        "iOS 1.0.10"
+        "Windows 0.4.11",
+        "Android 0.1.9",
+        "iOS 1.0.11"
       ]
     },
     {
