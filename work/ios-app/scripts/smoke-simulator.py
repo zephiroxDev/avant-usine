@@ -9,17 +9,20 @@ run('xcrun','simctl','bootstatus',udid,'-b')
 assert 'rootViewController = ViewController()' in Path('ios/App/App/SceneDelegate.swift').read_text()
 subprocess.run(['xcodebuild','-project','ios/App/App.xcodeproj','-scheme','App','-configuration','Debug','-sdk','iphonesimulator','-destination','id='+udid,'-derivedDataPath','build-simulator','CODE_SIGNING_ALLOWED=NO','build'],stdout=Path('simulator-build.log').open('w'),stderr=subprocess.STDOUT,check=True)
 run('xcrun','simctl','install',udid,'build-simulator/Build/Products/Debug-iphonesimulator/App.app')
-run('xcrun','simctl','launch',udid,'dev.zephirox.avantusine.ios')
 container=Path(run('xcrun','simctl','get_app_container',udid,'dev.zephirox.avantusine.ios','data').strip())
 probe=container/'Documents/au-debug-probe.json'
-state={}
-for attempt in range(65):
-    time.sleep(2)
-    if probe.exists():
-        state=json.loads(probe.read_text())
-        if state.get('ready'):
-            assert all(state.get(key) is True for key in ['updates','download','crypto','backup','force'])
-            print('SIMULATOR VERIFIED: '+json.dumps(state));break
-else:raise AssertionError('iOS readiness probe did not pass: '+json.dumps(state))
-run('xcrun','simctl','terminate',udid,'dev.zephirox.avantusine.ios')
+for phase in ['nativeSeed','nativeVerified']:
+    probe.unlink(missing_ok=True)
+    run('xcrun','simctl','launch',udid,'dev.zephirox.avantusine.ios')
+    state={}
+    for attempt in range(65):
+        time.sleep(2)
+        if probe.exists():
+            state=json.loads(probe.read_text())
+            if state.get('nativeError'):raise AssertionError(state['nativeError'])
+            if state.get('ready'):
+                assert all(state.get(key) is True for key in ['updates','download','crypto','backup','force',phase])
+                print('SIMULATOR VERIFIED '+phase+': '+json.dumps(state));break
+    else:raise AssertionError('iOS readiness probe did not pass: '+json.dumps(state))
+    run('xcrun','simctl','terminate',udid,'dev.zephirox.avantusine.ios')
 run('xcrun','simctl','shutdown',udid)

@@ -2,9 +2,11 @@ const fs=require('node:fs'),path=require('node:path');
 const {adaptCopy}=require('./desktop-copy.cjs');
 const source=path.resolve(__dirname,'../../github-sync-import'),destination=path.resolve(__dirname,'../site');
 fs.mkdirSync(destination,{recursive:true});
-const allowed=/^(index\.html|app-\d+v\d+\.js|(?:summary-rules|listening-clock|activity|blind-test|histories|metrics|statistics-engine|statistics-ui)-17v01\.js|local-18v00\.(?:js|css)|backup-18v06\.js|backup-18v06\.js|comfort-18v05\.(?:js|css)|immersion-18v05-2\.(?:js|css)|sharing-17v06\.js|catalog-audit-17v03\.js|native-light-17v04\.js|collection-\d+v\d+\.js|styles-\d+v\d+\.css|cover-\d{2}\.webp|pochette-animee-\d{2}\.mp4|favicon\.ico|favicon-32\.png|apple-touch-icon\.png|icon-(192|512)\.png|supabase-auth-client\.js|manifest\.webmanifest|offline\.html)$/;
+const allowed=/^(index\.html|app-\d+v\d+\.js|(?:summary-rules|listening-clock|activity|blind-test|histories|metrics|statistics-engine|statistics-ui)-17v01\.js|local-18v00\.(?:js|css)|local-storage-18v07\.js|backup-18v06\.js|backup-18v06\.js|comfort-18v05\.(?:js|css)|immersion-18v05-2\.(?:js|css)|sharing-17v06\.js|catalog-audit-17v03\.js|native-light-17v04\.js|collection-\d+v\d+\.js|styles-\d+v\d+\.css|cover-\d{2}\.webp|pochette-animee-\d{2}\.mp4|favicon\.ico|favicon-32\.png|apple-touch-icon\.png|icon-(192|512)\.png|supabase-auth-client\.js|manifest\.webmanifest|offline\.html)$/;
 for(const entry of fs.readdirSync(source))if(allowed.test(entry))fs.copyFileSync(path.join(source,entry),path.join(destination,entry));
 const htmlPath=path.join(destination,'index.html');let html=fs.readFileSync(htmlPath,'utf8');const active=html.match(/src="\.\/(app-\d+v\d+\.js)"/);if(!active)throw Error('Script principal introuvable');
+html=html.replace(/<link rel="stylesheet" href=".\/mobile-player-18v07.css">/,'').replace(/<script src=".\/mobile-player-18v07.js" defer><\/script>/,'');
+for(const file of ['mobile-player-18v07.js','mobile-player-18v07.css']){const obsolete=path.join(destination,file);if(fs.existsSync(obsolete))fs.unlinkSync(obsolete);}
 html=html.replace('<head>','<head><script>document.documentElement.dataset.auApp="desktop";</script>');
 html=html.replace(/<aside id="desktopAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./release-download.js" defer></script>','');
 html=html.replace(/<aside id="androidAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./android-download.js" defer></script>','');

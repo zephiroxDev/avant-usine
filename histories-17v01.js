@@ -1,6 +1,16 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "18V07 · Lecteur mobile et stabilité Local",
+      "10 octobre 2026",
+      "Contrôle du lecteur sur mobile et stockage partagé renforcé.",
+      [
+        "Le stockage partagé de Local a été sécurisé pour les applications. Local reste réservé aux applications ; aucune bibliothèque personnelle n’est activée sur le site.",
+        "Infos, fonctionnalités & astuces actualisé dans Lire le reste.",
+        "Ordre de chargement des animations fiabilisé au démarrage."
+      ]
+    ],
+    [
       "18V06 · Sauvegardes protégées",
       "9 octobre 2026",
       "Sauvegardes portables et options de transfert de rôle.",
@@ -696,6 +706,18 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "18V07 · Lecteur mobile et stabilité Local",
+      "10 octobre 2026",
+      "Contrôle du lecteur sur mobile et stockage partagé renforcé.",
+      [
+        "Une croix sur le lecteur permanent ouvre un choix avant de le masquer : jusqu’à la prochaine ouverture, ou pendant une durée personnalisée de 1 à 60 minutes.",
+        "La musique continue pendant le masquage. Le lecteur revient automatiquement à la fin du délai, y compris après un passage en arrière-plan. Une durée personnalisée reste applicable après réouverture.",
+        "Le bouton Réafficher le lecteur permet de le retrouver immédiatement. Le masquage libère le bas de page et l’accès aux réglages. Cette option concerne uniquement le site mobile et les applications Android et iPhone.",
+        "Local reste réservé aux applications. Infos, fonctionnalités & astuces actualisé dans Lire le reste.",
+        "Ordre de chargement des animations fiabilisé au démarrage."
+      ]
+    ],
     [
       "18V06 · Sauvegardes protégées",
       "9 octobre 2026",
