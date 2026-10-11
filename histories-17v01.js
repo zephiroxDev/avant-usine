@@ -456,6 +456,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "19V01 · Windows 0.5.2",
+      "11 octobre 2026",
+      "Atelier temporairement fermé pour réparation.",
+      [
+        "L’Atelier de synchronisation est temporairement fermé pour réparation. Un message explique son indisponibilité.",
+        "Les paroles déjà synchronisées restent disponibles dans les lecteurs. Les brouillons existants sont conservés."
+      ]
+    ],
+    [
       "19V01 · Windows 0.5.1",
       "11 octobre 2026",
       "Atelier temporairement fermé pour réparation.",
@@ -1363,6 +1372,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "19V01 · iOS 1.1.2",
+      "11 octobre 2026",
+      "Atelier temporairement fermé pour réparation.",
+      [
+        "L’Atelier de synchronisation est temporairement fermé pour réparation. Un message explique son indisponibilité.",
+        "Les paroles déjà synchronisées restent disponibles dans les lecteurs. Les brouillons existants sont conservés."
+      ]
+    ],
     [
       "19V01 · iOS 1.1.1",
       "11 octobre 2026",
