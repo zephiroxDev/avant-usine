@@ -1,10 +1,8 @@
 {
   "platform": "android",
-  "version": "0.2.0",
-  "versionCode": 11,
-  "sourceCommit": "76a2dafc9611dbb152890ee6c61c08d9bb58a657",
-  "file": "Avant-Usine-Android-0.2.0.apk",
-  "bytes": 20329024,
-  "sha256": "583c828803b94bdbb91e46c93f9bafca493ef49df8b57250560bf233ccd1005a",
-  "certificateSha256": "c56f1a5c2043a653b57729f8ad8cb7346c95fae2917c79307c4c699398a751b3"
+  "version": "0.2.1",
+  "versionCode": 12,
+  "file": "Avant-Usine-Android-0.2.1.apk",
+  "bytes": 38212479,
+  "sha256": "a653df8c281a13f16f59313ff405cef1333f494b8f5d892f59503ed34b2d1f6e"
 }
