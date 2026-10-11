@@ -1,6 +1,20 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "19V00 · Un nouvel Atelier",
+      "11 octobre 2026",
+      "Synchroniser simplement, gérer plusieurs voix et retrouver ses projets.",
+      [
+        "Atelier simplifié : un bouton ou Espace pour marquer les phrases, puis un passage facultatif pour affiner les mots. Les outils avancés restent repliés.",
+        "Voix principale, backs, ad-libs et pistes personnalisées indépendantes. Les phrases peuvent se chevaucher et les backs commencer avant la voix principale.",
+        "Timeline avec zoom, forme d’onde à charger, déplacement des phrases et réglage des débuts, fins et repères des mots. Boucle avec préécoute et reprise depuis un mot.",
+        "Modifier ou supprimer une phrase, couper, fusionner et dupliquer un refrain ; décaler une phrase ou une piste ; annuler, rétablir et verrouiller les passages.",
+        "Mes projets en cours : brouillons privés, sauvegarde automatique, reprise, renommage, archivage et suppression. Avancement et états À faire, À revoir et Terminé.",
+        "Aperçu dans le lecteur et validation avant export. JSON avec pistes et repères détaillés ; LRC simple avec avertissement sur les informations non conservées.",
+        "Vitesses 0,50×, 0,75×, 1× et 2× : les repères suivent toujours la position réelle du morceau. Interface adaptée aux petits écrans."
+      ]
+    ],
+    [
       "18V08 · Paroles au bon moment",
       "10 octobre 2026",
       "Affichage des paroles réellement en cours et historiques publics clarifiés.",
@@ -433,6 +447,21 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "19V00 · Windows 0.5.0",
+      "11 octobre 2026",
+      "Un nouvel Atelier et une immersion repensée.",
+      [
+        "Atelier simplifié : un bouton ou Espace pour marquer les phrases, puis un passage facultatif pour affiner les mots. Les outils avancés restent repliés.",
+        "Voix principale, backs, ad-libs et pistes personnalisées indépendantes. Les phrases peuvent se chevaucher et les backs commencer avant la voix principale.",
+        "Timeline avec zoom, forme d’onde à charger, déplacement des phrases et réglage des débuts, fins et repères des mots. Boucle avec préécoute et reprise depuis un mot.",
+        "Modifier ou supprimer une phrase, couper, fusionner et dupliquer un refrain ; décaler une phrase ou une piste ; annuler, rétablir et verrouiller les passages.",
+        "Mes projets en cours : brouillons privés, sauvegarde automatique, reprise, renommage, archivage et suppression. Avancement et états À faire, À revoir et Terminé.",
+        "Aperçu dans le lecteur et validation avant export. JSON avec pistes et repères détaillés ; LRC simple avec avertissement sur les informations non conservées.",
+        "Vitesses 0,50×, 0,75×, 1× et 2× : les repères suivent toujours la position réelle du morceau. Interface adaptée aux petits écrans.",
+        "Immersion repensée : pochette en décor plein écran flouté, paroles nettes au centre et commandes discrètes. Les paroles synchronisées suivent les voix en cours ; les textes simples défilent approximativement. Le mode reste réservé aux applications."
+      ]
+    ],
+    [
       "18V08 · Windows 0.4.11",
       "10 octobre 2026",
       "Paroles au bon moment et historiques publics entièrement clarifiés.",
@@ -714,6 +743,20 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "19V00 · Un nouvel Atelier",
+      "11 octobre 2026",
+      "Synchroniser simplement, gérer plusieurs voix et retrouver ses projets.",
+      [
+        "Atelier simplifié : un bouton ou Espace pour marquer les phrases, puis un passage facultatif pour affiner les mots. Les outils avancés restent repliés.",
+        "Voix principale, backs, ad-libs et pistes personnalisées indépendantes. Les phrases peuvent se chevaucher et les backs commencer avant la voix principale.",
+        "Timeline avec zoom, forme d’onde à charger, déplacement des phrases et réglage des débuts, fins et repères des mots. Boucle avec préécoute et reprise depuis un mot.",
+        "Modifier ou supprimer une phrase, couper, fusionner et dupliquer un refrain ; décaler une phrase ou une piste ; annuler, rétablir et verrouiller les passages.",
+        "Mes projets en cours : brouillons privés, sauvegarde automatique, reprise, renommage, archivage et suppression. Avancement et états À faire, À revoir et Terminé.",
+        "Aperçu dans le lecteur et validation avant export. JSON avec pistes et repères détaillés ; LRC simple avec avertissement sur les informations non conservées.",
+        "Vitesses 0,50×, 0,75×, 1× et 2× : les repères suivent toujours la position réelle du morceau. Interface adaptée aux petits écrans."
+      ]
+    ],
     [
       "18V08 · Paroles au bon moment",
       "10 octobre 2026",
@@ -1149,6 +1192,21 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "19V00 · Android 0.2.0",
+      "11 octobre 2026",
+      "Un nouvel Atelier et une immersion repensée.",
+      [
+        "Atelier simplifié : un bouton ou Espace pour marquer les phrases, puis un passage facultatif pour affiner les mots. Les outils avancés restent repliés.",
+        "Voix principale, backs, ad-libs et pistes personnalisées indépendantes. Les phrases peuvent se chevaucher et les backs commencer avant la voix principale.",
+        "Timeline avec zoom, forme d’onde à charger, déplacement des phrases et réglage des débuts, fins et repères des mots. Boucle avec préécoute et reprise depuis un mot.",
+        "Modifier ou supprimer une phrase, couper, fusionner et dupliquer un refrain ; décaler une phrase ou une piste ; annuler, rétablir et verrouiller les passages.",
+        "Mes projets en cours : brouillons privés, sauvegarde automatique, reprise, renommage, archivage et suppression. Avancement et états À faire, À revoir et Terminé.",
+        "Aperçu dans le lecteur et validation avant export. JSON avec pistes et repères détaillés ; LRC simple avec avertissement sur les informations non conservées.",
+        "Vitesses 0,50×, 0,75×, 1× et 2× : les repères suivent toujours la position réelle du morceau. Interface adaptée aux petits écrans.",
+        "Immersion repensée : pochette en décor plein écran flouté, paroles nettes au centre et commandes discrètes. Les paroles synchronisées suivent les voix en cours ; les textes simples défilent approximativement. Le mode reste réservé aux applications."
+      ]
+    ],
+    [
       "Android 0.1.9 · 18V08",
       "10 octobre 2026",
       "Paroles au bon moment et historiques publics entièrement clarifiés.",
@@ -1269,6 +1327,21 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "19V00 · iOS 1.1.0",
+      "11 octobre 2026",
+      "Un nouvel Atelier et une immersion repensée.",
+      [
+        "Atelier simplifié : un bouton ou Espace pour marquer les phrases, puis un passage facultatif pour affiner les mots. Les outils avancés restent repliés.",
+        "Voix principale, backs, ad-libs et pistes personnalisées indépendantes. Les phrases peuvent se chevaucher et les backs commencer avant la voix principale.",
+        "Timeline avec zoom, forme d’onde à charger, déplacement des phrases et réglage des débuts, fins et repères des mots. Boucle avec préécoute et reprise depuis un mot.",
+        "Modifier ou supprimer une phrase, couper, fusionner et dupliquer un refrain ; décaler une phrase ou une piste ; annuler, rétablir et verrouiller les passages.",
+        "Mes projets en cours : brouillons privés, sauvegarde automatique, reprise, renommage, archivage et suppression. Avancement et états À faire, À revoir et Terminé.",
+        "Aperçu dans le lecteur et validation avant export. JSON avec pistes et repères détaillés ; LRC simple avec avertissement sur les informations non conservées.",
+        "Vitesses 0,50×, 0,75×, 1× et 2× : les repères suivent toujours la position réelle du morceau. Interface adaptée aux petits écrans.",
+        "Immersion repensée : pochette en décor plein écran flouté, paroles nettes au centre et commandes discrètes. Les paroles synchronisées suivent les voix en cours ; les textes simples défilent approximativement. Le mode reste réservé aux applications."
+      ]
+    ],
     [
       "iOS 1.0.11 · 18V08",
       "10 octobre 2026",

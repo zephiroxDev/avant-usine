@@ -14,3 +14,18 @@
 #auImmersionApp .au-im-current-only .au-lyric-line[hidden]{display:none!important}
 #auImmersionApp .au-im-current-only .au-lyrics-content{min-height:100%;display:flex;flex-direction:column;justify-content:center}
 #auImmersionApp .au-im-current-only .au-lyric-line{margin:0;opacity:1;transform:none}
+/* 19V00: artwork forms the scene; only the background is blurred. */
+#auImmersionApp.au-new-immersion{position:fixed;isolation:isolate;background:#160b1a!important;color:#faf5fc}
+#auImmersionApp .au-im-body{display:block;position:static}
+#auImmersionApp .au-im-art{position:absolute;inset:0;z-index:-2;pointer-events:none;filter:blur(40px);opacity:.7;overflow:hidden}
+#auImmersionApp .au-im-picture,#auImmersionApp.au-im-no-lyrics .au-im-picture{width:100%!important;height:100%;aspect-ratio:auto;display:block}
+#auImmersionApp .au-im-picture>:is(canvas,img,video,.au-motion-cover){width:100%!important;height:100%!important;aspect-ratio:auto;object-fit:cover;border-radius:0}
+#auImmersionApp .au-im-picture .au-motion-cover video{object-fit:cover}
+#auImmersionApp::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,#160b1a80,#160b1a66 25%,#160b1ac9 75%,#160b1aeb)}
+#auImmersionApp .au-im-head{padding:8px 12px}
+#auImmersionApp .au-im-lyrics{height:100%;max-width:1000px;margin:auto;text-align:center}
+#auImmersionApp .au-im-note{color:#e1c8dc;flex-shrink:0}
+#auImmersionApp .au-im-viewport{font-size:clamp(24px,4vw,48px);line-height:1.35;padding:24px clamp(12px,4vw,50px);text-shadow:0 2px 20px #160b1a}
+#auImmersionApp .au-im-controls{justify-content:center;border-top:0;max-width:1000px;width:100%;margin:auto;padding:12px}
+#auImmersionApp .au-im-placeholder{display:none}
+@media(max-width:600px){#auImmersionApp .au-im-viewport{font-size:clamp(24px,7vw,34px);padding:20px 12px}#auImmersionApp .au-im-head h2{font-size:15px}#auImmersionApp .au-im-controls{padding:4px;gap:6px}}

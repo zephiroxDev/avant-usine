@@ -1,5 +1,6 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const root=path.resolve(__dirname,'..');
+const futureVersion=(Number(require('../release.json').version.split('.')[0])+1)+'.0.0';
 test('Packaged iOS references and isolated history',()=>{
  const html=fs.readFileSync(path.join(root,'site/index.html'),'utf8');
  for(const match of html.matchAll(/(?:src|href)="\.\/([^"#?]+)(?:[?#][^"]*)?"/g))assert.ok(fs.existsSync(path.join(root,'site',match[1])),match[1]);
@@ -17,7 +18,7 @@ function context(listenerMode){
  const accountDialog=element('dialog'),account=accountDialog;
  const document={documentElement:{dataset:{}},createElement:element,addEventListener(){},getElementById:id=>id==='accountDialog'?accountDialog:null,querySelector(s){return s==='#accountMember .actions'?account:s==='#accountDialog'?accountDialog:null;},body:{append(x){elements.push(x);}}};
  const win={AU_IOS_TEST:{},addEventListener(){},Capacitor:{Plugins:{IOSUpdates:{addListener:async()=>({remove:async()=>{}}),download:async()=>({uri:'file:///ipa'}),openIn:async()=>({opened:true})},Share:{share:async()=>{}}}}};
- const releases=[{assets:[{name:'Avant-Usine-iOS-1.1.0-non-signe.ipa',digest:'sha256:'+'a'.repeat(64),size:42,browser_download_url:'https://github.com/zephiroxDev/avant-usine/releases/download/ios-v1.1.0/Avant-Usine-iOS-1.1.0-non-signe.ipa'}]}];
+ const releases=[{assets:[{name:`Avant-Usine-iOS-${futureVersion}-non-signe.ipa`,digest:'sha256:'+'a'.repeat(64),size:42,browser_download_url:`https://github.com/zephiroxDev/avant-usine/releases/download/ios-v${futureVersion}/Avant-Usine-iOS-${futureVersion}-non-signe.ipa`}]}];
  win.Capacitor.Plugins.IOSUpdates.checkReleases=async()=>({json:JSON.stringify(releases)});
  win.Capacitor.Plugins.IOSUpdates.addListener=async(name,fn)=>{events[name]=fn;return {remove:async()=>{}};};
  if(listenerMode==='synchronous')win.Capacitor.Plugins.IOSUpdates.addListener=(name,fn)=>{events[name]=fn;return {remove:async()=>{}};};
@@ -32,9 +33,9 @@ test('Only newest published iOS package selected, numeric versions',()=>{
  assert.equal(c.choose([{draft:true,assets:[{name:'Avant-Usine-iOS-9.0.0-non-signe.ipa'}]},{assets:[{name:'Avant-Usine-Android-9.0.0.apk'}]}],'1.0.0'),undefined);
 });
 test('Skipped version suppressed; a newer real version is proposed',async()=>{
- const c=context();c.storage.set('au-ios-skip','1.1.0');await c.check();assert.equal(c.elements.length,0);
+ const c=context();c.storage.set('au-ios-skip',`${futureVersion}`);await c.check();assert.equal(c.elements.length,0);
  c.advance(60001);c.storage.set('au-ios-skip','1.0.1');await c.check();assert.equal(c.elements.length,1);
- assert.ok(c.elements[0].children.some(x=>x.textContent==='Sauter la version 1.1.0 et me le rappeler lors de la version qui sera déployée après la 1.1.0'));
+ assert.ok(c.elements[0].children.some(x=>x.textContent===`Sauter la version ${futureVersion} et me le rappeler lors de la version qui sera déployée après la ${futureVersion}`));
 });
 test('Later postpones; verified download provides ESign action',async()=>{
  const c=context();await c.check();const modal=c.elements[0];
@@ -54,20 +55,20 @@ test('Failed download never offers installation; ESign failure shows manual fall
  assert.ok(d.elements[0].children.some(x=>x.textContent?.includes('Ouvre ton outil de signature et importe')));
 });
 test('Account force update bypasses skipped version and postponed reminder',async()=>{
- const c=context();c.storage.set('au-ios-skip','1.1.0');c.storage.set('au-ios-remind',String(Date.now()+86400000));
+ const c=context();c.storage.set('au-ios-skip',`${futureVersion}`);c.storage.set('au-ios-remind',String(Date.now()+86400000));
  const button=c.account.children.find(x=>x.textContent==='Forcer une mise à jour');assert.ok(button);
- await button.onclick();assert.equal(c.elements[0].children[0].textContent,'Mise à jour iOS 1.1.0');assert.equal(button.disabled,false);
+ await button.onclick();assert.equal(c.elements[0].children[0].textContent,`Mise à jour iOS ${futureVersion}`);assert.equal(button.disabled,false);
 });
 
 test('Native search errors visible and manual retry can recover',async()=>{
  const c=context();c.win.Capacitor.Plugins.IOSUpdates.checkReleases=async()=>{throw Error('HTTP 403');};
  await c.check();assert.ok(c.elements.some(x=>x.textContent?.includes('HTTP 403')));
  c.win.Capacitor.Plugins.IOSUpdates.checkReleases=async()=>({json:JSON.stringify(c.releases)});
- await c.check(true);assert.ok(c.elements.some(x=>x.children?.[0]?.textContent==='Mise à jour iOS 1.1.0'));
+ await c.check(true);assert.ok(c.elements.some(x=>x.children?.[0]?.textContent===`Mise à jour iOS ${futureVersion}`));
 });
 
 test('Native app resume triggers a fresh update check',async()=>{
- const c=context();await c.events.resume();assert.equal(c.elements[0].children[0].textContent,'Mise à jour iOS 1.1.0');
+ const c=context();await c.events.resume();assert.equal(c.elements[0].children[0].textContent,`Mise à jour iOS ${futureVersion}`);
 });
 
 test('iOS presentation isolated, site histories last, day-night disabled',()=>{
@@ -88,6 +89,6 @@ test('Native transparency preference reaches the interface',async()=>{
 });
 
 
-test('Manual update button remains usable with synchronous or unavailable native listeners',async()=>{for(const mode of ['synchronous','throws']){const c=context(mode),button=c.account.children.find(x=>x.id==='forceAppUpdate');assert.ok(button);await button.onclick();assert.equal(c.elements.length,1);assert.ok(c.elements[0].children.some(x=>String(x.textContent).includes('1.1.0')));}});
+test('Manual update button remains usable with synchronous or unavailable native listeners',async()=>{for(const mode of ['synchronous','throws']){const c=context(mode),button=c.account.children.find(x=>x.id==='forceAppUpdate');assert.ok(button);await button.onclick();assert.equal(c.elements.length,1);assert.ok(c.elements[0].children.some(x=>String(x.textContent).includes(`${futureVersion}`)));}});
 
 test('Embedded platform histories retain original Unicode text',()=>{const text=fs.readFileSync(path.join(root,'site/histories-17v01.js'),'utf8');assert.ok(!text.includes('\u00c3\u00a9'));assert.ok(!text.includes('\u00c2\u00b7'));assert.ok(!text.includes('\ufffd'));});
