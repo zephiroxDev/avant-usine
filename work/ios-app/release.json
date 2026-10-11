@@ -1,8 +1,8 @@
 {
   "platform": "ios",
-  "version": "1.1.0",
-  "buildNumber": 13,
-  "releaseId": "19V00",
+  "version": "1.1.1",
+  "buildNumber": 14,
+  "releaseId": "19V01",
   "channel": "unsigned-beta",
   "source": "../github-sync-import"
 }

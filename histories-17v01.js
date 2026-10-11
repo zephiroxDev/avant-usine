@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "19V01 · Site PC",
+      "11 octobre 2026",
+      "Atelier temporairement fermé pour réparation.",
+      [
+        "L’Atelier de synchronisation est temporairement fermé pour réparation. Un message explique son indisponibilité.",
+        "Les paroles déjà synchronisées restent disponibles dans les lecteurs. Les brouillons existants sont conservés."
+      ]
+    ],
+    [
       "19V00 · Un nouvel Atelier",
       "11 octobre 2026",
       "Synchroniser simplement, gérer plusieurs voix et retrouver ses projets.",
@@ -447,6 +456,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "19V01 · Windows 0.5.1",
+      "11 octobre 2026",
+      "Atelier temporairement fermé pour réparation.",
+      [
+        "L’Atelier de synchronisation est temporairement fermé pour réparation. Un message explique son indisponibilité.",
+        "Les paroles déjà synchronisées restent disponibles dans les lecteurs. Les brouillons existants sont conservés."
+      ]
+    ],
+    [
       "19V00 · Windows 0.5.0",
       "11 octobre 2026",
       "Un nouvel Atelier et une immersion repensée.",
@@ -743,6 +761,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "19V01 · Site mobile",
+      "11 octobre 2026",
+      "Atelier temporairement fermé pour réparation.",
+      [
+        "L’Atelier de synchronisation est temporairement fermé pour réparation. Un message explique son indisponibilité.",
+        "Les paroles déjà synchronisées restent disponibles dans les lecteurs. Les brouillons existants sont conservés."
+      ]
+    ],
     [
       "19V00 · Un nouvel Atelier",
       "11 octobre 2026",
@@ -1192,6 +1219,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "19V01 · Android 0.2.1",
+      "11 octobre 2026",
+      "Atelier temporairement fermé pour réparation.",
+      [
+        "L’Atelier de synchronisation est temporairement fermé pour réparation. Un message explique son indisponibilité.",
+        "Les paroles déjà synchronisées restent disponibles dans les lecteurs. Les brouillons existants sont conservés."
+      ]
+    ],
+    [
       "19V00 · Android 0.2.0",
       "11 octobre 2026",
       "Un nouvel Atelier et une immersion repensée.",
@@ -1327,6 +1363,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "19V01 · iOS 1.1.1",
+      "11 octobre 2026",
+      "Atelier temporairement fermé pour réparation.",
+      [
+        "L’Atelier de synchronisation est temporairement fermé pour réparation. Un message explique son indisponibilité.",
+        "Les paroles déjà synchronisées restent disponibles dans les lecteurs. Les brouillons existants sont conservés."
+      ]
+    ],
     [
       "19V00 · iOS 1.1.0",
       "11 octobre 2026",

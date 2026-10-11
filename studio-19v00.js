@@ -3,6 +3,7 @@
 const M=window.AU_STUDIO_MODEL_19;
 const E=(tag,text,cls)=>{const n=document.createElement(tag);if(text!=null)n.textContent=text;if(cls)n.className=cls;return n;};
 function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],title='',trackKey='',sourceHash='',local=false,onchange=()=>{},preview,projectRevision=null}={}){
+ window.AU_MAINTENANCE_19?.assert('sync_studio');
  let disposed=false,selected=null,activeTrack='main',captureMode='phrases',cursor=0,armed=false,wordIndex=0,loop=null,revision=projectRevision,timer=0,saving=Promise.resolve(),peaks=null,zoom=1,frame=0,epoch=0,previewView=null;const projectOwner=window.AU_PROJECTS_19.owner();
  const root=E('section',null,'au-studio-19'),status=E('p',null,'au-note'),toolbar=E('div',null,'actions'),focus=E('section',null,'studio19-focus'),phrase=E('p',null,'studio19-phrase'),progress=E('p',null,'au-note'),trackSelect=E('select'),modeSelect=E('select');
  status.setAttribute('role','status');trackSelect.setAttribute('aria-label','Voix à synchroniser');modeSelect.setAttribute('aria-label','Passage de synchronisation');
