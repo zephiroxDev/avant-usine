@@ -2,6 +2,8 @@ from pathlib import Path
 import os,json,urllib.request,hashlib,subprocess,secrets,sys
 r=Path(__file__).resolve().parents[3];project=r/'work/android-app';release=json.loads((project/'release.json').read_text());version=release['version'];commit=sys.argv[1];branch='build/android-'+commit[:12];base='https://raw.githubusercontent.com/zephiroxDev/avant-usine/refs/heads/'+branch+'/'
 def get(name):
+ if len(sys.argv)>2:
+  return (Path(sys.argv[2])/('app-release-unsigned.apk' if name=='unsigned.apk' else name)).read_bytes()
  with urllib.request.urlopen(base+name,timeout=120) as response:return response.read()
 metadata=json.loads(get('build.json'));assert metadata['sourceCommit']==commit and metadata['unsigned']
 if metadata.get('parts'):

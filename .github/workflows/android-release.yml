@@ -16,8 +16,16 @@ jobs:
       - name: Verify signed APK
         run: |
           python - <<'PY'
-          import pathlib,json,hashlib
+          import pathlib,json,hashlib,base64
           r=pathlib.Path('work/android-app/releases');m=json.loads((r/'livraison.json').read_text());p=r/m['file']
+          if m.get('parts'):
+              chunks=[]
+              for part in m['parts']:
+                  assert pathlib.Path(part['file']).name==part['file']
+                  chunk=base64.b64decode((r/part['file']).read_bytes(),validate=True)
+                  assert len(chunk)==part['bytes'] and hashlib.sha256(chunk).hexdigest()==part['sha256']
+                  chunks.append(chunk)
+              p.write_bytes(b''.join(chunks))
           assert p.stat().st_size==m['bytes'] and hashlib.sha256(p.read_bytes()).hexdigest()==m['sha256']
           PY
           file="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['file'])")"
@@ -31,7 +39,7 @@ jobs:
           version="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['version'])")"
           file="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['file'])")"
           tag="android-v$version"
-          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --draft --prerelease --target "$GITHUB_SHA" --title "Avant l’usine — Android $version · Bêta" --notes-file "work/android-app/NOTES-$version.md"
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --draft --prerelease --target "$GITHUB_SHA" --title "Avant lâ€™usine â€” Android $version Â· BÃªta" --notes-file "work/android-app/NOTES-$version.md"
           gh release upload "$tag" "work/android-app/releases/$file" work/android-app/releases/livraison.json --clobber
           python - <<'PY'
           import json,subprocess,pathlib
