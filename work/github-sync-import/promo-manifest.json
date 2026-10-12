@@ -4,9 +4,9 @@
     {
       "id": "19v02-all",
       "patch": "19V02",
-      "image": "promo-19v02-vivant.png",
+      "image": "promo-19v02-texte.png",
       "original": "promo-19v02.png",
-      "animation": "promo-19v02-anime.mp4",
+      "animation": "promo-19v02-texte.mp4",
       "platforms": [
         "Site 19V02",
         "Windows 0.5.3",
