@@ -1,5 +1,5 @@
 name: iOS IPA release
-# Verify native services, account update control and listener compatibility before publication.
+# Validate generated Xcode project syntax before compilation.
 on:
   push:
     branches: [main]
@@ -70,6 +70,15 @@ jobs:
           ditto build/Build/Products/Release-iphoneos/App.app build/ipa/Payload/App.app
           ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload "build/Avant-Usine-iOS-$VERSION-non-signe.ipa"
           python scripts/verify-ipa.py "build/Avant-Usine-iOS-$VERSION-non-signe.ipa"
+      - name: Preserve verified IPA before publication
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-verified
+          path: |
+            work/ios-app/build/*.ipa
+            work/ios-app/build/livraison.json
+          if-no-files-found: error
+          retention-days: 7
       - name: Publish verified iOS distribution
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

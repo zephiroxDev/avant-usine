@@ -2,7 +2,7 @@ from pathlib import Path
 import json,os,subprocess
 release=json.loads(Path('release.json').read_text());version=release['version']
 tag='ios-v'+version
-metadata=json.loads(Path('build/livraison.json').read_text())
+metadata=json.loads(Path('build/livraison.json').read_text());metadata['sourceCommit']=os.environ['GITHUB_SHA'];Path('build/livraison.json').write_text(json.dumps(metadata))
 notes=json.loads(Path('patch-notes.json').read_text())[0]
 body=notes[2]+'\n\n'+'\n'.join('- '+line for line in notes[3])
 body+='\n\nCompilation iPhone/iPad vérifiée. Signature, installation et usage à confirmer sur appareil réel.\nSHA-256 : '+metadata['sha256']
@@ -24,7 +24,16 @@ if existing and not existing['draft']:
     print('Verified release already public: '+existing['html_url'])
 else:
     if not existing:
-        gh('release','create',tag,'--draft','--prerelease','--latest=false','--target',os.environ['GITHUB_SHA'],'--title','Avant l’usine — iOS '+version+' (IPA à signer)','--notes-file',str(notes_path))
+        try:
+            gh('release','create',tag,'--draft','--prerelease','--latest=false','--target',os.environ['GITHUB_SHA'],'--title','Avant l’usine — iOS '+version+' (IPA à signer)','--notes-file',str(notes_path))
+        except subprocess.CalledProcessError:
+            # A later infrastructure commit can prevent this runner from tagging an older SHA.
+            # Only allow a current-main tag if no product code changed during compilation.
+            diff=api('repos/'+repo+'/compare/'+os.environ['GITHUB_SHA']+'...main')
+            def infrastructure(path):
+                return path.startswith('.github/') or path.startswith('work/android-app/scripts/') or path in ['work/ios-app/scripts/publish-release.py'] or path.startswith('promo-') or path.startswith('work/github-sync-import/promo-')
+            assert not diff.get('total_commits',0)>100 and all(infrastructure(f['filename']) for f in diff.get('files',[])), 'Product changed during build; refusing to tag a different version'
+            gh('release','create',tag,'--draft','--prerelease','--latest=false','--target','main','--title','Avant l’usine — iOS '+version+' (IPA à signer)','--notes-file',str(notes_path))
     gh('release','upload',tag,'build/'+metadata['file'],'build/livraison.json','--clobber')
     draft=next(r for r in api('repos/'+repo+'/releases?per_page=100') if r['tag_name']==tag)
     assets={a['name']:a for a in draft['assets']}

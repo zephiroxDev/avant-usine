@@ -38,24 +38,19 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon --max-workers=2
-      - name: Save intermediate build on its dedicated branch
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
+      - name: Describe compiled APK
         run: |
           python - <<'PY'
-          import json,pathlib,base64,subprocess,os,hashlib
-          p=pathlib.Path('work/android-app/android/app/build/outputs/apk/release/app-release-unsigned.apk');data=p.read_bytes();repo=os.environ['GH_REPO'];commit=os.environ['GITHUB_SHA']
-          def api(endpoint,payload):
-              file=pathlib.Path(os.environ['RUNNER_TEMP'])/'github-payload.json';file.write_text(json.dumps(payload));return json.loads(subprocess.check_output(['gh','api','--method','POST','repos/'+repo+'/'+endpoint,'--input',str(file)]))
-          parts=[];entries=[]
-          for i,start in enumerate(range(0,len(data),4*1024*1024)):
-              chunk=data[start:start+4*1024*1024];name=f'unsigned.apk.part{i:03d}'
-              blob=api('git/blobs',{'encoding':'base64','content':base64.b64encode(chunk).decode()})
-              parts.append({'file':name,'bytes':len(chunk),'sha256':hashlib.sha256(chunk).hexdigest()});entries.append({'path':name,'mode':'100644','type':'blob','sha':blob['sha']})
-          metadata={'sourceCommit':commit,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'unsigned':True,'parts':parts}
-          tree=api('git/trees',{'tree':entries+[{'path':'build.json','mode':'100644','type':'blob','content':json.dumps(metadata)}]})
-          new=api('git/commits',{'message':'Intermediate unsigned Android build '+commit[:7],'tree':tree['sha'],'parents':[]})
-          api('git/refs',{'ref':'refs/heads/build/android-'+commit[:12],'sha':new['sha']})
-          print('BUILD_BRANCH=build/android-'+commit[:12])
+          import json,pathlib,hashlib,os
+          p=pathlib.Path('work/android-app/android/app/build/outputs/apk/release/app-release-unsigned.apk')
+          pathlib.Path('work/android-app/android/app/build/outputs/apk/release/build.json').write_text(json.dumps({'sourceCommit':os.environ['GITHUB_SHA'],'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'unsigned':True}))
           PY
+      - name: Transfer compiled APK as a build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-unsigned
+          path: |
+            work/android-app/android/app/build/outputs/apk/release/app-release-unsigned.apk
+            work/android-app/android/app/build/outputs/apk/release/build.json
+          if-no-files-found: error
+          retention-days: 7
