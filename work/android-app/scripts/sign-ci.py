@@ -4,7 +4,13 @@ r=Path(__file__).resolve().parents[3];project=r/'work/android-app';release=json.
 def get(name):
  with urllib.request.urlopen(base+name,timeout=120) as response:return response.read()
 metadata=json.loads(get('build.json'));assert metadata['sourceCommit']==commit and metadata['unsigned']
-data=get('unsigned.apk');assert len(data)==metadata['bytes'] and hashlib.sha256(data).hexdigest()==metadata['sha256'];out=r/'outputs/application-android';out.mkdir(parents=True,exist_ok=True);unsigned=out/'unsigned.apk';unsigned.write_bytes(data)
+if metadata.get('parts'):
+ chunks=[]
+ for part in metadata['parts']:
+  chunk=get(part['file']);assert len(chunk)==part['bytes'] and hashlib.sha256(chunk).hexdigest()==part['sha256'];chunks.append(chunk)
+ data=b''.join(chunks)
+else:data=get('unsigned.apk')
+assert len(data)==metadata['bytes'] and hashlib.sha256(data).hexdigest()==metadata['sha256'];out=r/'outputs/application-android';out.mkdir(parents=True,exist_ok=True);unsigned=out/'unsigned.apk';unsigned.write_bytes(data)
 tools=Path.home()/'.cache/avant-usine-android-tools';paths=json.loads((tools/'paths.json').read_text());java=Path(paths['java']);bt=Path(paths['sdk'])/'build-tools/36.0.0';env=os.environ.copy();env.update(JAVA_HOME=str(java));env['PATH']=str(java/'bin')+os.pathsep+env['PATH']
 private=Path.home()/'.codex/signing/avant-usine-android';private.mkdir(parents=True,exist_ok=True);sign=private/'signing.json';key=private/'avant-usine-android.jks'
 if not sign.exists():sign.write_text(json.dumps({'password':secrets.token_urlsafe(32),'alias':'avant-usine'}))

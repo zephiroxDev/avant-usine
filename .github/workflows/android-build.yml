@@ -48,9 +48,13 @@ jobs:
           p=pathlib.Path('work/android-app/android/app/build/outputs/apk/release/app-release-unsigned.apk');data=p.read_bytes();repo=os.environ['GH_REPO'];commit=os.environ['GITHUB_SHA']
           def api(endpoint,payload):
               file=pathlib.Path(os.environ['RUNNER_TEMP'])/'github-payload.json';file.write_text(json.dumps(payload));return json.loads(subprocess.check_output(['gh','api','--method','POST','repos/'+repo+'/'+endpoint,'--input',str(file)]))
-          blob=api('git/blobs',{'encoding':'base64','content':base64.b64encode(data).decode()})
-          metadata={'sourceCommit':commit,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'unsigned':True}
-          tree=api('git/trees',{'tree':[{'path':'unsigned.apk','mode':'100644','type':'blob','sha':blob['sha']},{'path':'build.json','mode':'100644','type':'blob','content':json.dumps(metadata)}]})
+          parts=[];entries=[]
+          for i,start in enumerate(range(0,len(data),4*1024*1024)):
+              chunk=data[start:start+4*1024*1024];name=f'unsigned.apk.part{i:03d}'
+              blob=api('git/blobs',{'encoding':'base64','content':base64.b64encode(chunk).decode()})
+              parts.append({'file':name,'bytes':len(chunk),'sha256':hashlib.sha256(chunk).hexdigest()});entries.append({'path':name,'mode':'100644','type':'blob','sha':blob['sha']})
+          metadata={'sourceCommit':commit,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'unsigned':True,'parts':parts}
+          tree=api('git/trees',{'tree':entries+[{'path':'build.json','mode':'100644','type':'blob','content':json.dumps(metadata)}]})
           new=api('git/commits',{'message':'Intermediate unsigned Android build '+commit[:7],'tree':tree['sha'],'parents':[]})
           api('git/refs',{'ref':'refs/heads/build/android-'+commit[:12],'sha':new['sha']})
           print('BUILD_BRANCH=build/android-'+commit[:12])
