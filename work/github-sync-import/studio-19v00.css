@@ -1,1 +1,18 @@
 .au-studio-19{max-width:100%;min-width:0}.au-studio-19 .actions{flex-wrap:wrap}.au-studio-19 select{max-width:100%;min-height:44px}.studio19-focus{padding:clamp(16px,4vw,32px);text-align:center;border:1px solid #d765bd55;border-radius:12px;background:#23112955}.studio19-phrase{font-size:clamp(1.3rem,4vw,2rem);line-height:1.5;overflow-wrap:anywhere}.studio19-tap{display:block;width:min(100%,440px);min-height:68px;margin:16px auto;font-size:1.15rem}.studio19-advanced{margin-top:20px}.studio19-advanced summary{cursor:pointer;padding:14px 4px;min-height:44px}.studio19-list{max-height:320px;overflow:auto;margin-block:16px}.studio19-row{display:flex;align-items:center;gap:10px;margin:8px 0}.studio19-row input{flex:0 0 auto;width:22px;height:22px}.studio19-row button{flex:1;text-align:left;overflow-wrap:anywhere;min-width:0}.studio19-row button[aria-pressed=true]{outline:2px solid #ed74df}.studio19-context{display:grid;gap:12px}.studio19-timeline{overflow-x:auto;max-width:100%;border:1px solid #d765bd55;margin-block:12px}.studio19-timeline-inner{position:relative;min-width:100%}.studio19-timeline canvas{display:block;width:100%;height:90px}.studio19-lane{position:relative;height:64px;border-top:1px solid #8884}.studio19-lane-label{font-size:.7rem;position:absolute;top:0;left:4px;pointer-events:none}.studio19-bar{position:absolute;top:22px;height:36px;overflow:hidden;white-space:nowrap;background:#a8328655;border:1px solid #ed74df;border-radius:4px;color:inherit;cursor:pointer}.studio19-preview{margin-top:16px;text-align:left}.studio19-form{max-width:min(94vw,560px)}.studio19-form form{display:grid;gap:12px}.studio19-form label{display:grid;gap:6px}.studio19-form textarea{min-height:100px}.au-projects-19 .major-card{margin-block:12px}.au-projects-19 h3{overflow-wrap:anywhere}@media(max-width:480px){.au-studio-19 .actions>button{flex:1 1 auto}.studio19-context .actions{gap:8px}.studio19-context .actions>button{font-size:.9rem}.studio19-focus{padding:14px}}
+
+/* Paroles à toucher : une seule zone de capture, corrections repliées. */
+.studio19-hint{font-size:.95rem;line-height:1.5;max-width:620px;margin:0 auto 20px;color:var(--muted,#c5b8cd)}
+.studio19-phrase{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:16px 0}
+.au-studio-19 .studio19-touch{font:inherit;color:inherit;white-space:pre-wrap;border:1px solid #d765bd66;border-radius:10px;background:#d765bd12;padding:14px 18px;min-height:56px;cursor:pointer;max-width:100%;overflow-wrap:anywhere;transition:background .15s,border-color .15s}
+.au-studio-19 .studio19-touch[data-state=current]{border-color:#fd4dd1;background:#fd4dd128;box-shadow:inset 0 -3px #fd4dd1}
+.au-studio-19 .studio19-touch[data-state=done]{color:var(--muted,#c5b8cd);background:transparent}
+.au-studio-19 .studio19-touch:disabled{cursor:default;opacity:.55}
+.studio19-next{color:var(--muted,#c5b8cd);font-size:1rem;overflow-wrap:anywhere}
+.studio19-running{display:grid;gap:10px;margin:16px 0}
+.studio19-running-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid #d765bd55;border-radius:8px;text-align:left}
+.studio19-running-row span{min-width:0;overflow-wrap:anywhere;font-size:.95rem}
+.studio19-running-row button{flex-shrink:0}
+.studio19-navigation{justify-content:center;margin-top:20px}
+.studio19-overlap{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;font-size:.9rem}
+.studio19-overlap input{width:20px;height:20px;flex-shrink:0}
+@media(max-width:480px){.studio19-running-row{flex-direction:column;align-items:stretch}.studio19-touch{padding:12px!important}.studio19-navigation>button{flex:1 1 40%!important}}

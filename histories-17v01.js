@@ -1,6 +1,16 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "19V02 · Site PC",
+      "12 octobre 2026",
+      "Une interface plus lisible et plus facile à parcourir.",
+      [
+        "Nouvelle direction artistique Néon industriel.",
+        "Boutons et commandes mieux espacés sur tous les écrans.",
+        "Annonces fermables et réaffichables depuis le bas de page."
+      ]
+    ],
+    [
       "19V01 · Site PC",
       "11 octobre 2026",
       "Atelier temporairement fermé pour réparation.",
@@ -456,6 +466,16 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "19V02 · Windows 0.5.3",
+      "12 octobre 2026",
+      "Une interface plus lisible et plus facile à parcourir.",
+      [
+        "Nouvelle direction artistique Néon industriel.",
+        "Boutons et commandes mieux espacés sur tous les écrans.",
+        "Annonces fermables et réaffichables depuis le bas de page."
+      ]
+    ],
+    [
       "19V01 · Windows 0.5.2",
       "11 octobre 2026",
       "Atelier temporairement fermé pour réparation.",
@@ -770,6 +790,16 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "19V02 · Site mobile",
+      "12 octobre 2026",
+      "Une interface plus lisible et plus facile à parcourir.",
+      [
+        "Nouvelle direction artistique Néon industriel.",
+        "Boutons et commandes mieux espacés sur tous les écrans.",
+        "Annonces fermables et réaffichables depuis le bas de page."
+      ]
+    ],
     [
       "19V01 · Site mobile",
       "11 octobre 2026",
@@ -1228,6 +1258,16 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "19V02 · Android 0.2.2",
+      "12 octobre 2026",
+      "Une interface plus lisible et plus facile à parcourir.",
+      [
+        "Nouvelle direction artistique Néon industriel.",
+        "Boutons et commandes mieux espacés sur tous les écrans.",
+        "Annonces fermables et réaffichables depuis le bas de page."
+      ]
+    ],
+    [
       "19V01 · Android 0.2.1",
       "11 octobre 2026",
       "Atelier temporairement fermé pour réparation.",
@@ -1372,6 +1412,16 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "19V02 · iOS 1.1.3",
+      "12 octobre 2026",
+      "Une interface plus lisible et plus facile à parcourir.",
+      [
+        "Nouvelle direction artistique Néon industriel.",
+        "Boutons et commandes mieux espacés sur tous les écrans.",
+        "Annonces fermables et réaffichables depuis le bas de page."
+      ]
+    ],
     [
       "19V01 · iOS 1.1.2",
       "11 octobre 2026",
