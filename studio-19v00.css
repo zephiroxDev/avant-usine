@@ -33,3 +33,7 @@
 .studio19-focus:has(.studio19-glide-phrase){background:linear-gradient(160deg,#211132,#311654);padding-inline:clamp(12px,3vw,26px)}
 .studio19-focus:has(.studio19-glide-phrase) .studio19-running:empty{display:none}
 .au-studio-19 .studio19-slider-wrap[hidden]{display:none!important}
+
+.studio19-sensitivity{display:flex;align-items:center;gap:10px;margin:12px 0 0;font-size:13px;flex-wrap:wrap}.studio19-sensitivity input{flex:1;min-width:90px;max-width:340px;accent-color:#c87bff}.studio19-sensitivity output{min-width:48px;text-align:right;font-variant-numeric:tabular-nums}
+
+.studio19-auto-pause{display:flex;gap:8px;align-items:center;font-size:13px;max-width:100%;white-space:normal}.studio19-auto-pause input{flex:none;accent-color:#c87bff}

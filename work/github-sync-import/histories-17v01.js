@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "19V04 · Site PC",
+      "13 octobre 2026",
+      "Choisis les paroles que tu veux voir.",
+      [
+        "La visibilité des paroles non chantées se règle de 0 à 100 %, par paliers de 10 : phrase actuelle seule ou texte complet.",
+        "Le réglage est mémorisé et s’applique aussi aux backs, à la synchronisation classique et à l’Immersion des applications."
+      ]
+    ],
+    [
       "19V03.2 · Site PC",
       "13 octobre 2026",
       "Une fin de phrase complète et plus naturelle.",
@@ -483,6 +492,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "19V04 · Application Windows 0.5.7",
+      "13 octobre 2026",
+      "Choisis les paroles que tu veux voir.",
+      [
+        "La visibilité des paroles non chantées se règle de 0 à 100 %, par paliers de 10 : phrase actuelle seule ou texte complet.",
+        "Le réglage est mémorisé et s’applique aussi aux backs, à la synchronisation classique et à l’Immersion des applications."
+      ]
+    ],
+    [
       "19V03.2 · Application Windows 0.5.6",
       "13 octobre 2026",
       "Une fin de phrase complète et plus naturelle.",
@@ -824,6 +842,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "19V04 · Site mobile",
+      "13 octobre 2026",
+      "Choisis les paroles que tu veux voir.",
+      [
+        "La visibilité des paroles non chantées se règle de 0 à 100 %, par paliers de 10 : phrase actuelle seule ou texte complet.",
+        "Le réglage est mémorisé et s’applique aussi aux backs, à la synchronisation classique et à l’Immersion des applications."
+      ]
+    ],
     [
       "19V03.2 · Site mobile",
       "13 octobre 2026",
@@ -1309,6 +1336,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "19V04 · Application Android 0.2.6",
+      "13 octobre 2026",
+      "Choisis les paroles que tu veux voir.",
+      [
+        "La visibilité des paroles non chantées se règle de 0 à 100 %, par paliers de 10 : phrase actuelle seule ou texte complet.",
+        "Le réglage est mémorisé et s’applique aussi aux backs, à la synchronisation classique et à l’Immersion des applications."
+      ]
+    ],
+    [
       "19V03.2 · Application Android 0.2.5",
       "13 octobre 2026",
       "Une fin de phrase complète et plus naturelle.",
@@ -1480,6 +1516,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "19V04 · Application iPhone 1.1.7",
+      "13 octobre 2026",
+      "Choisis les paroles que tu veux voir.",
+      [
+        "La visibilité des paroles non chantées se règle de 0 à 100 %, par paliers de 10 : phrase actuelle seule ou texte complet.",
+        "Le réglage est mémorisé et s’applique aussi aux backs, à la synchronisation classique et à l’Immersion des applications."
+      ]
+    ],
     [
       "19V03.2 · Application iPhone 1.1.6",
       "13 octobre 2026",

@@ -349,3 +349,12 @@ html[data-effects=off] :is(.au-motion-cover,canvas[data-cover-state]:not(.au-mot
 /* 19V03 : les paroles sont révélées, pas recouvertes d’un simple effet. */
 .au-lyric-line[data-reveal-mode=letters] .karaoke-char{display:inline-block;clip-path:inset(0 calc(100% - var(--fill,0%)) 0 0)}
 .au-lyric-line[data-reveal-mode=classic] .karaoke-main,.au-lyric-line[data-reveal-mode=classic] .karaoke-backs{mask-image:linear-gradient(to bottom,#000 calc(var(--reveal-edge,0%) - 10%),transparent var(--reveal-edge,0%));-webkit-mask-image:linear-gradient(to bottom,#000 calc(var(--reveal-edge,0%) - 10%),transparent var(--reveal-edge,0%))}
+
+/* 19V04 : contexte visible au choix, chant toujours au premier plan. */
+.au-lyrics-controls{position:sticky;top:0;z-index:4;padding:8px 10px;background:var(--lyrics-bg,#17101f);border-radius:10px;font:13px/1.5 Arial,sans-serif;color:inherit}.au-lyrics-controls summary{cursor:pointer}.au-lyrics-controls label{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding-top:10px}.au-lyrics-controls input{min-width:90px;flex:1;accent-color:#c87bff}.au-lyrics-controls output{min-width:40px;font-variant-numeric:tabular-nums}
+.au-adjustable-lyrics .au-lyric-line:not(.is-current){opacity:var(--lyrics-background,0);filter:none;animation:none;--karaoke-dim:#fff;--karaoke-ink:#fff}
+.au-adjustable-lyrics .au-lyric-line:not(.is-current) .karaoke-char{clip-path:none}
+.au-adjustable-lyrics .au-lyric-line:not(.is-current) :is(.karaoke-main,.karaoke-backs){mask-image:none;-webkit-mask-image:none}
+.au-adjustable-lyrics[data-lyrics-context=true] .au-lyric-line.is-current{--karaoke-dim:rgb(255 255 255 / var(--lyrics-background,0))}
+.au-adjustable-lyrics[data-lyrics-context=true] .au-lyric-line.is-current[data-reveal-mode=letters] .karaoke-char{clip-path:none}
+.au-adjustable-lyrics[data-lyrics-context=true] .au-lyric-line.is-current[data-reveal-mode=classic] :is(.karaoke-main,.karaoke-backs){mask-image:linear-gradient(to bottom,#000 calc(var(--reveal-edge,0%) - 10%),rgb(0 0 0 / var(--lyrics-background,0)) var(--reveal-edge,0%));-webkit-mask-image:linear-gradient(to bottom,#000 calc(var(--reveal-edge,0%) - 10%),rgb(0 0 0 / var(--lyrics-background,0)) var(--reveal-edge,0%))}

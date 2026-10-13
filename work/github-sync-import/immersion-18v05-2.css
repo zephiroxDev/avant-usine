@@ -12,8 +12,8 @@
 #auImmersionApp.au-im-idle[open]{grid-template-rows:minmax(0,1fr)}
 #auImmersionApp.au-im-idle :is(.au-im-head,.au-im-controls,.au-im-note){display:none!important}
 #auImmersionApp .au-im-current-only .au-lyric-line[hidden]{display:none!important}
-#auImmersionApp .au-im-current-only .au-lyrics-content{min-height:100%;display:flex;flex-direction:column;justify-content:center}
-#auImmersionApp .au-im-current-only .au-lyric-line{margin:0;opacity:1;transform:none}
+#auImmersionApp .au-im-current-only.au-current-lyrics-only .au-lyrics-content{min-height:100%;display:flex;flex-direction:column;justify-content:center}
+#auImmersionApp .au-im-current-only.au-current-lyrics-only .au-lyric-line{margin:0;opacity:1;transform:none}
 /* 19V00: artwork forms the scene; only the background is blurred. */
 #auImmersionApp.au-new-immersion{position:fixed;isolation:isolate;background:#160b1a!important;color:#faf5fc}
 #auImmersionApp .au-im-body{display:block;position:static}
