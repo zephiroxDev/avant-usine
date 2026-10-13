@@ -110,5 +110,6 @@
       "sha256": "1c944b5469ccfe5a4d3c20675ec3b86f493cc2004db1510bbe3add42e07f8273",
       "encoding": "base64"
     }
-  ]
+  ],
+  "transferRevision": 2
 }
