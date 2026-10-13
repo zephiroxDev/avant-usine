@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "19V03 · Site PC",
+      "13 octobre 2026",
+      "Les paroles prennent vie au rythme du morceau.",
+      [
+        "Les paroles Highlight apparaissent progressivement à la lettre près, backs compris.",
+        "En synchronisation classique, le texte se révèle par un fondu du haut vers le bas pendant la phrase."
+      ]
+    ],
+    [
       "19V02 · Site PC",
       "12 octobre 2026",
       "Une interface plus lisible et plus facile à parcourir.",
@@ -466,6 +475,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "19V03 · Application Windows 0.5.4",
+      "13 octobre 2026",
+      "Les paroles prennent vie au rythme du morceau.",
+      [
+        "Les paroles Highlight apparaissent progressivement à la lettre près, backs compris.",
+        "En synchronisation classique, le texte se révèle par un fondu du haut vers le bas pendant la phrase."
+      ]
+    ],
+    [
       "19V02 · Windows 0.5.3",
       "12 octobre 2026",
       "Une interface plus lisible et plus facile à parcourir.",
@@ -790,6 +808,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "19V03 · Site mobile",
+      "13 octobre 2026",
+      "Les paroles prennent vie au rythme du morceau.",
+      [
+        "Les paroles Highlight apparaissent progressivement à la lettre près, backs compris.",
+        "En synchronisation classique, le texte se révèle par un fondu du haut vers le bas pendant la phrase."
+      ]
+    ],
     [
       "19V02 · Site mobile",
       "12 octobre 2026",
@@ -1258,6 +1285,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "19V03 · Application Android 0.2.3",
+      "13 octobre 2026",
+      "Les paroles prennent vie au rythme du morceau.",
+      [
+        "Les paroles Highlight apparaissent progressivement à la lettre près, backs compris.",
+        "En synchronisation classique, le texte se révèle par un fondu du haut vers le bas pendant la phrase."
+      ]
+    ],
+    [
       "19V02 · Android 0.2.2",
       "12 octobre 2026",
       "Une interface plus lisible et plus facile à parcourir.",
@@ -1412,6 +1448,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "19V03 · Application iOS 1.1.4",
+      "13 octobre 2026",
+      "Les paroles prennent vie au rythme du morceau.",
+      [
+        "Les paroles Highlight apparaissent progressivement à la lettre près, backs compris.",
+        "En synchronisation classique, le texte se révèle par un fondu du haut vers le bas pendant la phrase."
+      ]
+    ],
     [
       "19V02 · iOS 1.1.3",
       "12 octobre 2026",

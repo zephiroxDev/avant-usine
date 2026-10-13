@@ -16,3 +16,20 @@
 .studio19-overlap{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;font-size:.9rem}
 .studio19-overlap input{width:20px;height:20px;flex-shrink:0}
 @media(max-width:480px){.studio19-running-row{flex-direction:column;align-items:stretch}.studio19-touch{padding:12px!important}.studio19-navigation>button{flex:1 1 40%!important}}
+
+/* Highlight 19V03 : une ligne horizontale et une seule barre à glisser. */
+.au-studio-19 .studio19-glide-phrase{display:block;text-align:left;white-space:pre;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;min-height:4rem;overflow-wrap:normal;padding:20px 8px;mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent)}
+.studio19-glide-phrase::-webkit-scrollbar{display:none}
+.studio19-glide-text{font-weight:750;white-space:pre;font-size:clamp(1.5rem,5vw,2.4rem)}
+.studio19-glide-char{background:linear-gradient(90deg,#c87bff var(--fill,0%),var(--text,#f6edff) var(--fill,0%));background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.studio19-slider-wrap{max-width:680px;margin:12px auto 24px;width:100%;order:2}
+.studio19-slider{height:68px;background:#0c0712;border:1px solid #a353cf55;border-radius:12px;position:relative;touch-action:none;user-select:none;cursor:ew-resize;outline-offset:5px}
+.studio19-slider:focus-visible{outline:3px solid #dbadff}
+.studio19-slider[aria-disabled=true]{opacity:.45;cursor:not-allowed}
+.studio19-slider-dots{position:absolute;inset:0 20px}
+.studio19-slider-dot{position:absolute;top:50%;width:5px;height:5px;border-radius:50%;background:#9543d2;transform:translate(-50%,-50%)}
+.studio19-slider-thumb{position:absolute;top:50%;left:calc(20px + (100% - 40px)*var(--position,0));width:40px;height:20px;background:#a64bea;border-radius:20px;transform:translate(-50%,-50%);box-shadow:0 0 12px #b560fb66;pointer-events:none}
+.studio19-slider[data-recording=true]{border-color:#d996ff}
+.studio19-focus:has(.studio19-glide-phrase){background:linear-gradient(160deg,#211132,#311654);padding-inline:clamp(12px,3vw,26px)}
+.studio19-focus:has(.studio19-glide-phrase) .studio19-running:empty{display:none}
+.au-studio-19 .studio19-slider-wrap[hidden]{display:none!important}

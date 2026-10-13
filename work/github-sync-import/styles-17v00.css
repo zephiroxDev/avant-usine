@@ -345,3 +345,7 @@ html[data-effects=off] :is(.au-motion-cover,canvas[data-cover-state]:not(.au-mot
 @media(prefers-reduced-motion:reduce){
  :is(.au-motion-cover,canvas[data-cover-state]:not(.au-motion-cover>canvas),.local-cover:not(.local-placeholder)){animation:none!important;box-shadow:0 0 5px #b17ccd55}
 }
+
+/* 19V03 : les paroles sont révélées, pas recouvertes d’un simple effet. */
+.au-lyric-line[data-reveal-mode=letters] .karaoke-char{display:inline-block;clip-path:inset(0 calc(100% - var(--fill,0%)) 0 0)}
+.au-lyric-line[data-reveal-mode=classic] .karaoke-main,.au-lyric-line[data-reveal-mode=classic] .karaoke-backs{mask-image:linear-gradient(to bottom,#000 calc(var(--reveal-edge,0%) - 10%),transparent var(--reveal-edge,0%));-webkit-mask-image:linear-gradient(to bottom,#000 calc(var(--reveal-edge,0%) - 10%),transparent var(--reveal-edge,0%))}
