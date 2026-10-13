@@ -16,3 +16,15 @@
 .studio19-overlap{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;font-size:.9rem}
 .studio19-overlap input{width:20px;height:20px;flex-shrink:0}
 @media(max-width:480px){.studio19-running-row{flex-direction:column;align-items:stretch}.studio19-touch{padding:12px!important}.studio19-navigation>button{flex:1 1 40%!important}}
+
+/* 19V03 — navigation tactile du Highlight progression (atelier privé). */
+.studio19-scrub-panel{margin:18px 0 6px;padding:16px;border:1px solid #8734cc88;border-radius:16px;background:linear-gradient(160deg,#180e2b,#080e1e);box-shadow:inset 0 1px #c87aff22}
+.studio19-scrub-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;color:#f1d9ff}
+.studio19-scrub-time{font-variant-numeric:tabular-nums;color:#cda8f7;font-size:.85rem}
+.studio19-scrub-words{display:flex;gap:8px;overflow-x:auto;padding:18px 2px 14px;scrollbar-width:thin;scrollbar-color:#9e39f3 #151124}
+.studio19-scrub-word{flex:0 0 auto;min-height:44px;padding:9px 14px;border:1px solid #66417e;border-radius:9px;background:#15132b;color:#e9e1f2;font:inherit;cursor:pointer}
+.studio19-scrub-word.is-active{border-color:#c06bff;background:#7723cc;color:#fff;box-shadow:0 0 18px #a83bff77}
+.studio19-scrub-label{display:block;text-align:left;color:#bfa5d4;font-size:.85rem}
+.studio19-scrub{display:block;width:100%;height:44px;margin:4px 0;accent-color:#a536f5;cursor:ew-resize;touch-action:pan-x}
+.studio19-scrub:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:480px){.studio19-scrub-panel{padding:12px}.studio19-scrub-words{gap:6px}.studio19-scrub-word{padding:8px 12px}}
