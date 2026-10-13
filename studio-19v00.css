@@ -51,3 +51,7 @@
 .studio19-scrub-wave{touch-action:none}
 @media(max-width:480px){.studio19-scrub-heading{flex-wrap:wrap}.studio19-scrub-time{margin-left:auto}.studio19-scrub-actions>.studio19-scrub-finish{grid-column:1/-1}}
 @media(prefers-reduced-motion:reduce){.studio19-scrub-words{scroll-behavior:auto}.studio19-scrub-word{transition:none}}
+
+/* 19V03 : remplissage continu des lettres, et non changement de couleur par mot. */
+.au-studio-19 .studio19-scrub-word{background:linear-gradient(90deg,#a84cff 0%,#a84cff var(--studio19-letter-fill,0%),#15132b var(--studio19-letter-fill,0%),#15132b 100%);color:#fff}
+.au-studio-19 .studio19-scrub-word.is-active{background:linear-gradient(90deg,#b45bff 0%,#b45bff var(--studio19-letter-fill,0%),#251539 var(--studio19-letter-fill,0%),#251539 100%);border-color:#c06bff;box-shadow:0 0 12px #a83bff55}
