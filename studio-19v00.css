@@ -34,3 +34,7 @@
 .studio19-scrub-help{margin:10px 0 0;font-size:.83rem;color:#c7b1d9;line-height:1.5}
 .studio19-scrub-word[aria-current=true]{outline:2px solid #e0a0ff;outline-offset:2px}
 @media(max-width:480px){.studio19-scrub-actions>.button{width:100%}}
+
+.studio19-scrub-wave{display:block;width:100%;height:72px;border:1px solid #653586;border-radius:10px;background:#251538;cursor:crosshair;touch-action:pan-y}
+.au-studio-19 .studio19-wave-button{display:block;margin:10px auto 8px;min-height:42px;border-radius:9px}
+@media(min-width:800px){.studio19-scrub-panel{padding:24px}.studio19-scrub-words{padding-block:24px}.studio19-scrub-wave{height:90px}}
