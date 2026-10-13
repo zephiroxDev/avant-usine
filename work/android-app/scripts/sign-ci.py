@@ -13,9 +13,9 @@ if metadata.get('parts'):
  data=b''.join(chunks)
 else:data=get('unsigned.apk')
 assert len(data)==metadata['bytes'] and hashlib.sha256(data).hexdigest()==metadata['sha256'];out=r/'outputs/application-android';out.mkdir(parents=True,exist_ok=True);unsigned=out/'unsigned.apk';unsigned.write_bytes(data)
-tools=Path.home()/'.cache/avant-usine-android-tools';paths=json.loads((tools/'paths.json').read_text());java=Path(paths['java']);bt=Path(paths['sdk'])/'build-tools/36.0.0';env=os.environ.copy();env.update(JAVA_HOME=str(java));env['PATH']=str(java/'bin')+os.pathsep+env['PATH']
-private=Path.home()/'.codex/signing/avant-usine-android';private.mkdir(parents=True,exist_ok=True);sign=private/'signing.json';key=private/'avant-usine-android.jks'
-if not sign.exists():sign.write_text(json.dumps({'password':secrets.token_urlsafe(32),'alias':'avant-usine'}))
+tools=r.parent/'outils-android';paths=json.loads((tools/'paths.json').read_text());java=Path(paths['java']);bt=Path(paths['sdk'])/'build-tools/36.0.0';env=os.environ.copy();env.update(JAVA_HOME=str(java));env['PATH']=str(java/'bin')+os.pathsep+env['PATH']
+private=r.parent/'cles-android';private.mkdir(parents=True,exist_ok=True);sign=private/'signing.json';key=private/'avant-usine-android.jks'
+if not sign.exists() or not key.exists():raise RuntimeError('Clés Android d’origine nécessaires : ne pas générer une nouvelle signature.')
 credentials=json.loads(sign.read_text());env['AU_ANDROID_KEY_PASS']=credentials['password']
 def run(args):subprocess.run([str(x) for x in args],cwd=project,env=env,check=True)
 if not key.exists():run([java/'bin/keytool.exe','-genkeypair','-keystore',key,'-alias',credentials['alias'],'-keyalg','RSA','-keysize','4096','-validity','10000','-storepass:env','AU_ANDROID_KEY_PASS','-keypass:env','AU_ANDROID_KEY_PASS','-dname','CN=Avant l’usine, OU=Android, O=zephiroxDev, C=FR'])

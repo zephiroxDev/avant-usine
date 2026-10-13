@@ -1,6 +1,6 @@
 from pathlib import Path
 import urllib.request,json,hashlib,zipfile,tarfile,concurrent.futures,base64
-tools=Path.home()/'.cache/avant-usine-android-tools';tools.mkdir(parents=True,exist_ok=True)
+tools=Path(__file__).resolve().parents[4]/'outils-android';tools.mkdir(parents=True,exist_ok=True)
 def get(url):
  with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Avant-usine-build'}),timeout=120) as r:return r.read()
 def download(url,path,sha=None):
