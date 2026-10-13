@@ -18,7 +18,7 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
  focus.prepend(hint);focus.append(nextLine,running,navigation);
  const scrubPanel=E('section',null,'studio19-scrub-panel'),scrubTitle=E('div',null,'studio19-scrub-heading'),scrubWords=E('div',null,'studio19-scrub-words'),scrubLabel=E('label','Déplacer la lecture dans le morceau','studio19-scrub-label'),scrub=E('input'),scrubTime=E('output',null,'studio19-scrub-time');
  scrub.type='range';scrub.min='0';scrub.max='1000';scrub.step='1';scrub.value='0';scrub.className='studio19-scrub';scrub.setAttribute('aria-label','Curseur violet de navigation dans la musique');
- scrubTitle.append(E('strong','Highlight progression'),scrubTime);scrubLabel.append(scrub);scrubPanel.append(scrubTitle,scrubWords,scrubLabel);focus.append(scrubPanel);
+ scrubTitle.append(E('strong','Highlight progression'),scrubTime);scrubLabel.append(scrub);const scrubActions=E('div',null,'studio19-scrub-actions'),scrubMark=E('button','Placer le repère du mot','button studio19-scrub-mark'),scrubHint=E('p','Glisse le curseur pour trouver le début du mot, puis place son repère.','studio19-scrub-help');scrubMark.type='button';scrubActions.append(scrubMark);scrubPanel.append(scrubTitle,scrubWords,scrubLabel,scrubActions,scrubHint);focus.append(scrubPanel);
  const stamp=t=>{const v=Math.max(0,Math.floor(t||0));return Math.floor(v/60)+':'+String(v%60).padStart(2,'0');};
  function scrubDuration(){return Number.isFinite(audio.duration)&&audio.duration>0?audio.duration:Number.isFinite(model.project.duration)?model.project.duration:0;}
  let scrubbing=false,lastScrubWord=-1;
@@ -32,6 +32,8 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
  if(index!==lastScrubWord){lastScrubWord=index;children[index]?.scrollIntoView?.({block:'nearest',inline:'nearest',behavior:'smooth'});}
  }
  scrub.oninput=()=>{const d=scrubDuration();if(!d)return;audio.currentTime=d*Number(scrub.value)/1000;updateScrub();};
+ scrubMark.onclick=()=>{try{const l=current(),tokens=l?M.words(l.text):[];if(!l||!tokens.length)throw Error('Sélectionne une phrase contenant des mots.');if(l.locked)throw Error('Déverrouille cette phrase avant de placer un repère.');if(!Number.isFinite(audio.currentTime))throw Error('Position audio indisponible.');const offset=wordIndex<tokens.length?tokens[wordIndex].offset:M.size(l.text);model.point(l.id,offset,audio.currentTime);if(wordIndex<tokens.length)wordIndex++;else{cursor=Math.min(cursor+1,trackLines().length);wordIndex=0;}status.textContent='Repère enregistré à '+stamp(audio.currentTime)+'.';render();}catch(e){status.textContent=e.message;}};
+
  const overlapLabel=E('label',null,'studio19-overlap'),overlap=E('input');overlap.type='checkbox';overlapLabel.append(overlap,document.createTextNode('Les phrases se chevauchent'));focus.append(overlapLabel);
  overlap.onchange=()=>{status.textContent=overlap.checked?'Chaque phrase en cours garde son propre bouton de fin.':'La phrase précédente se termine au début de la suivante, sauf si tu marques sa fin avant.';};
 
@@ -92,7 +94,7 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
  }
  function render(){
   if(disposed)return;const p=model.project,currentLine=current();trackSelect.replaceChildren();for(const t of p.tracks){const o=E('option',t.name);o.value=t.id;trackSelect.append(o);}trackSelect.value=activeTrack;
-  scrubPanel.hidden=captureMode!=='words';lastScrubWord=-1;scrubWords.replaceChildren();if(captureMode==='words'&&currentLine){M.words(currentLine.text).forEach((w,i)=>{const token=E('button',w.text.trim(),'studio19-scrub-word');token.type='button';token.onclick=()=>{wordIndex=i;selected=currentLine.id;const point=currentLine.points.find(p=>p[0]===w.offset);if(point&&Number.isFinite(point[1]))audio.currentTime=point[1];render();};scrubWords.append(token);});}updateScrub();
+  scrubPanel.hidden=captureMode!=='words';scrubMark.disabled=!currentLine||currentLine.locked;lastScrubWord=-1;scrubWords.replaceChildren();if(captureMode==='words'&&currentLine){M.words(currentLine.text).forEach((w,i)=>{const token=E('button',w.text.trim(),'studio19-scrub-word');token.type='button';token.onclick=()=>{wordIndex=i;selected=currentLine.id;const point=currentLine.points.find(p=>p[0]===w.offset);if(point&&Number.isFinite(point[1]))audio.currentTime=point[1];render();};scrubWords.append(token);});}updateScrub();
   phrase.replaceChildren();
   hint.textContent=captureMode==='words'?'Touche chaque mot quand il est chanté, puis « Fin de phrase ». Le mot suivant se prépare automatiquement.':'Touche la phrase quand elle commence. La suivante se prépare automatiquement.';
   if(currentLine){
