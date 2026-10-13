@@ -42,3 +42,12 @@
 .studio19-scrub-actions{flex-wrap:wrap;align-items:center}
 .au-studio-19 .studio19-nudge{min-width:68px;min-height:44px;border-radius:9px;font-variant-numeric:tabular-nums}
 @media(max-width:480px){.studio19-scrub-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.studio19-scrub-actions>.studio19-scrub-mark{grid-column:1/-1}}
+
+.studio19-scrub-count{font-size:.8rem;font-weight:600;color:#d4b1f0;background:#6a278b55;padding:5px 9px;border-radius:999px;white-space:nowrap}
+.au-studio-19 .studio19-scrub-finish{min-height:48px;border-radius:10px;border:1px solid #8150aa}
+.au-studio-19 .studio19-scrub-actions button:disabled{opacity:.45;cursor:not-allowed}
+.studio19-scrub-words{scroll-snap-type:x proximity;overscroll-behavior-x:contain}
+.studio19-scrub-word{scroll-snap-align:center}
+.studio19-scrub-wave{touch-action:none}
+@media(max-width:480px){.studio19-scrub-heading{flex-wrap:wrap}.studio19-scrub-time{margin-left:auto}.studio19-scrub-actions>.studio19-scrub-finish{grid-column:1/-1}}
+@media(prefers-reduced-motion:reduce){.studio19-scrub-words{scroll-behavior:auto}.studio19-scrub-word{transition:none}}
