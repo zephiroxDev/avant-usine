@@ -475,7 +475,7 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
-      "19V03 · Application Windows 0.5.4",
+      "19V03 · Application Windows 0.5.5",
       "13 octobre 2026",
       "Les paroles prennent vie au rythme du morceau.",
       [
@@ -1285,7 +1285,7 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
-      "19V03 · Application Android 0.2.3",
+      "19V03 · Application Android 0.2.4",
       "13 octobre 2026",
       "Les paroles prennent vie au rythme du morceau.",
       [
@@ -1449,7 +1449,7 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "ios": [
     [
-      "19V03 · Application iOS 1.1.4",
+      "19V03 · Application iOS 1.1.5",
       "13 octobre 2026",
       "Les paroles prennent vie au rythme du morceau.",
       [
