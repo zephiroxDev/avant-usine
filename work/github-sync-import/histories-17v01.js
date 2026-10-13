@@ -1,6 +1,14 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "19V03.2 · Site PC",
+      "13 octobre 2026",
+      "Une fin de phrase complète et plus naturelle.",
+      [
+        "Les phrases Highlight se révèlent jusqu’à la dernière lettre avant de disparaître, backs compris."
+      ]
+    ],
+    [
       "19V03 · Site PC",
       "13 octobre 2026",
       "Les paroles prennent vie au rythme du morceau.",
@@ -475,6 +483,14 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "19V03.2 · Application Windows 0.5.6",
+      "13 octobre 2026",
+      "Une fin de phrase complète et plus naturelle.",
+      [
+        "Les phrases Highlight se révèlent jusqu’à la dernière lettre avant de disparaître, backs compris."
+      ]
+    ],
+    [
       "19V03 · Application Windows 0.5.5",
       "13 octobre 2026",
       "Les paroles prennent vie au rythme du morceau.",
@@ -808,6 +824,14 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "19V03.2 · Site mobile",
+      "13 octobre 2026",
+      "Une fin de phrase complète et plus naturelle.",
+      [
+        "Les phrases Highlight se révèlent jusqu’à la dernière lettre avant de disparaître, backs compris."
+      ]
+    ],
     [
       "19V03 · Site mobile",
       "13 octobre 2026",
@@ -1285,6 +1309,14 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "19V03.2 · Application Android 0.2.5",
+      "13 octobre 2026",
+      "Une fin de phrase complète et plus naturelle.",
+      [
+        "Les phrases Highlight se révèlent jusqu’à la dernière lettre avant de disparaître, backs compris."
+      ]
+    ],
+    [
       "19V03 · Application Android 0.2.4",
       "13 octobre 2026",
       "Les paroles prennent vie au rythme du morceau.",
@@ -1448,6 +1480,14 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "19V03.2 · Application iPhone 1.1.6",
+      "13 octobre 2026",
+      "Une fin de phrase complète et plus naturelle.",
+      [
+        "Les phrases Highlight se révèlent jusqu’à la dernière lettre avant de disparaître, backs compris."
+      ]
+    ],
     [
       "19V03 · Application iOS 1.1.5",
       "13 octobre 2026",

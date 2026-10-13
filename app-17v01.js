@@ -507,15 +507,16 @@ function lyricAnnotationMap(lines,original){
 }
 
 function lyricLineEnd(data,i){
- if(Number.isFinite(data.line_ends?.[i]))return data.line_ends[i];
- if(data.sync_mode!=='blocks'&&data.curves?.[i]?.length)return data.curves[i].at(-1)[1];
+ const curveEnd=data.sync_mode!=='blocks'&&data.curves?.[i]?.length?data.curves[i].at(-1)[1]:null;
+ if(Number.isFinite(data.line_ends?.[i]))return Number.isFinite(curveEnd)?Math.max(data.line_ends[i],curveEnd):data.line_ends[i];
+ if(Number.isFinite(curveEnd))return curveEnd;
  let end=data.end_time??data.duration,start=data.times[i];
  for(let j=i+1;j<data.times.length;j++)if(data.times[j]>start){end=Math.min(end,data.times[j]);break;}
  return end;
 }
 function currentLyricLines(data,time){
  if(!Number.isFinite(time))return [];
- return data.lines.flatMap((_,i)=>Number.isFinite(data.times[i])&&Number.isFinite(lyricLineEnd(data,i))&&time>=data.times[i]&&time<lyricLineEnd(data,i)?[i]:[]);
+ return data.lines.flatMap((_,i)=>Number.isFinite(data.times[i])&&Number.isFinite(lyricLineEnd(data,i))&&time>=data.times[i]&&time<lyricLineEnd(data,i)+(data.sync_mode!=='blocks'&&data.curves?.[i]?.length ? .18 : 0)?[i]:[]);
 }
 
 function createPublicLyricsView(viewport,data,{seek,automatic=()=>true,endActions=true,currentOnly=true}={}){
@@ -553,7 +554,7 @@ function createPublicLyricsView(viewport,data,{seek,automatic=()=>true,endAction
   if(nextRow&&soon>0&&soon<.45&&bottom-top<height*.5){const nextTop=nextRow.getBoundingClientRect().top-box.top-viewport.clientTop;if(nextTop>height*.72){desired=Math.min(viewport.scrollTop+nextTop-height*.65,viewport.scrollTop+top-height*.08);}}
   if(top<height*.18||bottom>height*.78||desired>viewport.scrollTop+2){target=Math.max(0,Math.min(viewport.scrollHeight-height,desired));if(lastTarget!==null&&Math.abs(lastTarget-target)<2)return;lastTarget=target;if(reduced()){viewport.scrollTop=target;return;}if(!scrollFrame){lastWall=performance.now();scrollFrame=requestAnimationFrame(step);}}
  }
- function paint(time){const finished=Number.isFinite(lyricsEndTime(data))&&time>=lyricsEndTime(data);content.classList.toggle('is-finished',finished);content.hidden=finished&&time>=lyricsEndTime(data)+.8&&!selecting()&&!dragging;ending.hidden=!endActions||!finished||time<lyricsEndTime(data)+.8;
+ function paint(time){const finished=Number.isFinite(lyricsEndTime(data))&&time>=lyricsEndTime(data)+(data.sync_mode!=='blocks'&&data.curves?.length ? .18 : 0);content.classList.toggle('is-finished',finished);content.hidden=finished&&time>=lyricsEndTime(data)+.8&&!selecting()&&!dragging;ending.hidden=!endActions||!finished||time<lyricsEndTime(data)+.8;
  if(finished){rows.forEach(row=>{row.hidden=currentOnly;if(row.classList.contains('is-current'))row.classList.add('is-leaving');row.classList.remove('is-current');row.removeAttribute('aria-current');});active=-1;lastTarget=null;cancelAnimationFrame(scrollFrame);scrollFrame=0;return -1;}
  const next=AU_KARAOKE.paintLines(rows,data,time,active),live=new Set(currentLyricLines(data,time));active=live.has(next)?next:(live.size?[...live].at(-1):-1);rows.forEach((row,i)=>{const selected=live.has(i),was=row.classList.contains('is-current');row.hidden=currentOnly&&!selected;row.classList.toggle('is-current',selected);row.classList.toggle('is-past',i<active&&!selected);row.classList.toggle('is-leaving',was&&!selected&&i<active);if(selected){row.setAttribute('aria-current','true');if(row.dataset.revealMode==='letters')AU_KARAOKE.paint(row,AU_KARAOKE.position(data.curves[i],time));else{const end=lyricLineEnd(data,i),fraction=Math.max(0,Math.min(1,(time-data.times[i])/Math.max(.001,end-data.times[i])));row.style.setProperty('--reveal-edge',fraction===0?'0%':fraction===1?'110%':(fraction*110)+'%');}}else row.removeAttribute('aria-current');});follow(time);return active;}
  return {rows,paint,dispose(){disposed=true;cancelAnimationFrame(scrollFrame);content.removeEventListener('pointerdown',downSelection);document.removeEventListener('pointerup',upSelection);document.removeEventListener('pointercancel',upSelection);content.removeEventListener('keyup',selectPassage);document.removeEventListener('selectionchange',nativeChange);window.removeEventListener('au:annotations-updated',highlights);passage.onclick=null;rows.forEach(row=>{row.onclick=null;row.onkeydown=null;});ending.querySelectorAll('button').forEach(b=>b.onclick=null);}};
@@ -1258,7 +1259,7 @@ function initProjectGuide(){
  secret.forEach((word,i)=>{const card=element('article','major-card'),paragraph=element('p');const [before,clue,after]=clueSentences[i];if(clue!==word)throw Error('Indice incomplet');paragraph.append(document.createTextNode(guide[i][1]+' '+before),element('span','au-17-guide-clue',clue),document.createTextNode(after));card.append(element('h2','',guide[i][0]),paragraph);zone.append(card);});
  const rest=element('div','au-17-guide au-17-guide-rest');rest.hidden=true;const more=button('button secondary','Lire le reste',()=>{rest.hidden=!rest.hidden;more.textContent=rest.hidden?'Lire le reste':'Masquer la suite';more.setAttribute('aria-expanded',String(!rest.hidden));});more.setAttribute('aria-expanded','false');
  for(const [title,text]of [
-['Paroles révélées progressivement','Le Highlight fait apparaître les lettres selon les repères du fichier, y compris les backs. En synchronisation classique, le texte apparaît du haut vers le bas sur la durée de la phrase ; sans fin explicite, celle-ci est estimée jusqu’au prochain départ. Cet effet visuel ne crée pas de repères de mots.'],
+['Paroles révélées progressivement','Le Highlight fait apparaître les lettres selon les repères du fichier, y compris les backs. La phrase complète reste brièvement visible à la fin pour ne pas couper les dernières lettres. En synchronisation classique, le texte apparaît du haut vers le bas sur la durée de la phrase ; sans fin explicite, celle-ci est estimée jusqu’au prochain départ. Cet effet visuel ne crée pas de repères de mots.'],
  ['Navigation et annonces','Sur les petits écrans, le bouton Menu rassemble la navigation. Les annonces des applications et de soutien se ferment avec leur croix ; Réafficher les annonces, en bas de page, permet de les retrouver. Le lecteur réserve son espace pour laisser les commandes du bas accessibles.'],
  ['Atelier en réparation','L’Atelier de synchronisation est temporairement fermé pour réparation. Les brouillons sont conservés et les paroles déjà synchronisées restent disponibles dans les lecteurs.'],
 ['Paroles au bon moment','Le lecteur de paroles synchronisées affiche les lignes en cours, y compris plusieurs phrases si leurs timings se chevauchent. Les lignes terminées ou futures sont masquées. Les synchronisations simples sans fin de ligne connue restent affichées jusqu’au prochain départ.'],

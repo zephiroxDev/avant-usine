@@ -1,4 +1,3 @@
-# Avant l’usine — Application Windows 0.5.5 · 19V03
+# 19V03.2 — Application Windows 0.5.6
 
-- Les paroles Highlight apparaissent progressivement à la lettre près, backs compris.
-- En synchronisation classique, le texte se révèle par un fondu du haut vers le bas pendant la phrase.
+Les phrases Highlight se révèlent jusqu’à la dernière lettre avant de disparaître, backs compris.
