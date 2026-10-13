@@ -28,3 +28,9 @@
 .studio19-scrub{display:block;width:100%;height:44px;margin:4px 0;accent-color:#a536f5;cursor:ew-resize;touch-action:pan-x}
 .studio19-scrub:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:480px){.studio19-scrub-panel{padding:12px}.studio19-scrub-words{gap:6px}.studio19-scrub-word{padding:8px 12px}}
+
+.studio19-scrub-actions{display:flex;justify-content:center;gap:10px;margin-top:10px}
+.au-studio-19 .studio19-scrub-mark{min-height:48px;background:linear-gradient(100deg,#8530d7,#b246ef);color:#fff;border:1px solid #d58cff;border-radius:10px;font-weight:700}
+.studio19-scrub-help{margin:10px 0 0;font-size:.83rem;color:#c7b1d9;line-height:1.5}
+.studio19-scrub-word[aria-current=true]{outline:2px solid #e0a0ff;outline-offset:2px}
+@media(max-width:480px){.studio19-scrub-actions>.button{width:100%}}
