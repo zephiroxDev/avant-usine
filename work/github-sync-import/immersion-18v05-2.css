@@ -29,3 +29,11 @@
 #auImmersionApp .au-im-controls{justify-content:center;border-top:0;max-width:1000px;width:100%;margin:auto;padding:12px}
 #auImmersionApp .au-im-placeholder{display:none}
 @media(max-width:600px){#auImmersionApp .au-im-viewport{font-size:clamp(24px,7vw,34px);padding:20px 12px}#auImmersionApp .au-im-head h2{font-size:15px}#auImmersionApp .au-im-controls{padding:4px;gap:6px}}
+/* 19V06 : tout l'espace interne, sans plein écran système. */
+#auImmersionApp.au-new-immersion{inset:0;width:100%!important;height:100dvh!important;max-width:none!important;max-height:none!important;margin:0!important;padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))!important}
+#auImmersionApp .au-im-lyrics{max-width:none;width:100%;height:100%;min-height:0}
+#auImmersionApp .au-im-viewport{width:100%;padding:clamp(8px,2vw,28px);font-size:clamp(28px,5vw,64px)}
+#auImmersionApp .au-im-controls{max-width:none;width:100%;padding:4px;gap:6px}
+#auImmersionApp .au-lyrics-toolbar{justify-content:center;padding:4px;gap:6px}
+#auImmersionApp.au-im-idle .au-lyrics-toolbar{display:none!important}
+@media(max-height:450px){#auImmersionApp .au-im-viewport{font-size:clamp(24px,4vw,42px)}#auImmersionApp .au-im-note{display:none}}

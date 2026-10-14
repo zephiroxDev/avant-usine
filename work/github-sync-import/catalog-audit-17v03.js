@@ -63,6 +63,6 @@
     if(mode==='links'&&token===epoch)finish(results,songs.length,done,start,signal.aborted);
    }catch{if(token===epoch)finish(results,songs.length,done,start,true);}finally{if(token===epoch){running=false;cancelButton.hidden=true;retry.disabled=false;}}
   }
-  panel.addEventListener('close',()=>{controller?.abort();panel.querySelectorAll('audio').forEach(a=>a.pause());});window.addEventListener('au:access-preview',refresh);window.addEventListener('au:catalog-published',()=>{controller?.abort();});refresh();return {start:refresh,stop(){epoch++;controller?.abort();running=false;report=null;panel.close();linkEntry.hidden=duplicateEntry.hidden=true;list.replaceChildren();summary.replaceChildren();},refresh};
+  panel.addEventListener('close',()=>{controller?.abort();panel.querySelectorAll('audio').forEach(a=>a.pause());});window.addEventListener('au:role-changed',refresh);window.addEventListener('au:catalog-published',()=>{controller?.abort();});refresh();return {start:refresh,stop(){epoch++;controller?.abort();running=false;report=null;panel.close();linkEntry.hidden=duplicateEntry.hidden=true;list.replaceChildren();summary.replaceChildren();},refresh};
  };
 })();

@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "19V06 · Site PC",
+      "14 octobre 2026",
+      "Plus de place pour les paroles, un compte plus clair.",
+      [
+        "Les fonctions personnelles sont regroupées dans le panneau principal de Mon compte.",
+        "Les commandes et réglages des paroles sont placés en dehors du texte défilant pour faciliter sa lecture."
+      ]
+    ],
+    [
       "19V05 · Site PC",
       "14 octobre 2026",
       "Les transitions des paroles, à ton goût.",
@@ -503,6 +512,16 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "19V06 · Application Windows 0.5.9",
+      "14 octobre 2026",
+      "Plus de place pour les paroles, un compte plus clair.",
+      [
+        "Les fonctions personnelles sont regroupées dans le panneau principal de Mon compte.",
+        "Les commandes et réglages des paroles sont placés en dehors du texte défilant pour faciliter sa lecture.",
+        "Dans les applications, Immersion utilise tout l’espace interne disponible sans activer le plein écran du système."
+      ]
+    ],
+    [
       "19V05 · Application Windows 0.5.8",
       "14 octobre 2026",
       "Les transitions des paroles, à ton goût.",
@@ -864,6 +883,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "19V06 · Site mobile",
+      "14 octobre 2026",
+      "Plus de place pour les paroles, un compte plus clair.",
+      [
+        "Les fonctions personnelles sont regroupées dans le panneau principal de Mon compte.",
+        "Les commandes et réglages des paroles sont placés en dehors du texte défilant pour faciliter sa lecture."
+      ]
+    ],
     [
       "19V05 · Site mobile",
       "14 octobre 2026",
@@ -1369,6 +1397,16 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "19V06 · Application Android 0.2.8",
+      "14 octobre 2026",
+      "Plus de place pour les paroles, un compte plus clair.",
+      [
+        "Les fonctions personnelles sont regroupées dans le panneau principal de Mon compte.",
+        "Les commandes et réglages des paroles sont placés en dehors du texte défilant pour faciliter sa lecture.",
+        "Dans les applications, Immersion utilise tout l’espace interne disponible sans activer le plein écran du système."
+      ]
+    ],
+    [
       "19V05 · Application Android 0.2.7",
       "14 octobre 2026",
       "Les transitions des paroles, à ton goût.",
@@ -1560,6 +1598,17 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "19V06 · Application iPhone 1.1.9",
+      "14 octobre 2026",
+      "Plus de place pour les paroles, un compte plus clair.",
+      [
+        "Les fonctions personnelles sont regroupées dans le panneau principal de Mon compte.",
+        "Les commandes et réglages des paroles sont placés en dehors du texte défilant pour faciliter sa lecture.",
+        "Dans les applications, Immersion utilise tout l’espace interne disponible sans activer le plein écran du système.",
+        "Sur les iPhone compatibles, les paroles synchronisées peuvent apparaître dans Dynamic Island. Le Highlight est une option expérimentale à activer dans Mon compte."
+      ]
+    ],
     [
       "19V05 · Application iPhone 1.1.8",
       "14 octobre 2026",

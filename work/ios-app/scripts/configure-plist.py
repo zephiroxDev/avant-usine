@@ -8,7 +8,7 @@ p=app/'Info.plist'
 info=plistlib.loads(p.read_bytes())
 info.update(CFBundleDisplayName='Avant l’usine', CFBundleShortVersionString=release['version'],
             CFBundleVersion=str(release['buildNumber']), UIFileSharingEnabled=True,
-            LSSupportsOpeningDocumentsInPlace=True)
+            LSSupportsOpeningDocumentsInPlace=True, NSSupportsLiveActivities=True, UIBackgroundModes=['audio'])
 p.write_bytes(plistlib.dumps(info))
 privacy={'NSPrivacyTracking':False,'NSPrivacyCollectedDataTypes':[],
          'NSPrivacyAccessedAPITypes':[{'NSPrivacyAccessedAPIType':'NSPrivacyAccessedAPICategoryFileTimestamp',

@@ -29,3 +29,5 @@ scene=scene.replace('window?.rootViewController = CAPBridgeViewController()','wi
 if(!scene.includes('window?.rootViewController = ViewController()'))throw Error('iOS scene does not initialize the custom bridge');
 fs.writeFileSync(sceneFile,scene);
 cp.execFileSync('python',['scripts/configure-plist.py'],{cwd:root,stdio:'inherit'});
+
+cp.execFileSync(process.execPath,['scripts/configure-lyrics.cjs'],{cwd:root,stdio:'inherit'});
