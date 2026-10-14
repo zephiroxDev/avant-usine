@@ -1,14 +1,16 @@
 /* iOS: transfer the actual audio to AVPlayer while the WebView is hidden. */
 (()=>{'use strict';
 const native=window.Capacitor?.Plugins?.LiveLyrics;if(!native?.preparePlayback)return;
-let prepared='',preparing=null,phase='',owner=null,serial=Promise.resolve();
+let prepared='',preparing=null,phase='',owner=null,nativePlaying=false,serial=Promise.resolve();
 const wrapped=new WeakSet();
 const queue=fn=>{serial=serial.then(fn,fn).catch(error=>window.dispatchEvent(new CustomEvent('au:island-relay-error',{detail:error.message||String(error)})));return serial;};
 async function prepare(s){
  if(!s?.data?.lines?.length||!s.audio||phase||!s.key)return;
  if(!wrapped.has(s.audio)){wrapped.add(s.audio);const a=s.audio,play=a.play.bind(a),pause=a.pause.bind(a);
-  a.pause=()=>{if(phase==='native'&&owner?.audio===a)native.controlPlayback({key:owner.key,playing:false}).catch(()=>{});else pause();};
-  a.play=()=>{if(phase==='native'&&owner?.audio===a){if(window.AU_PLAYBACK_SOURCE_19?.()?.key===owner.key)return native.controlPlayback({key:owner.key,playing:true});return queue(foreground).then(play);}return play();};
+  const getter=window.HTMLMediaElement&&a instanceof HTMLMediaElement&&Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype,'paused')?.get;let actualPaused=a.paused;
+  Object.defineProperty(a,'paused',{configurable:true,get(){return owner?.audio===a&&['native','restoring'].includes(phase)?!nativePlaying:getter?getter.call(a):actualPaused;},set(value){actualPaused=value;}});
+  a.pause=()=>{if(phase==='native'&&owner?.audio===a){nativePlaying=false;native.controlPlayback({key:owner.key,playing:false}).catch(()=>{});}else pause();};
+  a.play=()=>{if(phase==='native'&&owner?.audio===a){if(window.AU_PLAYBACK_SOURCE_19?.()?.key===owner.key){nativePlaying=true;return native.controlPlayback({key:owner.key,playing:true});}return queue(foreground).then(play);}return play();};
  }
  const id=s.key+'|'+(s.audio.currentSrc||s.audio.src);
  if(prepared===id)return;if(preparing)return preparing;
@@ -35,14 +37,14 @@ async function background(){
   let before=a.currentTime;await arm();
   if(Math.abs(a.currentTime-before)>.2)await arm();
   if(!document.hidden||a.paused||a.ended||window.AU_PLAYBACK_SOURCE_19?.()?.key!==s.key){phase='';owner=null;return;}
-  a.pause();pausedByRelay=true;await native.commitPlayback({key:s.key});phase='native';
+  a.pause();pausedByRelay=true;await native.commitPlayback({key:s.key});nativePlaying=true;phase='native';
  }catch(error){await native.releasePlayback().catch(()=>{});phase='';owner=null;if(pausedByRelay)await a.play().catch(()=>{});throw error;}
 }
 async function foreground(resumeAfterError=false,allowResume=true){
  if(!phase)return;
  const s=owner;phase='restoring';
- try{const result=await native.releasePlayback();
-  if(result.owned&&s&&result.key===s.key&&window.AU_PLAYBACK_SOURCE_19?.()?.key===s.key){window.dispatchEvent(new CustomEvent('au:native-listening',{detail:{key:s.key,duration:s.audio.duration,segments:result.segments||[]}}));s.audio.currentTime=result.position;phase='';owner=null;if(allowResume&&(result.playing||resumeAfterError))await s.audio.play();else s.audio.dispatchEvent(new Event('pause'));}
+ try{const result=await native.releasePlayback();nativePlaying=!!result.playing;const raw=window.AU_PLAYBACK_SOURCE_19?.();
+  if(result.owned&&s&&result.key===s.key&&(raw?.key===s.key||s.local&&document.getElementById('audio')?.paused)){window.dispatchEvent(new CustomEvent('au:native-listening',{detail:{key:s.key,duration:s.audio.duration,segments:result.segments||[]}}));s.audio.currentTime=result.position;phase='';owner=null;if(allowResume&&(result.playing||resumeAfterError))await s.audio.play();else s.audio.dispatchEvent(new Event('pause'));}
  }finally{phase='';owner=null;window.dispatchEvent(new Event('au:island-relay-restored'));}
 }
 window.AU_ISLAND_AUDIO_19={prepare:s=>queue(()=>prepare(s)),get active(){return !!phase;},get phase(){return phase;}};
@@ -51,4 +53,5 @@ window.addEventListener('au:before-trackchange',()=>queue(async()=>{await foregr
 native.addListener('playbackEnded',()=>queue(async()=>{const s=owner;await foreground(false,false);if(s){s.audio.pause();s.audio.dispatchEvent(new Event('ended'));}}));
 native.addListener('playbackError',event=>queue(async()=>{await foreground(true);throw Error(event.message);}));
 native.addListener('playbackSleep',()=>queue(async()=>{await foreground(false,false);window.dispatchEvent(new Event('au:native-sleep'));}));
+native.addListener('playbackState',event=>{if(owner?.key===event.key)nativePlaying=!!event.playing;});
 })();

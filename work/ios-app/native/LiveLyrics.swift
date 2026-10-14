@@ -44,6 +44,10 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     private var lastStopReason = "aucun"
     private var playbackGap: Double = 0
     private var closingActivities = Set<String>()
+    private var lastAudioEvent: Double = 0
+    #if DEBUG
+    private var lastProbeWrite: Double = 0
+    #endif
     public override func load() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -63,11 +67,11 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { call.resolve(); return }
             call.resolve(["ticks": self.tickCount, "updates": self.updateCount,
-                "longestGap": self.longestGap, "playing": self.source?.playing ?? false,
+                "longestGap": self.longestGap, "playing": self.audio.ownsPlayback ? self.audio.playing : (self.source?.playing ?? false),
                 "state": self.activity.map { String(describing: $0.activityState) } ?? "absent",
                 "updatePending": self.updating, "background": UIApplication.shared.applicationState != .active,
                 "playbackGap": self.playbackGap, "nativeAudio": self.audio.ownsPlayback,
-                "stopReason": self.lastStopReason, "ios": UIDevice.current.systemVersion])
+                "stopReason": self.lastStopReason, "ios": UIDevice.current.systemVersion, "position": self.audio.position])
         }
     }
     @objc func availability(_ call: CAPPluginCall) {
@@ -183,6 +187,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
         let playing = audio.ownsPlayback ? audio.playing : s.playing
         let time = audio.ownsPlayback ? audio.position : min(s.duration, s.position + (s.playing ? max(0, ProcessInfo.processInfo.systemUptime-anchor) * s.rate : 0))
+        if audio.ownsPlayback, now-lastAudioEvent >= 0.5 { lastAudioEvent = now; notifyListeners("playbackState", data: ["key": s.id, "playing": playing]) }
         let indices = s.lines.indices.filter { time >= s.times[$0] && time < s.ends[$0] + (s.curves == nil ? 0 : 0.18) }
         let main = indices.first(where: { s.tracks?[$0] == "main" }) ?? indices.first
         let phrase = main.map { s.lines[$0] } ?? (playing ? "♪" : "Lecture en pause")
@@ -195,6 +200,13 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         }
         let next = s.times.indices.first { s.times[$0] > time }.map { s.lines[$0] } ?? ""
         var state = LyricsAttributes.ContentState(phrase: String(phrase.unicodeScalars.prefix(500)), backs: String(backs.unicodeScalars.prefix(100)), nextPhrase: String(next.unicodeScalars.prefix(100)), lineID: s.id + ":" + (main.map(String.init) ?? "gap") + ":" + (indices.map(String.init).joined(separator: ",")), highlighted: count, highlightEnabled: s.highlight && s.curves != nil, playing: playing, transition: s.transition, title: String(s.title.unicodeScalars.prefix(70)))
+        #if DEBUG
+        if now-lastProbeWrite >= 1, s.id == "__native-lyrics-test" {
+            lastProbeWrite = now
+            let probe: [String: Any] = ["position": time, "playing": playing, "nativeAudio": audio.ownsPlayback, "background": UIApplication.shared.applicationState != .active, "phrase": state.phrase, "highlight": state.highlightEnabled, "letters": count, "updates": updateCount]
+            if let folder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first, let bytes = try? JSONSerialization.data(withJSONObject: probe) { try? bytes.write(to: folder.appendingPathComponent("au-debug-background-lyrics.json"), options: .atomic) }
+        }
+        #endif
         while ((try? JSONEncoder().encode(state).count) ?? 0) > 3500 { if !state.nextPhrase.isEmpty { state.nextPhrase.removeLast() } else if !state.backs.isEmpty { state.backs.removeLast() } else if !state.phrase.isEmpty { state.phrase.removeLast() } else { return } }
         if let current = activity, current.activityState == .ended || current.activityState == .dismissed { activity = nil; lastState = nil }
         guard state != lastState, !updating else { return }

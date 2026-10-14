@@ -70,7 +70,10 @@ final class LyricsAudio {
         try session.setActive(true)
         ownsPlayback = true; previousSample = (position, Date().timeIntervalSince1970 * 1000)
         p.volume = gain(position); p.playImmediately(atRate: requestedRate)
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: title, MPMediaItemPropertyPlaybackDuration: duration, MPNowPlayingInfoPropertyElapsedPlaybackTime: position, MPNowPlayingInfoPropertyPlaybackRate: requestedRate]
+        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
+        info[MPMediaItemPropertyTitle] = title; info[MPMediaItemPropertyPlaybackDuration] = duration
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position; info[MPNowPlayingInfoPropertyPlaybackRate] = requestedRate
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
         let remote = MPRemoteCommandCenter.shared()
         commands.append((remote.pauseCommand, remote.pauseCommand.addTarget { [weak self] _ in self?.player?.pause(); self?.tick(); return .success }))
         commands.append((remote.playCommand, remote.playCommand.addTarget { [weak self] _ in guard let self = self else { return .commandFailed }; self.player?.playImmediately(atRate: self.requestedRate); self.tick(); return .success }))
