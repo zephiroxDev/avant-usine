@@ -2,6 +2,19 @@
   "format": 1,
   "images": [
     {
+      "id": "19v05-all",
+      "patch": "19V05",
+      "image": "promo-19v05-vivant.png",
+      "original": "promo-19v05.png",
+      "animation": "promo-19v05-anime.mp4",
+      "platforms": [
+        "Site 19V05",
+        "Windows 0.5.8",
+        "Android 0.2.7",
+        "iOS 1.1.8"
+      ]
+    },
+    {
       "id": "19v04-all",
       "patch": "19V04",
       "image": "promo-19v04-vivant.png",

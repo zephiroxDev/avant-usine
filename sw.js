@@ -1,5 +1,5 @@
 /* Cache uniquement l’interface locale. Les MP3, paroles et contributions restent en ligne. */
-const AU_CACHE='avant-usine-shell-19v04-r1-20261013';
+const AU_CACHE='avant-usine-shell-19v05-r1-20261014';
 const AU_BASE=new URL('./',self.location.href);
 const AU_INDEX=new URL('./index.html',AU_BASE).href;
 const AU_OFFLINE=new URL('./offline.html',AU_BASE).href;
