@@ -1599,6 +1599,17 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "ios": [
     [
+      "19V06.2 · Application iPhone 1.1.10",
+      "14 octobre 2026",
+      "Dynamic Island plus lisible, reprise du suivi renforcée.",
+      [
+        "Le nom Avant l’usine est supprimé du coin supérieur droit de Dynamic Island pour libérer la place des paroles.",
+        "Les arrêts, changements de piste et reprises du suivi sont mieux coordonnés ; une activité terminée est reconnue lors de la reprise.",
+        "Le suivi classique évite les actualisations de lettres inutiles, et le Highlight limite leur fréquence sans retarder les changements de phrase.",
+        "Un diagnostic local dans Mon compte aide à identifier les blocages en arrière-plan. Leur résolution complète reste à confirmer sur appareil."
+      ]
+    ],
+    [
       "19V06 · Application iPhone 1.1.9",
       "14 octobre 2026",
       "Plus de place pour les paroles, un compte plus clair.",

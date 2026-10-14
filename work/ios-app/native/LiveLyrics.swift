@@ -12,6 +12,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "availability", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setSource", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setClock", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "diagnostics", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "stop", returnType: CAPPluginReturnPromise)
     ]
     private struct Source: Decodable {
@@ -28,10 +29,30 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     private var updating = false
     private var failedTrack: String?
     private var generation = 0
+    private var lastTick = ProcessInfo.processInfo.systemUptime
+    private var longestGap: Double = 0
+    private var updateCount = 0
+    private var lastUpdateAt: Double = 0
+    private var tickCount = 0
+    private var lifecycleObservers: [NSObjectProtocol] = []
     public override func load() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in self?.refresh() }
+            self.timer = Timer(timeInterval: 0.25, repeats: true) { [weak self] _ in self?.refresh() }
+            if let timer = self.timer { RunLoop.main.add(timer, forMode: .common) }
+            self.lifecycleObservers.append(NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+                guard let self = self else { return }
+                self.lastState = nil; self.failedTrack = nil; self.refresh()
+            })
+        }
+    }
+    @objc func diagnostics(_ call: CAPPluginCall) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { call.resolve(); return }
+            call.resolve(["ticks": self.tickCount, "updates": self.updateCount,
+                "longestGap": self.longestGap, "playing": self.source?.playing ?? false,
+                "state": self.activity.map { String(describing: $0.activityState) } ?? "absent",
+                "updatePending": self.updating, "background": UIApplication.shared.applicationState != .active])
         }
     }
     @objc func availability(_ call: CAPPluginCall) {
@@ -52,7 +73,16 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         }
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { call.reject("Service indisponible."); return }
-            if self.source?.id != value.id { self.generation += 1; self.lastState = nil; self.endActivity() }
+            if self.source?.id != value.id {
+                self.generation += 1; self.lastState = nil
+                if self.activity?.attributes.trackID != value.id { self.endActivity() }
+                if self.activity == nil {
+                    self.activity = Activity<LyricsAttributes>.activities.first { $0.attributes.trackID == value.id && $0.activityState != .ended && $0.activityState != .dismissed }
+                }
+                for old in Activity<LyricsAttributes>.activities where old.id != self.activity?.id {
+                    Task { await old.end(nil, dismissalPolicy: .immediate) }
+                }
+            }
             self.failedTrack = nil; self.source = value; self.anchor = ProcessInfo.processInfo.systemUptime
             self.refresh(); call.resolve(["ready": true, "activityStarted": self.activity != nil])
         }
@@ -77,6 +107,8 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         if let old = old { Task { await old.end(nil, dismissalPolicy: .immediate) } }
     }
     private func refresh() {
+        let now = ProcessInfo.processInfo.systemUptime
+        longestGap = max(longestGap, now - lastTick); lastTick = now; tickCount += 1
         guard let s = source, s.enabled, !s.lines.isEmpty else { if activity != nil { endActivity() }; return }
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
         let time = min(s.duration, s.position + (s.playing ? max(0, ProcessInfo.processInfo.systemUptime-anchor) * s.rate : 0))
@@ -85,7 +117,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         let phrase = main.map { s.lines[$0] } ?? (s.playing ? "♪" : "Lecture en pause")
         let backs = indices.filter { $0 != main }.map { s.lines[$0] }.joined(separator: " · ")
         var count = 0
-        if let i = main, let curves = s.curves, i < curves.count {
+        if s.highlight, let i = main, let curves = s.curves, i < curves.count {
             let points = curves[i]
             if let last = points.last, last.count == 2, time >= last[1] { count = phrase.unicodeScalars.count }
             else if points.count > 1 { for j in 1..<points.count { let a=points[j-1],b=points[j];if a.count == 2 && b.count == 2 && b[1] > a[1] && time >= a[1] && time < b[1] { count=Int((a[0]+(b[0]-a[0])*(time-a[1])/(b[1]-a[1])).rounded(.down));break } } }
@@ -93,17 +125,24 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         let next = s.times.indices.first { s.times[$0] > time }.map { s.lines[$0] } ?? ""
         var state = LyricsAttributes.ContentState(phrase: String(phrase.unicodeScalars.prefix(500)), backs: String(backs.unicodeScalars.prefix(100)), nextPhrase: String(next.unicodeScalars.prefix(100)), lineID: (main.map(String.init) ?? "gap") + ":" + (indices.map(String.init).joined(separator: ",")), highlighted: count, highlightEnabled: s.highlight && s.curves != nil, playing: s.playing, transition: s.transition)
         while ((try? JSONEncoder().encode(state).count) ?? 0) > 3500 { if !state.nextPhrase.isEmpty { state.nextPhrase.removeLast() } else if !state.backs.isEmpty { state.backs.removeLast() } else if !state.phrase.isEmpty { state.phrase.removeLast() } else { return } }
+        if let current = activity, current.activityState == .ended || current.activityState == .dismissed { activity = nil; lastState = nil }
         guard state != lastState, !updating else { return }
+        if let previous = lastState, previous.lineID == state.lineID, previous.playing == state.playing,
+           previous.highlightEnabled == state.highlightEnabled {
+            let finalLetter = state.highlightEnabled && state.highlighted >= state.phrase.unicodeScalars.count && previous.highlighted < state.highlighted
+            let interval = UIApplication.shared.applicationState == .active ? 0.5 : 1.0
+            if !finalLetter && now - lastUpdateAt < interval { return }
+        }
         let attrs = LyricsAttributes(title: String(s.title.unicodeScalars.prefix(70)), trackID: String(s.id.prefix(100)))
-        let content = ActivityContent(state: state, staleDate: Date().addingTimeInterval(15), relevanceScore: 1)
+        let content = ActivityContent(state: state, staleDate: nil, relevanceScore: 1)
         if activity == nil {
             guard UIApplication.shared.applicationState == .active, failedTrack != s.id else { return }
-            do { activity = try Activity.request(attributes: attrs, content: content, pushType: nil); lastState = state }
+            do { activity = try Activity.request(attributes: attrs, content: content, pushType: nil); lastState = state; updateCount += 1; lastUpdateAt = now }
             catch { failedTrack = s.id; notifyListeners("error", data: ["message": error.localizedDescription]) }
         } else if let current = activity {
-            updating = true; let token = generation
-            Task { await current.update(content); await MainActor.run { self.updating = false; if self.generation == token { self.lastState = state } } }
+            updating = true; lastUpdateAt = now; let token = generation
+            Task { await current.update(content); await MainActor.run { self.updating = false; if self.generation == token { self.lastState = state; self.updateCount += 1 }; self.refresh() } }
         }
     }
-    deinit { timer?.invalidate() }
+    deinit { timer?.invalidate(); for observer in lifecycleObservers { NotificationCenter.default.removeObserver(observer) } }
 }
