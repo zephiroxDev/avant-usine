@@ -16,7 +16,6 @@ struct LyricsWidget: Widget {
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) { Image(systemName: context.state.playing ? "music.note" : "pause.fill").foregroundStyle(.pink) }
-                DynamicIslandExpandedRegion(.trailing) { Text("Avant l’usine").font(.caption2).foregroundStyle(.secondary) }
                 DynamicIslandExpandedRegion(.bottom) {
                     VStack(spacing: 6) {
                         phrase(context.state, text: context.state.phrase, offset: 0)
