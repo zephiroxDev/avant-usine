@@ -11,6 +11,8 @@ subprocess.run(['xcodebuild','-project','ios/App/App.xcodeproj','-scheme','App',
 run('xcrun','simctl','install',udid,'build-simulator/Build/Products/Debug-iphonesimulator/App.app')
 container=Path(run('xcrun','simctl','get_app_container',udid,'dev.zephirox.avantusine.ios','data').strip())
 probe=container/'Documents/au-debug-probe.json'
+# Warm Settings before starting the test audio: first launch can be slow.
+run('xcrun','simctl','launch',udid,'com.apple.Preferences')
 for phase in ['nativeSeed','nativeVerified']:
     probe.unlink(missing_ok=True)
     run('xcrun','simctl','launch',udid,'dev.zephirox.avantusine.ios')
