@@ -10,7 +10,7 @@ for(const file of fs.readdirSync(path.join(android,'site'))){
 let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
 html=html.replace('dataset.auApp="android"','dataset.auApp="ios"');
 html=html.replace('./android-logo.png','./icon-512.png').replace('./android.css','./ios.css').replace('./android.js','./ios.js');
-html=html.replace('</body>','<script src="./ios-lyrics.js" defer></script></body>');fs.copyFileSync(path.join(root,'web/lyrics-island.js'),path.join(dest,'ios-lyrics.js'));fs.writeFileSync(path.join(dest,'index.html'),html);
+html=html.replace('</body>','<script src="./ios-lyrics-audio.js" defer></script><script src="./ios-lyrics.js" defer></script></body>');fs.copyFileSync(path.join(root,'web/lyrics-audio.js'),path.join(dest,'ios-lyrics-audio.js'));fs.copyFileSync(path.join(root,'web/lyrics-island.js'),path.join(dest,'ios-lyrics.js'));fs.writeFileSync(path.join(dest,'index.html'),html);
 for(const file of ['icon-512.png','icon-192.png','apple-touch-icon.png','favicon-32.png'])
   fs.copyFileSync(path.resolve(root,'../desktop-app/build',file),path.join(dest,file));
 const release=require('../release.json');
@@ -20,6 +20,7 @@ const history=JSON.parse(fs.readFileSync(path.resolve(root,'../github-sync-impor
 history.ios=require('../patch-notes.json');fs.writeFileSync(path.join(dest,historyFile),prefix+JSON.stringify(history)+';');
 const main=html.match(/src="\.\/(app-\d+v\d+\.js)"/)[1];
 let code=fs.readFileSync(path.join(dest,main),'utf8');
+code=code.replace("return {key,title:t?.title||'',audio,data:nativeLyricCache.get(key)||null};", "return {key,title:t?.title||'',audio,audioEdit:t?.audio_edit,data:nativeLyricCache.get(key)||null};");
 const platformNames="const names={'web-pc':'Site PC','desktop-pc':'Application PC','web-mobile':'Site mobile','android':'Application Android','ios':'Application iOS'};";
 if(!code.includes(platformNames))throw Error('Sélecteur des plateformes introuvable');
 code=code.replace(platformNames,"const names={'ios':'Application iOS','android':'Application Android','desktop-pc':'Application PC','web-mobile':'Site mobile','web-pc':'Site PC'};");
@@ -32,4 +33,7 @@ if(!code.includes(needle))throw Error('Section Infos introuvable');
 code=code.replace(needle,needle+"\n['Mises à jour iPhone et iPad','L’application télécharge les nouveaux IPA et vérifie leur empreinte. Ouvrir dans un outil de signature utilise le menu natif iOS ; un certificat et un profil valides sont nécessaires pour signer puis installer. Garder le même identifiant et une signature compatible pour conserver les données.'],");
 code=code.replace(needle,needle+"\n['Interface verre iOS','Sur iPhone et iPad, les commandes, panneaux et cartes utilisent un verre translucide. L’apparence dédiée remplace le bouton jour/sombre. Réduire la transparence et augmenter le contraste dans les réglages iOS renforcent les surfaces ; les effets réduits restent disponibles. Les historiques des applications apparaissent avant ceux du site.'],");
 fs.writeFileSync(path.join(dest,main),code);
+const activityFile=path.join(dest,'activity-17v01.js');let activityCode=fs.readFileSync(activityFile,'utf8');
+activityCode=activityCode.replace("  window.addEventListener('pagehide'", "  window.addEventListener('au:native-listening',event=>{const d=event.detail,song=getTrack();if(!accountId||!song||d?.key!==song.key)return;for(const segment of d.segments||[]){if(!(segment.seconds>0&&segment.seconds<=35))continue;if(!sessionId)sessionId=crypto.randomUUID();lastActivity=Date.now();emit('listening',{trackKey:song.key,volume:song.volume,playbackId:playback?.playbackId,duration:d.duration,seconds:segment.seconds,startPosition:segment.startPosition,endPosition:segment.endPosition,sessionId});}flush();});\n  window.addEventListener('pagehide'");
+fs.writeFileSync(activityFile,activityCode);
 console.log('Interface iOS '+release.version+' préparée.');

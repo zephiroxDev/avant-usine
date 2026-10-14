@@ -7,7 +7,7 @@ struct LyricsWidget: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: LyricsAttributes.self) { context in
             VStack(alignment: .leading, spacing: 8) {
-                Text(context.attributes.title).font(.caption).foregroundStyle(.secondary)
+                Text(context.state.title ?? context.attributes.title).font(.caption).foregroundStyle(.secondary)
                 phrase(context.state, text: context.state.phrase, offset: 0)
                     .font(.title3.weight(.semibold)).lineLimit(3).minimumScaleFactor(0.7)
                 if !context.state.backs.isEmpty { Text(context.state.backs).font(.caption).foregroundStyle(.secondary) }

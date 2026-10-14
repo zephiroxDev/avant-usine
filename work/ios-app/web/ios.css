@@ -40,3 +40,6 @@ html[data-platform=ios][data-effects=off],html[data-platform=ios][data-effects=r
 @media(prefers-reduced-transparency:reduce),(prefers-contrast:more){html[data-platform=ios]{--ios-glass:#172033;--ios-glass-inner:#202b40;--ios-border:#b6c2d5;--ios-blur:none;--muted:#e0e6ef}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){html[data-platform=ios]{--ios-glass:#172033;--ios-glass-inner:#202b40}}
 @media(prefers-reduced-motion:reduce){html[data-platform=ios] *{transition:none!important}}
+/* 19V07: the scene is opaque edge to edge; only its controls use glass. */
+html[data-au-app=ios] #auImmersionApp.au-new-immersion{inset:0!important;margin:0!important;width:100vw!important;height:100dvh!important;min-width:100vw!important;min-height:100dvh!important;max-width:none!important;max-height:none!important;border:0!important;border-radius:0!important;background:#160b1a!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-au-app=ios] #auImmersionApp.au-new-immersion::backdrop{background:#160b1a!important}

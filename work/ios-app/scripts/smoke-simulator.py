@@ -21,7 +21,7 @@ for phase in ['nativeSeed','nativeVerified']:
             state=json.loads(probe.read_text())
             if state.get('nativeError'):raise AssertionError(state['nativeError'])
             if state.get('ready'):
-                assert all(state.get(key) is True for key in ['updates','download','crypto','backup','force','lyrics','lyricsActivity',phase])
+                assert all(state.get(key) is True for key in ['updates','download','crypto','backup','force','lyrics','lyricsActivity','nativeRelay',phase])
                 print('SIMULATOR VERIFIED '+phase+': '+json.dumps(state));break
     else:raise AssertionError('iOS readiness probe did not pass: '+json.dumps(state))
     run('xcrun','simctl','terminate',udid,'dev.zephirox.avantusine.ios')
