@@ -17,6 +17,7 @@ final class LyricsAudio {
     private var startTime: Double = 0
     private var fadeIn: Double = 0
     private var fadeOut: Double = 0
+    private var sleepDeadline: Double?
     private var commands: [(MPRemoteCommand, Any)] = []
     private var finished = false
     private var previousSample: (Double, Double)?
@@ -25,6 +26,7 @@ final class LyricsAudio {
     var onTime: (() -> Void)?
     var onEnd: (() -> Void)?
     var onError: ((String) -> Void)?
+    var onSleep: (() -> Void)?
     var position: Double { let t = player?.currentTime().seconds ?? 0; return t.isFinite ? t : 0 }
     var playing: Bool { ownsPlayback && (player?.rate ?? 0) > 0 }
 
@@ -39,10 +41,10 @@ final class LyricsAudio {
         itemFailure = NotificationCenter.default.addObserver(forName: .AVPlayerItemFailedToPlayToEndTime, object: item, queue: .main) { [weak self] _ in self?.onError?("Lecture native interrompue ; retour au lecteur habituel.") }
     }
 
-    func arm(position: Double, rate: Double, volume: Double, start: Double, end: Double, fadeIn: Double, fadeOut: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+    func arm(position: Double, rate: Double, volume: Double, start: Double, end: Double, fadeIn: Double, fadeOut: Double, sleepDeadline: Double? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let player = player else { completion(.failure(NSError(domain: "LyricsAudio", code: 1, userInfo: [NSLocalizedDescriptionKey: "Audio non préparé."]))); return }
         requestedRate = Float(rate); baseVolume = Float(max(0, min(1, volume)))
-        startTime = start; endTime = end; self.fadeIn = fadeIn; self.fadeOut = fadeOut
+        startTime = start; endTime = end; self.fadeIn = fadeIn; self.fadeOut = fadeOut; self.sleepDeadline = sleepDeadline
         let began = ProcessInfo.processInfo.systemUptime
         func ready() {
             guard self.player === player else { completion(.failure(NSError(domain: "LyricsAudio", code: 2, userInfo: [NSLocalizedDescriptionKey: "Morceau remplacé."]))); return }
@@ -97,11 +99,15 @@ final class LyricsAudio {
     private func tick() {
         guard ownsPlayback else { return }
         sample(force: false)
+        if let deadline = sleepDeadline, Date().timeIntervalSince1970 * 1000 >= deadline {
+            sleepDeadline = nil; sample(force: true); player?.pause(); onTime?(); onSleep?(); return
+        }
         if position >= endTime { finish(); return }
         player?.volume = gain(position)
         if var info = MPNowPlayingInfoCenter.default().nowPlayingInfo { info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position; info[MPNowPlayingInfoPropertyPlaybackRate] = player?.rate ?? 0; MPNowPlayingInfoCenter.default().nowPlayingInfo = info }
         onTime?()
     }
+    func control(playing: Bool) { sample(force: true); if playing { player?.playImmediately(atRate: requestedRate) } else { player?.pause() }; tick() }
     private func sample(force: Bool) {
         let now = Date().timeIntervalSince1970 * 1000, t = position
         guard ownsPlayback, let old = previousSample else { previousSample = (t, now); return }

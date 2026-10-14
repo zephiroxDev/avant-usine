@@ -38,12 +38,9 @@ struct LyricsWidget: Widget {
             }.keylineTint(.pink)
         }
     }
-    private func phrase(_ state: LyricsAttributes.ContentState, text: String, offset: Int) -> Text {
-        guard state.highlightEnabled else { return Text(text).foregroundColor(.white) }
-        let scalars = Array(text.unicodeScalars), count = max(0, min(scalars.count, state.highlighted - offset))
-        let sung = String(String.UnicodeScalarView(scalars.prefix(count)))
-        let rest = String(String.UnicodeScalarView(scalars.dropFirst(count)))
-        return Text(sung).foregroundColor(.pink) + Text(rest).foregroundColor(.white.opacity(0.55))
+    private func phrase(_ state: LyricsAttributes.ContentState, text: String, offset: Int) -> some View {
+        IslandPhrase(text: text, progress: Double(max(0, state.highlighted-offset)), highlight: state.highlightEnabled)
+            .animation(state.highlightEnabled ? .linear(duration: 0.15) : nil, value: state.highlighted)
     }
     private func split(_ text: String) -> (String, String) {
         let chars = Array(text.unicodeScalars), middle = chars.count / 2
@@ -51,6 +48,28 @@ struct LyricsWidget: Widget {
         let candidates = chars.indices.filter { CharacterSet.whitespaces.contains(chars[$0]) }
         let cut = candidates.min { abs($0-middle) < abs($1-middle) }.map { $0+1 } ?? middle
         return (String(String.UnicodeScalarView(chars.prefix(cut))), String(String.UnicodeScalarView(chars.dropFirst(cut))))
+    }
+}
+
+// Interpolate the next letter's colour rather than jumping an entire word at once.
+private struct IslandPhrase: View, Animatable {
+    var text: String
+    var progress: Double
+    var highlight: Bool
+    var animatableData: Double { get { progress } set { progress = newValue } }
+    var body: some View {
+        let scalars = Array(text.unicodeScalars)
+        let value = max(0, min(Double(scalars.count), progress))
+        let count = Int(value.rounded(.down)), fraction = value-Double(count)
+        let sung = String(String.UnicodeScalarView(scalars.prefix(count)))
+        let middle = count < scalars.count ? String(scalars[count]) : ""
+        let rest = String(String.UnicodeScalarView(scalars.dropFirst(min(scalars.count,count+1))))
+        if !highlight { Text(text).foregroundColor(.white) }
+        else {
+            Text(sung).foregroundColor(.pink)
+            + Text(middle).foregroundColor(Color(red: 0.55+0.45*fraction, green: 0.55-0.25*fraction, blue: 0.55+0.10*fraction))
+            + Text(rest).foregroundColor(.white.opacity(0.55))
+        }
     }
 }
 

@@ -17,7 +17,8 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "preparePlayback", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "armPlayback", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "commitPlayback", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "releasePlayback", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "releasePlayback", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "controlPlayback", returnType: CAPPluginReturnPromise)
     ]
     private struct Source: Decodable {
         var id: String; var title: String; var lines: [String]; var times: [Double]
@@ -49,6 +50,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
             self.audio.onTime = { [weak self] in self?.refresh() }
             self.audio.onEnd = { [weak self] in self?.notifyListeners("playbackEnded", data: [:]) }
             self.audio.onError = { [weak self] message in self?.notifyListeners("playbackError", data: ["message": message]) }
+            self.audio.onSleep = { [weak self] in self?.notifyListeners("playbackSleep", data: [:]) }
             self.timer = Timer(timeInterval: 0.25, repeats: true) { [weak self] _ in self?.refresh() }
             if let timer = self.timer { RunLoop.main.add(timer, forMode: .common) }
             self.lifecycleObservers.append(NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
@@ -142,9 +144,15 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
             guard let self = self, self.audio.key == call.getString("key"), self.source?.id == self.audio.key else { call.reject("La piste a changé."); return }
             let position = call.getDouble("position") ?? 0, rate = call.getDouble("rate") ?? 1, end = call.getDouble("end") ?? self.source?.duration ?? 0
             guard position.isFinite, rate.isFinite, rate > 0, rate <= 4, end.isFinite, end > 0 else { call.reject("Position audio invalide."); return }
-            self.audio.arm(position: position, rate: rate, volume: call.getDouble("volume") ?? 1, start: call.getDouble("start") ?? 0, end: end, fadeIn: call.getDouble("fadeIn") ?? 0, fadeOut: call.getDouble("fadeOut") ?? 0) { result in
+            self.audio.arm(position: position, rate: rate, volume: call.getDouble("volume") ?? 1, start: call.getDouble("start") ?? 0, end: end, fadeIn: call.getDouble("fadeIn") ?? 0, fadeOut: call.getDouble("fadeOut") ?? 0, sleepDeadline: call.getDouble("sleepDeadline")) { result in
                 switch result { case .success: call.resolve(["ready": true]); case .failure(let error): call.reject(error.localizedDescription) }
             }
+        }
+    }
+    @objc func controlPlayback(_ call: CAPPluginCall) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, self.audio.ownsPlayback, self.audio.key == call.getString("key") else { call.resolve(); return }
+            self.audio.control(playing: call.getBool("playing") ?? false); self.refresh(); call.resolve()
         }
     }
     @objc func commitPlayback(_ call: CAPPluginCall) {
@@ -169,7 +177,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     private func refresh() {
         let now = ProcessInfo.processInfo.systemUptime
         longestGap = max(longestGap, now - lastTick)
-        if source?.playing == true { playbackGap = max(playbackGap, now-lastTick) }
+        if audio.ownsPlayback ? audio.playing : source?.playing == true { playbackGap = max(playbackGap, now-lastTick) }
         lastTick = now; tickCount += 1
         guard let s = source, s.enabled, !s.lines.isEmpty else { if activity != nil { endActivity() }; return }
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
@@ -186,7 +194,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
             else if points.count > 1 { for j in 1..<points.count { let a=points[j-1],b=points[j];if a.count == 2 && b.count == 2 && b[1] > a[1] && time >= a[1] && time < b[1] { count=Int((a[0]+(b[0]-a[0])*(time-a[1])/(b[1]-a[1])).rounded(.down));break } } }
         }
         let next = s.times.indices.first { s.times[$0] > time }.map { s.lines[$0] } ?? ""
-        var state = LyricsAttributes.ContentState(phrase: String(phrase.unicodeScalars.prefix(500)), backs: String(backs.unicodeScalars.prefix(100)), nextPhrase: String(next.unicodeScalars.prefix(100)), lineID: s.id + ":" + (main.map(String.init) ?? "gap") + ":" + (indices.map(String.init).joined(separator: ",")), highlighted: count, highlightEnabled: s.highlight && s.curves != nil, playing: playing, transition: s.transition, title: s.title)
+        var state = LyricsAttributes.ContentState(phrase: String(phrase.unicodeScalars.prefix(500)), backs: String(backs.unicodeScalars.prefix(100)), nextPhrase: String(next.unicodeScalars.prefix(100)), lineID: s.id + ":" + (main.map(String.init) ?? "gap") + ":" + (indices.map(String.init).joined(separator: ",")), highlighted: count, highlightEnabled: s.highlight && s.curves != nil, playing: playing, transition: s.transition, title: String(s.title.unicodeScalars.prefix(70)))
         while ((try? JSONEncoder().encode(state).count) ?? 0) > 3500 { if !state.nextPhrase.isEmpty { state.nextPhrase.removeLast() } else if !state.backs.isEmpty { state.backs.removeLast() } else if !state.phrase.isEmpty { state.phrase.removeLast() } else { return } }
         if let current = activity, current.activityState == .ended || current.activityState == .dismissed { activity = nil; lastState = nil }
         guard state != lastState, !updating else { return }

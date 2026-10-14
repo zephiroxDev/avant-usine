@@ -36,4 +36,5 @@ fs.writeFileSync(path.join(dest,main),code);
 const activityFile=path.join(dest,'activity-17v01.js');let activityCode=fs.readFileSync(activityFile,'utf8');
 activityCode=activityCode.replace("  window.addEventListener('pagehide'", "  window.addEventListener('au:native-listening',event=>{const d=event.detail,song=getTrack();if(!accountId||!song||d?.key!==song.key)return;for(const segment of d.segments||[]){if(!(segment.seconds>0&&segment.seconds<=35))continue;if(!sessionId)sessionId=crypto.randomUUID();lastActivity=Date.now();emit('listening',{trackKey:song.key,volume:song.volume,playbackId:playback?.playbackId,duration:d.duration,seconds:segment.seconds,startPosition:segment.startPosition,endPosition:segment.endPosition,sessionId});}flush();});\n  window.addEventListener('pagehide'");
 fs.writeFileSync(activityFile,activityCode);
+const comfortFile=path.join(dest,'comfort-18v05.js');fs.writeFileSync(comfortFile,fs.readFileSync(comfortFile,'utf8').replace("setInterval(elapsed,1000);", "window.addEventListener('au:native-sleep',finish);setInterval(elapsed,1000);"));
 console.log('Interface iOS '+release.version+' préparée.');
