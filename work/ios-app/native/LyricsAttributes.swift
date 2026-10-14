@@ -12,6 +12,7 @@ struct LyricsAttributes: ActivityAttributes {
         var highlightEnabled: Bool
         var playing: Bool
         var transition: String
+        var title: String?
     }
     var title: String
     var trackID: String

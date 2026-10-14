@@ -11,6 +11,8 @@ subprocess.run(['xcodebuild','-project','ios/App/App.xcodeproj','-scheme','App',
 run('xcrun','simctl','install',udid,'build-simulator/Build/Products/Debug-iphonesimulator/App.app')
 container=Path(run('xcrun','simctl','get_app_container',udid,'dev.zephirox.avantusine.ios','data').strip())
 probe=container/'Documents/au-debug-probe.json'
+# Warm Settings before starting the test audio: first launch can be slow.
+run('xcrun','simctl','launch',udid,'com.apple.Preferences')
 for phase in ['nativeSeed','nativeVerified']:
     probe.unlink(missing_ok=True)
     run('xcrun','simctl','launch',udid,'dev.zephirox.avantusine.ios')
@@ -21,8 +23,22 @@ for phase in ['nativeSeed','nativeVerified']:
             state=json.loads(probe.read_text())
             if state.get('nativeError'):raise AssertionError(state['nativeError'])
             if state.get('ready'):
-                assert all(state.get(key) is True for key in ['updates','download','crypto','backup','force','lyrics','lyricsActivity',phase])
+                assert all(state.get(key) is True for key in ['updates','download','crypto','backup','force','lyrics','lyricsActivity','nativeRelay',phase])
                 print('SIMULATOR VERIFIED '+phase+': '+json.dumps(state));break
     else:raise AssertionError('iOS readiness probe did not pass: '+json.dumps(state))
+    # Launch Settings to genuinely put the music application in background.
+    background_probe=container/'Documents/au-debug-background-lyrics.json'
+    run('xcrun','simctl','launch',udid,'com.apple.Preferences')
+    samples=[]
+    for step in range(10):
+        time.sleep(5)
+        assert background_probe.exists(), 'Native background probe missing'
+        sample=json.loads(background_probe.read_text());samples.append(sample)
+        assert sample['playing'] and sample['nativeAudio'] and sample['background'], sample
+        assert sample['highlight']==(phase=='nativeVerified'), sample
+        if len(samples)>1:assert sample['position']>samples[-2]['position']+2, 'Native playback clock froze'
+    assert samples[-1]['updates']>samples[0]['updates']+2, 'Lyrics activity updates stopped'
+    assert len({x['phrase'] for x in samples})>=4, 'Phrases did not follow the audio'
+    print('SIMULATOR BACKGROUND VERIFIED '+phase+': '+json.dumps(samples))
     run('xcrun','simctl','terminate',udid,'dev.zephirox.avantusine.ios')
 run('xcrun','simctl','shutdown',udid)

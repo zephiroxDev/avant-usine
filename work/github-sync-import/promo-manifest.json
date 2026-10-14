@@ -2,6 +2,17 @@
   "format": 1,
   "images": [
     {
+      "id": "19v07-mobile",
+      "patch": "19V07",
+      "image": "promo-19v07-vivant.png",
+      "original": "promo-19v07.png",
+      "animation": "promo-19v07-anime.mp4",
+      "platforms": [
+        "iPhone 1.1.11",
+        "Android 0.2.9"
+      ]
+    },
+    {
       "id": "19v06-2-ios",
       "patch": "19V06.2",
       "image": "promo-19v06-2-vivant.png",
