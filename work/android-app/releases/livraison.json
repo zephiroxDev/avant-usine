@@ -1,150 +1,186 @@
 {
   "platform": "android",
-  "version": "0.2.8",
-  "versionCode": 19,
-  "sourceCommit": "2a4de3c8dc34650418c7e857b497e1ba3895de62",
-  "file": "Avant-Usine-Android-0.2.8.apk",
-  "bytes": 93128896,
-  "sha256": "e92b310ee426a653bb1c9b53d18454c6c69b8304cab833a7522577744d6567a2",
+  "version": "0.2.9",
+  "versionCode": 20,
+  "file": "Avant-Usine-Android-0.2.9.apk",
+  "bytes": 119958098,
+  "sha256": "cd7557adaeace507c9a565c7c6fc6b21563d26d925cce7e19dada6a2f44b5862",
   "certificateSha256": "c56f1a5c2043a653b57729f8ad8cb7346c95fae2917c79307c4c699398a751b3",
   "parts": [
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part000",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part000",
       "bytes": 4194304,
-      "sha256": "abfc4d3e82b4ff05f645f4127d398ed9a00b448884126cd5b0aeb079f6e0dc18",
+      "sha256": "13e6f1125fca652d3e40b87e93750011d21ceb5eaf11996283c6111e04891805",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part001",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part001",
       "bytes": 4194304,
-      "sha256": "04a9c745a604bc0d50ed74c77c2b3854e136d705b338d36a4a4492617c923a7c",
+      "sha256": "72756754882450ebf9c2f4a9281fb24959ceee64432eaf130f1221b65a9ba0e8",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part002",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part002",
       "bytes": 4194304,
-      "sha256": "1088d9bff45721e1731368cf52d057f9dedb5c30cf348b447947b0bb03f60a1b",
+      "sha256": "bc73b40bf30b86e9bd1ef5d7f019210a7a0d378657458e3bb7201c8fc424673c",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part003",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part003",
       "bytes": 4194304,
-      "sha256": "8fd303aab7fd04d28f9dd804f78205a88e99afce0cb664a84b9000dd0aa773c8",
+      "sha256": "79218d869de041db29c7d175d2f38b20a73e36fd586a5e97dcdaa9e0c48a184e",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part004",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part004",
       "bytes": 4194304,
-      "sha256": "58fefa1d89fd298f661b4ed21ee15b08f0e14e991a683c4bd270854ae9d88574",
+      "sha256": "cd3d6916a2f27bf62ad9874deec8dc5610b7d2ce16775b963943f0afa8330848",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part005",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part005",
       "bytes": 4194304,
-      "sha256": "fe7aecfc3315e888992333e8e53be2a276f47120e97f72eea38f46d1a67475d0",
+      "sha256": "6a71edf56b5ca092f0ebe0bea2cafdd0b9dc595a4a8cc94d2acc7621227c3ac2",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part006",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part006",
       "bytes": 4194304,
-      "sha256": "f32d6058c0f309115d9e5803da6469b8245679de0cf8718d18fa85247d9d6e19",
+      "sha256": "46caadd586ea951c505a4228436c72b5c17693bd4e0aecf79956524487f34833",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part007",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part007",
       "bytes": 4194304,
-      "sha256": "96519ca3cada1c3cc23650e247e9346a312bfa7ad5b0dc7ef17e1391d5dc667a",
+      "sha256": "1454baf85a8610e97b77fc045bcc261b041f79caf495f08bd3b5959029ade688",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part008",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part008",
       "bytes": 4194304,
-      "sha256": "594c80b86257523a4b8842cef6b834a49f36264fab2b26292806bb3680a4f844",
+      "sha256": "44f6e691049e6c52e7ad9ecd368afdae277ac9930497d17acf33a9e56a571f0d",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part009",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part009",
       "bytes": 4194304,
-      "sha256": "7e5164f61bda71bd619d733b3de409976f4501b6a81378af1b0e4b18b557ed8e",
+      "sha256": "79733afbc2bffd2ff66cda3fdd8f263b32043c619167c1b2e326129ba02f013c",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part010",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part010",
       "bytes": 4194304,
-      "sha256": "c09b7f07f962f16bebece95c938149163b7a4a39bd7eed09d9e1581470180fe0",
+      "sha256": "424908aecb906ad4b06b8aa858f8688b2229df81f098d60f461d050d6b043329",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part011",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part011",
       "bytes": 4194304,
-      "sha256": "09f70ca39ceaf1a0f1ec4517353ffff28be3a0e184847f03824c7a1f5a06958d",
+      "sha256": "9c2999de45f349f63657ce467c5292b412a94486126a5c9fc99c0f0576ef3674",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part012",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part012",
       "bytes": 4194304,
-      "sha256": "676bb561e7f88149a0ef8e43ae9575cb94408628aa1c91791f8b8e3a508dbc92",
+      "sha256": "99dfd5792cb4db1e95b2b3a37ef6121ec297dc5c155db89c61a97cc58ead59ca",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part013",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part013",
       "bytes": 4194304,
-      "sha256": "8065fdb737003cdb30842e54c5f1a33e0c3b695315ff735dfb907167d2ca3297",
+      "sha256": "91e639782b169d7a94f68818e8f4813a221d970b5b3b3e0fdd10c6b3d5fe4dbf",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part014",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part014",
       "bytes": 4194304,
-      "sha256": "064ba908685c9861fb0c8a19dda7fe9dac6efc09919d31c0e62fbe33061e36bf",
+      "sha256": "c7be4299192c175a0a734ed6389f571cb673cc11aef88b5658561719a021bd5f",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part015",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part015",
       "bytes": 4194304,
-      "sha256": "6a049063a11f1fdfded485549cf51e158ba46754c4077378c66cf3bba9acdb9c",
+      "sha256": "3d7bc66972566708664fb0b1a0d960b7d4e70583e3e3583138c7a63abd6ae174",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part016",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part016",
       "bytes": 4194304,
-      "sha256": "47acd0e074aab73325cbefada1db853b0d9995f0dee7693daa6d12869b2f5c99",
+      "sha256": "b9e0c8a48323dacb9c7bba3a60f4d613517cd201306437b3d7f352a40162a777",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part017",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part017",
       "bytes": 4194304,
-      "sha256": "c8ab1970fc390324588f3b958079f222c682ef5817fc2a24f1da5b94962e955d",
+      "sha256": "6c5cac7db0eea5f07a105a520729e2e5f15e10f9feb0202ba8098cacf5c76669",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part018",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part018",
       "bytes": 4194304,
-      "sha256": "0d928f3fdeaca67ba0315f4b3570fb57de1ecb0354ec84a47aeac7dbc6da25ed",
+      "sha256": "0f57cd0e18a305e359d87e20decd745c444dc785ee6ff96be5fa4caf659f0dd5",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part019",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part019",
       "bytes": 4194304,
-      "sha256": "c0f2db07f14d11f4e4938f6d0e6417769b94d8489a7a4d79874290e6e49fa40d",
+      "sha256": "58382ef672281bcb500fa0e4441ff52dbcb8e6a18f14ee486877f8866e10c9ed",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part020",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part020",
       "bytes": 4194304,
-      "sha256": "f022ce7e19093ce117aaa6b1eb44b48eaa0cdafe3ef9901236ce0910a958fb19",
+      "sha256": "eb2bdd58169830a86a740e56e283ad0b09a6cfec5b52a1e9bb68847abbd5b93f",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part021",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part021",
       "bytes": 4194304,
-      "sha256": "91705a929446d8a208343b33e323089a507faa6c9a98c2d0cd3ff5739b0e3631",
+      "sha256": "e29af779308e7d76ac0c0f665672143dc67560c6e1f3e0484845230e9934d9e4",
       "encoding": "base64"
     },
     {
-      "file": "Avant-Usine-Android-0.2.8.apk.b64part022",
-      "bytes": 854208,
-      "sha256": "0caeeea6f1f8a8ab1b871006eb7f26e3786df9ab194fa9aefa644ecb5e780c04",
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part022",
+      "bytes": 4194304,
+      "sha256": "5ef7c1fc8144fc08469c9e084763c9f8e14fa6923c6c7c82a51cfe0288aa6e45",
+      "encoding": "base64"
+    },
+    {
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part023",
+      "bytes": 4194304,
+      "sha256": "180a1e4de5f5f51f3e2e6be6a5bc2f60c0a3ac5d3303725edae338999054a6cd",
+      "encoding": "base64"
+    },
+    {
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part024",
+      "bytes": 4194304,
+      "sha256": "62939e8040ba18709a6e97c7b80b98b13293be1b198924301d24e93dc713970a",
+      "encoding": "base64"
+    },
+    {
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part025",
+      "bytes": 4194304,
+      "sha256": "e3cab40d100cfb3bb1e94d0c9109f1c0a6b770c704f5493249cbe9ff38e3be24",
+      "encoding": "base64"
+    },
+    {
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part026",
+      "bytes": 4194304,
+      "sha256": "94ef079b877d880ece0684c23c291d4bb951699843820f03215dd6023bbad2d6",
+      "encoding": "base64"
+    },
+    {
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part027",
+      "bytes": 4194304,
+      "sha256": "72e5a1c38cd2f87607582d9801046ad44cc4b3a90480bcb6dc23b4d42d585bb2",
+      "encoding": "base64"
+    },
+    {
+      "file": "Avant-Usine-Android-0.2.9.apk.b64part028",
+      "bytes": 2517586,
+      "sha256": "b3d7699d573d20a212a22dc37e25f3f61b1f2d5f12f4dbc85d749462a06a0bba",
       "encoding": "base64"
     }
-  ]
+  ],
+  "sourceCommit": "71db8b2bd0f562ba64d9bdb2618241f03378fae0"
 }
