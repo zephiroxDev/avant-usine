@@ -6,7 +6,8 @@ window.AU_PLATFORM_HISTORIES={
       "Des gestes plus simples, des paroles qui suivent.",
       [
         "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
-        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale."
+        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale.",
+        "« Wesh le clin’s » reçoit le JSON Highlight terminé : 49 phrases, avec tous les repères du fichier conservés."
       ]
     ],
     [
@@ -527,7 +528,8 @@ window.AU_PLATFORM_HISTORIES={
       [
         "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
         "Le défilement automatique des paroles synchronisées fonctionne en immersion, en classique et en Highlight, avec pause et reprise du suivi.",
-        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale."
+        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale.",
+        "« Wesh le clin’s » reçoit le JSON Highlight terminé : 49 phrases, avec tous les repères du fichier conservés."
       ]
     ],
     [
@@ -909,7 +911,8 @@ window.AU_PLATFORM_HISTORIES={
       [
         "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
         "La barre Highlight continue à enregistrer lorsque le doigt sort au-dessus ou au-dessous de la barre ; le relâchement termine le geste.",
-        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale."
+        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale.",
+        "« Wesh le clin’s » reçoit le JSON Highlight terminé : 49 phrases, avec tous les repères du fichier conservés."
       ]
     ],
     [
@@ -1433,7 +1436,8 @@ window.AU_PLATFORM_HISTORIES={
         "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
         "La barre Highlight continue à enregistrer lorsque le doigt sort au-dessus ou au-dessous de la barre ; le relâchement termine le geste.",
         "Le défilement automatique des paroles synchronisées fonctionne en immersion, en classique et en Highlight, avec pause et reprise du suivi.",
-        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale."
+        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale.",
+        "« Wesh le clin’s » reçoit le JSON Highlight terminé : 49 phrases, avec tous les repères du fichier conservés."
       ]
     ],
     [
@@ -1648,6 +1652,16 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "ios": [
     [
+      "19V08.2 · Application iPhone 1.1.13",
+      "15 octobre 2026",
+      "Rétablir les paroles dans la Dynamic Island.",
+      [
+        "Le rendu précédent des paroles est rétabli après le signalement d’une Dynamic Island noire sur la 1.1.12.",
+        "Après une nouvelle installation ou une mise à jour, l’ancienne activité est fermée avant de créer celle de la version installée.",
+        "Le relais audio anticipé et le diagnostic du dernier passage en arrière-plan sont conservés. Affichage et disparition du gel à confirmer sur appareil réel."
+      ]
+    ],
+    [
       "19V08 · Application iPhone 1.1.12",
       "15 octobre 2026",
       "Des gestes plus simples, des paroles qui suivent.",
@@ -1657,7 +1671,8 @@ window.AU_PLATFORM_HISTORIES={
         "Le défilement automatique des paroles synchronisées fonctionne en immersion, en classique et en Highlight, avec pause et reprise du suivi.",
         "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale.",
         "Sur iPhone, le relais audio est anticipé dès la perte du premier plan et les mises à jour intermédiaires du Highlight sont espacées pour alléger le rendu.",
-        "Le texte de la Dynamic Island conserve son identité entre les phrases ; le diagnostic garde le dernier passage en arrière-plan. La disparition du gel reste à confirmer sur iPhone réel."
+        "Le texte de la Dynamic Island conserve son identité entre les phrases ; le diagnostic garde le dernier passage en arrière-plan. La disparition du gel reste à confirmer sur iPhone réel.",
+        "« Wesh le clin’s » reçoit le JSON Highlight terminé : 49 phrases, avec tous les repères du fichier conservés."
       ]
     ],
     [

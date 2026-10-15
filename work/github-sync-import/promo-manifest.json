@@ -2,6 +2,16 @@
   "format": 1,
   "images": [
     {
+      "id": "19v08-2-ios",
+      "patch": "19V08.2",
+      "image": "promo-19v08-2-vivant.png",
+      "original": "promo-19v08-2.png",
+      "animation": "promo-19v08-2-anime.mp4",
+      "platforms": [
+        "iPhone 1.1.13"
+      ]
+    },
+    {
       "id": "19v08",
       "patch": "19V08",
       "image": "promo-19v08-vivant.png",

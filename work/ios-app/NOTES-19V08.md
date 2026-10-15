@@ -8,3 +8,4 @@ Des gestes plus simples, des paroles qui suivent.
 - Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale.
 - Sur iPhone, le relais audio est anticipé dès la perte du premier plan et les mises à jour intermédiaires du Highlight sont espacées pour alléger le rendu.
 - Le texte de la Dynamic Island conserve son identité entre les phrases ; le diagnostic garde le dernier passage en arrière-plan. La disparition du gel reste à confirmer sur iPhone réel.
+- « Wesh le clin’s » reçoit le JSON Highlight terminé : 49 phrases, avec tous les repères du fichier conservés.

@@ -3,6 +3,10 @@ import Foundation
 
 class ViewController: CAPBridgeViewController {
     override func capacitorDidLoad() {
+        #if DEBUG
+        // Exercise replacement of a previous installation's activity on the second simulator launch.
+        UserDefaults.standard.set("previous-test-build", forKey: "au-island-widget-build")
+        #endif
         bridge?.registerPluginInstance(IOSUpdatesPlugin())
         if #available(iOS 16.2, *) { bridge?.registerPluginInstance(LiveLyricsPlugin()) }
     }

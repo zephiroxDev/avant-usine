@@ -56,12 +56,28 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     private var backgroundFirstPosition: Double = 0
     private var backgroundReport: [String: Any] = [:]
     private var lastUpdateCompleted: Double = 0
+    private var resettingActivities = false
     #if DEBUG
     private var lastProbeWrite: Double = 0
     #endif
     public override func load() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "unknown"
+            if UserDefaults.standard.string(forKey: "au-island-widget-build") != build {
+                let previous = Activity<LyricsAttributes>.activities
+                self.resettingActivities = true
+                for old in previous { self.closingActivities.insert(old.id) }
+                Task {
+                    for old in previous { await old.end(nil, dismissalPolicy: .immediate) }
+                    await MainActor.run {
+                        self.activity = nil; self.lastState = nil; self.failedTrack = nil
+                        self.resettingActivities = false
+                        UserDefaults.standard.set(build, forKey: "au-island-widget-build")
+                        self.refresh()
+                    }
+                }
+            }
             self.audio.onTime = { [weak self] in self?.refresh() }
             self.audio.onEnd = { [weak self] in self?.notifyListeners("playbackEnded", data: [:]) }
             self.audio.onError = { [weak self] message in self?.notifyListeners("playbackError", data: ["message": message]) }
@@ -101,7 +117,9 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
                 "updatePending": self.updating, "background": UIApplication.shared.applicationState != .active,
                 "playbackGap": self.playbackGap, "nativeAudio": self.audio.ownsPlayback,
                 "stopReason": self.lastStopReason, "ios": UIDevice.current.systemVersion, "position": self.audio.position,
-                "lastBackground": self.backgroundReport])
+                "lastBackground": self.backgroundReport,
+                "appVersion": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?",
+                "build": Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "?"])
         }
     }
     @objc func availability(_ call: CAPPluginCall) {
@@ -234,6 +252,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         lastTick = now; tickCount += 1
         guard let s = source, s.enabled, !s.lines.isEmpty else { if activity != nil { endActivity() }; return }
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
+        guard !resettingActivities else { return }
         let playing = audio.ownsPlayback ? audio.playing : s.playing
         let time = audio.ownsPlayback ? audio.position : min(s.duration, s.position + (s.playing ? max(0, ProcessInfo.processInfo.systemUptime-anchor) * s.rate : 0))
         if audio.ownsPlayback, now-lastAudioEvent >= 0.5 { lastAudioEvent = now; notifyListeners("playbackState", data: ["key": s.id, "playing": playing]) }

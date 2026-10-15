@@ -21,7 +21,9 @@ struct LyricsWidget: Widget {
                         phrase(context.state, text: context.state.phrase, offset: 0)
                             .font(.system(size: context.state.phrase.count > 90 ? 15 : 19, weight: .semibold))
                             .lineLimit(3).minimumScaleFactor(0.7).multilineTextAlignment(.center)
-                            .transaction { transaction in transaction.animation = nil }
+                            .id(context.state.lineID)
+                            .transition(context.state.transition == "none" ? .identity : .opacity)
+                            .animation(.easeInOut(duration: 0.22), value: context.state.lineID)
                         if !context.state.backs.isEmpty { Text(context.state.backs).font(.caption).foregroundStyle(.secondary).lineLimit(2) }
                     }.padding(.vertical, 6)
                 }
