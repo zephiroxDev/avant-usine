@@ -1,8 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {BufferAPI, processPromos, receipt, captionOf, videoOf} from './worker.mjs';
+import {BufferAPI, processPromos, receipt, captionOf, videoOf, keyOf} from './worker.mjs';
 
 const item = {id:'19v09-all',patch:'19V09',platforms:['Site','Android'],animation:'promo-19v09-anime.mp4'};
+test('new major patch naming and old patch naming both remain valid',()=>{
+  assert.equal(keyOf({patch:'20.0'}),'20.0');assert.equal(keyOf({patch:'20.0.2'}),'20.0.2');
+  assert.equal(keyOf({patch:'19V08.2'}),'19v08.2');assert.throws(()=>keyOf({patch:'../secret'}));
+});
 const post = (status='scheduled') => ({id:'p1',channelId:'channel',text:captionOf(item),status,
   sentAt:status==='sent'?'2026-10-16T12:00:00Z':null,externalLink:'https://www.tiktok.com/@avant.l.usine/video/123'});
 function fixture() {

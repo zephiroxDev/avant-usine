@@ -1,6 +1,18 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "20.0 · Site PC",
+      "15 octobre 2026",
+      "Une nouvelle finition pour Avant l’usine.",
+      [
+        "Une interface plus sobre et cohérente : typographie, espacements, commandes et fenêtres retravaillés, avec des accents rose et violet discrets.",
+        "Un écran de paroles repensé : pochette à gauche sur grand écran, petite pochette en haut à droite sur téléphone, fond diffus aux couleurs du volume.",
+        "Paroles classiques et Highlight : texte plus lisible, mise en lumière douce, défilement fluide et voix secondaires distinctes, avec les minutages existants.",
+        "Les réglages de visibilité de 0 à 100, les transitions et les explications restent accessibles dans les options des paroles.",
+        "Le contrôle de volume adopte un ruban en relief qui réagit au déplacement, avec un affichage en pourcentage."
+      ]
+    ],
+    [
       "19V08 · Site PC",
       "15 octobre 2026",
       "Des gestes plus simples, des paroles qui suivent.",
@@ -522,6 +534,19 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "20.0 · Windows 0.6.0",
+      "15 octobre 2026",
+      "Une nouvelle finition pour Avant l’usine.",
+      [
+        "Une interface plus sobre et cohérente : typographie, espacements, commandes et fenêtres retravaillés, avec des accents rose et violet discrets.",
+        "Un écran de paroles repensé : pochette à gauche sur grand écran, petite pochette en haut à droite sur téléphone, fond diffus aux couleurs du volume.",
+        "Paroles classiques et Highlight : texte plus lisible, mise en lumière douce, défilement fluide et voix secondaires distinctes, avec les minutages existants.",
+        "Les réglages de visibilité de 0 à 100, les transitions et les explications restent accessibles dans les options des paroles.",
+        "Le contrôle de volume adopte un ruban en relief qui réagit au déplacement, avec un affichage en pourcentage.",
+        "Le mode immersion reprend la nouvelle composition, adaptée à la taille de l’écran."
+      ]
+    ],
+    [
       "19V08 · Application Windows 0.5.10",
       "15 octobre 2026",
       "Des gestes plus simples, des paroles qui suivent.",
@@ -904,6 +929,18 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "20.0 · Site mobile",
+      "15 octobre 2026",
+      "Une nouvelle finition pour Avant l’usine.",
+      [
+        "Une interface plus sobre et cohérente : typographie, espacements, commandes et fenêtres retravaillés, avec des accents rose et violet discrets.",
+        "Un écran de paroles repensé : pochette à gauche sur grand écran, petite pochette en haut à droite sur téléphone, fond diffus aux couleurs du volume.",
+        "Paroles classiques et Highlight : texte plus lisible, mise en lumière douce, défilement fluide et voix secondaires distinctes, avec les minutages existants.",
+        "Les réglages de visibilité de 0 à 100, les transitions et les explications restent accessibles dans les options des paroles.",
+        "Le contrôle de volume adopte un ruban en relief qui réagit au déplacement, avec un affichage en pourcentage."
+      ]
+    ],
     [
       "19V08 · Site mobile",
       "15 octobre 2026",
@@ -1429,6 +1466,19 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "20.0 · Android 0.3.0",
+      "15 octobre 2026",
+      "Une nouvelle finition pour Avant l’usine.",
+      [
+        "Une interface plus sobre et cohérente : typographie, espacements, commandes et fenêtres retravaillés, avec des accents rose et violet discrets.",
+        "Un écran de paroles repensé : pochette à gauche sur grand écran, petite pochette en haut à droite sur téléphone, fond diffus aux couleurs du volume.",
+        "Paroles classiques et Highlight : texte plus lisible, mise en lumière douce, défilement fluide et voix secondaires distinctes, avec les minutages existants.",
+        "Les réglages de visibilité de 0 à 100, les transitions et les explications restent accessibles dans les options des paroles.",
+        "Le contrôle de volume adopte un ruban en relief qui réagit au déplacement, avec un affichage en pourcentage.",
+        "Le mode immersion reprend la nouvelle composition, adaptée à la taille de l’écran."
+      ]
+    ],
+    [
       "19V08 · Application Android 0.2.10",
       "15 octobre 2026",
       "Des gestes plus simples, des paroles qui suivent.",
@@ -1651,6 +1701,19 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "20.0 · iPhone et iPad 2.0",
+      "15 octobre 2026",
+      "Une nouvelle finition pour Avant l’usine.",
+      [
+        "Une interface plus sobre et cohérente : typographie, espacements, commandes et fenêtres retravaillés, avec des accents rose et violet discrets.",
+        "Un écran de paroles repensé : pochette à gauche sur grand écran, petite pochette en haut à droite sur téléphone, fond diffus aux couleurs du volume.",
+        "Paroles classiques et Highlight : texte plus lisible, mise en lumière douce, défilement fluide et voix secondaires distinctes, avec les minutages existants.",
+        "Les réglages de visibilité de 0 à 100, les transitions et les explications restent accessibles dans les options des paroles.",
+        "Le contrôle de volume adopte un ruban en relief qui réagit au déplacement, avec un affichage en pourcentage.",
+        "Le mode immersion reprend la nouvelle composition, adaptée à la taille de l’écran."
+      ]
+    ],
     [
       "19V08.2 · Application iPhone 1.1.13",
       "15 octobre 2026",

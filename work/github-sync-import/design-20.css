@@ -1,0 +1,157 @@
+/* 20.0 — shared product typography, spacing and listening composition. */
+:root{--paper:#151316;--ink:#f5eff3;--muted:#b6a9b3;--purple:#e4a5d1;--pink:#e4a5d1;--accent:#e4a5d1;--line:#ffffff13;--surface:#211c23;--surface-raised:#2c252f;--ui-border:#ffffff1d;--bg:var(--paper);--panel:var(--surface);--text-main:var(--ink);--text-soft:var(--muted);--au20-cover-accent:#be82b5}
+:root[data-theme=light]{--paper:#f5f1f3;--ink:#30262f;--muted:#776875;--purple:#934e85;--pink:#934e85;--accent:#934e85;--line:#30262f15;--surface:#fffafd;--surface-raised:#ece4eb;--ui-border:#30262f24}
+html body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--paper);font-weight:400;-webkit-font-smoothing:antialiased}
+html :is(button,input,select,textarea){font-family:inherit}
+html :is(h1,h2,h3,h4){font-family:inherit;letter-spacing:-.035em;text-wrap:balance}
+html p{line-height:1.65}html :is(button,a,input,select,textarea){touch-action:manipulation}
+html :is(button,a.button){transition:background-color .18s,color .18s,box-shadow .18s,transform .18s}
+html :is(.topbar,.player-dock){background:color-mix(in srgb,var(--surface) 92%,transparent)!important;backdrop-filter:blur(24px);border-color:var(--line)!important;box-shadow:none}
+html .topbar-inner{max-width:1450px;padding:20px 32px;gap:30px}
+html .brand-word{font-size:18px;text-transform:lowercase;letter-spacing:-.055em;font-weight:750}
+html .brand-word small{font-size:9px;letter-spacing:.11em;font-weight:500;margin-top:5px}
+html .brand-mark{border-radius:10px!important;background:var(--surface-raised)!important;color:var(--accent)!important;box-shadow:none}
+html .nav{gap:6px;flex-wrap:wrap}html .nav button{font-size:12px;padding:10px 13px;border-radius:9px;font-weight:550}
+html .nav button[aria-current=page]{background:color-mix(in srgb,var(--accent) 10%,transparent)!important;color:var(--ink)!important}
+html .topbar:after,html .player-dock:before,html .au-desktop-announcement:before,html .au-kofi-banner:before{display:none}
+html #main{max-width:1360px;padding-inline:32px}
+html .page{animation:au20-arrive .28s ease-out}
+@keyframes au20-arrive{from{opacity:.4;transform:translateY(8px)}to{opacity:1;transform:none}}
+html .button,html .button.pink{padding:12px 18px;min-height:44px;border-radius:11px;border:1px solid transparent!important;box-shadow:none!important;background:var(--accent)!important;color:#271c26!important;font-size:13px;font-weight:650;letter-spacing:0;line-height:1.4}
+html .button.secondary{background:var(--surface-raised)!important;color:var(--ink)!important;border-color:transparent!important}
+html[data-theme=light] .button:not(.secondary){color:#fff!important}
+html :is(.text-button,.lyrics-button){font-size:13px;line-height:1.5;font-weight:550;min-height:38px;white-space:normal}
+html :is(.actions,.filters,.au-inline-form,.sync-controls,.local-toolbar,.major-actions){gap:12px!important;flex-wrap:wrap;align-items:center}
+html :is(input:not([type=range]):not([type=checkbox]):not([type=radio]),select,textarea){border-radius:10px;padding:12px 14px;font-size:15px;line-height:1.4;border:1px solid var(--ui-border)}
+html :is(.hero,.album-hero){border-radius:20px!important;background:var(--surface)!important;padding:40px!important;gap:40px}
+html .hero{min-height:460px}.hero .hero-art{background:transparent;border:0;padding:0;box-shadow:none}
+html .hero h1{font-size:clamp(48px,6vw,84px);font-weight:750;line-height:1.02;letter-spacing:-.065em}
+html .lede{font-size:clamp(15px,1.4vw,18px);line-height:1.7;font-weight:400}
+html :is(.feature,.download-card,.major-card,.au-panel,.community-panel,.dc-card,.annotation-card,.major-release,.major-profile){border:1px solid var(--line)!important;border-radius:16px;box-shadow:none!important;padding:24px}
+html .collection-grid{gap:30px}html .album-card{min-width:0}html .album-card h3{font-size:21px;font-weight:650;letter-spacing:-.035em;margin-top:16px}
+html .tracklist li,html .au-songs li{border-color:var(--line);padding-block:13px;gap:14px;min-height:62px}
+html :is(.track-title,.au-song-title){font-size:15px;line-height:1.45;font-weight:550}
+html :is(.section-head,.page-heading){margin-block:30px 24px}
+html :is(.au-desktop-announcement,.au-kofi-banner){border:1px solid var(--line)!important;border-radius:16px;box-shadow:none;padding:24px}
+html dialog{border:1px solid var(--ui-border)!important;border-radius:20px!important;padding:24px;box-shadow:0 24px 100px #0005}
+html dialog::backdrop{background:#0c080fb3;backdrop-filter:blur(8px)}
+html :is(.au-dialog-head,.major-dialog-head,.annotation-dialog-head,.au-art-header){gap:20px;padding-block:12px 20px;margin-bottom:10px}
+html :is(.au-dialog-head,.major-dialog-head,.annotation-dialog-head,.au-art-header)>:is(h2,div){min-width:0}
+html #accountMember{display:flex;flex-wrap:wrap;gap:12px;padding-top:20px}
+html #accountMember>button{flex:1 1 230px;min-height:48px;white-space:normal;text-align:left}
+html #accountMember>:not(button){flex-basis:100%;min-width:0}
+html .dock-inner{max-width:1400px;gap:24px;padding:12px 28px}
+html .dock-status{padding:2px 28px 10px;gap:14px;align-items:center;flex-wrap:wrap}
+html .dock-status #status{font-size:11px;opacity:.72}.now-title{font-size:14px;font-weight:600}
+.au20-dock-menu{position:relative;margin-left:auto;font-size:12px;color:var(--ink);flex:none}
+.au20-dock-menu>summary{padding:10px 12px;min-height:38px;border-radius:9px;list-style:none;background:var(--surface-raised);font-weight:550}
+.au20-dock-menu[open]{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.au20-dock-menu[open]>summary{flex-basis:100%}
+.au20-dock-menu[open]{position:absolute;right:16px;bottom:100%;width:min(360px,calc(100vw - 32px));padding:16px;border-radius:16px;background:var(--surface);box-shadow:0 -12px 45px #0005;z-index:60;border:1px solid var(--ui-border)}
+html .main-play{width:46px;height:46px;background:var(--ink)!important;color:var(--paper)!important;border-radius:50%!important;box-shadow:none}
+html .transport{gap:12px}.now-cover{border:0;box-shadow:none}html .timeline input{height:4px}
+html .control{border:0;box-shadow:none;background:transparent;min-width:36px;min-height:36px}
+html .au-spaced-controls{gap:12px!important}
+/* Original controls remain native and keyboard-accessible beneath the ribbon. */
+.au20-volume{position:relative;isolation:isolate;display:inline-block;width:156px;height:46px;flex:none;color:var(--ink)}
+.au20-volume canvas{display:block;width:100%;height:100%;border-radius:0!important;box-shadow:none!important;animation:none!important;pointer-events:none;background:transparent!important}
+.au20-volume,.au20-volume output{background:transparent!important;border:0!important;box-shadow:none!important}
+html .au20-volume input[type=range]{position:absolute;inset:0;width:100%;height:100%;opacity:.001;margin:0;z-index:2;cursor:ew-resize;touch-action:none}
+.au20-volume:focus-within{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
+.au20-volume output{position:absolute;right:8px;top:17px;font-size:11px;font-weight:600;pointer-events:none;font-variant-numeric:tabular-nums;z-index:3}
+/* The validated composition is shared by public lyrics and application immersion. */
+html #paroles .lyrics-layout{display:block}
+html #paroles>.page-heading{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);margin:0;padding:0}
+html .shell:has(#paroles:not([hidden])) :is(#desktopAnnouncement,.au-development-notice){display:none!important}
+html .page-heading:before{display:none}
+html .page-heading h1{font-size:clamp(34px,4vw,52px);font-weight:700;letter-spacing:-.05em}
+html #paroles>.page-heading .lede{display:none}
+html .lyrics-card.au20-listening{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(210px,.78fr) minmax(0,1.22fr);gap:clamp(28px,5vw,72px);padding:44px!important;border-radius:20px!important;overflow:hidden;min-height:650px;background:#291d27!important;color:#fff5fa!important;border:0!important;box-shadow:none!important}
+.au20-listening:after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,#2d172bab,#1d1b22d9);pointer-events:none}
+.au20-listening>.au-cover-atmosphere{z-index:-2;filter:blur(65px) saturate(.6) brightness(.8);opacity:.5}
+.au20-art-column{min-width:0;align-self:center}.au20-player-art{width:100%;aspect-ratio:1;display:block;border-radius:7px;overflow:hidden;box-shadow:0 24px 65px #0905084d}
+.au20-player-art>:is(canvas,img,video,.au-motion-cover){width:100%!important;height:100%!important;object-fit:cover;aspect-ratio:1}
+.au20-art-column #lyricsTitle{font-size:25px;font-weight:700;line-height:1.3;letter-spacing:-.04em;margin:24px 0 6px;color:#fff5fa!important}
+.au20-track-artist{font-size:14px;color:#fff5fa88!important;margin:0}.au20-text-column{min-width:0;align-self:center}
+.au20-lyric-options{padding-top:15px;margin-top:15px;border-top:1px solid #ffffff15;color:#fff5fa88;font-size:12px}
+.au20-lyric-options>summary{font-weight:550;min-height:32px;padding:8px 0}
+.au20-lyric-options[open]{display:flex;flex-wrap:wrap;gap:10px;align-items:start}.au20-lyric-options>summary{width:100%}
+.au20-lyric-options>.au-lyrics-toolbar,.au20-lyric-options>.sync-toolbar{flex-basis:100%}
+.au20-listening:has(.sync-player:not([hidden])) #lyricsState{display:none}
+.au20-listening .sync-player{background:transparent!important;border:0!important;padding:0!important;overflow:visible;box-shadow:none!important}
+.au20-listening .sync-player>.au-cover-atmosphere{display:none}
+.au20-listening .sync-player>.au-note{display:none}
+.au20-listening .sync-player-lines{height:480px;max-height:none;min-height:240px}
+.au20-listening .lyrics-selection-help{font-size:11px;color:#fff5fa66;margin:0 0 15px;line-height:1.5}
+.au20-listening .sync-toolbar{gap:8px!important}.au20-listening .sync-toolbar button{font-size:11px;min-height:34px;padding:7px 10px}
+.au20-listening .au-note,.au20-listening .lyrics-note{color:#fff5fa88!important;font-size:12px}
+.au20-listening .button.secondary{background:#ffffff12!important;color:#fff5fa!important;border:0!important}
+html #communityPanel{margin-top:28px}
+html .au-lyrics-viewport{scrollbar-width:thin;scrollbar-color:#ffffff25 transparent;scroll-padding-block:24px;mask-image:linear-gradient(transparent,#000 9%,#000 86%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 9%,#000 86%,transparent)}
+html .au-lyrics-content{padding:calc(25px + 7vh) 0 32vh}
+html .au-lyrics-viewport .au-lyric-line{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:clamp(27px,3.35vw,44px);font-weight:750;letter-spacing:-.045em;line-height:1.24;text-align:left;padding:20px 4px;white-space:pre-wrap;text-shadow:none;transition:opacity .6s ease,filter .6s ease,transform .7s cubic-bezier(.2,.8,.2,1);transform:scale(.985);transform-origin:left center;--karaoke-ink:#fff7fa;--karaoke-dim:#fff7fa50}
+html .au-lyrics-viewport .au-lyric-line.is-current{filter:none;opacity:1;transform:scale(1);text-shadow:none;--karaoke-ink:#fff7fa}
+html .au-adjustable-lyrics .au-lyric-line:not(.is-current):not(.is-exiting){opacity:var(--lyrics-background,0);filter:blur(calc((1 - var(--lyrics-background,0)) * 1.8px));text-shadow:none}
+html .au-adjustable-lyrics[data-lyrics-context=true] .au-lyric-line.is-current{--karaoke-dim:#fff7fa4a}
+html .au-lyric-line[data-reveal-mode=letters] .karaoke-char{clip-path:none!important;background-image:linear-gradient(90deg,var(--karaoke-ink) calc(var(--fill,0%) - 14%),var(--karaoke-dim) calc(var(--fill,0%) + 14%));background-clip:text;-webkit-background-clip:text;color:transparent;display:inline-block;vertical-align:baseline}
+html .au-current-lyrics-only .au-lyric-line[data-reveal-mode=letters] .karaoke-char{--karaoke-dim:transparent}
+html .au-lyric-line[data-reveal-mode=classic] :is(.karaoke-main,.karaoke-backs){mask-image:none!important;-webkit-mask-image:none!important}
+html .au-lyric-line[data-reveal-mode=classic].is-current .karaoke-char{background:none;color:var(--karaoke-ink)!important;-webkit-text-fill-color:currentColor!important}
+html .au-lyric-line:not(.is-current):not(.is-exiting) .karaoke-char{background:none;color:inherit!important;-webkit-text-fill-color:currentColor!important;clip-path:none}
+html .au-lyric-line .karaoke-backs{font-size:.52em;font-weight:550;line-height:1.5;letter-spacing:-.01em;margin-top:.5em;opacity:.8}
+html .au-lyrics-toolbar{gap:8px;padding-bottom:12px}html .au-lyrics-controls{position:static;background:#ffffff0b;border-radius:10px;font-family:inherit;font-size:12px;padding:8px 10px;color:inherit}
+html .au-lyrics-ending{padding:16px;border-radius:12px;background:#ffffff0c}
+html #auImmersionApp.au-new-immersion{background:#211923!important;isolation:isolate}
+html #auImmersionApp .au-im-body{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.2fr);gap:clamp(30px,6vw,90px);padding:28px 6%;position:relative}
+html #auImmersionApp .au-im-art{position:relative;inset:auto;z-index:1;filter:none;opacity:1;align-self:center;overflow:visible}
+html #auImmersionApp .au-im-picture{aspect-ratio:1;width:100%!important;height:auto!important;max-height:65dvh}
+html #auImmersionApp .au-im-picture>:is(canvas,img,video,.au-motion-cover){aspect-ratio:1;object-fit:contain;border-radius:7px!important}
+html #auImmersionApp .au20-immersion-backdrop{position:absolute;inset:-10%;width:120%;height:120%;object-fit:cover;filter:blur(65px) saturate(.6);opacity:.3;z-index:-2;pointer-events:none}
+html #auImmersionApp .au-im-lyrics{text-align:left;min-height:0;height:100%}
+html #auImmersionApp .au-im-viewport{text-align:left;padding:0 4px;min-height:0}
+html #auImmersionApp.au-im-idle .au-im-body{height:100%}
+html #auImmersionApp.au-im-no-lyrics .au-im-body{grid-template-columns:1fr}
+html #auImmersionApp.au-im-no-lyrics .au-im-art{max-width:600px;justify-self:center;width:100%}
+/* Audio editing: original media and catalogue formats stay intact. */
+.au20-audio-workspace{display:grid;gap:18px;margin-block:18px;min-width:0}.au20-wave{position:relative;height:150px;border-radius:12px;background:var(--surface);overflow:hidden;touch-action:none;user-select:none}
+.au20-wave canvas{width:100%;height:100%;border-radius:0!important;box-shadow:none!important;animation:none!important}
+.au20-cut-handle{position:absolute;top:0;bottom:0;width:26px;padding:0!important;border:0!important;border-radius:0!important;z-index:3;background:color-mix(in srgb,var(--accent) 30%,transparent)!important;color:var(--ink)!important;cursor:ew-resize;touch-action:none}
+.au20-cut-handle:after{content:'';position:absolute;inset:44% 10px;background:currentColor;border-radius:2px}
+.au20-audio-times,.au20-fade-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.au20-audio-times label,.au20-fade-fields label{display:grid;gap:8px;font-size:13px}
+.au20-fade-fields output{font-variant-numeric:tabular-nums}.au20-audio-feedback{font-size:13px;line-height:1.6}.au20-audio-workspace input[type=range]{width:100%;accent-color:var(--accent)}
+@media(max-width:1000px){html .topbar-inner{padding:16px 20px;gap:16px}html .nav{gap:2px}html #main{padding-inline:20px}html .lyrics-card.au20-listening{padding:28px!important;gap:32px}html .featured{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){
+ html #main{padding-inline:16px}html .hero,html .album-hero{padding:24px!important;gap:24px}html .hero{min-height:0}.hero .hero-art{max-width:270px}
+ html .hero h1{font-size:52px}html :is(.feature,.download-card,.major-card,.au-panel,.community-panel){padding:18px}
+ html .topbar-inner{padding:12px 16px;gap:14px}html .brand-word{font-size:16px}.brand-word small{display:none}
+ html .collection-grid,html .featured{gap:22px 14px}html .album-card h3{font-size:17px}
+ html dialog{padding:18px;border-radius:18px!important}html #accountMember>button{flex-basis:100%}
+ html :is(input:not([type=range]),textarea,select){font-size:16px}
+ html .dock-inner{padding:10px 14px;gap:12px}html .dock-status{padding:0 14px 10px;gap:10px}
+ html .dock-inner .loudness{display:flex!important;grid-column:1/-1;justify-content:flex-end;align-items:center;gap:8px;width:auto;min-width:0}
+ html .dock-status{position:relative;display:flex;align-items:center;gap:8px}
+ html .dock-status #status{order:5;flex-basis:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;margin:0}
+ html .dock-status .au-mobile-player-close{margin-left:0}
+ html .dock-status #openLyrics{margin-right:auto}
+ html .lyrics-card.au20-listening{display:flex;flex-direction:column;gap:20px;padding:22px!important;min-height:600px}
+ html .au20-art-column{display:grid;grid-template-columns:minmax(0,1fr) 68px;gap:14px;align-items:center;width:100%}
+ html .au20-player-art{grid-column:2;grid-row:1/3;width:68px;height:68px;border-radius:5px}
+ html .au20-art-column #lyricsTitle{grid-column:1;grid-row:1;margin:0;align-self:end;font-size:19px;line-height:1.25}
+ html .au20-track-artist{grid-column:1;grid-row:2;font-size:12px;align-self:start}
+ html .au20-text-column{width:100%}html .au20-listening .sync-player-lines{height:440px}
+ html .au-lyrics-viewport .au-lyric-line{font-size:32px;letter-spacing:-.04em;padding:19px 2px}
+ html .au20-listening .lyrics-selection-help{font-size:11px}html .au20-volume{width:126px}
+ html #auImmersionApp .au-im-body{display:grid;grid-template-columns:minmax(0,1fr) 68px;grid-template-rows:68px minmax(0,1fr);gap:16px;padding:8px 14px}
+ html #auImmersionApp .au-im-art{grid-column:2;grid-row:1;width:68px;height:68px;align-self:start}
+ html #auImmersionApp .au-im-lyrics{grid-column:1/-1;grid-row:2;min-height:0}
+ html #auImmersionApp .au-im-note{position:absolute;top:15px;left:14px;right:98px;font-size:12px}
+ html #auImmersionApp .au-im-picture{width:68px!important;height:68px!important}
+ html #auImmersionApp.au-im-no-lyrics .au-im-body{display:grid;grid-template-columns:1fr;grid-template-rows:1fr}
+ html #auImmersionApp.au-im-no-lyrics .au-im-art{grid-column:1;grid-row:1;align-self:center;justify-self:center;width:min(100%,400px);height:auto}
+ html #auImmersionApp.au-im-no-lyrics .au-im-picture{width:100%!important;height:auto!important}
+ html #auImmersionApp .au-im-controls{gap:8px;padding:8px 12px}
+ html #auImmersionApp .au-im-controls button{font-size:11px;padding:8px;min-height:40px}
+ .au20-audio-times,.au20-fade-fields{gap:12px}.au20-wave{height:130px}
+}
+@media(prefers-reduced-motion:reduce){html .page,html .au-lyric-line{animation:none!important;transition:none!important;transform:none!important}}
+html[data-motion=off] .page{animation:none}html[data-motion=off] .au-lyric-line{transition:none!important;transform:none!important}

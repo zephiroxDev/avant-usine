@@ -43,3 +43,15 @@ html[data-platform=ios][data-effects=off],html[data-platform=ios][data-effects=r
 /* 19V07: the scene is opaque edge to edge; only its controls use glass. */
 html[data-au-app=ios] #auImmersionApp.au-new-immersion{inset:0!important;margin:0!important;width:100vw!important;height:100dvh!important;min-width:100vw!important;min-height:100dvh!important;max-width:none!important;max-height:none!important;border:0!important;border-radius:0!important;background:#160b1a!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 html[data-au-app=ios] #auImmersionApp.au-new-immersion::backdrop{background:#160b1a!important}
+
+/* 20.0: retain iOS glass while sharing the quieter listening palette. */
+html[data-platform=ios]{--paper:#151316;--ink:#f5eff3;--muted:#b6a9b3;--line:#ffffff1d;--purple:#e4a5d1;--pink:#e4a5d1;--ios-glass:rgba(33,28,35,.82);--ios-glass-inner:rgba(44,37,47,.72);--ios-border:rgba(255,255,255,.15)}
+html[data-platform=ios] body{background:var(--paper)}
+html[data-platform=ios] .au20-lyric-options{background:transparent!important;border:0!important;border-top:1px solid #ffffff20!important;border-radius:0;padding:12px 0;box-shadow:none}
+html[data-platform=ios] .au20-dock-menu{background:transparent!important;padding:0;border:0!important;border-radius:0;box-shadow:none}
+html[data-platform=ios] .au20-dock-menu[open]{background:var(--surface)!important;padding:16px;border:1px solid var(--ui-border)!important;border-radius:16px;box-shadow:0 -12px 45px #0005}
+html[data-platform=ios] :is(.button,.chip,.control,.nav button){background:linear-gradient(150deg,#ffffff15,#ffffff03),#302733b8!important}
+html[data-platform=ios] :is(.chip[aria-pressed=true],.nav button[aria-current=page],.button[aria-pressed=true],.control.main-play){background:linear-gradient(145deg,#d7a3ca66,#93678055)!important;border-color:#e1b9d577!important}
+html[data-platform=ios][data-reduce-transparency=true],html[data-platform=ios][data-increase-contrast=true]{--ios-glass:#211c23;--ios-glass-inner:#2c252f;--ios-border:#bba8b8;--muted:#e8dce5}
+html[data-platform=ios][data-reduce-transparency=true] :is(.button,.chip,.control,.nav button),html[data-platform=ios][data-increase-contrast=true] :is(.button,.chip,.control,.nav button){background:#423746!important}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){html[data-platform=ios]{--ios-glass:#211c23;--ios-glass-inner:#2c252f;--ios-border:#bba8b8;--muted:#e8dce5}}

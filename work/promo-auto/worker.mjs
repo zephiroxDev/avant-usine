@@ -2,7 +2,7 @@
 export const BASE = 'https://zephiroxdev.github.io/avant-usine/';
 const FIELDS = 'id text status sentAt externalLink channelId';
 export const keyOf = item => {
-  if (!/^\d{2}V\d{2}(?:\.\d+)?$/.test(item.patch)) throw Error('invalid_patch');
+  if (!/^(?:\d{2}V\d{2}(?:\.\d+)?|\d+\.\d+(?:\.\d+)?)$/.test(item.patch)) throw Error('invalid_patch');
   return item.patch.toLowerCase();
 };
 export const videoOf = item => {
