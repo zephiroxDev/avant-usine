@@ -1,7 +1,7 @@
 /* iOS: transfer the actual audio to AVPlayer while the WebView is hidden. */
 (()=>{'use strict';
 const native=window.Capacitor?.Plugins?.LiveLyrics;if(!native?.preparePlayback)return;
-let prepared='',preparing=null,phase='',owner=null,nativePlaying=false,serial=Promise.resolve();
+let prepared='',preparing=null,phase='',owner=null,nativePlaying=false,serial=Promise.resolve(),inactive=false;
 const wrapped=new WeakSet();
 const queue=fn=>{serial=serial.then(fn,fn).catch(error=>window.dispatchEvent(new CustomEvent('au:island-relay-error',{detail:error.message||String(error)})));return serial;};
 async function prepare(s){
@@ -24,10 +24,10 @@ async function prepare(s){
  })().finally(()=>preparing=null);return preparing;
 }
 async function background(){
- if(phase||!document.hidden)return;
+ if(phase||!(document.hidden||inactive))return;
  const s=window.AU_PLAYBACK_SOURCE_19?.(),a=s?.audio;
  if(!s?.data?.lines?.length||!a||a.paused||a.ended||localStorage.getItem('au-ios-lyrics-island')==='false')return;
- await prepare(s);if(!prepared.startsWith(s.key+'|')||!document.hidden||a.paused)return;
+ await prepare(s);if(!prepared.startsWith(s.key+'|')||!(document.hidden||inactive)||a.paused)return;
  phase='arming';owner=s;
  let pausedByRelay=false;
  try{
@@ -36,7 +36,7 @@ async function background(){
   const arm=()=>native.armPlayback({key:s.key,position:a.currentTime,rate:a.playbackRate,volume:a.muted?0:a.volume,...range,sleepDeadline:sleep?.deadline||null});
   let before=a.currentTime;await arm();
   if(Math.abs(a.currentTime-before)>.2)await arm();
-  if(!document.hidden||a.paused||a.ended||window.AU_PLAYBACK_SOURCE_19?.()?.key!==s.key){phase='';owner=null;return;}
+  if(!(document.hidden||inactive)||a.paused||a.ended||window.AU_PLAYBACK_SOURCE_19?.()?.key!==s.key){phase='';owner=null;return;}
   a.pause();pausedByRelay=true;await native.commitPlayback({key:s.key});nativePlaying=true;phase='native';
  }catch(error){await native.releasePlayback().catch(()=>{});phase='';owner=null;if(pausedByRelay)await a.play().catch(()=>{});throw error;}
 }
@@ -48,7 +48,8 @@ async function foreground(resumeAfterError=false,allowResume=true){
  }finally{phase='';owner=null;window.dispatchEvent(new Event('au:island-relay-restored'));}
 }
 window.AU_ISLAND_AUDIO_19={prepare:s=>queue(()=>prepare(s)),get active(){return !!phase;},get phase(){return phase;}};
-document.addEventListener('visibilitychange',()=>queue(()=>document.hidden?background():foreground()));
+document.addEventListener('visibilitychange',()=>queue(()=>document.hidden||inactive?background():foreground()));
+native.addListener('applicationState',event=>{inactive=!event.active;queue(()=>event.active?foreground():background());});
 window.addEventListener('au:before-trackchange',()=>queue(async()=>{await foreground();prepared='';}));
 native.addListener('playbackEnded',()=>queue(async()=>{const s=owner;await foreground(false,false);if(s){s.audio.pause();s.audio.dispatchEvent(new Event('ended'));}}));
 native.addListener('playbackError',event=>queue(async()=>{await foreground(true);throw Error(event.message);}));

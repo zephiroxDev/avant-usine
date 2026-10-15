@@ -22,6 +22,8 @@ final class LyricsAudio {
     private var finished = false
     private var previousSample: (Double, Double)?
     private var segments: [[String: Double]] = []
+    private var lastNowPlaying: Double = 0
+    private var lastNowPlayingRate: Float = -1
     func takeSegments() -> [[String: Double]] { let result = segments; segments.removeAll(); return result }
     var onTime: (() -> Void)?
     var onEnd: (() -> Void)?
@@ -107,7 +109,11 @@ final class LyricsAudio {
         }
         if position >= endTime { finish(); return }
         player?.volume = gain(position)
-        if var info = MPNowPlayingInfoCenter.default().nowPlayingInfo { info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position; info[MPNowPlayingInfoPropertyPlaybackRate] = player?.rate ?? 0; MPNowPlayingInfoCenter.default().nowPlayingInfo = info }
+        let now = ProcessInfo.processInfo.systemUptime, rate = player?.rate ?? 0
+        if now-lastNowPlaying >= 2 || rate != lastNowPlayingRate {
+            lastNowPlaying = now; lastNowPlayingRate = rate
+            if var info = MPNowPlayingInfoCenter.default().nowPlayingInfo { info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position; info[MPNowPlayingInfoPropertyPlaybackRate] = rate; MPNowPlayingInfoCenter.default().nowPlayingInfo = info }
+        }
         onTime?()
     }
     func control(playing: Bool) { sample(force: true); if playing { player?.playImmediately(atRate: requestedRate) } else { player?.pause() }; tick() }

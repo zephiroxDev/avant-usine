@@ -45,6 +45,17 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     private var playbackGap: Double = 0
     private var closingActivities = Set<String>()
     private var lastAudioEvent: Double = 0
+    private var handoffTask: UIBackgroundTaskIdentifier = .invalid
+    private var backgroundStarted: Double?
+    private var backgroundTicks = 0
+    private var backgroundUpdates = 0
+    private var backgroundNative = false
+    private var backgroundMaxGap: Double = 0
+    private var backgroundLastTick: Double = 0
+    private var backgroundLastPosition: Double = 0
+    private var backgroundFirstPosition: Double = 0
+    private var backgroundReport: [String: Any] = [:]
+    private var lastUpdateCompleted: Double = 0
     #if DEBUG
     private var lastProbeWrite: Double = 0
     #endif
@@ -57,8 +68,26 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
             self.audio.onSleep = { [weak self] in self?.notifyListeners("playbackSleep", data: [:]) }
             self.timer = Timer(timeInterval: 0.25, repeats: true) { [weak self] _ in self?.refresh() }
             if let timer = self.timer { RunLoop.main.add(timer, forMode: .common) }
+            self.backgroundReport = UserDefaults.standard.dictionary(forKey: "au-island-last-background") ?? [:]
+            self.lifecycleObservers.append(NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
+                guard let self = self else { return }
+                self.finishHandoffTask()
+                guard self.source?.enabled == true, self.source?.playing == true else { return }
+                self.handoffTask = UIApplication.shared.beginBackgroundTask(withName: "Finish real audio handoff") { [weak self] in self?.finishHandoffTask() }
+                self.notifyListeners("applicationState", data: ["active": false])
+            })
+            self.lifecycleObservers.append(NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
+                guard let self = self else { return }
+                let now = ProcessInfo.processInfo.systemUptime
+                self.backgroundStarted = now; self.backgroundTicks = self.tickCount; self.backgroundUpdates = self.updateCount
+                self.backgroundNative = self.audio.ownsPlayback; self.backgroundMaxGap = 0; self.backgroundLastTick = now
+                self.backgroundFirstPosition = self.audio.ownsPlayback ? self.audio.position : self.source?.position ?? 0
+                self.backgroundLastPosition = self.backgroundFirstPosition
+            })
             self.lifecycleObservers.append(NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
                 guard let self = self else { return }
+                self.saveBackgroundReport(); self.backgroundStarted = nil; self.finishHandoffTask()
+                self.notifyListeners("applicationState", data: ["active": true])
                 self.lastState = nil; self.failedTrack = nil; self.refresh()
             })
         }
@@ -71,7 +100,8 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
                 "state": self.activity.map { String(describing: $0.activityState) } ?? "absent",
                 "updatePending": self.updating, "background": UIApplication.shared.applicationState != .active,
                 "playbackGap": self.playbackGap, "nativeAudio": self.audio.ownsPlayback,
-                "stopReason": self.lastStopReason, "ios": UIDevice.current.systemVersion, "position": self.audio.position])
+                "stopReason": self.lastStopReason, "ios": UIDevice.current.systemVersion, "position": self.audio.position,
+                "lastBackground": self.backgroundReport])
         }
     }
     @objc func availability(_ call: CAPPluginCall) {
@@ -121,7 +151,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func stop(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             self?.lastStopReason = call.getString("reason") ?? "demande du lecteur"
-            self?.audio.clear(); self?.source = nil; self?.generation += 1; self?.endActivity(); call.resolve()
+            self?.finishHandoffTask(); self?.audio.clear(); self?.source = nil; self?.generation += 1; self?.endActivity(); call.resolve()
         }
     }
     @objc func preparePlayback(_ call: CAPPluginCall) {
@@ -162,13 +192,14 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func commitPlayback(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self, let s = self.source, s.id == call.getString("key"), self.audio.key == s.id else { call.reject("La piste a changé."); return }
-            do { try self.audio.commit(title: s.title, duration: s.duration); self.refresh(); call.resolve(["playing": true]) }
-            catch { call.reject(error.localizedDescription) }
+            do { try self.audio.commit(title: s.title, duration: s.duration); self.finishHandoffTask(); self.refresh(); call.resolve(["playing": true]) }
+            catch { self.finishHandoffTask(); call.reject(error.localizedDescription) }
         }
     }
     @objc func releasePlayback(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { call.resolve(); return }
+            self.saveBackgroundReport(); self.finishHandoffTask()
             let owned = self.audio.ownsPlayback, snapshot = self.audio.release()
             if owned, var s = self.source { s.position = snapshot.0; s.playing = snapshot.1; self.source = s; self.anchor = ProcessInfo.processInfo.systemUptime }
             call.resolve(["owned": owned, "position": snapshot.0, "playing": snapshot.1, "key": self.audio.key, "segments": self.audio.takeSegments()])
@@ -178,8 +209,26 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         let old = activity; activity = nil; lastState = nil
         if let old = old { closingActivities.insert(old.id); Task { await old.end(nil, dismissalPolicy: .immediate); await MainActor.run { self.closingActivities.remove(old.id) } } }
     }
+    private func finishHandoffTask() {
+        if handoffTask != .invalid { UIApplication.shared.endBackgroundTask(handoffTask); handoffTask = .invalid }
+    }
+    private func saveBackgroundReport() {
+        guard let began = backgroundStarted else { return }
+        backgroundReport = ["duration": ProcessInfo.processInfo.systemUptime-began,
+            "ticks": tickCount-backgroundTicks, "updates": updateCount-backgroundUpdates,
+            "nativeAudioUsed": backgroundNative, "maxGap": backgroundMaxGap,
+            "firstPosition": backgroundFirstPosition, "lastPosition": backgroundLastPosition,
+            "updatePending": updating, "lastUpdateAge": lastUpdateCompleted > 0 ? ProcessInfo.processInfo.systemUptime-lastUpdateCompleted : -1,
+            "state": activity.map { String(describing: $0.activityState) } ?? "absent"]
+        UserDefaults.standard.set(backgroundReport, forKey: "au-island-last-background")
+    }
     private func refresh() {
         let now = ProcessInfo.processInfo.systemUptime
+        if backgroundStarted != nil {
+            backgroundMaxGap = max(backgroundMaxGap, now-backgroundLastTick); backgroundLastTick = now
+            backgroundNative = backgroundNative || audio.ownsPlayback
+            backgroundLastPosition = audio.ownsPlayback ? audio.position : source.map { min($0.duration,$0.position+($0.playing ? max(0,now-anchor)*$0.rate : 0)) } ?? 0
+        }
         longestGap = max(longestGap, now - lastTick)
         if audio.ownsPlayback ? audio.playing : source?.playing == true { playbackGap = max(playbackGap, now-lastTick) }
         lastTick = now; tickCount += 1
@@ -213,7 +262,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
         if let previous = lastState, previous.lineID == state.lineID, previous.playing == state.playing,
            previous.highlightEnabled == state.highlightEnabled {
             let finalLetter = state.highlightEnabled && state.highlighted >= state.phrase.unicodeScalars.count && previous.highlighted < state.highlighted
-            let interval = state.highlightEnabled ? 0.15 : 0.5
+            let interval = state.highlightEnabled ? (UIApplication.shared.applicationState == .active ? 0.15 : 0.5) : 0.5
             if !finalLetter && now - lastUpdateAt < interval { return }
         }
         let attrs = LyricsAttributes(title: String(s.title.unicodeScalars.prefix(70)), trackID: String(s.id.prefix(100)))
@@ -224,7 +273,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
             catch { failedTrack = s.id; notifyListeners("error", data: ["message": error.localizedDescription]) }
         } else if let current = activity {
             updating = true; lastUpdateAt = now; let token = generation
-            Task { await current.update(content); await MainActor.run { self.updating = false; if self.generation == token { self.lastState = state; self.updateCount += 1 }; self.refresh() } }
+            Task { await current.update(content); await MainActor.run { self.updating = false; self.lastUpdateCompleted = ProcessInfo.processInfo.systemUptime; if self.generation == token { self.lastState = state; self.updateCount += 1 }; self.refresh() } }
         }
     }
     deinit { timer?.invalidate(); for observer in lifecycleObservers { NotificationCenter.default.removeObserver(observer) } }

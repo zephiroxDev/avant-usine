@@ -21,9 +21,7 @@ struct LyricsWidget: Widget {
                         phrase(context.state, text: context.state.phrase, offset: 0)
                             .font(.system(size: context.state.phrase.count > 90 ? 15 : 19, weight: .semibold))
                             .lineLimit(3).minimumScaleFactor(0.7).multilineTextAlignment(.center)
-                            .id(context.state.lineID)
-                            .transition(context.state.transition == "none" ? .identity : .opacity)
-                            .animation(.easeInOut(duration: 0.22), value: context.state.lineID)
+                            .transaction { transaction in transaction.animation = nil }
                         if !context.state.backs.isEmpty { Text(context.state.backs).font(.caption).foregroundStyle(.secondary).lineLimit(2) }
                     }.padding(.vertical, 6)
                 }
@@ -40,7 +38,7 @@ struct LyricsWidget: Widget {
     }
     private func phrase(_ state: LyricsAttributes.ContentState, text: String, offset: Int) -> some View {
         IslandPhrase(text: text, progress: Double(max(0, state.highlighted-offset)), highlight: state.highlightEnabled)
-            .animation(state.highlightEnabled ? .linear(duration: 0.15) : nil, value: state.highlighted)
+            .animation(state.highlightEnabled ? .linear(duration: 0.45) : nil, value: state.highlighted)
     }
     private func split(_ text: String) -> (String, String) {
         let chars = Array(text.unicodeScalars), middle = chars.count / 2

@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "19V08 · Site PC",
+      "15 octobre 2026",
+      "Des gestes plus simples, des paroles qui suivent.",
+      [
+        "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
+        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale."
+      ]
+    ],
+    [
       "19V06 · Site PC",
       "14 octobre 2026",
       "Plus de place pour les paroles, un compte plus clair.",
@@ -512,6 +521,16 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "19V08 · Application Windows 0.5.10",
+      "15 octobre 2026",
+      "Des gestes plus simples, des paroles qui suivent.",
+      [
+        "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
+        "Le défilement automatique des paroles synchronisées fonctionne en immersion, en classique et en Highlight, avec pause et reprise du suivi.",
+        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale."
+      ]
+    ],
+    [
       "19V06 · Application Windows 0.5.9",
       "14 octobre 2026",
       "Plus de place pour les paroles, un compte plus clair.",
@@ -883,6 +902,16 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "19V08 · Site mobile",
+      "15 octobre 2026",
+      "Des gestes plus simples, des paroles qui suivent.",
+      [
+        "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
+        "La barre Highlight continue à enregistrer lorsque le doigt sort au-dessus ou au-dessous de la barre ; le relâchement termine le geste.",
+        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale."
+      ]
+    ],
     [
       "19V06 · Site mobile",
       "14 octobre 2026",
@@ -1397,6 +1426,17 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "19V08 · Application Android 0.2.10",
+      "15 octobre 2026",
+      "Des gestes plus simples, des paroles qui suivent.",
+      [
+        "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
+        "La barre Highlight continue à enregistrer lorsque le doigt sort au-dessus ou au-dessous de la barre ; le relâchement termine le geste.",
+        "Le défilement automatique des paroles synchronisées fonctionne en immersion, en classique et en Highlight, avec pause et reprise du suivi.",
+        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale."
+      ]
+    ],
+    [
       "19V07 · Application Android 0.2.9",
       "14 octobre 2026",
       "Les paroles et l’immersion sur mobile.",
@@ -1607,6 +1647,19 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "19V08 · Application iPhone 1.1.12",
+      "15 octobre 2026",
+      "Des gestes plus simples, des paroles qui suivent.",
+      [
+        "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
+        "La barre Highlight continue à enregistrer lorsque le doigt sort au-dessus ou au-dessous de la barre ; le relâchement termine le geste.",
+        "Le défilement automatique des paroles synchronisées fonctionne en immersion, en classique et en Highlight, avec pause et reprise du suivi.",
+        "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale.",
+        "Sur iPhone, le relais audio est anticipé dès la perte du premier plan et les mises à jour intermédiaires du Highlight sont espacées pour alléger le rendu.",
+        "Le texte de la Dynamic Island conserve son identité entre les phrases ; le diagnostic garde le dernier passage en arrière-plan. La disparition du gel reste à confirmer sur iPhone réel."
+      ]
+    ],
     [
       "19V07 · Application iPhone 1.1.11",
       "14 octobre 2026",
