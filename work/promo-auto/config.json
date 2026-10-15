@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "channelId": "6ad0edf5778b240e2f19fa52",
+  "handle": "avant.l.usine",
+  "excludedPatches": [
+    "18v07",
+    "18v08",
+    "19v00",
+    "19v01",
+    "19v02",
+    "19v03",
+    "19v03.2",
+    "19v04",
+    "19v05",
+    "19v06",
+    "19v06.2",
+    "19v07",
+    "19v08",
+    "19v08.2"
+  ]
+}
