@@ -13,6 +13,11 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /work/android-app/releases/
+            /work/android-app/NOTES-*.md
       - name: Verify signed APK
         run: |
           python - <<'PY'
@@ -23,7 +28,7 @@ jobs:
               for part in m['parts']:
                   assert pathlib.Path(part['file']).name==part['file']
                   if part.get('url'):
-                      assert part['url'].startswith('https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.1/')
+                      assert part['url']=='https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-'+m['version']+'/'+part['file']
                       with urllib.request.urlopen(part['url'],timeout=120) as response: encoded=response.read()
                   else: encoded=(r/part['file']).read_bytes()
                   chunk=base64.b64decode(encoded,validate=True)
