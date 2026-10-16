@@ -13,5 +13,8 @@ html='''<!doctype html><html lang="fr"><meta charset="utf-8"><title>20V00.1</tit
 for name in ['render-promo-20.cjs','animate-promo-20.py','build-android-20.py']:
  s=(r/'work/mine-sync'/name).read_text(encoding='utf-8').replace('outputs/20-0','outputs/20v00-1').replace("'20-0'","'20v00-1'").replace('promo-20-0','promo-20v00-1')
  if name.startswith('render'):s=s.replace("'20.0'","'20V00.1'")
+ if name.startswith('animate'):
+  s=s.replace("'-c:v','libx264'","'-r','30','-c:v','libx264'").replace("'-crf','21',str(w/","'-crf','21','-movflags','+faststart',str(w/")
+  s=s.replace('Promo 20.0','Promo 20V00.1')
  (r/'work/mine-sync'/name.replace('-20.','-20v00-1.')).write_text(s,encoding='utf-8')
 print('New promotional composition and release helpers prepared.')
