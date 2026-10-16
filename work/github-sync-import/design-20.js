@@ -23,7 +23,7 @@ function volume(input){
 function tidyLyrics(){
  const text=document.querySelector('.au20-text-column');if(!text)return;
  let options=text.querySelector(':scope > .au20-lyric-options');if(!options){options=document.createElement('details');options.className='au20-lyric-options';const title=document.createElement('summary');title.textContent='Options des paroles';options.append(title);text.append(options);}
- for(const node of text.querySelectorAll('.lyrics-selection-help,.sync-toolbar,.sync-player > button,.sync-player > .au-lyrics-toolbar'))if(!options.contains(node))options.append(node);
+ for(const node of text.querySelectorAll('.lyrics-selection-help,.sync-toolbar,.sync-player > button:not(.au-lyrics-return),.sync-player > .au-lyrics-toolbar'))if(!options.contains(node))options.append(node);
  if(options.parentElement===text&&text.lastElementChild!==options)text.append(options);
 }
 function composition(){

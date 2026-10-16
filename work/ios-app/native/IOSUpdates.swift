@@ -91,13 +91,13 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
         DispatchQueue.main.async {
             guard self.pending == nil else { call.reject("Un téléchargement est déjà en cours."); return }
             guard let raw = call.getString("url"), let url = URL(string: raw),
-                  url.scheme == "https", url.host == "github.com",
-                  url.path.hasPrefix("/zephiroxDev/avant-usine/releases/download/"),
+                  url.scheme == "https",
+                  ((url.host == "github.com" && url.path.hasPrefix("/zephiroxDev/avant-usine/releases/download/")) || (url.host == "djjfzymrkncwhrocpxjo.supabase.co" && url.path == "/functions/v1/beta-builds")),
                   let hash = call.getString("sha256"),
                   hash.range(of: "^[a-fA-F0-9]{64}$", options: .regularExpression) != nil,
                   let size = call.getInt("size"), size > 0,
                   let name = call.getString("name"),
-                  name.range(of: "^Avant-Usine-iOS-[0-9]+\\.[0-9]+\\.[0-9]+-non-signe\\.ipa$", options: .regularExpression) != nil
+                  ((url.host == "github.com" && name.range(of: "^Avant-Usine-iOS-[0-9]+\\.[0-9]+\\.[0-9]+-non-signe\\.ipa$", options: .regularExpression) != nil) || (url.host == "djjfzymrkncwhrocpxjo.supabase.co" && name.range(of: "^betatesting-20-0-2-test-[1-9][0-9]*\\.ipa$", options: .regularExpression) != nil))
             else { call.reject("Informations du paquet invalides."); return }
             self.pending = call
             self.expectedHash = hash.lowercased()

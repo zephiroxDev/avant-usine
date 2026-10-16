@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "20.0.2 · Site PC",
+      "16 octobre 2026",
+      "Les paroles deviennent des repères de lecture.",
+      [
+        "Touchez une phrase synchronisée pour rejoindre son passage dans le morceau, y compris les backs, en classique et en Highlight.",
+        "Après un défilement manuel, le bouton « Revenir aux paroles en cours » recentre le chant et réactive le suivi automatique."
+      ]
+    ],
+    [
       "20V00.1 · Site PC",
       "16 octobre 2026",
       "Correctifs du lecteur et des paroles.",
@@ -542,6 +551,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "20.0.2 · Windows 0.6.2",
+      "16 octobre 2026",
+      "Les paroles deviennent des repères de lecture.",
+      [
+        "Touchez une phrase synchronisée pour rejoindre son passage dans le morceau, y compris les backs, en classique et en Highlight.",
+        "Après un défilement manuel, le bouton « Revenir aux paroles en cours » recentre le chant et réactive le suivi automatique."
+      ]
+    ],
+    [
       "20V00.1 · Windows 0.6.1",
       "16 octobre 2026",
       "Correctifs du lecteur et des paroles.",
@@ -946,6 +964,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "20.0.2 · Site mobile",
+      "16 octobre 2026",
+      "Les paroles deviennent des repères de lecture.",
+      [
+        "Touchez une phrase synchronisée pour rejoindre son passage dans le morceau, y compris les backs, en classique et en Highlight.",
+        "Après un défilement manuel, le bouton « Revenir aux paroles en cours » recentre le chant et réactive le suivi automatique."
+      ]
+    ],
     [
       "20V00.1 · Site mobile",
       "16 octobre 2026",
@@ -1492,6 +1519,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "20.0.2 · Android 0.3.2",
+      "16 octobre 2026",
+      "Les paroles deviennent des repères de lecture.",
+      [
+        "Touchez une phrase synchronisée pour rejoindre son passage dans le morceau, y compris les backs, en classique et en Highlight.",
+        "Après un défilement manuel, le bouton « Revenir aux paroles en cours » recentre le chant et réactive le suivi automatique."
+      ]
+    ],
+    [
       "20V00.1 · Android 0.3.1",
       "16 octobre 2026",
       "Correctifs du lecteur et des paroles.",
@@ -1737,6 +1773,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "20.0.2 · iPhone et iPad 2.0.2",
+      "16 octobre 2026",
+      "Les paroles deviennent des repères de lecture.",
+      [
+        "Touchez une phrase synchronisée pour rejoindre son passage dans le morceau, y compris les backs, en classique et en Highlight.",
+        "Après un défilement manuel, le bouton « Revenir aux paroles en cours » recentre le chant et réactive le suivi automatique."
+      ]
+    ],
     [
       "20V00.1 · iPhone et iPad 2.0.1",
       "16 octobre 2026",
