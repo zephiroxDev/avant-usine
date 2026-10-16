@@ -155,3 +155,19 @@ html #auImmersionApp.au-im-no-lyrics .au-im-art{max-width:600px;justify-self:cen
 }
 @media(prefers-reduced-motion:reduce){html .page,html .au-lyric-line{animation:none!important;transition:none!important;transform:none!important}}
 html[data-motion=off] .page{animation:none}html[data-motion=off] .au-lyric-line{transition:none!important;transform:none!important}
+
+/* 20V00.1: letter exits already animate opacity. A second row-opacity tween
+   would briefly reveal the reset letters when the exit class is removed. */
+html .au-lyrics-viewport .au-lyric-line{transition-property:filter,transform}
+.au20-audio-timebar{display:flex;justify-content:space-between;gap:16px;align-items:center;font-size:14px;font-weight:650;font-variant-numeric:tabular-nums;margin:12px 0;color:var(--ink)}
+.au20-audio-zoom{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0 20px}
+html .au20-wave .au20-cut-handle{width:42px;min-width:42px;min-height:44px;border:0;border-radius:7px;background:#f1e9f3;color:#261e2a;font-size:24px;box-shadow:0 0 0 1px #1d142855;touch-action:none}
+.au20-audio-precise{margin:16px 0;border-top:1px solid var(--ui-border);padding-top:12px}.au20-audio-precise>summary{padding:10px 0;font-size:13px;color:var(--muted)}
+.au20-fade-fields output{color:#dab3ea;font-variant-numeric:tabular-nums;font-weight:650}
+.au20-fade-fields input[type=range]{accent-color:#b58bcc;min-height:44px}
+@media(max-width:680px){
+ html .player-dock{padding-bottom:env(safe-area-inset-bottom,0px)}
+ html .dock-status{justify-content:center;column-gap:12px;padding-left:max(24px,calc(env(safe-area-inset-left,0px) + 16px));padding-right:max(24px,calc(env(safe-area-inset-right,0px) + 16px));padding-bottom:12px}
+ html .dock-status #openLyrics,html .dock-status .au20-dock-menu{margin-left:0;margin-right:0}
+ html .dock-status .au-mobile-player-close{min-width:44px;min-height:44px;flex-shrink:0}
+}

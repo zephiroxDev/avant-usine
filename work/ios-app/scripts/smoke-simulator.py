@@ -1,8 +1,10 @@
 import json,subprocess,time
 from pathlib import Path
+from PIL import Image
 def run(*args):return subprocess.check_output(args,text=True)
 devices=json.loads(run('xcrun','simctl','list','devices','available','-j'))['devices']
-device=next(d for runtime,items in devices.items() if 'iOS' in runtime for d in items if 'iPhone' in d['name'] and d.get('isAvailable'))
+device=next(d for runtime,items in devices.items() if 'iOS' in runtime for d in items if 'iPhone' in d['name'] and 'Pro' in d['name'] and d.get('isAvailable'))
+print('Dynamic Island simulator: '+device['name'])
 udid=device['udid']
 if device['state']!='Booted':run('xcrun','simctl','boot',udid)
 run('xcrun','simctl','bootstatus',udid,'-b')
@@ -39,6 +41,19 @@ for phase in ['nativeSeed','nativeVerified']:
         if len(samples)>1:assert sample['position']>samples[-2]['position']+2, 'Native playback clock froze'
     assert samples[-1]['updates']>samples[0]['updates']+2, 'Lyrics activity updates stopped'
     assert len({x['phrase'] for x in samples})>=4, 'Phrases did not follow the audio'
+    # Preserve the actual system presentation, not only ActivityKit update counters.
+    captures=Path('build/simulator-captures');captures.mkdir(parents=True,exist_ok=True)
+    run('xcrun','simctl','io',udid,'screenshot',str(captures/(phase+'-island.png')))
+    image=Image.open(captures/(phase+'-island.png')).convert('RGB')
+    # The compact leading music note is pink even in classic mode. Search only
+    # the central status area, excluding Settings content and the side clock.
+    width,height=image.size
+    crop=image.crop((int(width*.25),0,int(width*.75),int(height*.075)))
+    visible=sum(1 for red,green,blue in crop.getdata() if red>160 and blue>65 and red>green+45 and blue>green+10)
+    assert visible>=5, 'Dynamic Island has no visible native widget pixels: '+str(visible)
+    print('SIMULATOR DISPLAY VERIFIED '+phase+': '+str(visible)+' visible pink pixels')
+    logs=run('xcrun','simctl','spawn',udid,'log','show','--last','2m','--style','compact','--predicate','process == "LyricsIsland" OR process == "liveactivitiesd"')
+    (captures/(phase+'-system.log')).write_text(logs)
     print('SIMULATOR BACKGROUND VERIFIED '+phase+': '+json.dumps(samples))
     run('xcrun','simctl','terminate',udid,'dev.zephirox.avantusine.ios')
 run('xcrun','simctl','shutdown',udid)

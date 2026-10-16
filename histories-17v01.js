@@ -1,6 +1,14 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "20V00.1 · Site PC",
+      "16 octobre 2026",
+      "Correctifs du lecteur et des paroles.",
+      [
+        "Les paroles terminées ne réapparaissent plus brièvement à la fin de leur transition."
+      ]
+    ],
+    [
       "20.0 · Site PC",
       "15 octobre 2026",
       "Une nouvelle finition pour Avant l’usine.",
@@ -929,6 +937,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "20V00.1 · Site mobile",
+      "16 octobre 2026",
+      "Correctifs du lecteur et des paroles.",
+      [
+        "Les paroles terminées ne réapparaissent plus brièvement à la fin de leur transition.",
+        "Les commandes du bas du lecteur sont mieux espacées et tiennent compte des marges de sécurité du téléphone."
+      ]
+    ],
     [
       "20.0 · Site mobile",
       "15 octobre 2026",

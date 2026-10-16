@@ -1,5 +1,14 @@
 [
   [
+    "20V00.1 · Windows 0.6.1",
+    "16 octobre 2026",
+    "Correctifs du lecteur et des paroles.",
+    [
+      "Les paroles terminées ne réapparaissent plus brièvement à la fin de leur transition.",
+      "Le mode immersion récupère aussi les synchronisations déjà chargées avant son ouverture."
+    ]
+  ],
+  [
     "20.0 · Windows 0.6.0",
     "15 octobre 2026",
     "Une nouvelle finition pour Avant l’usine.",

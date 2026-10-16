@@ -64,6 +64,13 @@ jobs:
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' \
             build | tee build-output.log | xcbeautify
           lipo -archs build/Build/Products/Release-iphoneos/App.app/App | grep arm64
+      - name: Preserve actual Dynamic Island simulator captures
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-island-display
+          path: work/ios-app/build/simulator-captures/
+          if-no-files-found: warn
       - name: Package and verify unsigned IPA
         working-directory: work/ios-app
         run: |
@@ -104,4 +111,3 @@ jobs:
           GH_REPO: ${{ github.repository }}
         working-directory: work/ios-app
         run: python scripts/publish-verified.py
-

@@ -1,6 +1,14 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "20V00.1 · Site PC",
+      "16 octobre 2026",
+      "Correctifs du lecteur et des paroles.",
+      [
+        "Les paroles terminées ne réapparaissent plus brièvement à la fin de leur transition."
+      ]
+    ],
+    [
       "20.0 · Site PC",
       "15 octobre 2026",
       "Une nouvelle finition pour Avant l’usine.",
@@ -534,6 +542,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "20V00.1 · Windows 0.6.1",
+      "16 octobre 2026",
+      "Correctifs du lecteur et des paroles.",
+      [
+        "Les paroles terminées ne réapparaissent plus brièvement à la fin de leur transition.",
+        "Le mode immersion récupère aussi les synchronisations déjà chargées avant son ouverture."
+      ]
+    ],
+    [
       "20.0 · Windows 0.6.0",
       "15 octobre 2026",
       "Une nouvelle finition pour Avant l’usine.",
@@ -929,6 +946,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "20V00.1 · Site mobile",
+      "16 octobre 2026",
+      "Correctifs du lecteur et des paroles.",
+      [
+        "Les paroles terminées ne réapparaissent plus brièvement à la fin de leur transition.",
+        "Les commandes du bas du lecteur sont mieux espacées et tiennent compte des marges de sécurité du téléphone."
+      ]
+    ],
     [
       "20.0 · Site mobile",
       "15 octobre 2026",
@@ -1466,6 +1492,16 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "20V00.1 · Android 0.3.1",
+      "16 octobre 2026",
+      "Correctifs du lecteur et des paroles.",
+      [
+        "Les paroles terminées ne réapparaissent plus brièvement à la fin de leur transition.",
+        "Les commandes du bas du lecteur sont mieux espacées et tiennent compte des marges de sécurité du téléphone.",
+        "Le mode immersion récupère aussi les synchronisations déjà chargées avant son ouverture."
+      ]
+    ],
+    [
       "20.0 · Android 0.3.0",
       "15 octobre 2026",
       "Une nouvelle finition pour Avant l’usine.",
@@ -1701,6 +1737,18 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "20V00.1 · iPhone et iPad 2.0.1",
+      "16 octobre 2026",
+      "Correctifs du lecteur et des paroles.",
+      [
+        "Les paroles terminées ne réapparaissent plus brièvement à la fin de leur transition.",
+        "Les commandes du bas du lecteur sont mieux espacées et tiennent compte des marges de sécurité du téléphone.",
+        "Le mode immersion récupère aussi les synchronisations déjà chargées avant son ouverture.",
+        "Le volume utilise un réglage audio effectif sur iPhone et iPad.",
+        "Le rendu natif des paroles dans la Dynamic Island est simplifié ; le fonctionnement après signature reste à confirmer sur appareil."
+      ]
+    ],
     [
       "20.0 · iPhone et iPad 2.0",
       "15 octobre 2026",
