@@ -48,10 +48,18 @@ for phase in ['nativeSeed','nativeVerified']:
     # The compact leading music note is pink even in classic mode. Search only
     # the central status area, excluding Settings content and the side clock.
     width,height=image.size
-    crop=image.crop((int(width*.25),0,int(width*.75),int(height*.075)))
+    crop=image.crop((int(width*.08),0,int(width*.92),int(height*.075)))
     visible=sum(1 for red,green,blue in crop.getdata() if red>160 and blue>65 and red>green+45 and blue>green+10)
+    # Inspect text inside the central, opaque part of the capsule as well. White
+    # Settings background is outside its vertical bounds and must not count.
+    band=image.crop((int(width*.25),0,int(width*.75),int(height*.075)))
+    dark=[y for y in range(band.height) if sum(1 for x in range(band.width) if max(band.getpixel((x,y)))<45)>band.width*.6]
+    assert dark, 'No Dynamic Island capsule visible'
+    inner=band.crop((0,min(dark)+8,band.width,max(dark)-8))
+    letters=sum(1 for red,green,blue in inner.getdata() if min(red,green,blue)>170)
     assert visible>=5, 'Dynamic Island has no visible native widget pixels: '+str(visible)
-    print('SIMULATOR DISPLAY VERIFIED '+phase+': '+str(visible)+' visible pink pixels')
+    assert letters>=10, 'Dynamic Island capsule contains no visible text: '+str(letters)
+    print('SIMULATOR DISPLAY VERIFIED '+phase+': '+str(visible)+' pink pixels; '+str(letters)+' text pixels')
     logs=run('xcrun','simctl','spawn',udid,'log','show','--last','2m','--style','compact','--predicate','process == "LyricsIsland" OR process == "liveactivitiesd"')
     (captures/(phase+'-system.log')).write_text(logs)
     print('SIMULATOR BACKGROUND VERIFIED '+phase+': '+json.dumps(samples))

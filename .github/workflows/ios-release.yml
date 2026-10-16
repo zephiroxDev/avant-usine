@@ -1,5 +1,6 @@
 name: iOS IPA release
 # Validate generated Xcode project syntax before compilation.
+# Inspect both the leading icon and text inside the full Dynamic Island capsule.
 on:
   push:
     branches: [main]
