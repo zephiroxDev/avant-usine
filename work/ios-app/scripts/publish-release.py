@@ -29,11 +29,12 @@ else:
         except subprocess.CalledProcessError:
             # A later infrastructure commit can prevent this runner from tagging an older SHA.
             # Only allow a current-main tag if no product code changed during compilation.
-            diff=api('repos/'+repo+'/compare/'+os.environ['GITHUB_SHA']+'...main')
+            target=api('repos/'+repo+'/git/ref/heads/main')['object']['sha']
+            diff=api('repos/'+repo+'/compare/'+os.environ['GITHUB_SHA']+'...'+target)
             def infrastructure(path):
-                return path.startswith('.github/') or path.startswith('work/android-app/scripts/') or path.startswith('work/android-app/releases/') or path in ['work/ios-app/scripts/publish-release.py'] or path.startswith('promo-') or path.startswith('work/github-sync-import/promo-')
+                return path.startswith('.github/') or path.startswith('work/android-app/scripts/') or path.startswith('work/android-app/releases/') or path in ['work/ios-app/scripts/publish-release.py','work/desktop-app/scripts/publish-ci.ps1'] or path.startswith('promo-') or path.startswith('work/github-sync-import/promo-')
             assert not diff.get('total_commits',0)>100 and all(infrastructure(f['filename']) for f in diff.get('files',[])), 'Product changed during build; refusing to tag a different version'
-            gh('release','create',tag,'--draft','--prerelease','--latest=false','--target','main','--title','Avant l’usine — iOS '+version+' (IPA à signer)','--notes-file',str(notes_path))
+            gh('release','create',tag,'--draft','--prerelease','--latest=false','--target',target,'--title','Avant l’usine — iOS '+version+' (IPA à signer)','--notes-file',str(notes_path))
     gh('release','upload',tag,'build/'+metadata['file'],'build/livraison.json','--clobber')
     draft=next(r for r in api('repos/'+repo+'/releases?per_page=100') if r['tag_name']==tag)
     assets={a['name']:a for a in draft['assets']}
@@ -42,4 +43,3 @@ else:
     assert 'livraison.json' in assets
     published=api('repos/'+repo+'/releases/'+str(draft['id']),'PATCH',{'draft':False,'prerelease':True,'make_latest':'false'})
     print('Published '+published['html_url'])
-

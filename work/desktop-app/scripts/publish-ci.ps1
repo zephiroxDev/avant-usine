@@ -31,7 +31,21 @@ if ($LASTEXITCODE -eq 0) {
     if (-not $taskExistingRelease.isDraft) { throw 'This version is already public; do not overwrite it' }
 } else {
     gh release create $taskTag --draft --target $env:RELEASE_COMMIT --title "Avant l’usine — Windows $taskVersion · $taskReleaseId" --notes-file $taskNotesPath
-    if ($LASTEXITCODE -ne 0) { throw 'Draft creation failed' }
+    if ($LASTEXITCODE -ne 0) {
+        # GitHub can restrict tagging an earlier commit after another platform
+        # advances main. Only use its current head when product files are identical.
+        $taskHead=gh api "repos/${env:GH_REPO}/git/ref/heads/main" | ConvertFrom-Json
+        if ($LASTEXITCODE -ne 0 -or -not $taskHead.object.sha) { throw 'Cannot resolve a safe release target' }
+        $taskDiff=gh api "repos/${env:GH_REPO}/compare/${env:RELEASE_COMMIT}...$($taskHead.object.sha)" | ConvertFrom-Json
+        if ($LASTEXITCODE -ne 0 -or $taskDiff.total_commits -gt 100) { throw 'Cannot verify the current release target' }
+        foreach ($taskChanged in $taskDiff.files) {
+            $taskPath=$taskChanged.filename
+            $taskInfrastructure=$taskPath.StartsWith('.github/') -or $taskPath.StartsWith('work/android-app/releases/') -or $taskPath.StartsWith('work/android-app/scripts/') -or $taskPath.StartsWith('work/ios-app/') -or $taskPath -eq 'work/desktop-app/scripts/publish-ci.ps1' -or $taskPath.StartsWith('promo-') -or $taskPath.StartsWith('work/github-sync-import/promo-')
+            if (-not $taskInfrastructure) { throw "Product changed during compilation: $taskPath" }
+        }
+        gh release create $taskTag --draft --target $taskHead.object.sha --title "Avant l’usine — Windows $taskVersion · $taskReleaseId" --notes-file $taskNotesPath
+        if ($LASTEXITCODE -ne 0) { throw 'Draft creation failed after verifying unchanged product files' }
+    }
 }
 $taskPaths=@($taskFiles | ForEach-Object { $_.FullName })
 gh release upload $taskTag @taskPaths --clobber
