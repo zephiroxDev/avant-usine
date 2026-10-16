@@ -23,7 +23,7 @@ jobs:
               for part in m['parts']:
                   assert pathlib.Path(part['file']).name==part['file']
                   if part.get('url'):
-                      assert part['url'].startswith('https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.0/')
+                      assert part['url'].startswith('https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.1/')
                       with urllib.request.urlopen(part['url'],timeout=120) as response: encoded=response.read()
                   else: encoded=(r/part['file']).read_bytes()
                   chunk=base64.b64decode(encoded,validate=True)
@@ -53,4 +53,5 @@ jobs:
           a=next(a for a in r['assets'] if a['name']==m['file']);assert a['size']==m['bytes'] and a['digest']=='sha256:'+m['sha256']
           PY
           gh release edit "$tag" --draft=false --prerelease --latest=false
+
 
