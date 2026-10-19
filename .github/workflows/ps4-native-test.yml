@@ -12,6 +12,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: work/ps4-app
       - name: Test durable storage and audio conversion
         run: |
           mkdir -p "$RUNNER_TEMP/core"

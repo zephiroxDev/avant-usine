@@ -117,7 +117,8 @@ static void loadLoop() {
                 unsigned rate=mp3.sampleRate,channels=mp3.channels;
                 if(channels>=1&&channels<=2&&rate>=8000&&rate<=192000){
                     for(;;){auto n=drmp3_read_pcm_frames_s16(&mp3,4096,block);if(!n)break;
-                        if(exiting||id!=generation||source.size()+n*channels>uint64_t(rate)*channels*720){ok=false;break;}
+                        if(exiting||id!=generation||source.size()+n*channels>uint64_t(rate)*channels*720||
+                           (source.size()+n*channels)*sizeof(int16_t)>144*1024*1024){ok=false;break;}
                         source.insert(source.end(),block,block+n*channels);}
                     if(ok)decoded=toStereo48(source.data(),source.size()/channels,channels,rate);
                 }
