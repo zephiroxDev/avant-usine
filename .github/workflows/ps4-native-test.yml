@@ -46,7 +46,13 @@ jobs:
         env:
           DOTNET_ROLL_FORWARD: Major
           DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: '1'
-        run: python3 scripts/package.py
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" \
+            -v "$OO_PS4_TOOLCHAIN:$OO_PS4_TOOLCHAIN:ro" \
+            -w "$PWD" -e OO_PS4_TOOLCHAIN \
+            -e DOTNET_ROLL_FORWARD -e DOTNET_SYSTEM_GLOBALIZATION_INVARIANT \
+            ubuntu:20.04 bash -ec 'apt-get update -qq; DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3 libssl1.1 libicu66; python3 scripts/package.py'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
