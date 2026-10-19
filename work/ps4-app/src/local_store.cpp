@@ -1,6 +1,7 @@
 #include "local_store.h"
 #include <algorithm>
 #include <cstdio>
+#include <cstdlib>
 #include <cerrno>
 #include <cstring>
 #include <dirent.h>
