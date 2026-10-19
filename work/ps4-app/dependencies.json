@@ -28,5 +28,20 @@
     "path": "vendor/stb_easy_font.h",
     "url": "https://raw.githubusercontent.com/nothings/stb/a7d4c2175630e1ea5b6f8dd00ab96fed0b97b96d/stb_easy_font.h",
     "sha256": "7b48b52a316477766c0a7a096b33a29bcbd847b6fab4fabd32bb3fdb7cea1a60"
+  },
+  {
+    "path": "sce_module/libc.prx",
+    "url": "https://raw.githubusercontent.com/OpenOrbis/OpenOrbis-PS4-Toolchain/v0.5.2/samples/hello_world/sce_module/libc.prx",
+    "sha256": "11840c557f6ac9de8a8fbfed597493c26ff17f0e30725d9f7444da9e856255c3"
+  },
+  {
+    "path": "sce_module/libSceFios2.prx",
+    "url": "https://raw.githubusercontent.com/OpenOrbis/OpenOrbis-PS4-Toolchain/v0.5.2/samples/hello_world/sce_module/libSceFios2.prx",
+    "sha256": "6de0afdaadb12f86e21b8d77ee969399cde0741319a1a770777d8d61bb858de2"
+  },
+  {
+    "path": "sce_sys/about/right.sprx",
+    "url": "https://raw.githubusercontent.com/OpenOrbis/OpenOrbis-PS4-Toolchain/v0.5.2/samples/hello_world/sce_sys/about/right.sprx",
+    "sha256": "7d84e8cc13515e2d34d96b570409b3da4b12229ae560deade2986c445df1d223"
   }
 ]

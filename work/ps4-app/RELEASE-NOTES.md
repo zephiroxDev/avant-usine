@@ -1,6 +1,8 @@
-Avant l’usine — PS4 — prototype natif 0.1.0-test2
+Avant l’usine — PS4 — prototype natif 0.1.0-test3
 
-Nouvel essai de compatibilité au lancement : génération du SELF avec le convertisseur OpenOrbis 0.5.2, compilateur et bibliothèques 0.5.4 conservés. Cette piste correspond au problème de lancement rapporté dans https://github.com/OpenOrbis/OpenOrbis-PS4-Toolchain/issues/283 ; le fonctionnement sur cette console reste à confirmer. Contrôles supplémentaires des segments mémoire et paramètres de démarrage. Même identifiant ALUS00001, version du paquet 00.11 ; ne supprime pas les fichiers Local.
+Nouvel essai après refus de lancement des tests 1 et 2 : ajout au paquet des fichiers de support fournis avec l’exemple officiel OpenOrbis (sce_module/libc.prx, sce_module/libSceFios2.prx et sce_sys/about/right.sprx), omis dans les premiers paquets. Le build vérifie leur présence et leur empreinte, puis les inclut explicitement dans le projet PKG. Métadonnées APP_VER/VERSION alignées sur 01.00 comme l’exemple officiel, même identifiant ALUS00001. Aucun fichier Local n’est supprimé.
+
+Le convertisseur SELF 0.5.2 et les contrôles supplémentaires de l’exécutable sont conservés. Cette version reste expérimentale : le lancement sur PS4 13.52 doit être confirmé par un essai réel. Le précédent changement de convertisseur n’a pas suffi à résoudre le rejet constaté sur cette console.
 
 - Catalogue public de 118 morceaux répartis sur 8 volumes.
 - Lecture MP3 native, pause, arrêt et déplacement de dix secondes.

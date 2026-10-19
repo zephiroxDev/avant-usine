@@ -78,6 +78,7 @@ jobs:
             work/ps4-app/build/*.elf
             work/ps4-app/build/*.oelf
             work/ps4-app/build/executable-validation.json
+            work/ps4-app/build/package-files.json
             work/ps4-app/eboot.bin
             work/ps4-app/README.md
   publish-test:

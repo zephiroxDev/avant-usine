@@ -13,18 +13,19 @@ for name,kind,size,value in [
  ('SYSTEM_VER','Integer',4,0),('TITLE','Utf8',128,"Avant l'usine - PS4 test"),
  ('TITLE_ID','Utf8',12,release['titleId']),('VERSION','Utf8',8,release['appVersion'])]:
  run('sfo_setentry',sfo,name,'--type',kind,'--maxsize',size,'--value',value)
-files=['eboot.bin','sce_sys/param.sfo','sce_sys/icon0.png']
-rights=list(sdk.glob('**/sce_sys/about/right.sprx'))
-if rights:
- (r/'sce_sys/about').mkdir(parents=True,exist_ok=True)
- shutil.copyfile(rights[0],r/'sce_sys/about/right.sprx');files.append('sce_sys/about/right.sprx')
+support=['sce_module/libc.prx','sce_module/libSceFios2.prx','sce_sys/about/right.sprx']
+pins={d['path']:d for d in json.loads((r/'dependencies.json').read_text())}
+for name in support:
+ data=(r/name).read_bytes()
+ assert data[:4]==b'O\x15=\x1d' and hashlib.sha256(data).hexdigest()==pins[name]['sha256'],name
+files=['eboot.bin','sce_sys/param.sfo','sce_sys/icon0.png']+support
 subprocess.run([str(gp4),'-out','pkg.gp4','--content-id='+release['contentId'],'--files',' '.join(files)],check=True)
 run('pkg_build','pkg.gp4','.')
-packages=list(r.glob('*.pkg'));assert len(packages)==1,packages
-p=packages[0];assert p.stat().st_size>16384
+p=r/(release['contentId']+'.pkg');assert p.is_file() and p.stat().st_size>16384
 with p.open('rb') as f:assert f.read(4)==b'\x7fCNT','Invalid PKG header'
 target=r/('Avant-Usine-PS4-'+release['version']+'.pkg')
 if p!=target:p.rename(target)
 assert (r/'build/avant-usine.elf').read_bytes()[:4]==b'\x7fELF'
 (r/'SHA256SUMS.txt').write_text(hashlib.sha256(target.read_bytes()).hexdigest()+'  '+target.name+'\n')
 print('Native PKG built. Physical-console compatibility remains unverified.')
+(r/'build/package-files.json').write_text(json.dumps({'files':files,'appVersion':release['appVersion'],'supportFilesVerified':True},indent=2))
