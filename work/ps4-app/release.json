@@ -1,7 +1,7 @@
 {
   "platform": "ps4",
-  "version": "0.1.0-test1",
-  "appVersion": "00.10",
+  "version": "0.1.0-test2",
+  "appVersion": "00.11",
   "titleId": "ALUS00001",
   "contentId": "IV0000-ALUS00001_00-AVANTUSINEPS4001",
   "target": "PS4 avec homebrew actif, essai prévu en 13.52 avec GoldHEN",

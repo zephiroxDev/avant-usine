@@ -1,7 +1,8 @@
 from pathlib import Path
 import os,json,subprocess,hashlib,struct,shutil
 r=Path(__file__).resolve().parents[1];os.chdir(r)
-sdk=Path(os.environ['OO_PS4_TOOLCHAIN']);tool=sdk/'bin/linux/PkgTool.Core'
+sdk=Path(os.environ['OO_PS4_TOOLCHAIN']);tool=Path(os.environ.get('PS4_PKG_TOOL',str(sdk/'bin/linux/PkgTool.Core')))
+gp4=Path(os.environ.get('PS4_GP4_TOOL',str(sdk/'bin/linux/create-gp4')))
 release=json.loads((r/'release.json').read_text())
 def run(*args):subprocess.run([str(tool),*map(str,args)],check=True)
 sfo=r/'sce_sys/param.sfo';run('sfo_new',sfo)
@@ -17,7 +18,7 @@ rights=list(sdk.glob('**/sce_sys/about/right.sprx'))
 if rights:
  (r/'sce_sys/about').mkdir(parents=True,exist_ok=True)
  shutil.copyfile(rights[0],r/'sce_sys/about/right.sprx');files.append('sce_sys/about/right.sprx')
-subprocess.run([str(sdk/'bin/linux/create-gp4'),'-out','pkg.gp4','--content-id='+release['contentId'],'--files',' '.join(files)],check=True)
+subprocess.run([str(gp4),'-out','pkg.gp4','--content-id='+release['contentId'],'--files',' '.join(files)],check=True)
 run('pkg_build','pkg.gp4','.')
 packages=list(r.glob('*.pkg'));assert len(packages)==1,packages
 p=packages[0];assert p.stat().st_size>16384

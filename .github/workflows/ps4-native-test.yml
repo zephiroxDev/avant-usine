@@ -38,9 +38,24 @@ jobs:
           for d in json.loads((root/'dependencies.json').read_text()):
             assert hashlib.sha256((root/d['path']).read_bytes()).hexdigest()==d['sha256'], d['path']
           PY
+      - name: Use legacy SELF converter for launch compatibility test
+        run: |
+          curl --fail --location --retry 3 https://github.com/OpenOrbis/OpenOrbis-PS4-Toolchain/releases/download/v0.5.2/v0.5.2.tar.gz -o "$RUNNER_TEMP/oo052.tar.gz"
+          echo "92457ea5cb4b5fe80ca45a578f7899458fec5634143c7091a605cde823941334  $RUNNER_TEMP/oo052.tar.gz" | sha256sum -c -
+          python3 - <<'PY'
+          import os,tarfile,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])
+          with tarfile.open(root/'oo052.tar.gz') as archive:
+            matches=[m for m in archive.getmembers() if m.isfile() and m.name.endswith('/bin/linux/create-fself')]
+            assert len(matches)==1
+            target=root/'create-fself-052';target.write_bytes(archive.extractfile(matches[0]).read());target.chmod(0o755)
+          with open(os.environ['GITHUB_ENV'],'a') as f:f.write('PS4_FSELF='+str(target)+'\n')
+          PY
       - name: Build native PS4 executable
         working-directory: work/ps4-app
-        run: make -j2
+        run: |
+          make -j2 PS4_FSELF="$PS4_FSELF"
+          python3 scripts/validate_executable.py
       - name: Build test PKG
         working-directory: work/ps4-app
         env:
@@ -62,6 +77,7 @@ jobs:
             work/ps4-app/SHA256SUMS.txt
             work/ps4-app/build/*.elf
             work/ps4-app/build/*.oelf
+            work/ps4-app/build/executable-validation.json
             work/ps4-app/eboot.bin
             work/ps4-app/README.md
   publish-test:
@@ -82,10 +98,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          VERSION=$(python3 -c "import json; print(json.load(open('work/ps4-app/release.json'))['version'])")
           cd ps4-package
           sha256sum -c SHA256SUMS.txt
-          gh release create ps4-v0.1.0-test1 Avant-Usine-PS4-0.1.0-test1.pkg SHA256SUMS.txt README.md \
+          gh release create "ps4-v$VERSION" "Avant-Usine-PS4-$VERSION.pkg" SHA256SUMS.txt README.md \
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
-            --title "Avant l'usine PS4 - prototype 0.1.0-test1" --prerelease --latest=false \
+            --title "Avant l'usine PS4 - prototype $VERSION" --prerelease --latest=false \
             --notes-file "$GITHUB_WORKSPACE/work/ps4-app/RELEASE-NOTES.md"
-

@@ -1,4 +1,6 @@
-Avant l’usine — PS4 — prototype natif 0.1.0-test1
+Avant l’usine — PS4 — prototype natif 0.1.0-test2
+
+Nouvel essai de compatibilité au lancement : génération du SELF avec le convertisseur OpenOrbis 0.5.2, compilateur et bibliothèques 0.5.4 conservés. Cette piste correspond au problème de lancement rapporté dans https://github.com/OpenOrbis/OpenOrbis-PS4-Toolchain/issues/283 ; le fonctionnement sur cette console reste à confirmer. Contrôles supplémentaires des segments mémoire et paramètres de démarrage. Même identifiant ALUS00001, version du paquet 00.11 ; ne supprime pas les fichiers Local.
 
 - Catalogue public de 118 morceaux répartis sur 8 volumes.
 - Lecture MP3 native, pause, arrêt et déplacement de dix secondes.
