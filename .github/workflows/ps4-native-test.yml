@@ -64,3 +64,28 @@ jobs:
             work/ps4-app/build/*.oelf
             work/ps4-app/eboot.bin
             work/ps4-app/README.md
+  publish-test:
+    needs: native
+    if: contains(github.event.head_commit.message, '[publish-ps4-test]')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: work/ps4-app
+      - uses: actions/download-artifact@v4
+        with:
+          name: ps4-native-test
+          path: ps4-package
+      - name: Publish independent PS4 experimental package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd ps4-package
+          sha256sum -c SHA256SUMS.txt
+          gh release create ps4-v0.1.0-test1 Avant-Usine-PS4-0.1.0-test1.pkg SHA256SUMS.txt README.md \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Avant l'usine PS4 - prototype 0.1.0-test1" --prerelease --latest=false \
+            --notes-file "$GITHUB_WORKSPACE/work/ps4-app/RELEASE-NOTES.md"
+
