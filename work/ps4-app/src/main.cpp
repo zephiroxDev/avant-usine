@@ -12,7 +12,7 @@
 #include <cstring>
 #include <cstdio>
 std::stringstream debugLogStream;
-extern "C" { unsigned int sceLibcHeapSize=512*1024*1024; }
+extern "C" { uint64_t sceLibcHeapSize=512*1024*1024; }
 static Scene2D* screen;
 static const Color white={239,236,246},muted={150,143,168},pink={232,93,178};
 static void box(int x,int y,int w,int h,Color c) {
