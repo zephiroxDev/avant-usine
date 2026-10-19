@@ -1,0 +1,32 @@
+[
+  {
+    "path": "vendor/graphics.cpp",
+    "url": "https://raw.githubusercontent.com/OpenOrbis/OpenOrbis-PS4-Toolchain/b458dfd9d2f5c40aa249b127c9b9b4488afdc686/samples/_common/graphics.cpp",
+    "sha256": "9c84ca9e9ef2c5ad8f7ae20b91031db6f83b0d6fe5dac4f4693869df76756ef7"
+  },
+  {
+    "path": "vendor/graphics.h",
+    "url": "https://raw.githubusercontent.com/OpenOrbis/OpenOrbis-PS4-Toolchain/b458dfd9d2f5c40aa249b127c9b9b4488afdc686/samples/_common/graphics.h",
+    "sha256": "3b0103b088f414e52a1aebe79552883d381c6d8f4481c91fbd6aa73fe1679b71"
+  },
+  {
+    "path": "vendor/log.h",
+    "url": "https://raw.githubusercontent.com/OpenOrbis/OpenOrbis-PS4-Toolchain/b458dfd9d2f5c40aa249b127c9b9b4488afdc686/samples/_common/log.h",
+    "sha256": "a6ebb2470fc561adcad41001fb09f7f09ffbf0b9636c837b18c867bc607bc257"
+  },
+  {
+    "path": "vendor/OpenOrbis-LICENSE",
+    "url": "https://raw.githubusercontent.com/OpenOrbis/OpenOrbis-PS4-Toolchain/b458dfd9d2f5c40aa249b127c9b9b4488afdc686/LICENSE",
+    "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  },
+  {
+    "path": "vendor/dr_mp3.h",
+    "url": "https://raw.githubusercontent.com/mackron/dr_libs/dfe8377631000664666519fdb83da193fd8037f4/dr_mp3.h",
+    "sha256": "997b7ee18de6e6b81e2a83f1ea9fc62aef25c62b28d48db95635f49e65de0a2f"
+  },
+  {
+    "path": "vendor/stb_easy_font.h",
+    "url": "https://raw.githubusercontent.com/nothings/stb/a7d4c2175630e1ea5b6f8dd00ab96fed0b97b96d/stb_easy_font.h",
+    "sha256": "7b48b52a316477766c0a7a096b33a29bcbd847b6fab4fabd32bb3fdb7cea1a60"
+  }
+]

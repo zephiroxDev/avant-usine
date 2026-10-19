@@ -1,0 +1,58 @@
+name: PS4 native prototype validation
+on:
+  push:
+    branches: [console/ps4-test]
+    paths: ['work/ps4-app/**', '.github/workflows/ps4-native-test.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test durable storage and audio conversion
+        run: |
+          mkdir -p "$RUNNER_TEMP/core"
+          g++ -std=c++17 -Wall -Wextra -Werror -Wno-misleading-indentation -fsanitize=address,undefined -g -Iwork/ps4-app/src work/ps4-app/tests/core.cpp work/ps4-app/src/settings.cpp work/ps4-app/src/local_store.cpp work/ps4-app/src/pcm.cpp -o "$RUNNER_TEMP/core-test"
+          "$RUNNER_TEMP/core-test" "$RUNNER_TEMP/core"
+      - name: Install native compiler
+        run: sudo apt-get update -qq && sudo apt-get install -y clang-18 lld-18
+      - name: Download and verify OpenOrbis
+        run: |
+          curl --fail --location --retry 3 https://github.com/OpenOrbis/OpenOrbis-PS4-Toolchain/releases/download/v0.5.4/toolchain-llvm-18.tar.gz -o "$RUNNER_TEMP/sdk.tar.gz"
+          echo "3c7cd5bb593ca74fa1c13fd59f3938dc0fc07985167f7275063019e63abe4526  $RUNNER_TEMP/sdk.tar.gz" | sha256sum -c -
+          mkdir "$RUNNER_TEMP/oo"
+          tar -xzf "$RUNNER_TEMP/sdk.tar.gz" -C "$RUNNER_TEMP/oo"
+          SDK_BIN=$(find "$RUNNER_TEMP/oo" -type f -path '*/bin/linux/create-fself' -print -quit)
+          test -n "$SDK_BIN"
+          echo "OO_PS4_TOOLCHAIN=${SDK_BIN%/bin/linux/create-fself}" >> "$GITHUB_ENV"
+      - name: Check pinned sources
+        run: |
+          python3 - <<'PY'
+          import json,hashlib,pathlib
+          root=pathlib.Path('work/ps4-app')
+          for d in json.loads((root/'dependencies.json').read_text()):
+            assert hashlib.sha256((root/d['path']).read_bytes()).hexdigest()==d['sha256'], d['path']
+          PY
+      - name: Build native PS4 executable
+        working-directory: work/ps4-app
+        run: make -j2
+      - name: Build test PKG
+        working-directory: work/ps4-app
+        env:
+          DOTNET_ROLL_FORWARD: Major
+          DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: '1'
+        run: python3 scripts/package.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ps4-native-test
+          path: |
+            work/ps4-app/*.pkg
+            work/ps4-app/SHA256SUMS.txt
+            work/ps4-app/build/*.elf
+            work/ps4-app/build/*.oelf
+            work/ps4-app/eboot.bin
+            work/ps4-app/README.md
