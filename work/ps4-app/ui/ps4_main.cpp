@@ -88,7 +88,7 @@ int main() {
         if(update.phase==Phase::Idle&&displayedPhase==Phase::Checking&&update.notify)ui::showUpdateNotice(update.message);
         int percent=-1;std::string updateMessage=update.message;
         if(update.phase==Phase::Downloading){percent=update.total?int(update.received*100/update.total):0;updateMessage="Téléchargement de la mise à jour : "+std::to_string(percent)+" %";}
-        if(update.phase==Phase::Deferred)updateMessage="Mise à jour reportée. Le fichier déjà vérifié est conservé.";
+        if(update.phase==Phase::Deferred)updateMessage="Décision reportée. Cette version sera proposée de nouveau plus tard.";
         if(update.phase==Phase::Countdown)updateMessage="Mise à jour "+update.version+" prête.";
         ui::setUpdateStatus(updateMessage,percent);
         if(update.needsSave){auto audio=player::state();

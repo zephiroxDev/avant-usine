@@ -30,8 +30,10 @@ int main(int argc,char** argv) {
     puts("Render update");ui::showUpdate("1.0.1");require(ui::navigationGroup()!=mainGroup);capture(display,out+"/update.bgra");
     ui::back();require(ui::navigationGroup()==mainGroup);require(choice==0);
     ui::setUpdateStatus("Téléchargement de la mise à jour : 42 %",42);capture(display,out+"/download.bgra");
+    ui::setUpdateStatus("Mise à jour 1.0.1 prête.");
     ui::showUpdateReady("1.0.1",10);capture(display,out+"/countdown.bgra");ui::back();require(readyChoice==0);require(ui::navigationGroup()==mainGroup);
     ui::showUpdateReady("1.0.1",0,true);ui::back();require(ui::navigationGroup()!=mainGroup);
+    ui::setUpdateStatus("L’installateur PS4 a refusé la mise à jour.");
     ui::showUpdateNotice("L’installateur PS4 a refusé la mise à jour. L’application reste ouverte.");capture(display,out+"/installer-error.bgra");
     ui::back();require(ui::navigationGroup()==mainGroup);require(choice==0&&readyChoice==0);
     puts("Native UI rendered: home, collection, album, update dialog.");
