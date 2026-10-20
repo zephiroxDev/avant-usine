@@ -30,6 +30,7 @@ static lv_obj_t* button(lv_obj_t* parent,const std::string& title,int x,int y,in
     lv_obj_set_style_bg_color(b,lv_color_hex(0x2c252f),0);lv_obj_set_style_bg_opa(b,LV_OPA_COVER,0);lv_obj_set_style_radius(b,9,0);
     lv_obj_set_style_outline_color(b,lv_color_hex(PINK),LV_STATE_FOCUSED);lv_obj_set_style_outline_width(b,2,LV_STATE_FOCUSED);
     lv_obj_set_style_outline_pad(b,3,LV_STATE_FOCUSED);lv_obj_remove_flag(b,LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(b,LV_OBJ_FLAG_SCROLL_ON_FOCUS);
     auto* l=label(b,title,12,0,w-24);lv_obj_align(l,LV_ALIGN_CENTER,0,0);
     lv_obj_add_event_cb(b,callback,LV_EVENT_CLICKED,data);lv_group_add_obj(group,b);return b;
 }
@@ -40,9 +41,10 @@ static void trackEvent(lv_event_t* e) {
     if(actions.play)actions.play(index);
 }
 static void cover(lv_obj_t* parent,int index,int x,int y,int size) {
-    auto* image=lv_image_create(parent);char file[64];snprintf(file,sizeof(file),"/cover-%02d.png",index+1);
+    auto* frame=panel(parent,size,size,PAPER,7);lv_obj_set_pos(frame,x,y);lv_obj_set_style_clip_corner(frame,true,0);
+    auto* image=lv_image_create(frame);char file[64];snprintf(file,sizeof(file),"/cover-%02d.png",index+1);
     std::string src="A:"+assets+file;lv_image_set_src(image,src.c_str());
-    lv_obj_set_pos(image,x,y);lv_image_set_scale(image,size*256/360);
+    lv_obj_set_pos(image,0,0);lv_image_set_scale(image,size*256/360);
     lv_image_set_pivot(image,0,0);
 }
 static void albumCard(lv_obj_t* parent,int index,int x,int y,int size) {

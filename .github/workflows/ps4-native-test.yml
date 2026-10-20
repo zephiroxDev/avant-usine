@@ -58,12 +58,10 @@ jobs:
         run: |
           make -j2 PS4_FSELF="$PS4_FSELF"
           python3 scripts/validate_executable.py
-      - name: Cross-compile native interface development objects
+      - name: Link isolated native interface development executable
         working-directory: work/ps4-app
         run: |
-          python3 scripts/prepare_ui_engine.py
-          cmake -S ui -B build/ui-native -DCMAKE_TOOLCHAIN_FILE="$GITHUB_WORKSPACE/work/ps4-app/ui/openorbis.cmake" -DCMAKE_BUILD_TYPE=Release
-          cmake --build build/ui-native -j2
+          make ui-development -j2 PS4_FSELF="$PS4_FSELF"
           python3 scripts/check_stack_usage.py
       - name: Build test PKG
         working-directory: work/ps4-app

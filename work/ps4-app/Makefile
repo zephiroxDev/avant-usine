@@ -15,3 +15,14 @@ build/avant-usine.elf: $(OBJECTS)
 	$(LD) -m elf_x86_64 -pie --script $(SDK)/link.x --eh-frame-hdr -L$(SDK)/lib $(OBJECTS) $(LIBS) $(SDK)/lib/crt1.o -o $@
 eboot.bin: build/avant-usine.elf
 	$(PS4_FSELF) -in=$< -out=build/avant-usine.oelf --eboot $@ --paid 0x3800000000000011
+
+# Isolated development executable; never overwrites the validated prototype eboot.bin.
+ui-development: $(filter-out build/src/main.o build/vendor/graphics.o,$(OBJECTS))
+	python3 scripts/prepare_ui_engine.py
+	cmake -S ui -B build/ui-native -DCMAKE_TOOLCHAIN_FILE=$(CURDIR)/ui/openorbis.cmake -DCMAKE_BUILD_TYPE=Release
+	cmake --build build/ui-native -j2
+	$(CXX) $(FLAGS) -Iui -Ireference/lvgl -DLV_CONF_INCLUDE_SIMPLE -c ui/ps4_main.cpp -o build/ui-main.o
+	$(CXX) $(FLAGS) -Iui -Ireference/lvgl -DLV_CONF_INCLUDE_SIMPLE -c ui/ps4_video.cpp -o build/ui-video.o
+	$(LD) -m elf_x86_64 -pie --script $(SDK)/link.x --eh-frame-hdr -L$(SDK)/lib build/ui-main.o build/ui-video.o $(filter-out build/src/main.o build/vendor/graphics.o,$(OBJECTS)) build/ui-native/libavant_ui.a build/ui-native/liblvgl.a $(LIBS) $(SDK)/lib/crt1.o -o build/ui-development.elf
+	$(PS4_FSELF) -in=build/ui-development.elf -out=build/ui-development.oelf --eboot build/ui-development.bin --paid 0x3800000000000011
+.PHONY: ui-development
