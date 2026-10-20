@@ -31,12 +31,7 @@ jobs:
         run: |
           mkdir -p work/ps4-app/build/ui-captures
           timeout 60s work/ps4-app/build/ui/ui-preview "$GITHUB_WORKSPACE/work/ps4-app/ui/assets" "$GITHUB_WORKSPACE/work/ps4-app/build/ui-captures"
-          python3 - <<'PY'
-          from pathlib import Path
-          from PIL import Image
-          for source in Path('work/ps4-app/build/ui-captures').glob('*.bgra'):
-            Image.frombytes('RGB',(1280,720),source.read_bytes(),'raw','BGRX').save(source.with_suffix('.png'))
-          PY
+          python3 work/ps4-app/scripts/convert_ui_captures.py work/ps4-app/build/ui-captures
       - uses: actions/upload-artifact@v4
         with:
           name: ps4-native-interface-preview

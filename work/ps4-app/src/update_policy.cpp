@@ -34,7 +34,8 @@ bool Policy::shouldOffer(const std::string& installed,const std::string& availab
     if(!parseVersion(installed,current)||!parseVersion(available,next)||compare(next,current)<=0)return false;
     if(parseVersion(skipped,ignored)&&compare(next,ignored)<=0)return false;
     // A later release bypasses a reminder for an older one.
-    return delayed!=available||now>=remindAt;
+    Version postponed;
+    return !parseVersion(delayed,postponed)||compare(next,postponed)!=0||now>=remindAt;
 }
 bool Policy::choose(Choice choice,const std::string& available,uint64_t now) {
     Version version;if(!parseVersion(available,version))return false;

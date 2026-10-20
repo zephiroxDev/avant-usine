@@ -13,6 +13,7 @@ int main(int argc,char** argv) {
     assert(!policy.shouldOffer("1.0.10","1.0.10",0));
     assert(policy.choose(Choice::Later,"1.0.10",100));
     assert(!policy.shouldOffer("1.0.9","1.0.10",1899));
+    assert(!policy.shouldOffer("1.0.9","v1.0.10",1899));
     assert(policy.shouldOffer("1.0.9","1.0.10",1900));
     assert(policy.shouldOffer("1.0.9","1.0.11",101));
     assert(policy.choose(Choice::Skip,"1.0.10",200));

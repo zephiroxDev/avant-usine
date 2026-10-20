@@ -8,6 +8,8 @@ namespace ui {
 static constexpr uint32_t PAPER=0x151316,INK=0xf5eff3,MUTED=0xb6a9b3,PINK=0xe4a5d1,SURFACE=0x211c23;
 static lv_obj_t *content,*dockTitle,*dockSubtitle,*progress,*clockLabel,*playButtonLabel;
 static lv_group_t* group;
+static lv_group_t* underlyingGroup=nullptr;
+static lv_obj_t* updateShade=nullptr;
 static lv_font_t *normal,*large,*heading;
 static std::vector<unsigned char> fontBytes;
 static std::string assets;
@@ -88,14 +90,23 @@ void showSettings() {
     auto* check=button(content,actions.checkUpdates?"Rechercher une mise à jour":"Mises à jour : raccordement en cours",0,205,520,50,[](lv_event_t*){if(actions.checkUpdates)actions.checkUpdates();});
     if(!actions.checkUpdates)lv_obj_add_state(check,LV_STATE_DISABLED);
 }
+static void closeUpdate(int choice) {
+    if(!updateShade)return;
+    auto* obsolete=group;group=underlyingGroup;underlyingGroup=nullptr;
+    lv_obj_delete(updateShade);updateShade=nullptr;lv_group_delete(obsolete);
+    if(actions.updateChoice)actions.updateChoice(choice);
+}
+void back() { if(updateShade)closeUpdate(0);else showHome(); }
 void showUpdate(const std::string& version) {
+    if(updateShade)return;
+    underlyingGroup=group;group=lv_group_create();
     auto* shade=panel(lv_layer_top(),1280,720,0x000000,0);lv_obj_set_style_bg_opa(shade,190,0);
+    updateShade=shade;
     auto* modal=panel(shade,900,350,SURFACE,20);lv_obj_center(modal);
     label(modal,"Mise à jour "+version+" disponible",32,32,835,large);
     label(modal,"L’installation conservera vos données locales et vos réglages.",32,98,835,normal,MUTED);
     auto cb=[](lv_event_t* e){int choice=int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)));
-        auto* modal=lv_obj_get_parent(lv_event_get_target_obj(e));auto* shade=lv_obj_get_parent(modal);
-        lv_obj_delete(shade);if(actions.updateChoice)actions.updateChoice(choice);};
+        closeUpdate(choice);};
     auto* later=button(modal,"Plus tard",32,158,245,48,cb,reinterpret_cast<void*>(intptr_t(0)));
     button(modal,"Installer",296,158,245,48,cb,reinterpret_cast<void*>(intptr_t(2)));
     button(modal,"Sauter la version "+version+" et me le rappeler lors de la version qui sera déployée après la "+version,32,230,835,82,cb,reinterpret_cast<void*>(intptr_t(1)));

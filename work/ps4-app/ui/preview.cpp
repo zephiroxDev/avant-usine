@@ -19,11 +19,14 @@ int main(int argc,char** argv) {
     lv_display_set_color_format(display,LV_COLOR_FORMAT_XRGB8888);
     lv_display_set_buffers(display,pixels.data(),nullptr,pixels.size(),LV_DISPLAY_RENDER_MODE_FULL);
     lv_display_set_flush_cb(display,flush);
-    puts("Create native interface");require(ui::create(argv[1],{}));std::string out=argv[2];
+    int choice=-1;ui::Actions callbacks;callbacks.updateChoice=[&choice](int value){choice=value;};
+    puts("Create native interface");require(ui::create(argv[1],callbacks));std::string out=argv[2];
     puts("Render home");
     capture(display,out+"/home.bgra");
     puts("Render collection");ui::showCollection();capture(display,out+"/collection.bgra");
     puts("Render album");ui::showAlbum(0);ui::setPlayback(0,43,180,true);capture(display,out+"/album.bgra");
-    puts("Render update");ui::showUpdate("1.0.1");capture(display,out+"/update.bgra");
+    auto* mainGroup=ui::navigationGroup();
+    puts("Render update");ui::showUpdate("1.0.1");require(ui::navigationGroup()!=mainGroup);capture(display,out+"/update.bgra");
+    ui::back();require(ui::navigationGroup()==mainGroup);require(choice==0);
     puts("Native UI rendered: home, collection, album, update dialog.");
 }
