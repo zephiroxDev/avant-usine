@@ -20,7 +20,7 @@ with tarfile.open(archive) as source:
         parts=Path(member.name).parts[1:]
         if not parts or not member.isfile():continue
         if '..' in parts:raise ValueError('Unsafe archive member')
-        if parts[0]!='src' and '/'.join(parts) not in ('lvgl.h','lv_version.h','LICENCE.txt'):continue
+        if parts[0]!='src' and '/'.join(parts) not in ('lvgl.h','lvgl_private.h','lv_version.h','LICENCE.txt'):continue
         target=destination.joinpath(*parts);target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes(source.extractfile(member).read())
 print('LVGL 9.3.0 verified and extracted.')

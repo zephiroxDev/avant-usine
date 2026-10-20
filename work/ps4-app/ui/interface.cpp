@@ -85,7 +85,8 @@ void showSettings() {
     clearContent();label(content,"Réglages",0,0,1000,heading);
     label(content,"Mises à jour de l’application PS4",0,100,1000,large);
     label(content,"Les nouvelles versions seront proposées directement dans l’application.",0,152,1030,normal,MUTED);
-    button(content,"Rechercher une mise à jour",0,205,380,50,[](lv_event_t*){if(actions.checkUpdates)actions.checkUpdates();});
+    auto* check=button(content,actions.checkUpdates?"Rechercher une mise à jour":"Mises à jour : raccordement en cours",0,205,520,50,[](lv_event_t*){if(actions.checkUpdates)actions.checkUpdates();});
+    if(!actions.checkUpdates)lv_obj_add_state(check,LV_STATE_DISABLED);
 }
 void showUpdate(const std::string& version) {
     auto* shade=panel(lv_layer_top(),1280,720,0x000000,0);lv_obj_set_style_bg_opa(shade,190,0);
