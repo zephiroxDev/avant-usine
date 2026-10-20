@@ -113,7 +113,7 @@ static lv_obj_t* button(lv_obj_t* parent,const std::string& title,int x,int y,in
     lv_obj_set_style_outline_pad(b,4,LV_STATE_FOCUSED);lv_obj_remove_flag(b,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_SCROLL_ON_FOCUS));
     lv_obj_set_style_bg_color(b,lv_color_hex(0x463447),LV_STATE_FOCUSED);
     lv_obj_set_style_anim_duration(b,0,0);
-    auto* l=label(b,title,12,0,std::max(1,w-56));lv_obj_align(l,LV_ALIGN_LEFT_MID,12,0);
+    auto* l=label(b,title,12,0,std::max(1,w-52));lv_obj_set_height(l,lv_font_get_line_height(normal));lv_obj_align(l,LV_ALIGN_LEFT_MID,12,0);
     keyIcon(b,KeyIcon::Cross,w-37,(h-26)/2);
     lv_obj_add_event_cb(b,callback,LV_EVENT_CLICKED,data);lv_group_add_obj(group,b);return b;
 }
@@ -138,8 +138,13 @@ static void openKeyboard(lv_obj_t* field) {
     label(keyboardPanel,field==passwordField?"Mot de passe":"Adresse e-mail",24,18,600,large);
     auto* done=button(keyboardPanel,"Terminer",802,12,155,44,[](lv_event_t*){finishTextEntry();});shortcut(done,KeyIcon::Options);lv_group_remove_obj(done);
     auto* cancel=button(keyboardPanel,"Fermer",972,12,155,44,[](lv_event_t*){finishTextEntry();});shortcut(cancel,KeyIcon::Circle);lv_group_remove_obj(cancel);
-    textKeyboard=lv_keyboard_create(keyboardPanel);lv_obj_set_size(textKeyboard,1102,300);lv_obj_set_pos(textKeyboard,24,73);
+    textKeyboard=lv_keyboard_create(keyboardPanel);lv_obj_set_size(textKeyboard,1102,300);lv_obj_set_align(textKeyboard,LV_ALIGN_TOP_LEFT);lv_obj_set_pos(textKeyboard,24,73);
     lv_obj_set_style_text_font(textKeyboard,normal,LV_PART_ITEMS);
+    lv_obj_set_style_bg_color(textKeyboard,lv_color_hex(SURFACE),0);lv_obj_set_style_border_width(textKeyboard,0,0);
+    lv_obj_set_style_bg_color(textKeyboard,lv_color_hex(0x302834),LV_PART_ITEMS);
+    lv_obj_set_style_text_color(textKeyboard,lv_color_hex(INK),LV_PART_ITEMS);
+    lv_obj_set_style_bg_color(textKeyboard,lv_color_hex(0x755270),LV_PART_ITEMS|LV_STATE_FOCUSED);
+    lv_obj_set_style_bg_color(textKeyboard,lv_color_hex(0x755270),LV_PART_ITEMS|LV_STATE_PRESSED);
     lv_keyboard_set_textarea(textKeyboard,field);lv_keyboard_set_mode(textKeyboard,LV_KEYBOARD_MODE_TEXT_LOWER);
     lv_group_add_obj(group,textKeyboard);lv_group_focus_obj(textKeyboard);lv_buttonmatrix_set_selected_button(textKeyboard,0);
     lv_obj_add_event_cb(textKeyboard,[](lv_event_t*){finishTextEntry();},LV_EVENT_READY,nullptr);
@@ -241,6 +246,12 @@ void showAccount() {
         passwordField=lv_textarea_create(content);lv_obj_set_pos(passwordField,0,260);lv_obj_set_size(passwordField,760,50);
         lv_textarea_set_one_line(passwordField,true);lv_textarea_set_password_mode(passwordField,true);lv_textarea_set_max_length(passwordField,512);lv_obj_set_style_text_font(passwordField,normal,0);
         lv_group_add_obj(group,passwordField);lv_obj_add_event_cb(passwordField,[](lv_event_t* e){openKeyboard(static_cast<lv_obj_t*>(lv_event_get_target(e)));},LV_EVENT_CLICKED,nullptr);
+        for(auto* field:{emailField,passwordField}) {
+            lv_obj_set_style_bg_color(field,lv_color_hex(SURFACE),0);lv_obj_set_style_text_color(field,lv_color_hex(INK),0);
+            lv_obj_set_style_border_color(field,lv_color_hex(MUTED),0);lv_obj_set_style_radius(field,8,0);
+            lv_obj_set_style_border_color(field,lv_color_hex(PINK),LV_STATE_FOCUSED);
+            lv_obj_set_style_border_width(field,2,LV_STATE_FOCUSED);
+        }
         auto* submit=button(content,accountView.busy?"Connexion en cours…":"Se connecter",0,345,330,50,[](lv_event_t*){
             if(!emailField||!passwordField||accountView.busy)return;
             std::string email=lv_textarea_get_text(emailField),password=lv_textarea_get_text(passwordField);
@@ -380,7 +391,7 @@ void showUpdate(const std::string& version) {
     button(modal,"Installer",296,158,245,48,cb,reinterpret_cast<void*>(intptr_t(2)));
     button(modal,"Sauter la version "+version+" et me le rappeler lors de la version qui sera déployée après la "+version,32,230,835,82,cb,reinterpret_cast<void*>(intptr_t(1)));
     // Wrapped text is necessary for the complete skip label.
-    auto* skipLabel=lv_obj_get_child(lv_obj_get_child(modal,-1),0);lv_label_set_long_mode(skipLabel,LV_LABEL_LONG_WRAP);
+    auto* skipLabel=lv_obj_get_child(lv_obj_get_child(modal,-1),0);lv_label_set_long_mode(skipLabel,LV_LABEL_LONG_WRAP);lv_obj_set_height(skipLabel,LV_SIZE_CONTENT);
     lv_group_focus_obj(later);
 }
 void showUpdateReady(const std::string& version,unsigned seconds,bool handingOff) {
@@ -444,6 +455,7 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     large=lv_tiny_ttf_create_data(fontBytes.data(),fontBytes.size(),28);
     heading=lv_tiny_ttf_create_data(fontBytes.data(),fontBytes.size(),51);
     if(!normal||!large||!heading)return false;
+    normal->fallback=&lv_font_montserrat_14;large->fallback=&lv_font_montserrat_14;heading->fallback=&lv_font_montserrat_14;
     group=lv_group_create();lv_group_set_default(group);
     auto* root=lv_screen_active();lv_obj_set_style_bg_color(root,lv_color_hex(PAPER),0);lv_obj_remove_flag(root,LV_OBJ_FLAG_SCROLLABLE);
     label(root,"avant l’usine",50,28,310,large);
