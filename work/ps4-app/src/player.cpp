@@ -12,6 +12,8 @@
 #include <condition_variable>
 #include <atomic>
 #include <algorithm>
+#include <memory>
+#include <new>
 #include <cstdio>
 #include <cctype>
 #define DR_MP3_IMPLEMENTATION
@@ -119,19 +121,20 @@ static void loadLoop() {
         bool ok=src.compare(0,8,"https://")==0?network.fetch(src,bytes,id,error):readFile(src,bytes);
         std::vector<int16_t> decoded;
         if(ok&&id==generation&&!exiting) {
-            drmp3 mp3{};
-            if(drmp3_init_memory(&mp3,bytes.data(),bytes.size(),nullptr)) {
+            // Decoder state is large: keep it off the native worker's stack.
+            std::unique_ptr<drmp3> decoder(new(std::nothrow) drmp3{});
+            if(decoder&&drmp3_init_memory(decoder.get(),bytes.data(),bytes.size(),nullptr)) {
                 // Bounded incremental decoding avoids allocating from an untrusted MP3 duration.
                 std::vector<int16_t> source;int16_t block[4096*2];
-                unsigned rate=mp3.sampleRate,channels=mp3.channels;
+                unsigned rate=decoder->sampleRate,channels=decoder->channels;
                 if(channels>=1&&channels<=2&&rate>=8000&&rate<=192000){
-                    for(;;){auto n=drmp3_read_pcm_frames_s16(&mp3,4096,block);if(!n)break;
+                    for(;;){auto n=drmp3_read_pcm_frames_s16(decoder.get(),4096,block);if(!n)break;
                         if(exiting||id!=generation||source.size()+n*channels>uint64_t(rate)*channels*720||
                            (source.size()+n*channels)*sizeof(int16_t)>144*1024*1024){ok=false;break;}
                         source.insert(source.end(),block,block+n*channels);}
                     if(ok)decoded=toStereo48(source.data(),source.size()/channels,channels,rate);
                 }
-                drmp3_uninit(&mp3);
+                drmp3_uninit(decoder.get());
             }
             if(decoded.empty()){ok=false;error="MP3 invalide ou duree superieure a 12 minutes";}
         }

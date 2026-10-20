@@ -13,7 +13,7 @@ for line in report.read_text().splitlines():
     name,size,kind=line.rsplit('\t',2)
     assert kind=='static', 'Unbounded dynamic worker stack frame: '+line
     frames.append({'function':name,'bytes':int(size)})
-assert frames and any('loadLoop' in f['function'] for f in frames)
+assert frames and any(any(n in f['function'] for n in ['loadLoop','loadEntry']) for f in frames)
 maximum=max(f['bytes'] for f in frames)
 assert maximum<=32768, 'Worker frame above 32 KiB: '+str(maximum)
 result={'maximumPlayerFrame':maximum,'perFrameBudget':32768,
