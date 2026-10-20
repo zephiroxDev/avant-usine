@@ -1,11 +1,13 @@
 {
   "platform": "ps4",
-  "version": "0.1.0-test4",
-  "appVersion": "01.01",
+  "version": "0.2.0-preview1",
+  "appVersion": "01.02",
   "titleId": "ALUS00001",
   "contentId": "IV0000-ALUS00001_00-AVANTUSINEPS4001",
-  "target": "PS4 avec homebrew actif, essai pr\u00c3\u00a9vu en 13.52 avec GoldHEN",
+  "target": "PS4 avec homebrew actif ; validation physique requise",
   "deviceTested": false,
   "native": true,
-  "browser": false
+  "browser": false,
+  "entrypoint": "native-ui",
+  "title": "Avant l'usine - PS4 apercu"
 }
