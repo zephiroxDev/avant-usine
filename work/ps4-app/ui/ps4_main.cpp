@@ -12,28 +12,40 @@
 #include <orbis/libkernel.h>
 #include <cstdint>
 #include <utility>
+#include <cstdlib>
 extern "C" { uint64_t sceLibcHeapSize=512*1024*1024; }
 static int pad=-1,activeTrack=-1,currentVolume=100;
-static uint32_t lastKey=LV_KEY_ENTER;
 static uint32_t lastButtons=0;
-static bool backRequested=false;
-static bool toggleRequested=false,settingsRequested=false;
-static int seekRequested=0;
-static void input(lv_indev_t*,lv_indev_data_t* event) {
-    OrbisPadData data{};uint32_t key=0;
-    if(scePadReadState(pad,&data)>=0) {
-        uint32_t pressed=data.buttons&~lastButtons;
-        if(pressed&ORBIS_PAD_BUTTON_CIRCLE)backRequested=true;
-        if(pressed&ORBIS_PAD_BUTTON_TRIANGLE)toggleRequested=true;
-        if(pressed&ORBIS_PAD_BUTTON_OPTIONS)settingsRequested=true;
-        if(pressed&ORBIS_PAD_BUTTON_L1)seekRequested-=10;
-        if(pressed&ORBIS_PAD_BUTTON_R1)seekRequested+=10;
-        lastButtons=data.buttons;
-        if(data.buttons&ORBIS_PAD_BUTTON_CROSS)key=LV_KEY_ENTER;
-        else if(data.buttons&(ORBIS_PAD_BUTTON_DOWN|ORBIS_PAD_BUTTON_RIGHT))key=LV_KEY_NEXT;
-        else if(data.buttons&(ORBIS_PAD_BUTTON_UP|ORBIS_PAD_BUTTON_LEFT))key=LV_KEY_PREV;
+static uint32_t heldDirection=0;
+static uint64_t repeatAt=0,volumeAt=0;
+static void pollController() {
+    OrbisPadData data{};
+    if(scePadReadState(pad,&data)<0){lastButtons=0;heldDirection=0;return;}
+    uint64_t now=sceKernelGetProcessTime()/1000;
+    uint32_t buttons=data.buttons;
+    int x=int(data.leftStick.x)-128,y=int(data.leftStick.y)-128;
+    if(std::abs(x)>55||std::abs(y)>55) {
+        if(std::abs(x)>std::abs(y))buttons|=x<0?ORBIS_PAD_BUTTON_LEFT:ORBIS_PAD_BUTTON_RIGHT;
+        else buttons|=y<0?ORBIS_PAD_BUTTON_UP:ORBIS_PAD_BUTTON_DOWN;
     }
-    if(key)lastKey=key;event->key=lastKey;event->state=key?LV_INDEV_STATE_PRESSED:LV_INDEV_STATE_RELEASED;
+    uint32_t pressed=buttons&~lastButtons;lastButtons=buttons;
+    uint32_t direction=buttons&(ORBIS_PAD_BUTTON_LEFT|ORBIS_PAD_BUTTON_RIGHT|ORBIS_PAD_BUTTON_UP|ORBIS_PAD_BUTTON_DOWN);
+    if(direction&&(direction!=heldDirection||now>=repeatAt)) {
+        ui::moveFocus(direction&ORBIS_PAD_BUTTON_LEFT?ui::Direction::Left:direction&ORBIS_PAD_BUTTON_RIGHT?ui::Direction::Right:direction&ORBIS_PAD_BUTTON_UP?ui::Direction::Up:ui::Direction::Down);
+        repeatAt=now+(direction==heldDirection?110:350);
+    }
+    heldDirection=direction;
+    if(pressed&ORBIS_PAD_BUTTON_CIRCLE)ui::back();
+    else if(pressed&ORBIS_PAD_BUTTON_OPTIONS)ui::showSettings();
+    else if(pressed&ORBIS_PAD_BUTTON_SQUARE)ui::showCollection();
+    else if(pressed&ORBIS_PAD_BUTTON_CROSS)ui::activateFocused();
+    if(pressed&ORBIS_PAD_BUTTON_TRIANGLE)player::toggle();
+    if(pressed&ORBIS_PAD_BUTTON_L1){int n=int(sizeof(tracks)/sizeof(*tracks));int index=activeTrack<=0?n-1:activeTrack-1;activeTrack=index;player::open(tracks[index].url);}
+    if(pressed&ORBIS_PAD_BUTTON_R1){activeTrack=(activeTrack+1)%int(sizeof(tracks)/sizeof(*tracks));player::open(tracks[activeTrack].url);}
+    if(pressed&ORBIS_PAD_BUTTON_L2)player::seek(-10);
+    if(pressed&ORBIS_PAD_BUTTON_R2)player::seek(10);
+    int volume=int(data.rightStick.y)-128;
+    if(std::abs(volume)>65&&now>=volumeAt){ui::adjustVolume(volume<0?5:-5);volumeAt=now+130;}
 }
 int main() {
     sceUserServiceInitialize(nullptr);scePadInit();int user=0;sceUserServiceGetInitialUser(&user);
@@ -52,6 +64,7 @@ int main() {
     actions.toggle=[audioReady](){if(audioReady)player::toggle();};
     auto next=[playTrack](){playTrack((activeTrack+1)%int(sizeof(tracks)/sizeof(*tracks)));};
     actions.next=next;
+    actions.seek=[](int seconds){player::seek(seconds);};
     actions.previous=[playTrack](){int total=int(sizeof(tracks)/sizeof(*tracks));playTrack(activeTrack<=0?total-1:activeTrack-1);};
     actions.volume=[](int percent){currentVolume=percent;player::setVolume(float(percent)/100);};
     actions.hintsChanged=[](bool enabled){return writeHints("/data/avant-usine-ps4/settings.ini",enabled);};
@@ -65,21 +78,15 @@ int main() {
         player::setVolume(float(currentVolume)/100);ui::setVolumeLevel(currentVolume);
     }
     updater.start();
-    auto* keyboard=lv_indev_create();lv_indev_set_type(keyboard,LV_INDEV_TYPE_KEYPAD);
-    lv_indev_set_read_cb(keyboard,input);lv_indev_set_group(keyboard,ui::navigationGroup());
     uint64_t previous=sceKernelGetProcessTime(),lastPlayback=0;
     updates::Phase displayedPhase=updates::Phase::Idle;
     while(video::healthy()) {
-        if(lv_indev_get_group(keyboard)!=ui::navigationGroup())lv_indev_set_group(keyboard,ui::navigationGroup());
         uint64_t now=sceKernelGetProcessTime();uint32_t ms=uint32_t((now-previous)/1000);
         if(ms){lv_tick_inc(ms);previous+=uint64_t(ms)*1000;}
         if(now-lastPlayback>=100000){auto state=player::state();ui::setPlayback(activeTrack,state.position,state.duration,state.playing,audioReady?state.message:"Sortie audio indisponible");
             if(state.message=="Termine"&&!state.busy)next();lastPlayback=now;}
+        pollController();
         lv_timer_handler();
-        if(backRequested){backRequested=false;ui::back();}
-        if(toggleRequested){toggleRequested=false;player::toggle();}
-        if(settingsRequested){settingsRequested=false;ui::showSettings();}
-        if(seekRequested){player::seek(seekRequested);seekRequested=0;}
         auto update=updater.tick(sceKernelGetProcessTime()/1000);
         using updates::Phase;
         if(update.phase==Phase::Offered&&displayedPhase!=Phase::Offered)ui::showUpdate(update.version);
@@ -87,9 +94,9 @@ int main() {
         if(update.phase==Phase::Error&&displayedPhase!=Phase::Error&&update.notify)ui::showUpdateNotice(update.message);
         if(update.phase==Phase::Idle&&displayedPhase==Phase::Checking&&update.notify)ui::showUpdateNotice(update.message);
         int percent=-1;std::string updateMessage=update.message;
-        if(update.phase==Phase::Downloading){percent=update.total?int(update.received*100/update.total):0;updateMessage="Téléchargement de la mise à jour : "+std::to_string(percent)+" %";}
-        if(update.phase==Phase::Deferred)updateMessage="Décision reportée. Cette version sera proposée de nouveau plus tard.";
-        if(update.phase==Phase::Countdown)updateMessage="Mise à jour "+update.version+" prête.";
+        if(update.phase==Phase::Downloading){percent=update.total?int(update.received*100/update.total):0;updateMessage="TÃ©lÃ©chargement de la mise Ã  jour : "+std::to_string(percent)+" %";}
+        if(update.phase==Phase::Deferred)updateMessage="DÃ©cision reportÃ©e. Cette version sera proposÃ©e de nouveau plus tard.";
+        if(update.phase==Phase::Countdown)updateMessage="Mise Ã  jour "+update.version+" prÃªte.";
         ui::setUpdateStatus(updateMessage,percent);
         if(update.needsSave){auto audio=player::state();
             bool saved=writeUpdateSession("/data/avant-usine-ps4/update-session.ini",activeTrack,audio.position,currentVolume);

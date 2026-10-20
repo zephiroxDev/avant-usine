@@ -4,6 +4,10 @@
 #include <cstdint>
 #include <vector>
 #include <utility>
+#include <algorithm>
+#include <cstring>
+#include <limits>
+#include <cstdlib>
 namespace ui {
 static constexpr uint32_t PAPER=0x151316,INK=0xf5eff3,MUTED=0xb6a9b3,PINK=0xe4a5d1,SURFACE=0x211c23;
 static lv_obj_t *content,*dockTitle,*dockSubtitle,*progress,*clockLabel,*playButtonLabel;
@@ -21,9 +25,60 @@ static Actions actions;
 static int activeTrack=-1;
 static int volumePercent=100;
 static bool hintsEnabled=true;
-static lv_obj_t *hintsLabel,*volumeLabel;
+static lv_obj_t *volumeLabel;
 static std::string settingsNotice;
 static std::string applicationVersion="Développement";
+enum class Page {Home,Collection,Album,Settings};
+static Page page=Page::Home;
+enum class KeyIcon {Cross,Circle,Square,Triangle,L1,R1,L2,R2,Options,Arrows};
+static void textIfChanged(lv_obj_t* target,const std::string& text) {
+    if(std::strcmp(lv_label_get_text(target),text.c_str()))lv_label_set_text(target,text.c_str());
+}
+static bool usable(lv_obj_t* object) {
+    if(lv_obj_has_state(object,LV_STATE_DISABLED))return false;
+    for(auto* p=object;p;p=lv_obj_get_parent(p))if(lv_obj_has_flag(p,LV_OBJ_FLAG_HIDDEN))return false;
+    return true;
+}
+static void hintVisibility(lv_obj_t* object) {
+    if(lv_obj_has_flag(object,LV_OBJ_FLAG_USER_1)) {
+        if(hintsEnabled)lv_obj_remove_flag(object,LV_OBJ_FLAG_HIDDEN);
+        else lv_obj_add_flag(object,LV_OBJ_FLAG_HIDDEN);
+    }
+    for(uint32_t i=0;i<lv_obj_get_child_count(object);++i)hintVisibility(lv_obj_get_child(object,i));
+}
+static void iconLine(lv_obj_t* parent,const lv_point_precise_t* points,uint32_t count,uint32_t color) {
+    auto* line=lv_line_create(parent);lv_line_set_points(line,points,count);
+    lv_obj_set_style_line_width(line,2,0);lv_obj_set_style_line_color(line,lv_color_hex(color),0);
+    lv_obj_set_style_line_rounded(line,true,0);lv_obj_remove_flag(line,LV_OBJ_FLAG_CLICKABLE);
+}
+static lv_obj_t* keyIcon(lv_obj_t* parent,KeyIcon key,int x,int y) {
+    auto* box=lv_obj_create(parent);lv_obj_remove_style_all(box);lv_obj_set_pos(box,x,y);lv_obj_set_size(box,28,26);
+    lv_obj_remove_flag(box,LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_flag(box,LV_OBJ_FLAG_USER_1);
+    static const lv_point_precise_t crossA[]={{7,6},{21,20}},crossB[]={{21,6},{7,20}};
+    static const lv_point_precise_t triangle[]={{14,4},{24,21},{4,21},{14,4}};
+    static const lv_point_precise_t optionsA[]={{5,7},{23,7}},optionsB[]={{5,13},{23,13}},optionsC[]={{5,19},{23,19}};
+    static const lv_point_precise_t up[]={{10,8},{14,4},{18,8}},down[]={{10,18},{14,22},{18,18}};
+    static const lv_point_precise_t left[]={{7,9},{3,13},{7,17}},right[]={{21,9},{25,13},{21,17}};
+    if(key==KeyIcon::Cross){iconLine(box,crossA,2,0x99bfff);iconLine(box,crossB,2,0x99bfff);}
+    else if(key==KeyIcon::Triangle)iconLine(box,triangle,4,0x83dfc1);
+    else if(key==KeyIcon::Options){iconLine(box,optionsA,2,INK);iconLine(box,optionsB,2,INK);iconLine(box,optionsC,2,INK);}
+    else if(key==KeyIcon::Arrows){iconLine(box,up,3,INK);iconLine(box,down,3,INK);iconLine(box,left,3,INK);iconLine(box,right,3,INK);}
+    else {
+        auto* shape=lv_obj_create(box);lv_obj_remove_style_all(shape);lv_obj_remove_flag(shape,LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_SCROLLABLE);
+        bool circle=key==KeyIcon::Circle,square=key==KeyIcon::Square;
+        lv_obj_set_pos(shape,circle||square?5:1,circle||square?4:3);lv_obj_set_size(shape,circle||square?18:26,circle||square?18:20);
+        lv_obj_set_style_border_width(shape,2,0);lv_obj_set_style_radius(shape,circle?LV_RADIUS_CIRCLE:(square?1:5),0);
+        lv_obj_set_style_border_color(shape,lv_color_hex(circle?0xf3a0a0:(square?0xe8a9dc:INK)),0);
+        if(!circle&&!square){auto* l=lv_label_create(shape);lv_label_set_text(l,key==KeyIcon::L1?"L1":key==KeyIcon::R1?"R1":key==KeyIcon::L2?"L2":"R2");lv_obj_set_style_text_font(l,&lv_font_montserrat_14,0);lv_obj_set_style_text_color(l,lv_color_hex(INK),0);lv_obj_center(l);}
+    }
+    if(!hintsEnabled)lv_obj_add_flag(box,LV_OBJ_FLAG_HIDDEN);
+    return box;
+}
+static void shortcut(lv_obj_t* button,KeyIcon key) {
+    auto* old=lv_obj_get_child(button,1);if(old&&lv_obj_has_flag(old,LV_OBJ_FLAG_USER_1))lv_obj_delete(old);
+    keyIcon(button,key,lv_obj_get_style_width(button,0)-37,(lv_obj_get_style_height(button,0)-26)/2);
+}
 static lv_obj_t* panel(lv_obj_t* parent,int w,int h,uint32_t color,int radius=12) {
     auto* o=lv_obj_create(parent);lv_obj_remove_style_all(o);lv_obj_set_size(o,w,h);
     lv_obj_set_style_bg_color(o,lv_color_hex(color),0);lv_obj_set_style_bg_opa(o,LV_OPA_COVER,0);
@@ -37,11 +92,19 @@ static lv_obj_t* label(lv_obj_t* parent,const std::string& text,int x,int y,int 
 static lv_obj_t* button(lv_obj_t* parent,const std::string& title,int x,int y,int w,int h,lv_event_cb_t callback,void* data=nullptr) {
     auto* b=lv_button_create(parent);lv_obj_remove_style_all(b);lv_obj_set_pos(b,x,y);lv_obj_set_size(b,w,h);
     lv_obj_set_style_bg_color(b,lv_color_hex(0x2c252f),0);lv_obj_set_style_bg_opa(b,LV_OPA_COVER,0);lv_obj_set_style_radius(b,9,0);
-    lv_obj_set_style_outline_color(b,lv_color_hex(PINK),LV_STATE_FOCUSED);lv_obj_set_style_outline_width(b,2,LV_STATE_FOCUSED);
-    lv_obj_set_style_outline_pad(b,3,LV_STATE_FOCUSED);lv_obj_remove_flag(b,LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_add_flag(b,LV_OBJ_FLAG_SCROLL_ON_FOCUS);
-    auto* l=label(b,title,12,0,w-24);lv_obj_align(l,LV_ALIGN_CENTER,0,0);
+    lv_obj_set_style_outline_color(b,lv_color_hex(PINK),LV_STATE_FOCUSED);lv_obj_set_style_outline_width(b,3,LV_STATE_FOCUSED);
+    lv_obj_set_style_outline_pad(b,4,LV_STATE_FOCUSED);lv_obj_remove_flag(b,LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_set_style_bg_color(b,lv_color_hex(0x463447),LV_STATE_FOCUSED);
+    lv_obj_set_style_anim_duration(b,0,0);
+    auto* l=label(b,title,12,0,std::max(1,w-56));lv_obj_align(l,LV_ALIGN_LEFT_MID,12,0);
+    keyIcon(b,KeyIcon::Cross,w-37,(h-26)/2);
     lv_obj_add_event_cb(b,callback,LV_EVENT_CLICKED,data);lv_group_add_obj(group,b);return b;
+}
+static void focusFirstContent() {
+    lv_obj_update_layout(content);
+    for(uint32_t i=0;i<lv_group_get_obj_count(group);++i){auto* o=lv_group_get_obj_by_index(group,i);
+        if(!usable(o))continue;
+        for(auto* p=lv_obj_get_parent(o);p;p=lv_obj_get_parent(p))if(p==content){lv_group_focus_obj(o);lv_obj_scroll_to_view(o,LV_ANIM_OFF);return;}}
 }
 static void clearContent() { lv_obj_clean(content);lv_obj_scroll_to_y(content,0,LV_ANIM_OFF); }
 static void albumEvent(lv_event_t* e) { showAlbum(int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)))); }
@@ -61,8 +124,10 @@ static void albumCard(lv_obj_t* parent,int index,int x,int y,int size) {
     lv_obj_set_style_bg_opa(card,LV_OPA_TRANSP,0);cover(card,index,0,0,size);
     label(card,volumes[index].title,0,size+12,size,normal);
     label(card,std::to_string(volumes[index].count)+" morceaux",0,size+38,size,normal,MUTED);
+    auto* badge=lv_obj_get_child(card,1);lv_obj_set_pos(badge,size-36,8);lv_obj_move_foreground(badge);
 }
 void showHome() {
+    page=Page::Home;
     clearContent();
     auto* hero=panel(content,1128,246,SURFACE,20);lv_obj_set_pos(hero,0,0);
     label(hero,"LA COLLECTION · JUL",28,25,650,normal,PINK);
@@ -72,15 +137,19 @@ void showHome() {
     cover(hero,7,876,25,196);
     label(content,"La collection",0,274,900,large);
     for(int i=0;i<4;++i)albumCard(content,i,i*286,326,242);
-    lv_obj_update_layout(content);
+    focusFirstContent();
 }
 void showCollection() {
+    if(updateShade)return;
+    page=Page::Collection;
     clearContent();label(content,"La collection",0,0,1000,heading);
     label(content,"8 volumes · 118 morceaux",0,69,900,normal,MUTED);
     for(int i=0;i<8;++i)albumCard(content,i,(i%4)*286,120+(i/4)*325,242);
+    focusFirstContent();
 }
 void showAlbum(int index) {
     if(index<0||index>=int(sizeof(volumes)/sizeof(*volumes)))return;
+    page=Page::Album;
     clearContent();cover(content,index,0,0,210);
     label(content,"JUL · LA COLLECTION",242,10,800,normal,PINK);
     label(content,volumes[index].title,242,55,830,heading);
@@ -91,11 +160,13 @@ void showAlbum(int index) {
         auto* row=button(content,"",0,244+n*64,1110,54,trackEvent,reinterpret_cast<void*>(intptr_t(i)));
         lv_obj_set_style_bg_color(row,lv_color_hex(n%2?PAPER:SURFACE),0);
         label(row,std::to_string(n+1),16,15,40,normal,MUTED);
-        label(row,tracks[i].title,66,15,1000);
+        label(row,tracks[i].title,66,15,990);
     }
+    focusFirstContent();
 }
 void showSettings() {
     if(updateShade)return;
+    page=Page::Settings;
     clearContent();label(content,"Réglages",0,0,1000,heading);
     label(content,"Avant l’usine PS4 · Version "+applicationVersion,0,68,1100,normal,MUTED);
     label(content,"Mises à jour de l’application PS4",0,100,1000,large);
@@ -106,10 +177,11 @@ void showSettings() {
         bool wanted=!hintsEnabled;
         if(actions.hintsChanged&&!actions.hintsChanged(wanted)) {settingsNotice="Impossible d’enregistrer le réglage : stockage inaccessible.";showSettings();return;}
         hintsEnabled=wanted;settingsNotice.clear();
-        if(hintsEnabled)lv_obj_remove_flag(hintsLabel,LV_OBJ_FLAG_HIDDEN);else lv_obj_add_flag(hintsLabel,LV_OBJ_FLAG_HIDDEN);
+        hintVisibility(lv_screen_active());hintVisibility(lv_layer_top());
         showSettings();
     });
     if(!settingsNotice.empty())label(content,settingsNotice,0,365,1080,normal,PINK);
+    focusFirstContent();
 }
 static void closeUpdate(int choice,bool notify=true) {
     if(!updateShade)return;
@@ -121,7 +193,41 @@ static void closeUpdate(int choice,bool notify=true) {
     if(notify&&previousDialog==Dialog::Offer&&actions.updateChoice)actions.updateChoice(choice);
     if(notify&&previousDialog==Dialog::Ready&&actions.readyChoice)actions.readyChoice(choice);
 }
-void back() { if(updateShade)closeUpdate(0);else showHome(); }
+void back() { if(updateShade)closeUpdate(0);else if(page==Page::Album)showCollection();else showHome(); }
+void activateFocused() {
+    auto* selected=lv_group_get_focused(group);
+    if(selected&&usable(selected))lv_obj_send_event(selected,LV_EVENT_CLICKED,nullptr);
+}
+void moveFocus(Direction direction) {
+    lv_obj_update_layout(lv_screen_active());
+    auto* selected=lv_group_get_focused(group);if(!selected){focusFirstContent();return;}
+    auto inContent=[](lv_obj_t* object){for(auto* p=object;p;p=lv_obj_get_parent(p))if(p==content)return true;return false;};
+    lv_area_t from;lv_obj_get_coords(selected,&from);
+    int cx=(from.x1+from.x2)/2,cy=(from.y1+from.y2)/2;
+    lv_obj_t* best=nullptr;int64_t bestScore=std::numeric_limits<int64_t>::max();
+    // Prefer remaining items in the current content before crossing to the dock.
+    for(int pass=0;pass<2&&!best;++pass) {
+        for(uint32_t i=0;i<lv_group_get_obj_count(group);++i) {
+            auto* candidate=lv_group_get_obj_by_index(group,i);
+            if(candidate==selected||!usable(candidate))continue;
+            bool same=(inContent(candidate)&&inContent(selected))||
+                (!inContent(candidate)&&!inContent(selected)&&lv_obj_get_parent(candidate)==lv_obj_get_parent(selected));
+            if(pass==0&&!same)continue;
+            lv_area_t to;lv_obj_get_coords(candidate,&to);
+            int dx=(to.x1+to.x2)/2-cx,dy=(to.y1+to.y2)/2-cy;
+            bool horizontal=direction==Direction::Left||direction==Direction::Right;
+            int advance=direction==Direction::Left?-dx:direction==Direction::Right?dx:direction==Direction::Up?-dy:dy;
+            if(advance<=0)continue;
+            // Left/right stay on the same visual row, never jump to a distant row.
+            if(horizontal&&(to.y2<from.y1||to.y1>from.y2))continue;
+            if(!same&&(to.y2<103||to.y1>582)&&inContent(candidate))continue;
+            int lateral=horizontal?std::abs(dy):std::abs(dx);
+            int64_t score=int64_t(advance)+int64_t(lateral)*4;
+            if(score<bestScore){bestScore=score;best=candidate;}
+        }
+    }
+    if(best){lv_group_focus_obj(best);lv_obj_scroll_to_view(best,LV_ANIM_OFF);}
+}
 void showUpdate(const std::string& version) {
     if(updateShade)return;
     dialog=Dialog::Offer;updateLocked=false;
@@ -156,7 +262,7 @@ void showUpdateReady(const std::string& version,unsigned seconds,bool handingOff
         lv_group_focus_obj(readyLater);
     }
     updateLocked=handingOff;
-    lv_label_set_text(countdownLabel,handingOff?"Transmission à l’installateur PS4…":("L’application va se fermer dans "+std::to_string(seconds)+" secondes.").c_str());
+    textIfChanged(countdownLabel,handingOff?"Transmission à l’installateur PS4…":("L’application va se fermer dans "+std::to_string(seconds)+" secondes."));
     if(handingOff){lv_obj_add_state(readyLater,LV_STATE_DISABLED);lv_obj_add_state(readyNow,LV_STATE_DISABLED);}
 }
 void showUpdateNotice(const std::string& message) {
@@ -169,23 +275,24 @@ void showUpdateNotice(const std::string& message) {
     auto* close=button(modal,"Fermer",32,239,245,48,[](lv_event_t*){closeUpdate(0);});lv_group_focus_obj(close);
 }
 void setUpdateStatus(const std::string& message,int percent) {
-    lv_label_set_text(updateStatus,message.c_str());
+    textIfChanged(updateStatus,message);
     if(percent<0)lv_obj_add_flag(updateBar,LV_OBJ_FLAG_HIDDEN);
     else {lv_obj_remove_flag(updateBar,LV_OBJ_FLAG_HIDDEN);lv_bar_set_value(updateBar,percent,LV_ANIM_OFF);}
 }
 void setVolumeLevel(int percent) {
     if(percent<0||percent>100)return;
-    volumePercent=percent;lv_label_set_text(volumeLabel,(std::to_string(percent)+" %").c_str());
+    volumePercent=percent;textIfChanged(volumeLabel,std::to_string(percent)+" %");
 }
+void adjustVolume(int step) {setVolumeLevel(std::max(0,std::min(100,volumePercent+step)));if(actions.volume)actions.volume(volumePercent);}
 void setApplicationVersion(const std::string& version){applicationVersion=version;}
 void setPlayback(int track,float position,float duration,bool playing,const std::string& status) {
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks))&&track!=activeTrack) {
-        activeTrack=track;lv_label_set_text(dockTitle,tracks[track].title);
+        activeTrack=track;textIfChanged(dockTitle,tracks[track].title);
     }
-    if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks)))lv_label_set_text(dockSubtitle,(std::string(volumes[tracks[track].volume].title)+(status.empty()?"":" · "+status)).c_str());
-    lv_label_set_text(playButtonLabel,playing?"Pause":"Lecture");
+    if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks)))textIfChanged(dockSubtitle,std::string(volumes[tracks[track].volume].title)+(status.empty()?"":" · "+status));
+    textIfChanged(playButtonLabel,playing?"Pause":"Lecture");
     int seconds=position>0?int(position):0,total=duration>0?int(duration):0;char time[64];
-    snprintf(time,sizeof(time),"%d:%02d / %d:%02d",seconds/60,seconds%60,total/60,total%60);lv_label_set_text(clockLabel,time);
+    snprintf(time,sizeof(time),"%d:%02d / %d:%02d",seconds/60,seconds%60,total/60,total%60);textIfChanged(clockLabel,time);
     lv_bar_set_value(progress,total>0?int(1000.0f*position/duration):0,LV_ANIM_OFF);
 }
 bool create(const std::string& directory,Actions callbacks,bool hints) {
@@ -200,30 +307,32 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     group=lv_group_create();lv_group_set_default(group);
     auto* root=lv_screen_active();lv_obj_set_style_bg_color(root,lv_color_hex(PAPER),0);lv_obj_remove_flag(root,LV_OBJ_FLAG_SCROLLABLE);
     label(root,"avant l’usine",50,28,310,large);
-    button(root,"Accueil",396,26,130,46,[](lv_event_t*){showHome();});
-    button(root,"Collection",540,26,150,46,[](lv_event_t*){showCollection();});
-    button(root,"Réglages",1052,26,170,46,[](lv_event_t*){showSettings();});
+    button(root,"Accueil",350,26,130,46,[](lv_event_t*){showHome();});
+    shortcut(button(root,"Collection",496,26,165,46,[](lv_event_t*){showCollection();}),KeyIcon::Square);
+    shortcut(button(root,"Retour",906,26,140,46,[](lv_event_t*){back();}),KeyIcon::Circle);
+    shortcut(button(root,"Réglages",1062,26,160,46,[](lv_event_t*){showSettings();}),KeyIcon::Options);
     updateStatus=label(root,"",58,78,1164,normal,MUTED);
     updateBar=lv_bar_create(root);lv_obj_set_pos(updateBar,58,101);lv_obj_set_size(updateBar,1164,2);lv_bar_set_range(updateBar,0,100);
     lv_obj_set_style_bg_color(updateBar,lv_color_hex(PINK),LV_PART_INDICATOR);lv_obj_add_flag(updateBar,LV_OBJ_FLAG_HIDDEN);
     content=lv_obj_create(root);lv_obj_remove_style_all(content);lv_obj_set_pos(content,58,103);lv_obj_set_size(content,1164,479);
     lv_obj_set_scroll_dir(content,LV_DIR_VER);lv_obj_set_scrollbar_mode(content,LV_SCROLLBAR_MODE_AUTO);
+    lv_obj_set_style_anim_duration(content,0,0);
     auto* dock=panel(root,1164,94,SURFACE,15);lv_obj_set_pos(dock,58,598);
-    dockTitle=label(dock,"Choisissez un morceau",22,17,340);dockSubtitle=label(dock,"La collection",22,48,340,normal,MUTED);
-    button(dock,"‹",400,18,44,48,[](lv_event_t*){if(actions.previous)actions.previous();});
-    auto* toggle=button(dock,"Lecture",460,18,145,48,[](lv_event_t*){if(actions.toggle)actions.toggle();});playButtonLabel=lv_obj_get_child(toggle,0);
-    button(dock,"›",621,18,44,48,[](lv_event_t*){if(actions.next)actions.next();});
-    clockLabel=label(dock,"0:00 / 0:00",700,15,210,normal,MUTED);
+    dockTitle=label(dock,"Choisissez un morceau",22,12,295);dockSubtitle=label(dock,"La collection",22,43,295,normal,MUTED);
+    shortcut(button(dock,"",340,10,52,40,[](lv_event_t*){if(actions.previous)actions.previous();}),KeyIcon::L1);
+    auto* toggle=button(dock,"Lecture",404,10,132,40,[](lv_event_t*){if(actions.toggle)actions.toggle();});playButtonLabel=lv_obj_get_child(toggle,0);
+    shortcut(toggle,KeyIcon::Triangle);
+    shortcut(button(dock,"",548,10,52,40,[](lv_event_t*){if(actions.next)actions.next();}),KeyIcon::R1);
+    clockLabel=label(dock,"0:00 / 0:00",640,15,235,normal,MUTED);
     auto changeVolume=[](lv_event_t* e){int step=int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)));
-        volumePercent=volumePercent+step;if(volumePercent<0)volumePercent=0;if(volumePercent>100)volumePercent=100;
-        lv_label_set_text(volumeLabel,(std::to_string(volumePercent)+" %").c_str());if(actions.volume)actions.volume(volumePercent);};
-    button(dock,"−",940,8,44,44,changeVolume,reinterpret_cast<void*>(intptr_t(-10)));
-    volumeLabel=label(dock,"100 %",997,20,78,normal,MUTED);
-    button(dock,"+",1080,8,44,44,changeVolume,reinterpret_cast<void*>(intptr_t(10)));
-    progress=lv_bar_create(dock);lv_obj_set_pos(progress,700,55);lv_obj_set_size(progress,430,5);lv_bar_set_range(progress,0,1000);
+        adjustVolume(step);};
+    button(dock,"−",923,8,70,44,changeVolume,reinterpret_cast<void*>(intptr_t(-10)));
+    volumeLabel=label(dock,"100 %",1002,20,78,normal,MUTED);
+    button(dock,"+",1083,8,70,44,changeVolume,reinterpret_cast<void*>(intptr_t(10)));
+    progress=lv_bar_create(dock);lv_obj_set_pos(progress,640,55);lv_obj_set_size(progress,240,5);lv_bar_set_range(progress,0,1000);
     lv_obj_set_style_bg_color(progress,lv_color_hex(PINK),LV_PART_INDICATOR);
-    hintsLabel=label(root,"Croix : choisir · Rond : retour · Triangle : lecture/pause · L1/R1 : −10/+10 s · Options : réglages",58,699,1164,normal,MUTED);
-    if(!hintsEnabled)lv_obj_add_flag(hintsLabel,LV_OBJ_FLAG_HIDDEN);
+    shortcut(button(dock,"−10 s",340,57,118,32,[](lv_event_t*){if(actions.seek)actions.seek(-10);}),KeyIcon::L2);
+    shortcut(button(dock,"+10 s",474,57,126,32,[](lv_event_t*){if(actions.seek)actions.seek(10);}),KeyIcon::R2);
     showHome();return true;
 }
 lv_group_t* navigationGroup() { return group; }

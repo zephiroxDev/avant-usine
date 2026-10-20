@@ -3,6 +3,8 @@
 #include <orbis/libkernel.h>
 #include <cstdint>
 #include <cstring>
+#include <vector>
+#include "frame_copy.h"
 namespace video {
 static int handle=-1;
 static off_t offset=0;
@@ -12,9 +14,16 @@ static void* buffers[2]={nullptr,nullptr};
 static int64_t frame=0;
 static bool ready=false,allocated=false;
 static lv_display_t* display=nullptr;
-static void flush(lv_display_t* target,const lv_area_t*,uint8_t* pixels) {
-    const int index=pixels==buffers[0]?0:(pixels==buffers[1]?1:-1);
-    if(index<0||sceVideoOutSubmitFlip(handle,index,ORBIS_VIDEO_OUT_FLIP_VSYNC,++frame)<0)ready=false;
+static std::vector<uint32_t> cpuPixels;
+static int nextBuffer=0;
+static frame_copy::Rect dirty{};
+static bool hasDirty=false;
+static void flush(lv_display_t* target,const lv_area_t* area,uint8_t*) {
+    frame_copy::Rect rect{area->x1,area->y1,area->x2,area->y2};
+    frame_copy::copy(static_cast<uint32_t*>(buffers[nextBuffer]),cpuPixels.data(),1280,720,rect);
+    dirty=hasDirty?frame_copy::unite(dirty,rect):rect;hasDirty=true;
+    if(!lv_display_flush_is_last(target)){lv_display_flush_ready(target);return;}
+    if(sceVideoOutSubmitFlip(handle,nextBuffer,ORBIS_VIDEO_OUT_FLIP_VSYNC,++frame)<0)ready=false;
     if(ready) {
         auto deadline=sceKernelGetProcessTime()+2000000;
         for(;;) {
@@ -25,6 +34,12 @@ static void flush(lv_display_t* target,const lv_area_t*,uint8_t* pixels) {
             sceKernelUsleep(1000);
         }
     }
+    if(ready) {
+        // Flip completed: only now may the formerly visible buffer be written.
+        nextBuffer=1-nextBuffer;
+        frame_copy::copy(static_cast<uint32_t*>(buffers[nextBuffer]),cpuPixels.data(),1280,720,dirty);
+    }
+    hasDirty=false;
     // LVGL must not wait forever after an output error; main exits on !healthy().
     lv_display_flush_ready(target);
 }
@@ -42,13 +57,15 @@ bool init() {
     sceVideoOutSetFlipRate(handle,0);
     display=lv_display_create(1280,720);if(!display){shutdown();return false;}
     lv_display_set_color_format(display,LV_COLOR_FORMAT_XRGB8888);
-    lv_display_set_buffers(display,buffers[0],buffers[1],frameBytes,LV_DISPLAY_RENDER_MODE_FULL);
+    cpuPixels.resize(1280*720);
+    lv_display_set_buffers(display,cpuPixels.data(),nullptr,frameBytes,LV_DISPLAY_RENDER_MODE_DIRECT);
     lv_display_set_flush_cb(display,flush);ready=true;return true;
 }
 bool healthy(){return ready;}
 void shutdown() {
     ready=false;
     if(display){lv_display_delete(display);display=nullptr;}
+    std::vector<uint32_t>().swap(cpuPixels);
     if(handle>=0){sceVideoOutClose(handle);handle=-1;}
     if(mapping){sceKernelMunmap(mapping,allocationBytes);mapping=nullptr;}
     if(allocated){sceKernelReleaseDirectMemory(offset,allocationBytes);allocated=false;offset=0;}

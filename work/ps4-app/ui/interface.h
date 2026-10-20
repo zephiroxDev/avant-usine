@@ -7,6 +7,7 @@ struct Actions {
     std::function<void(int)> play;
     std::function<void()> toggle;
     std::function<void()> previous,next;
+    std::function<void(int)> seek;
     std::function<void(int)> volume;
     std::function<bool(bool)> hintsChanged;
     std::function<void()> checkUpdates;
@@ -25,6 +26,10 @@ void setUpdateStatus(const std::string& message,int percent=-1);
 void setVolumeLevel(int percent);
 void setApplicationVersion(const std::string& version);
 void back();
+enum class Direction {Left,Right,Up,Down};
+void moveFocus(Direction direction);
+void activateFocused();
+void adjustVolume(int step);
 void setPlayback(int track,float position,float duration,bool playing,const std::string& status="");
 lv_group_t* navigationGroup();
 }
