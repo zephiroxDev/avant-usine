@@ -39,6 +39,10 @@ int main(int argc,char** argv) {
         assert(good.received()==data.size());assert(good.finish());assert(!good.finish());
         assert(!good.append(data.data(),1));assert(read(path)==std::string(data.begin(),data.end()));
     }
+    assert(updates::verifyCachedPackage(path,data.size(),hash));
+    assert(!updates::verifyCachedPackage(path,data.size()+1,hash));
+    assert(!updates::verifyCachedPackage(path,data.size(),std::string(64,'0')));
+    assert(!updates::verifyCachedPackage(path,data.size(),hash,[](){return true;}));
     {updates::Staging invalid(path,UINT64_MAX,hash);assert(!invalid.error().empty());}
     {updates::Staging invalid(path,data.size(),"not a hash");assert(!invalid.error().empty());}
     assert(read(path)==std::string(data.begin(),data.end()));remove(path.c_str());

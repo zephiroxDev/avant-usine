@@ -5,7 +5,6 @@
 #include "update_installer.h"
 #include "https_client.h"
 #include "native_thread.h"
-#include "picosha2.h"
 #include <orbis/libkernel.h>
 #include <condition_variable>
 #include <mutex>
@@ -52,19 +51,10 @@ struct Service::State {
         if(!latest.version.empty()&&policy.shouldOffer(installed,latest.version,now/1000))flow.offer(latest.version);
         else {flow.idle();message="Aucune nouvelle version PS4 disponible.";}
     }
-    bool cacheMatches(const Release& target) {
-        FILE* f=fopen((root+"/update.pkg").c_str(),"rb");if(!f)return false;
-        picosha2::hash256_one_by_one hash;uint64_t bytes=0;uint8_t chunk[8192],magic[4]={};bool ok=true;
-        for(;;){size_t n=fread(chunk,1,sizeof(chunk),f);if(!bytes&&n>=4)memcpy(magic,chunk,4);
-            if(quit||n>target.bytes-bytes){ok=false;break;}hash.process(chunk,chunk+n);bytes+=n;
-            if(n<sizeof(chunk)){ok=!ferror(f);break;}}
-        fclose(f);hash.finish();const uint8_t expected[]={0x7f,'C','N','T'};
-        return ok&&bytes==target.bytes&&memcmp(magic,expected,4)==0&&picosha2::get_hash_hex_string(hash)==target.sha256;
-    }
     void downloadRelease() {
         Release target;{std::lock_guard<std::mutex> guard(lock);target=release;}
         std::string error;
-        if(!cacheMatches(target)) {
+        if(!verifyCachedPackage(root+"/update.pkg",target.bytes,target.sha256,[&](){return bool(quit);})) {
             Staging staging(root+"/update.pkg",target.bytes,target.sha256);https::Result result;
             if(!staging.error().empty()){fail(staging.error());return;}
             bool ok=client.fetch(target.packageUrl,https::Purpose::Updates,{},"",false,target.bytes,

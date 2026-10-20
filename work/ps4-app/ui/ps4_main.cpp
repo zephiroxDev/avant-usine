@@ -59,6 +59,7 @@ int main() {
     actions.updateChoice=[&](int choice){updater.choose(choice,sceKernelGetProcessTime()/1000);};
     actions.readyChoice=[&](int choice){updater.readyChoice(choice,sceKernelGetProcessTime()/1000);};
     if(!ui::create("/app0/ui/assets",std::move(actions),readHints("/data/avant-usine-ps4/settings.ini"))){player::shutdown();video::shutdown();return 3;}
+    ui::setApplicationVersion(ALUS_BUILD_VERSION);
     int savedTrack=-1;float savedPosition=0;
     if(readUpdateSession("/data/avant-usine-ps4/update-session.ini",savedTrack,savedPosition,currentVolume)){
         player::setVolume(float(currentVolume)/100);ui::setVolumeLevel(currentVolume);

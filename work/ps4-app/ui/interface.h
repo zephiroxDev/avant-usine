@@ -23,6 +23,7 @@ void showUpdateReady(const std::string& version,unsigned seconds,bool handingOff
 void showUpdateNotice(const std::string& message);
 void setUpdateStatus(const std::string& message,int percent=-1);
 void setVolumeLevel(int percent);
+void setApplicationVersion(const std::string& version);
 void back();
 void setPlayback(int track,float position,float duration,bool playing,const std::string& status="");
 lv_group_t* navigationGroup();

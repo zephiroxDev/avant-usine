@@ -56,3 +56,6 @@ Lâ€™utilisateur a choisi les deux mÃ©thodes : identifiants Ã  la manette et QR c
 Le guide Supabase a Ã©tÃ© consultÃ©, puis son changelog et sa documentation dâ€™authentification. La notice officielle du 12 octobre 2026 annonce le retrait de quatre suites TLS 1.2 CBC Ã  partir du 10 novembre. Tester les suites modernes de la PS4 avant de livrer lâ€™authentification : https://supabase.com/changelog/cbc-tls-ciphers-deprecated . Ne jamais dÃ©sactiver la validation TLS pour contourner un problÃ¨me de connexion.
 
 Inventaire statique partiel des RPC rÃ©utilisables : backend-port-inventory.json. Cet inventaire ne constitue pas une vÃ©rification du schÃ©ma en production ; aucune donnÃ©e personnelle ni aucun jeton de session nâ€™a Ã©tÃ© rÃ©cupÃ©rÃ©, aucune modification Supabase effectuÃ©e.
+
+
+Mise à jour du 20 octobre : le fonctionnement demandé du compteur est décrit précisément dans MISES-A-JOUR-PS4.md. Ne pas promettre une fermeture sans écran d’erreur PS4. Le code ne ferme l’application qu’après acceptation de la tâche d’installation ; aucune faute mémoire volontaire n’est ajoutée.

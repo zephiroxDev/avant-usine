@@ -2,8 +2,11 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <functional>
 #include <string>
 namespace updates {
+bool verifyCachedPackage(const std::string& path,uint64_t bytes,const std::string& sha256,
+                         const std::function<bool()>& cancelled={});
 // Transactional download cache, never an application-directory writer.
 class Staging {
     struct State;

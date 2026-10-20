@@ -56,7 +56,7 @@ bool Installer::prepare(const std::string& path,const std::string& version,std::
         rc=s.bgftInit(&init);if(rc!=0){error=failure("Préparation de l’installation",rc);return false;}s.initialized=true;
     }
     char title[16]={0};int32_t isApp=0;int rc=s.getTitle(path.c_str(),title,&isApp);
-    if(rc!=0||isApp==0||std::strcmp(title,"ALUS00001")!=0){error="Le paquet ne correspond pas à Avant l’usine PS4";return false;}
+    if(rc!=0||isApp==0||!std::memchr(title,0,sizeof(title))||std::strcmp(title,"ALUS00001")!=0){error="Le paquet ne correspond pas à Avant l’usine PS4";return false;}
     s.path=path;s.name="Avant l’usine "+version;
     int user=0;sceUserServiceGetInitialUser(&user);
     OrbisBgftDownloadParamEx params{};
@@ -66,7 +66,7 @@ bool Installer::prepare(const std::string& path,const std::string& version,std::
     params.params.option=ORBIS_BGFT_TASK_OPT_NONE; // Keep system UI/confirmations; never force overwrite.
     params.params.playgoScenarioId="0";params.params.releaseDate="";params.params.packageType="";params.params.packageSubType="";
     rc=s.registerTask(&params,&s.task);
-    if(rc!=0){s.task=-1;error=failure("Enregistrement de la mise à jour",rc);return false;}
+    if(rc!=0||s.task<0){if(s.task>=0)s.unregisterTask(s.task);s.task=-1;error=failure("Enregistrement de la mise à jour",rc);return false;}
     return true;
 }
 bool Installer::start(std::string& error) {

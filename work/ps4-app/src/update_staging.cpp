@@ -6,6 +6,19 @@
 #include <vector>
 #include <unistd.h>
 namespace updates {
+bool verifyCachedPackage(const std::string& path,uint64_t expectedBytes,const std::string& digest,const std::function<bool()>& cancelled) {
+    if(expectedBytes<16384||expectedBytes>512ULL*1024*1024||digest.size()!=64)return false;
+    FILE* file=fopen(path.c_str(),"rb");if(!file)return false;
+    picosha2::hash256_one_by_one hash;uint64_t bytes=0;uint8_t chunk[8192],magic[4]={};bool ok=true;
+    for(;;) {
+        size_t n=fread(chunk,1,sizeof(chunk),file);if(!bytes&&n>=4)memcpy(magic,chunk,4);
+        if((cancelled&&cancelled())||n>expectedBytes-bytes){ok=false;break;}
+        hash.process(chunk,chunk+n);bytes+=n;
+        if(n<sizeof(chunk)){ok=!ferror(file);break;}
+    }
+    fclose(file);hash.finish();const uint8_t expected[]={0x7f,'C','N','T'};
+    return ok&&bytes==expectedBytes&&memcmp(magic,expected,4)==0&&picosha2::get_hash_hex_string(hash)==digest;
+}
 struct Staging::State {
     std::string target,temporary,expectedHash,error;
     uint64_t expected=0,received=0;
