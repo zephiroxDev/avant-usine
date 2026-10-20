@@ -75,7 +75,7 @@ test('iOS presentation isolated, site histories last, day-night disabled',()=>{
  const html=fs.readFileSync(path.join(root,'site/index.html'),'utf8');
  const main=html.match(/src="\.\/(app-\d+v\d+\.js)"/)[1];
  const code=fs.readFileSync(path.join(root,'site',main),'utf8');
- assert.ok(code.includes("const names={'ios':'Application iOS','android':'Application Android','desktop-pc':'Application PC','web-mobile':'Site mobile','web-pc':'Site PC'};"));
+ assert.ok(code.includes("const names={'ios':'Application iOS','android':'Application Android','desktop-pc':'Application PC','ps4':'Application PS4','web-mobile':'Site mobile','web-pc':'Site PC'};"));
  assert.ok(code.includes('themeButton.disabled=true;themeButton.hidden=true;'));
  assert.ok(!code.includes("root.dataset.theme=t==='light'?'light':'dark';"));
  const css=fs.readFileSync(path.join(root,'site/ios.css'),'utf8');assert.ok(css.includes('-webkit-backdrop-filter'));assert.ok(css.includes('data-reduce-transparency=true'));

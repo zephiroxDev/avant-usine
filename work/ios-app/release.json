@@ -4,5 +4,6 @@
   "buildNumber": 30,
   "releaseId": "20.0.3",
   "channel": "unsigned-beta",
-  "source": "../github-sync-import"
+  "source": "../github-sync-import",
+  "immersionBackground": "solid-customizable"
 }

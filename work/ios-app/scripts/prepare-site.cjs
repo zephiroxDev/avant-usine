@@ -21,9 +21,9 @@ history.ios=require('../patch-notes.json');fs.writeFileSync(path.join(dest,histo
 const main=html.match(/src="\.\/(app-\d+v\d+\.js)"/)[1];
 let code=fs.readFileSync(path.join(dest,main),'utf8');
 code=code.replace("return {key,title:t?.title||'',audio,data:nativeLyricCache.get(key)||null};", "return {key,title:t?.title||'',audio,audioEdit:t?.audio_edit,data:nativeLyricCache.get(key)||null};");
-const platformNames="const names={'web-pc':'Site PC','desktop-pc':'Application PC','web-mobile':'Site mobile','android':'Application Android','ios':'Application iOS'};";
+const platformNames="const names={'web-pc':'Site PC','desktop-pc':'Application PC','web-mobile':'Site mobile','android':'Application Android','ios':'Application iOS','ps4':'Application PS4'};";
 if(!code.includes(platformNames))throw Error('Sélecteur des plateformes introuvable');
-code=code.replace(platformNames,"const names={'ios':'Application iOS','android':'Application Android','desktop-pc':'Application PC','web-mobile':'Site mobile','web-pc':'Site PC'};");
+code=code.replace(platformNames,"const names={'ios':'Application iOS','android':'Application Android','desktop-pc':'Application PC','ps4':'Application PS4','web-mobile':'Site mobile','web-pc':'Site PC'};");
 code=code.replace("root.dataset.theme=t==='light'?'light':'dark';","root.dataset.theme='dark';");
 const themePlacement="$('accountHeading').parentElement.after(themeButton);";
 if(!code.includes(themePlacement))throw Error('Bouton de thème introuvable');
