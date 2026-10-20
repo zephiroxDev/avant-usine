@@ -1,5 +1,6 @@
 // Shared worker, exercised by Node tests and hosted by the Supabase Edge Function.
 export const BASE = 'https://zephiroxdev.github.io/avant-usine/';
+export const MEDIA_BASE = 'https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-promo-media/';
 const FIELDS = 'id text status sentAt externalLink channelId';
 export const keyOf = item => {
   if (!/^(?:\d{2}V\d{2}(?:\.\d+)?|\d+\.\d+(?:\.\d+)?)$/.test(item.patch)) throw Error('invalid_patch');
@@ -7,7 +8,7 @@ export const keyOf = item => {
 };
 export const videoOf = item => {
   if (!/^promo-[a-z0-9-]+\.mp4$/.test(item.animation)) throw Error('invalid_video');
-  return BASE + item.animation;
+  return MEDIA_BASE + item.animation;
 };
 export const captionOf = item => `Avant l’usine — ${item.patch}\n${item.platforms.join(' · ')}\n${BASE}\n#avantlusine #jul #ALU${item.patch.replaceAll('.', '_')}`;
 

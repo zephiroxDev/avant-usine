@@ -2116,6 +2116,19 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "ps4": [
     [
+      "0.24 · Application PS4",
+      "20 octobre 2026",
+      "Nouvelle interface PS4 et correctifs du lecteur. Version en développement.",
+      [
+        "Nouvelle présentation pour la télévision : navigation arrondie, bibliothèque aérée et grandes paroles.",
+        "Les indications de manette sont réservées aux véritables raccourcis. Retour et Paroles quittent le menu supérieur ; les paroles sont accessibles dans le lecteur.",
+        "Les paroles non synchronisées retrouvent un défilement approximatif pendant la lecture.",
+        "Activation des verrous de mémoire avant les threads natifs pour corriger les corruptions constatées pendant les chargements audio et Highlight. Disparition des crashs à confirmer sur console.",
+        "Immersion plein écran avec un fond uni dont la couleur peut être réglée et enregistrée.",
+        "Recherche des prochaines versions numériques 0.xx, téléchargement vérifié et choix Plus tard, Sauter ou Installer. Installation de la mise à jour à confirmer sur PS4."
+      ]
+    ],
+    [
       "PS4 · 0.2.0-preview2",
       "20 octobre 2026",
       "Aperçu natif PS4 : correction du plantage au lancement. Le démarrage de cette version a été confirmé sur console.",

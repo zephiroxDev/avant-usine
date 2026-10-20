@@ -53,3 +53,10 @@ au prochain patch ; les vérifications actuelles n'ont rien posté sur TikTok.
 Documentation : https://developers.buffer.com/reference.html ;
 https://supabase.com/docs/guides/functions/schedule-functions ;
 https://supabase.com/docs/guides/database/vault.
+
+
+## Correctif média du 20 octobre 2026
+
+Envoi 20.0.3 confirmé sur TikTok (PS4 0.24 comprise). Buffer rejetait la vidéo depuis GitHub Pages avec InvalidInputError / Video could not be read from its URL. Le service utilise maintenant les URLs publiques du bucket au-promo-media. Avant un premier envoi, media.mjs copie automatiquement depuis GitHub Pages un MP4 dont le nom est strictement contrôlé : 10 Mio maximum, Content-Type vidéo et boîte ftyp, sans transférer de secret à GitHub. L’objet déjà présent est réutilisé et jamais écrasé par ce chemin. Les contrôles de doublons et les reçus demeurent actifs. La case Publiée n’est cochée qu’après sent et sentAt.
+
+Publication confirmée : https://tiktok.com/@avant.l.usine/video/7698859826784390433

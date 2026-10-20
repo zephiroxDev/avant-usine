@@ -1,4 +1,5 @@
 import {BASE, BufferAPI, processPromos} from './worker.mjs';
+import {ensureMedia} from './media.mjs';
 
 const url = Deno.env.get('SUPABASE_URL')!;
 const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -37,8 +38,7 @@ Deno.serve(async request => {
       persist: (next: unknown) => rpc('save', {lease, state: next}),
       mediaReady: async (asset: string) => {
         try {
-          const media = await fetch(asset, {method: 'HEAD', signal: AbortSignal.timeout(10000)});
-          return media.ok && (media.headers.get('Content-Type') || '').includes('video/mp4');
+          return await ensureMedia(asset,{root:url,key:serviceKey});
         } catch { return false; }
       }});
     await rpc('release', {lease, error: result.errors.join('; ')});
