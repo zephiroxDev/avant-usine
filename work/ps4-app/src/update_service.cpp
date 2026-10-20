@@ -90,7 +90,7 @@ Service::~Service(){if(!state)return;state->quit=true;state->client.cancel();sta
     if(native_thread::join(state->thread)!=0)state.release();} // Avoid freeing a worker that failed to join.
 bool Service::start() {
     if(state->thread.started)return true;
-    if(native_thread::start(state->thread,State::entry,"alus-update")!=0){state->fail("Service de mise à jour indisponible");return false;}
+    if(native_thread::start(state->thread,State::entry,"alus-update",state.get())!=0){state->fail("Service de mise à jour indisponible");return false;}
     check(false);return true;
 }
 void Service::check(bool manual) {

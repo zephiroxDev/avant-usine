@@ -1,4 +1,6 @@
-Avant l’usine — PS4 — aperçu natif 0.2.0-preview1
+Avant l’usine — PS4 — aperçu natif 0.2.0-preview2
+
+Correction du plantage immédiat capturé dans le thread alus-update : son contexte était remplacé par un pointeur nul lors de la création du thread. Le contexte est désormais transmis à son point d’entrée. Un test vérifie sa réception et son utilisation. Le correctif cible le crash constaté ; le nouveau lancement sur console reste à confirmer.
 
 Nouvelle interface native : accueil, collection de huit volumes, pochettes, albums et lecteur permanent. Navigation à la manette, lecture MP3 distante, pause, déplacement dans le morceau, volume et indications des touches réglables.
 

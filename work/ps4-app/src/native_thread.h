@@ -7,6 +7,6 @@ namespace native_thread {
 constexpr size_t stackBytes = 2 * 1024 * 1024;
 struct Thread { OrbisPthread handle{}; bool started=false; };
 using Entry = void* (*)(void*);
-int start(Thread& thread, Entry entry, const char* name);
+int start(Thread& thread, Entry entry, const char* name, void* argument=nullptr);
 int join(Thread& thread);
 }
