@@ -5,6 +5,7 @@
 #include "lyrics_model.h"
 #include <memory>
 #include "account_model.h"
+#include "local_service.h"
 namespace ui {
 struct Actions {
     std::function<void(int)> play;
@@ -14,6 +15,9 @@ struct Actions {
     std::function<void(double)> seekTo;
     std::function<void(std::string,std::string)> signIn;
     std::function<void()> signOut;
+    std::function<void(int)> localBrowse;
+    std::function<void()> localParent;
+    std::function<void(size_t,unsigned)> localSelect;
     std::function<void(int)> volume;
     std::function<bool(bool)> hintsChanged;
     std::function<void()> checkUpdates;
@@ -27,6 +31,12 @@ void showAlbum(int index);
 void showSettings();
 void showLyrics();
 void showAccount();
+void showMenu();
+void showLocal();
+void setLocal(local::View view);
+void setLocalTitle(const std::string& title);
+void setLocalNotice(const std::string& message);
+void stepTrack(int direction);
 void setAccount(const account::View& view);
 bool textEntryActive();
 void finishTextEntry();

@@ -19,7 +19,7 @@ struct Service::State {
     explicit State(std::string file):path(std::move(file)){}
     static void* entry(void* pointer){static_cast<State*>(pointer)->run();return nullptr;}
     bool enqueue(Job job) {
-        if(!thread.started&&native_thread::start(thread,entry,"alus-account",this)!=0){view.busy=false;view.message="Service de compte indisponible.";++view.revision;return false;}
+        if(!thread.started&&native_thread::start(thread,entry,"alus-account",this)!=0){view.busy=false;refreshAt=sceKernelGetProcessTime()/1000+60000;view.message="Service de compte indisponible.";++view.revision;return false;}
         jobs.push_back(std::move(job));wake.notify_one();return true;
     }
     bool post(const std::string& route,const std::string& body,const std::string& token,std::string& output,https::Result& result) {

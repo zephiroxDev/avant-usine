@@ -30,7 +30,7 @@ static bool hintsEnabled=true;
 static lv_obj_t *volumeLabel;
 static std::string settingsNotice;
 static std::string applicationVersion="Développement";
-enum class Page {Home,Collection,Album,Settings,Lyrics,Account};
+enum class Page {Home,Collection,Album,Settings,Lyrics,Account,Menu,Local};
 static Page page=Page::Home;
 static int lyricsTrack=-1,followedLine=-1;
 static double playbackPosition=0;
@@ -47,7 +47,10 @@ static lv_obj_t *emailField=nullptr,*passwordField=nullptr,*keyboardShade=nullpt
 static lv_group_t* keyboardUnderlying=nullptr;
 static bool accountRedrawPending=false;
 static void openKeyboard(lv_obj_t* field);
-enum class KeyIcon {Cross,Circle,Square,Triangle,L1,R1,L2,R2,Options,Arrows};
+static local::View localView;
+static size_t localPage=0;
+static bool localPlayback=false;
+enum class KeyIcon {Cross,Circle,Square,Triangle,L1,R1,L2,R2,Options,Arrows,Touchpad};
 static void textIfChanged(lv_obj_t* target,const std::string& text) {
     if(std::strcmp(lv_label_get_text(target),text.c_str()))lv_label_set_text(target,text.c_str());
 }
@@ -81,7 +84,10 @@ static lv_obj_t* keyIcon(lv_obj_t* parent,KeyIcon key,int x,int y) {
     else if(key==KeyIcon::Triangle)iconLine(box,triangle,4,0x83dfc1);
     else if(key==KeyIcon::Options){iconLine(box,optionsA,2,INK);iconLine(box,optionsB,2,INK);iconLine(box,optionsC,2,INK);}
     else if(key==KeyIcon::Arrows){iconLine(box,up,3,INK);iconLine(box,down,3,INK);iconLine(box,left,3,INK);iconLine(box,right,3,INK);}
-    else {
+    else if(key==KeyIcon::Touchpad) {
+        auto* shape=lv_obj_create(box);lv_obj_remove_style_all(shape);lv_obj_remove_flag(shape,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_SCROLLABLE));
+        lv_obj_set_pos(shape,1,5);lv_obj_set_size(shape,26,16);lv_obj_set_style_border_width(shape,2,0);lv_obj_set_style_border_color(shape,lv_color_hex(INK),0);lv_obj_set_style_radius(shape,4,0);
+    }else {
         auto* shape=lv_obj_create(box);lv_obj_remove_style_all(shape);lv_obj_remove_flag(shape,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_SCROLLABLE));
         bool circle=key==KeyIcon::Circle,square=key==KeyIcon::Square;
         lv_obj_set_pos(shape,circle||square?5:1,circle||square?4:3);lv_obj_set_size(shape,circle||square?18:26,circle||square?18:20);
@@ -266,10 +272,51 @@ void setAccount(const account::View& view) {
     accountView=view;
     if(page==Page::Account){if(keyboardShade)accountRedrawPending=true;else if(!updateShade)showAccount();}
 }
+void showMenu() {
+    if(updateShade||keyboardShade)return;
+    page=Page::Menu;clearContent();label(content,"Menu",0,0,1050,heading);
+    button(content,"La collection",0,100,540,62,[](lv_event_t*){showCollection();});
+    button(content,"Paroles",570,100,540,62,[](lv_event_t*){showLyrics();});
+    button(content,"Mon compte",0,190,540,62,[](lv_event_t*){showAccount();});
+    button(content,"Musique locale",570,190,540,62,[](lv_event_t*){showLocal();});
+    button(content,"Réglages",0,280,540,62,[](lv_event_t*){showSettings();});
+    focusFirstContent();
+}
+void showLocal() {
+    if(updateShade||keyboardShade)return;
+    page=Page::Local;clearContent();label(content,"Local",0,0,1050,heading);
+    auto* path=label(content,localView.path.empty()?"Bibliothèque de cette PS4":localView.path,0,65,1100,normal,MUTED);lv_label_set_long_mode(path,LV_LABEL_LONG_DOT);
+    button(content,"Bibliothèque",0,107,250,44,[](lv_event_t*){localPage=0;if(actions.localBrowse)actions.localBrowse(0);});
+    button(content,"Clé USB 1",270,107,230,44,[](lv_event_t*){localPage=0;if(actions.localBrowse)actions.localBrowse(1);});
+    button(content,"Clé USB 2",520,107,230,44,[](lv_event_t*){localPage=0;if(actions.localBrowse)actions.localBrowse(2);});
+    button(content,"Dossier parent",770,107,340,44,[](lv_event_t*){localPage=0;if(actions.localParent)actions.localParent();});
+    label(content,localView.message,0,170,1100,normal,PINK);
+    const size_t pageSize=40,begin=localPage*pageSize;
+    if(localView.entries.empty()&&!localView.busy)label(content,"Choisis une clé USB pour copier des fichiers dans la bibliothèque.",0,225,1100,normal,MUTED);
+    for(size_t i=begin;i<std::min(begin+pageSize,localView.entries.size());++i) {
+        const auto& entry=localView.entries[i];std::string text=entry.directory?"Dossier · "+entry.name:(localView.library?local::displayName(entry.name):"Importer · "+entry.name);
+        auto* row=button(content,text,0,224+int(i-begin)*62,1110,50,[](lv_event_t* e){size_t index=size_t(reinterpret_cast<uintptr_t>(lv_event_get_user_data(e)));if(actions.localSelect)actions.localSelect(index,localView.revision);},reinterpret_cast<void*>(uintptr_t(i)));
+        if(localView.busy)lv_obj_add_state(row,LV_STATE_DISABLED);
+    }
+    int bottom=224+int(std::min(pageSize,localView.entries.size()>begin?localView.entries.size()-begin:0))*62;
+    if(localPage)button(content,"Page précédente",0,bottom,340,46,[](lv_event_t*){--localPage;showLocal();});
+    if(begin+pageSize<localView.entries.size())button(content,"Page suivante",380,bottom,340,46,[](lv_event_t*){++localPage;showLocal();});
+    focusFirstContent();
+    if(localView.path.empty()&&actions.localBrowse)actions.localBrowse(0);
+}
+void setLocal(local::View view) {
+    if(view.path!=localView.path||localPage*40>=view.entries.size())localPage=0;
+    localView=std::move(view);if(page==Page::Local&&!updateShade&&!keyboardShade)showLocal();
+}
+void setLocalTitle(const std::string& title) {
+    localPlayback=true;activeTrack=-1;textIfChanged(dockTitle,title);textIfChanged(dockSubtitle,"Local · Fichier conservé sur cette PS4");
+}
+void setLocalNotice(const std::string& message){localView.message=message;if(page==Page::Local)showLocal();}
+void stepTrack(int direction){if(direction<0){if(actions.previous)actions.previous();}else if(actions.next)actions.next();}
 void showLyrics() {
     if(updateShade)return;
     page=Page::Lyrics;clearContent();
-    if(activeTrack<0){label(content,"Choisissez un morceau pour ouvrir ses paroles.",0,30,1100,large);return;}
+    if(activeTrack<0){auto* text=label(content,localPlayback?"Les paroles des fichiers locaux ne sont pas encore disponibles dans cet aperçu.":"Choisissez un morceau pour ouvrir ses paroles.",0,30,1100,large);lv_label_set_long_mode(text,LV_LABEL_LONG_WRAP);return;}
     cover(content,tracks[activeTrack].volume,0,16,330);
     label(content,tracks[activeTrack].title,0,370,360,large);
     auto* follow=button(content,lyricsFollow?"Suivi auto : activé":"Suivi auto : désactivé",0,421,350,44,[](lv_event_t*){lyricsFollow=!lyricsFollow;showLyrics();});
@@ -334,8 +381,20 @@ static void closeUpdate(int choice,bool notify=true) {
     if(notify&&previousDialog==Dialog::Offer&&actions.updateChoice)actions.updateChoice(choice);
     if(notify&&previousDialog==Dialog::Ready&&actions.readyChoice)actions.readyChoice(choice);
     if(page==Page::Lyrics)showLyrics();
+    else if(page==Page::Account)showAccount();
+    else if(page==Page::Local)showLocal();
 }
-void back() { if(keyboardShade)finishTextEntry();else if(updateShade)closeUpdate(0);else if(page==Page::Album)showCollection();else showHome(); }
+void back() {
+    if(keyboardShade)finishTextEntry();
+    else if(updateShade)closeUpdate(0);
+    else if(page==Page::Album)showCollection();
+    else if(page==Page::Lyrics&&activeTrack>=0)showAlbum(tracks[activeTrack].volume);
+    else if(page==Page::Local) {
+        if(localView.path=="/data/avant-usine-ps4/local"||localView.path=="/mnt/usb0"||localView.path=="/mnt/usb1"||localView.path.empty())showMenu();
+        else if(actions.localParent)actions.localParent();
+    }else if(page==Page::Account||page==Page::Settings)showMenu();
+    else showHome();
+}
 void activateFocused() {
     auto* selected=lv_group_get_focused(group);
     if(keyboardShade&&selected==textKeyboard){lv_obj_send_event(textKeyboard,LV_EVENT_VALUE_CHANGED,nullptr);return;}
@@ -436,7 +495,7 @@ void setApplicationVersion(const std::string& version){applicationVersion=versio
 void setPlayback(int track,float position,float duration,bool playing,const std::string& status) {
     playbackPosition=position;
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks))&&track!=activeTrack) {
-        activeTrack=track;textIfChanged(dockTitle,tracks[track].title);
+        localPlayback=false;activeTrack=track;textIfChanged(dockTitle,tracks[track].title);
         if(page==Page::Lyrics&&!updateShade)showLyrics();
     }
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks)))textIfChanged(dockSubtitle,std::string(volumes[tracks[track].volume].title)+(status.empty()?"":" · "+status));
@@ -458,7 +517,8 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     normal->fallback=&lv_font_montserrat_14;large->fallback=&lv_font_montserrat_14;heading->fallback=&lv_font_montserrat_14;
     group=lv_group_create();lv_group_set_default(group);
     auto* root=lv_screen_active();lv_obj_set_style_bg_color(root,lv_color_hex(PAPER),0);lv_obj_remove_flag(root,LV_OBJ_FLAG_SCROLLABLE);
-    label(root,"avant l’usine",50,28,310,large);
+    auto* menu=button(root,"avant l’usine",50,26,238,46,[](lv_event_t*){showMenu();});shortcut(menu,KeyIcon::Touchpad);
+    lv_obj_set_style_bg_opa(menu,LV_OPA_TRANSP,0);auto* brand=lv_obj_get_child(menu,0);lv_obj_set_style_text_font(brand,large,0);lv_obj_set_height(brand,lv_font_get_line_height(large));
     button(root,"Accueil",300,26,130,46,[](lv_event_t*){showHome();});
     shortcut(button(root,"Collection",442,26,160,46,[](lv_event_t*){showCollection();}),KeyIcon::Square);
     button(root,"Paroles",614,26,140,46,[](lv_event_t*){showLyrics();});

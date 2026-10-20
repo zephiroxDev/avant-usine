@@ -10,6 +10,8 @@
 #include "lyrics_service.h"
 #include "public_backend_config.h"
 #include "account_service.h"
+#include "local_service.h"
+#include <algorithm>
 #include <orbis/Pad.h>
 #include <orbis/UserService.h>
 #include <orbis/libkernel.h>
@@ -46,11 +48,12 @@ static void pollController() {
     }
     if(pressed&ORBIS_PAD_BUTTON_CIRCLE)ui::back();
     else if(pressed&ORBIS_PAD_BUTTON_OPTIONS)ui::showSettings();
+    else if(pressed&ORBIS_PAD_BUTTON_TOUCH_PAD)ui::showMenu();
     else if(pressed&ORBIS_PAD_BUTTON_SQUARE)ui::showCollection();
     else if(pressed&ORBIS_PAD_BUTTON_CROSS)ui::activateFocused();
     if(pressed&ORBIS_PAD_BUTTON_TRIANGLE)player::toggle();
-    if(pressed&ORBIS_PAD_BUTTON_L1){int n=int(sizeof(tracks)/sizeof(*tracks));int index=activeTrack<=0?n-1:activeTrack-1;activeTrack=index;player::open(tracks[index].url);}
-    if(pressed&ORBIS_PAD_BUTTON_R1){activeTrack=(activeTrack+1)%int(sizeof(tracks)/sizeof(*tracks));player::open(tracks[activeTrack].url);}
+    if(pressed&ORBIS_PAD_BUTTON_L1)ui::stepTrack(-1);
+    if(pressed&ORBIS_PAD_BUTTON_R1)ui::stepTrack(1);
     if(pressed&ORBIS_PAD_BUTTON_L2)player::seek(-10);
     if(pressed&ORBIS_PAD_BUTTON_R2)player::seek(10);
     int volume=int(data.rightStick.y)-128;
@@ -65,21 +68,45 @@ int main() {
     updates::Service updater("/data/avant-usine-ps4",ALUS_VERSION);
     lyrics::Service lyricService;
     account::Service accounts("/data/avant-usine-ps4/account-refresh");accounts.restore();
+    local::Service localFiles("/data/avant-usine-ps4/local");
+    local::View localState;unsigned localRevision=0;
+    std::string localTitle,localPath;std::vector<local::Entry> localQueue;int localIndex=-1;
+    auto mp3=[](std::string name){for(char& c:name)if(c>='A'&&c<='Z')c+=32;return name.size()>4&&name.substr(name.size()-4)==".mp3";};
     ui::Actions actions;
-    auto playTrack=[audioReady](int index){
+    auto playTrack=[audioReady,&localTitle,&localPath,&localIndex](int index){
         if(audioReady&&index>=0&&index<int(sizeof(tracks)/sizeof(*tracks))) {
+            localTitle.clear();localPath.clear();localIndex=-1;
             if(activeTrack==index)player::toggle();else {activeTrack=index;player::open(tracks[index].url);}
         }
     };
     actions.play=playTrack;
     actions.toggle=[audioReady](){if(audioReady)player::toggle();};
-    auto next=[playTrack](){playTrack((activeTrack+1)%int(sizeof(tracks)/sizeof(*tracks)));};
-    actions.next=next;
+    auto step=[&](int direction){
+        if(!localTitle.empty()&&!localQueue.empty()&&localIndex>=0){
+            int n=int(localQueue.size());localIndex=(localIndex+direction+n)%n;
+            const auto& entry=localQueue[size_t(localIndex)];localPath=entry.path;localTitle=local::displayName(entry.name);player::open(localPath);return;
+        }
+        int n=int(sizeof(tracks)/sizeof(*tracks));playTrack(activeTrack<0?(direction<0?n-1:0):(activeTrack+direction+n)%n);
+    };
+    auto next=[&](){step(1);};actions.next=next;
+    actions.previous=[&](){step(-1);};
     actions.seek=[](int seconds){player::seek(seconds);};
     actions.seekTo=[](double seconds){player::seekTo(seconds);if(!player::state().playing)player::toggle();};
     actions.signIn=[&](std::string email,std::string password){accounts.signIn(std::move(email),std::move(password));};
     actions.signOut=[&](){accounts.signOut();};
-    actions.previous=[playTrack](){int total=int(sizeof(tracks)/sizeof(*tracks));playTrack(activeTrack<=0?total-1:activeTrack-1);};
+    actions.localBrowse=[&](int source){localFiles.browse(source);};
+    actions.localParent=[&](){localFiles.parent();};
+    actions.localSelect=[&](size_t index,unsigned revision){
+        if(localState.revision!=revision||index>=localState.entries.size()||localState.busy)return;
+        const auto& entry=localState.entries[index];
+        if(entry.directory||!localState.library){localFiles.select(index,revision);return;}
+        if(!mp3(entry.name)){ui::setLocalNotice("Ce lecteur prend actuellement en charge les fichiers MP3.");return;}
+        if(!audioReady)return;
+        if(localPath==entry.path){player::toggle();return;}
+        localQueue.clear();for(const auto& item:localState.entries)if(!item.directory&&mp3(item.name))localQueue.push_back(item);
+        localIndex=0;for(size_t i=0;i<localQueue.size();++i)if(localQueue[i].path==entry.path)localIndex=int(i);
+        activeTrack=-1;localPath=entry.path;localTitle=local::displayName(entry.name);player::open(localPath);
+    };
     actions.volume=[](int percent){currentVolume=percent;player::setVolume(float(percent)/100);};
     actions.hintsChanged=[](bool enabled){return writeHints("/data/avant-usine-ps4/settings.ini",enabled);};
     actions.checkUpdates=[&](){updater.check();};
@@ -99,11 +126,13 @@ int main() {
     while(video::healthy()) {
         uint64_t now=sceKernelGetProcessTime();uint32_t ms=uint32_t((now-previous)/1000);
         if(ms){lv_tick_inc(ms);previous+=uint64_t(ms)*1000;}
-        if(now-lastPlayback>=100000){auto state=player::state();ui::setPlayback(activeTrack,state.position,state.duration,state.playing,audioReady?state.message:"Sortie audio indisponible");
+        if(now-lastPlayback>=33000){auto state=player::state();ui::setPlayback(activeTrack,state.position,state.duration,state.playing,audioReady?state.message:"Sortie audio indisponible");
+            if(!localTitle.empty())ui::setLocalTitle(localTitle);
             if(state.message=="Termine"&&!state.busy)next();lastPlayback=now;}
         if(activeTrack>=0&&requestedLyrics!=activeTrack){requestedLyrics=activeTrack;lyricService.request(public_backend::trackKeys[activeTrack]);}
         auto lyricState=lyricService.snapshot();
         if(lyricState.revision!=lyricRevision){lyricRevision=lyricState.revision;ui::setLyrics(requestedLyrics,lyricState.document,lyricState.message);}
+        local::View changedLocal;if(localFiles.changed(localRevision,changedLocal)){localRevision=changedLocal.revision;localState=changedLocal;ui::setLocal(std::move(changedLocal));}
         auto accountState=accounts.tick(now/1000);
         if(accountState.revision!=accountRevision){accountRevision=accountState.revision;ui::setAccount(accountState);}
         pollController();
@@ -115,9 +144,9 @@ int main() {
         if(update.phase==Phase::Error&&displayedPhase!=Phase::Error&&update.notify)ui::showUpdateNotice(update.message);
         if(update.phase==Phase::Idle&&displayedPhase==Phase::Checking&&update.notify)ui::showUpdateNotice(update.message);
         int percent=-1;std::string updateMessage=update.message;
-        if(update.phase==Phase::Downloading){percent=update.total?int(update.received*100/update.total):0;updateMessage="TÃ©lÃ©chargement de la mise Ã  jour : "+std::to_string(percent)+" %";}
-        if(update.phase==Phase::Deferred)updateMessage="DÃ©cision reportÃ©e. Cette version sera proposÃ©e de nouveau plus tard.";
-        if(update.phase==Phase::Countdown)updateMessage="Mise Ã  jour "+update.version+" prÃªte.";
+        if(update.phase==Phase::Downloading){percent=update.total?int(update.received*100/update.total):0;updateMessage="TÃƒÂ©lÃƒÂ©chargement de la mise ÃƒÂ  jour : "+std::to_string(percent)+" %";}
+        if(update.phase==Phase::Deferred)updateMessage="DÃƒÂ©cision reportÃƒÂ©e. Cette version sera proposÃƒÂ©e de nouveau plus tard.";
+        if(update.phase==Phase::Countdown)updateMessage="Mise ÃƒÂ  jour "+update.version+" prÃƒÂªte.";
         ui::setUpdateStatus(updateMessage,percent);
         if(update.needsSave){auto audio=player::state();
             bool saved=writeUpdateSession("/data/avant-usine-ps4/update-session.ini",activeTrack,audio.position,currentVolume);

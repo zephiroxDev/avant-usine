@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <utility>
 namespace local {
 bool safeName(const std::string& n) {
     return !n.empty()&&n!="."&&n!=".."&&n.size()<=240&&
@@ -27,10 +28,13 @@ std::vector<Entry> list(const std::string& p) {
         result.push_back({n,path,S_ISDIR(s.st_mode),uint64_t(s.st_size)});
     }
     closedir(d);std::sort(result.begin(),result.end(),[](const Entry&a,const Entry&b){
-        if(a.directory!=b.directory)return a.directory;return a.name<b.name;
+        if(a.directory!=b.directory)return a.directory;
+        auto number=[](const std::string& n){uint64_t value=0;size_t i=0;for(;i<n.size()&&n[i]>='0'&&n[i]<='9'&&i<12;++i)value=value*10+uint64_t(n[i]-'0');return std::make_pair(i!=0,value);};
+        auto x=number(a.name),y=number(b.name);if(x.first&&y.first&&x.second!=y.second)return x.second<y.second;
+        return a.name<b.name;
     });return result;
 }
-bool importFile(const std::string& source,const std::string& root,const std::string& name,std::string& error) {
+bool importFile(const std::string& source,const std::string& root,const std::string& name,std::string& error,const std::function<bool(uint64_t,uint64_t)>& progress) {
     error.clear();if(!safeName(name)){error="Nom de fichier invalide";return false;}
     if(!directory(root)){error="Stockage Local inaccessible";return false;}
     struct stat before{};int input=open(source.c_str(),O_RDONLY|O_NOFOLLOW);
@@ -42,6 +46,7 @@ bool importFile(const std::string& source,const std::string& root,const std::str
     int output=mkstemp(pattern.data());temp=pattern.data();bool ok=output>=0;
     uint64_t bytes=0;char buffer[65536];
     while(ok) {
+        if(progress&&!progress(bytes,uint64_t(before.st_size))){ok=false;break;}
         ssize_t n=read(input,buffer,sizeof(buffer));if(n==0)break;
         if(n<0){if(errno==EINTR)continue;ok=false;break;}
         ssize_t done=0;while(done<n){ssize_t w=write(output,buffer+done,n-done);

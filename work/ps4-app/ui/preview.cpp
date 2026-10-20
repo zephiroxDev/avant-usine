@@ -55,6 +55,11 @@ int main(int argc,char** argv) {
     auto* accountGroup=ui::navigationGroup();ui::activateFocused();require(ui::textEntryActive()&&ui::navigationGroup()!=accountGroup);
     ui::moveFocus(ui::Direction::Right);ui::activateFocused();capture(display,out+"/keyboard.bgra");
     ui::finishTextEntry();require(!ui::textEntryActive()&&ui::navigationGroup()==accountGroup);
+    puts("Render native Local file browser");
+    local::View localFiles;localFiles.path="/data/avant-usine-ps4/local";localFiles.library=true;
+    localFiles.entries.push_back({"01 - Exemple.mp3","/data/avant-usine-ps4/local/01 - Exemple.mp3",false,1000});
+    ui::setLocal(std::move(localFiles));ui::showLocal();capture(display,out+"/local.bgra");
+    ui::showMenu();capture(display,out+"/menu.bgra");
     ui::showAlbum(0);
     auto* mainGroup=ui::navigationGroup();
     puts("Render update");ui::showUpdate("1.0.1");require(ui::navigationGroup()!=mainGroup);capture(display,out+"/update.bgra");

@@ -19,6 +19,12 @@ int main(int argc,char**argv) {
     std::string payload("binary\0audio",12);put(source,payload);
     assert(local::importFile(source,library,"track.mp3",error));
     assert(get(library+"/track.mp3")==payload);
+    put(source,std::string(200000,'x'));
+    assert(!local::importFile(source,library,"track.mp3",error,[](uint64_t done,uint64_t){return done<65536;}));
+    assert(get(library+"/track.mp3")==payload);
+    assert(local::displayName("05 01 - La vie est belle.mp3")=="La vie est belle");
+    assert(local::displayName("01 - été.mp3")=="été");
+    assert(local::displayName("123.mp3")=="123");
     // A removed USB/source after a restart must not invalidate the imported copy.
     unlink(source.c_str());assert(get(library+"/track.mp3")==payload);
     assert(!local::importFile(source,library,"track.mp3",error));
