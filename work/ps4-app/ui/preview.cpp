@@ -19,7 +19,8 @@ int main(int argc,char** argv) {
     lv_display_set_color_format(display,LV_COLOR_FORMAT_XRGB8888);
     lv_display_set_buffers(display,pixels.data(),nullptr,pixels.size(),LV_DISPLAY_RENDER_MODE_FULL);
     lv_display_set_flush_cb(display,flush);
-    int choice=-1;ui::Actions callbacks;callbacks.updateChoice=[&choice](int value){choice=value;};
+    int choice=-1,readyChoice=-1;ui::Actions callbacks;callbacks.updateChoice=[&choice](int value){choice=value;};
+    callbacks.readyChoice=[&readyChoice](int value){readyChoice=value;};
     puts("Create native interface");require(ui::create(argv[1],callbacks));std::string out=argv[2];
     puts("Render home");
     capture(display,out+"/home.bgra");
@@ -28,5 +29,10 @@ int main(int argc,char** argv) {
     auto* mainGroup=ui::navigationGroup();
     puts("Render update");ui::showUpdate("1.0.1");require(ui::navigationGroup()!=mainGroup);capture(display,out+"/update.bgra");
     ui::back();require(ui::navigationGroup()==mainGroup);require(choice==0);
+    ui::setUpdateStatus("Téléchargement de la mise à jour : 42 %",42);capture(display,out+"/download.bgra");
+    ui::showUpdateReady("1.0.1",10);capture(display,out+"/countdown.bgra");ui::back();require(readyChoice==0);require(ui::navigationGroup()==mainGroup);
+    ui::showUpdateReady("1.0.1",0,true);ui::back();require(ui::navigationGroup()!=mainGroup);
+    ui::showUpdateNotice("L’installateur PS4 a refusé la mise à jour. L’application reste ouverte.");capture(display,out+"/installer-error.bgra");
+    ui::back();require(ui::navigationGroup()==mainGroup);require(choice==0&&readyChoice==0);
     puts("Native UI rendered: home, collection, album, update dialog.");
 }

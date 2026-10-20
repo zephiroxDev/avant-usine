@@ -82,8 +82,10 @@ jobs:
           path: |
             work/ps4-app/*.pkg
             work/ps4-app/SHA256SUMS.txt
+            work/ps4-app/ps4-update.json
             work/ps4-app/build/*.elf
             work/ps4-app/build/*.oelf
+            work/ps4-app/build/ui-development.bin
             work/ps4-app/build/executable-validation.json
             work/ps4-app/build/package-files.json
             work/ps4-app/build/stack-validation.json

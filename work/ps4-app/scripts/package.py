@@ -27,5 +27,6 @@ target=r/('Avant-Usine-PS4-'+release['version']+'.pkg')
 if p!=target:p.rename(target)
 assert (r/'build/avant-usine.elf').read_bytes()[:4]==b'\x7fELF'
 (r/'SHA256SUMS.txt').write_text(hashlib.sha256(target.read_bytes()).hexdigest()+'  '+target.name+'\n')
+subprocess.run(['python3',str(r/'scripts/generate_update_manifest.py'),str(target)],check=True)
 print('Native PKG built. Physical-console compatibility remains unverified.')
 (r/'build/package-files.json').write_text(json.dumps({'files':files,'appVersion':release['appVersion'],'supportFilesVerified':True},indent=2))

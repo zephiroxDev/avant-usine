@@ -10,6 +10,10 @@ static lv_obj_t *content,*dockTitle,*dockSubtitle,*progress,*clockLabel,*playBut
 static lv_group_t* group;
 static lv_group_t* underlyingGroup=nullptr;
 static lv_obj_t* updateShade=nullptr;
+enum class Dialog {Offer,Ready,Notice};
+static Dialog dialog=Dialog::Offer;
+static bool updateLocked=false;
+static lv_obj_t *countdownLabel,*readyLater,*readyNow,*updateStatus,*updateBar;
 static lv_font_t *normal,*large,*heading;
 static std::vector<unsigned char> fontBytes;
 static std::string assets;
@@ -105,15 +109,20 @@ void showSettings() {
     });
     if(!settingsNotice.empty())label(content,settingsNotice,0,365,1080,normal,PINK);
 }
-static void closeUpdate(int choice) {
+static void closeUpdate(int choice,bool notify=true) {
     if(!updateShade)return;
+    if(updateLocked&&notify)return;
+    Dialog previousDialog=dialog;
     auto* obsolete=group;group=underlyingGroup;underlyingGroup=nullptr;
     lv_obj_delete(updateShade);updateShade=nullptr;lv_group_delete(obsolete);
-    if(actions.updateChoice)actions.updateChoice(choice);
+    updateLocked=false;
+    if(notify&&previousDialog==Dialog::Offer&&actions.updateChoice)actions.updateChoice(choice);
+    if(notify&&previousDialog==Dialog::Ready&&actions.readyChoice)actions.readyChoice(choice);
 }
 void back() { if(updateShade)closeUpdate(0);else showHome(); }
 void showUpdate(const std::string& version) {
     if(updateShade)return;
+    dialog=Dialog::Offer;updateLocked=false;
     underlyingGroup=group;group=lv_group_create();
     auto* shade=panel(lv_layer_top(),1280,720,0x000000,0);lv_obj_set_style_bg_opa(shade,190,0);
     updateShade=shade;
@@ -128,6 +137,43 @@ void showUpdate(const std::string& version) {
     // Wrapped text is necessary for the complete skip label.
     auto* skipLabel=lv_obj_get_child(lv_obj_get_child(modal,-1),0);lv_label_set_long_mode(skipLabel,LV_LABEL_LONG_WRAP);
     lv_group_focus_obj(later);
+}
+void showUpdateReady(const std::string& version,unsigned seconds,bool handingOff) {
+    if(updateShade&&dialog!=Dialog::Ready)closeUpdate(0,false);
+    if(!updateShade) {
+        dialog=Dialog::Ready;underlyingGroup=group;group=lv_group_create();
+        updateShade=panel(lv_layer_top(),1280,720,0x000000,0);lv_obj_set_style_bg_opa(updateShade,190,0);
+        auto* modal=panel(updateShade,900,330,SURFACE,20);lv_obj_center(modal);
+        label(modal,"Mise à jour "+version+" prête",32,30,835,large);
+        countdownLabel=label(modal,"",32,103,835,normal);
+        auto* subtitle=label(modal,"L’installation PS4 prendra le relais. Vos données locales sont conservées.",32,146,835,normal,MUTED);
+        lv_label_set_long_mode(subtitle,LV_LABEL_LONG_WRAP);
+        auto cb=[](lv_event_t* e){closeUpdate(int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e))));};
+        readyLater=button(modal,"Plus tard",32,239,245,48,cb,reinterpret_cast<void*>(intptr_t(0)));
+        readyNow=button(modal,"Fermer maintenant",296,239,300,48,cb,reinterpret_cast<void*>(intptr_t(1)));
+        lv_group_focus_obj(readyLater);
+    }
+    updateLocked=handingOff;
+    lv_label_set_text(countdownLabel,handingOff?"Transmission à l’installateur PS4…":("L’application va se fermer dans "+std::to_string(seconds)+" secondes.").c_str());
+    if(handingOff){lv_obj_add_state(readyLater,LV_STATE_DISABLED);lv_obj_add_state(readyNow,LV_STATE_DISABLED);}
+}
+void showUpdateNotice(const std::string& message) {
+    if(updateShade)closeUpdate(0,false);
+    dialog=Dialog::Notice;updateLocked=false;underlyingGroup=group;group=lv_group_create();
+    updateShade=panel(lv_layer_top(),1280,720,0x000000,0);lv_obj_set_style_bg_opa(updateShade,190,0);
+    auto* modal=panel(updateShade,900,330,SURFACE,20);lv_obj_center(modal);
+    label(modal,"Mises à jour PS4",32,30,835,large);
+    auto* text=label(modal,message,32,103,835,normal);lv_label_set_long_mode(text,LV_LABEL_LONG_WRAP);
+    auto* close=button(modal,"Fermer",32,239,245,48,[](lv_event_t*){closeUpdate(0);});lv_group_focus_obj(close);
+}
+void setUpdateStatus(const std::string& message,int percent) {
+    lv_label_set_text(updateStatus,message.c_str());
+    if(percent<0)lv_obj_add_flag(updateBar,LV_OBJ_FLAG_HIDDEN);
+    else {lv_obj_remove_flag(updateBar,LV_OBJ_FLAG_HIDDEN);lv_bar_set_value(updateBar,percent,LV_ANIM_OFF);}
+}
+void setVolumeLevel(int percent) {
+    if(percent<0||percent>100)return;
+    volumePercent=percent;lv_label_set_text(volumeLabel,(std::to_string(percent)+" %").c_str());
 }
 void setPlayback(int track,float position,float duration,bool playing,const std::string& status) {
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks))&&track!=activeTrack) {
@@ -154,6 +200,9 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     button(root,"Accueil",396,26,130,46,[](lv_event_t*){showHome();});
     button(root,"Collection",540,26,150,46,[](lv_event_t*){showCollection();});
     button(root,"Réglages",1052,26,170,46,[](lv_event_t*){showSettings();});
+    updateStatus=label(root,"",58,78,1164,normal,MUTED);
+    updateBar=lv_bar_create(root);lv_obj_set_pos(updateBar,58,101);lv_obj_set_size(updateBar,1164,2);lv_bar_set_range(updateBar,0,100);
+    lv_obj_set_style_bg_color(updateBar,lv_color_hex(PINK),LV_PART_INDICATOR);lv_obj_add_flag(updateBar,LV_OBJ_FLAG_HIDDEN);
     content=lv_obj_create(root);lv_obj_remove_style_all(content);lv_obj_set_pos(content,58,103);lv_obj_set_size(content,1164,479);
     lv_obj_set_scroll_dir(content,LV_DIR_VER);lv_obj_set_scrollbar_mode(content,LV_SCROLLBAR_MODE_AUTO);
     auto* dock=panel(root,1164,94,SURFACE,15);lv_obj_set_pos(dock,58,598);
