@@ -551,6 +551,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "20.0.3 · Windows 0.6.3",
+      "20 octobre 2026",
+      "Une immersion aux couleurs de votre choix.",
+      [
+        "Le mode immersion utilise désormais un fond uni fixe, sans image ni dégradé en arrière-plan.",
+        "Choisissez sa couleur directement dans le mode immersion. Votre choix est conservé sur cet appareil."
+      ]
+    ],
+    [
       "20.0.2 · Windows 0.6.2",
       "16 octobre 2026",
       "Les paroles deviennent des repères de lecture.",
@@ -1519,6 +1528,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "20.0.3 · Android 0.3.3",
+      "20 octobre 2026",
+      "Une immersion aux couleurs de votre choix.",
+      [
+        "Le mode immersion utilise désormais un fond uni fixe, sans image ni dégradé en arrière-plan.",
+        "Choisissez sa couleur directement dans le mode immersion. Votre choix est conservé sur cet appareil."
+      ]
+    ],
+    [
       "20.0.2 · Android 0.3.2",
       "16 octobre 2026",
       "Les paroles deviennent des repères de lecture.",
@@ -1773,6 +1791,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "20.0.3 · iPhone et iPad 2.0.3",
+      "20 octobre 2026",
+      "Une immersion aux couleurs de votre choix.",
+      [
+        "Le mode immersion utilise désormais un fond uni fixe, sans image ni dégradé en arrière-plan.",
+        "Choisissez sa couleur directement dans le mode immersion. Votre choix est conservé sur cet appareil."
+      ]
+    ],
     [
       "20.0.2 · iPhone et iPad 2.0.2",
       "16 octobre 2026",
@@ -2084,6 +2111,28 @@ window.AU_PLATFORM_HISTORIES={
         "Téléchargement natif de l’IPA avec progression et contrôle SHA-256.",
         "Bouton « Ouvrir dans ESign » via le menu de partage pour signer et installer le fichier.",
         "IPA non signé : certificat et profil de signature valides requis. Installation et conservation des données à confirmer sur appareil réel."
+      ]
+    ]
+  ],
+  "ps4": [
+    [
+      "PS4 · 0.2.0-preview2",
+      "20 octobre 2026",
+      "Aperçu natif PS4 : correction du plantage au lancement. Le démarrage de cette version a été confirmé sur console.",
+      [
+        "Correction du contexte transmis au service de mise à jour, responsable du plantage immédiat de l’aperçu précédent.",
+        "Premiers écrans natifs : accueil, collection, albums, pochettes et lecteur MP3.",
+        "Le portage complet reste en cours : la navigation et les performances nécessitent encore des corrections ; les comptes, paroles et autres fonctions de Windows ne sont pas encore disponibles.",
+        "Les mises à jour automatiques des versions stables sont intégrées mais leur installation sur console reste à valider. Les aperçus ne sont pas proposés automatiquement."
+      ]
+    ],
+    [
+      "PS4 · 0.2.0-preview1",
+      "20 octobre 2026",
+      "Premier aperçu de la nouvelle interface native PS4 ; version remplacée à cause d’un plantage au démarrage.",
+      [
+        "Ajout des premières vues de la collection et du lecteur avec pochettes et police Inter.",
+        "Cette version présente un plantage au lancement ; utiliser l’aperçu suivant."
       ]
     ]
   ]

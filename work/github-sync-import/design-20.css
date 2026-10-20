@@ -101,12 +101,15 @@ html .au-lyric-line:not(.is-current):not(.is-exiting) .karaoke-char{background:n
 html .au-lyric-line .karaoke-backs{font-size:.52em;font-weight:550;line-height:1.5;letter-spacing:-.01em;margin-top:.5em;opacity:.8}
 html .au-lyrics-toolbar{gap:8px;padding-bottom:12px}html .au-lyrics-controls{position:static;background:#ffffff0b;border-radius:10px;font-family:inherit;font-size:12px;padding:8px 10px;color:inherit}
 html .au-lyrics-ending{padding:16px;border-radius:12px;background:#ffffff0c}
-html #auImmersionApp.au-new-immersion{background:#211923!important;isolation:isolate}
+html #auImmersionApp.au-new-immersion{background:var(--au-immersion-solid,#101c31)!important;background-image:none!important;isolation:isolate}
 html #auImmersionApp .au-im-body{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.2fr);gap:clamp(30px,6vw,90px);padding:28px 6%;position:relative}
 html #auImmersionApp .au-im-art{position:relative;inset:auto;z-index:1;filter:none;opacity:1;align-self:center;overflow:visible}
 html #auImmersionApp .au-im-picture{aspect-ratio:1;width:100%!important;height:auto!important;max-height:65dvh}
 html #auImmersionApp .au-im-picture>:is(canvas,img,video,.au-motion-cover){aspect-ratio:1;object-fit:contain;border-radius:7px!important}
-html #auImmersionApp .au20-immersion-backdrop{position:absolute;inset:-10%;width:120%;height:120%;object-fit:cover;filter:blur(65px) saturate(.6);opacity:.3;z-index:-2;pointer-events:none}
+html #auImmersionApp :is(.au20-immersion-backdrop,.au-cover-atmosphere){display:none!important}
+html #auImmersionApp.au-new-immersion::before,html #auImmersionApp.au-new-immersion::after{display:none!important}
+html #auImmersionApp .au-im-background-choice{display:flex;align-items:center;gap:8px;font-size:13px;white-space:nowrap}
+html #auImmersionApp .au-im-background-choice input{width:42px;min-width:42px;flex:none;height:32px;min-height:32px;padding:2px;border:1px solid #ffffff60;border-radius:6px;background:transparent}
 html #auImmersionApp .au-im-lyrics{text-align:left;min-height:0;height:100%}
 html #auImmersionApp .au-im-viewport{text-align:left;padding:0 4px;min-height:0}
 html #auImmersionApp.au-im-idle .au-im-body{height:100%}

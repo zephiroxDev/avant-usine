@@ -551,6 +551,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "20.0.3 · Windows 0.6.3",
+      "20 octobre 2026",
+      "Une immersion aux couleurs de votre choix.",
+      [
+        "Le mode immersion utilise désormais un fond uni fixe, sans image ni dégradé en arrière-plan.",
+        "Choisissez sa couleur directement dans le mode immersion. Votre choix est conservé sur cet appareil."
+      ]
+    ],
+    [
       "20.0.2 · Windows 0.6.2",
       "16 octobre 2026",
       "Les paroles deviennent des repères de lecture.",
@@ -1519,6 +1528,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "android": [
     [
+      "20.0.3 · Android 0.3.3",
+      "20 octobre 2026",
+      "Une immersion aux couleurs de votre choix.",
+      [
+        "Le mode immersion utilise désormais un fond uni fixe, sans image ni dégradé en arrière-plan.",
+        "Choisissez sa couleur directement dans le mode immersion. Votre choix est conservé sur cet appareil."
+      ]
+    ],
+    [
       "20.0.2 · Android 0.3.2",
       "16 octobre 2026",
       "Les paroles deviennent des repères de lecture.",
@@ -1773,6 +1791,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "20.0.3 · iPhone et iPad 2.0.3",
+      "20 octobre 2026",
+      "Une immersion aux couleurs de votre choix.",
+      [
+        "Le mode immersion utilise désormais un fond uni fixe, sans image ni dégradé en arrière-plan.",
+        "Choisissez sa couleur directement dans le mode immersion. Votre choix est conservé sur cet appareil."
+      ]
+    ],
     [
       "20.0.2 · iPhone et iPad 2.0.2",
       "16 octobre 2026",
