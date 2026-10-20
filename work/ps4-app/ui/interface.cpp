@@ -30,7 +30,7 @@ static bool hintsEnabled=true;
 static lv_obj_t *volumeLabel;
 static std::string settingsNotice;
 static std::string applicationVersion="Développement";
-enum class Page {Home,Collection,Album,Settings,Lyrics};
+enum class Page {Home,Collection,Album,Settings,Lyrics,Account};
 static Page page=Page::Home;
 static int lyricsTrack=-1,followedLine=-1;
 static double playbackPosition=0;
@@ -42,6 +42,11 @@ static lv_obj_t* lyricsFollowLabel=nullptr;
 struct LyricRow {lv_obj_t* object;lv_obj_t* spans;lv_span_t *spoken,*remaining;size_t shown;bool active;};
 static std::vector<LyricRow> lyricRows;
 static void paintLyrics();
+static account::View accountView;
+static lv_obj_t *emailField=nullptr,*passwordField=nullptr,*keyboardShade=nullptr,*textKeyboard=nullptr;
+static lv_group_t* keyboardUnderlying=nullptr;
+static bool accountRedrawPending=false;
+static void openKeyboard(lv_obj_t* field);
 enum class KeyIcon {Cross,Circle,Square,Triangle,L1,R1,L2,R2,Options,Arrows};
 static void textIfChanged(lv_obj_t* target,const std::string& text) {
     if(std::strcmp(lv_label_get_text(target),text.c_str()))lv_label_set_text(target,text.c_str());
@@ -118,7 +123,29 @@ static void focusFirstContent() {
         if(!usable(o))continue;
         for(auto* p=lv_obj_get_parent(o);p;p=lv_obj_get_parent(p))if(p==content){lv_group_focus_obj(o);lv_obj_scroll_to_view(o,LV_ANIM_OFF);return;}}
 }
-static void clearContent() {lyricRows.clear();lyricsList=nullptr;lyricsFollowLabel=nullptr;followedLine=-1;lv_obj_clean(content);lv_obj_scroll_to_y(content,0,LV_ANIM_OFF);}
+bool textEntryActive(){return keyboardShade!=nullptr;}
+void finishTextEntry() {
+    if(!keyboardShade)return;
+    auto* obsolete=group;group=keyboardUnderlying;keyboardUnderlying=nullptr;
+    lv_obj_delete(keyboardShade);keyboardShade=nullptr;textKeyboard=nullptr;lv_group_delete(obsolete);
+    if(accountRedrawPending){accountRedrawPending=false;showAccount();}
+}
+static void openKeyboard(lv_obj_t* field) {
+    if(updateShade||keyboardShade)return;
+    keyboardUnderlying=group;group=lv_group_create();lv_group_set_editing(group,true);
+    keyboardShade=panel(lv_layer_top(),1280,720,0x000000,0);lv_obj_set_style_bg_opa(keyboardShade,LV_OPA_50,0);
+    auto* keyboardPanel=panel(keyboardShade,1150,390,SURFACE,16);lv_obj_set_pos(keyboardPanel,65,310);
+    label(keyboardPanel,field==passwordField?"Mot de passe":"Adresse e-mail",24,18,600,large);
+    auto* done=button(keyboardPanel,"Terminer",802,12,155,44,[](lv_event_t*){finishTextEntry();});shortcut(done,KeyIcon::Options);lv_group_remove_obj(done);
+    auto* cancel=button(keyboardPanel,"Fermer",972,12,155,44,[](lv_event_t*){finishTextEntry();});shortcut(cancel,KeyIcon::Circle);lv_group_remove_obj(cancel);
+    textKeyboard=lv_keyboard_create(keyboardPanel);lv_obj_set_size(textKeyboard,1102,300);lv_obj_set_pos(textKeyboard,24,73);
+    lv_obj_set_style_text_font(textKeyboard,normal,LV_PART_ITEMS);
+    lv_keyboard_set_textarea(textKeyboard,field);lv_keyboard_set_mode(textKeyboard,LV_KEYBOARD_MODE_TEXT_LOWER);
+    lv_group_add_obj(group,textKeyboard);lv_group_focus_obj(textKeyboard);lv_buttonmatrix_set_selected_button(textKeyboard,0);
+    lv_obj_add_event_cb(textKeyboard,[](lv_event_t*){finishTextEntry();},LV_EVENT_READY,nullptr);
+    lv_obj_add_event_cb(textKeyboard,[](lv_event_t*){finishTextEntry();},LV_EVENT_CANCEL,nullptr);
+}
+static void clearContent() {lyricRows.clear();lyricsList=nullptr;lyricsFollowLabel=nullptr;followedLine=-1;emailField=passwordField=nullptr;lv_obj_clean(content);lv_obj_scroll_to_y(content,0,LV_ANIM_OFF);}
 static void albumEvent(lv_event_t* e) { showAlbum(int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)))); }
 static void trackEvent(lv_event_t* e) {
     int index=int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)));
@@ -195,6 +222,39 @@ void showSettings() {
     if(!settingsNotice.empty())label(content,settingsNotice,0,365,1080,normal,PINK);
     focusFirstContent();
 }
+void showAccount() {
+    if(updateShade||keyboardShade)return;
+    page=Page::Account;clearContent();label(content,"Mon compte",0,0,1050,heading);
+    auto* notice=label(content,accountView.message,0,72,1080,normal,MUTED);lv_label_set_long_mode(notice,LV_LABEL_LONG_WRAP);
+    if(accountView.connected) {
+        label(content,accountView.nickname.empty()?accountView.email:accountView.nickname,0,142,1060,large);
+        label(content,accountView.email,0,190,1000,normal,MUTED);
+        label(content,!accountView.permissionsKnown?"Droits du compte non vérifiés pour le moment":accountView.creator?"Créateur":accountView.moderator?"Modérateur":"Membre",0,237,1000,normal,PINK);
+        button(content,"Déconnecter cette PS4",0,307,360,50,[](lv_event_t*){if(actions.signOut)actions.signOut();});
+    }else {
+        label(content,"Adresse e-mail",0,130,950,normal);
+        emailField=lv_textarea_create(content);lv_obj_set_pos(emailField,0,160);lv_obj_set_size(emailField,760,50);
+        lv_textarea_set_one_line(emailField,true);lv_textarea_set_max_length(emailField,254);lv_obj_set_style_text_font(emailField,normal,0);
+        lv_textarea_set_text(emailField,accountView.email.c_str());lv_group_add_obj(group,emailField);
+        lv_obj_add_event_cb(emailField,[](lv_event_t* e){openKeyboard(static_cast<lv_obj_t*>(lv_event_get_target(e)));},LV_EVENT_CLICKED,nullptr);
+        label(content,"Mot de passe",0,230,950,normal);
+        passwordField=lv_textarea_create(content);lv_obj_set_pos(passwordField,0,260);lv_obj_set_size(passwordField,760,50);
+        lv_textarea_set_one_line(passwordField,true);lv_textarea_set_password_mode(passwordField,true);lv_textarea_set_max_length(passwordField,512);lv_obj_set_style_text_font(passwordField,normal,0);
+        lv_group_add_obj(group,passwordField);lv_obj_add_event_cb(passwordField,[](lv_event_t* e){openKeyboard(static_cast<lv_obj_t*>(lv_event_get_target(e)));},LV_EVENT_CLICKED,nullptr);
+        auto* submit=button(content,accountView.busy?"Connexion en cours…":"Se connecter",0,345,330,50,[](lv_event_t*){
+            if(!emailField||!passwordField||accountView.busy)return;
+            std::string email=lv_textarea_get_text(emailField),password=lv_textarea_get_text(passwordField);
+            if(email.find('@')==std::string::npos||password.empty()){accountView.message="Renseigne ton adresse e-mail et ton mot de passe.";showAccount();return;}
+            lv_textarea_set_text(passwordField,"");if(actions.signIn)actions.signIn(std::move(email),std::move(password));
+        });
+        if(accountView.busy)lv_obj_add_state(submit,LV_STATE_DISABLED);
+    }
+    focusFirstContent();
+}
+void setAccount(const account::View& view) {
+    accountView=view;
+    if(page==Page::Account){if(keyboardShade)accountRedrawPending=true;else if(!updateShade)showAccount();}
+}
 void showLyrics() {
     if(updateShade)return;
     page=Page::Lyrics;clearContent();
@@ -264,12 +324,14 @@ static void closeUpdate(int choice,bool notify=true) {
     if(notify&&previousDialog==Dialog::Ready&&actions.readyChoice)actions.readyChoice(choice);
     if(page==Page::Lyrics)showLyrics();
 }
-void back() { if(updateShade)closeUpdate(0);else if(page==Page::Album)showCollection();else showHome(); }
+void back() { if(keyboardShade)finishTextEntry();else if(updateShade)closeUpdate(0);else if(page==Page::Album)showCollection();else showHome(); }
 void activateFocused() {
     auto* selected=lv_group_get_focused(group);
+    if(keyboardShade&&selected==textKeyboard){lv_obj_send_event(textKeyboard,LV_EVENT_VALUE_CHANGED,nullptr);return;}
     if(selected&&usable(selected))lv_obj_send_event(selected,LV_EVENT_CLICKED,nullptr);
 }
 void moveFocus(Direction direction) {
+    if(keyboardShade){lv_group_send_data(group,direction==Direction::Left?LV_KEY_LEFT:direction==Direction::Right?LV_KEY_RIGHT:direction==Direction::Up?LV_KEY_UP:LV_KEY_DOWN);return;}
     lv_obj_update_layout(lv_screen_active());
     lv_obj_update_layout(lv_layer_top());
     auto* selected=lv_group_get_focused(group);if(!selected){focusFirstContent();return;}
@@ -385,11 +447,12 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     group=lv_group_create();lv_group_set_default(group);
     auto* root=lv_screen_active();lv_obj_set_style_bg_color(root,lv_color_hex(PAPER),0);lv_obj_remove_flag(root,LV_OBJ_FLAG_SCROLLABLE);
     label(root,"avant l’usine",50,28,310,large);
-    button(root,"Accueil",350,26,130,46,[](lv_event_t*){showHome();});
-    shortcut(button(root,"Collection",496,26,165,46,[](lv_event_t*){showCollection();}),KeyIcon::Square);
-    button(root,"Paroles",690,26,160,46,[](lv_event_t*){showLyrics();});
-    shortcut(button(root,"Retour",906,26,140,46,[](lv_event_t*){back();}),KeyIcon::Circle);
-    shortcut(button(root,"Réglages",1062,26,160,46,[](lv_event_t*){showSettings();}),KeyIcon::Options);
+    button(root,"Accueil",300,26,130,46,[](lv_event_t*){showHome();});
+    shortcut(button(root,"Collection",442,26,160,46,[](lv_event_t*){showCollection();}),KeyIcon::Square);
+    button(root,"Paroles",614,26,140,46,[](lv_event_t*){showLyrics();});
+    button(root,"Mon compte",766,26,180,46,[](lv_event_t*){showAccount();});
+    shortcut(button(root,"Retour",958,26,122,46,[](lv_event_t*){back();}),KeyIcon::Circle);
+    shortcut(button(root,"Réglages",1092,26,136,46,[](lv_event_t*){showSettings();}),KeyIcon::Options);
     updateStatus=label(root,"",58,78,1164,normal,MUTED);
     updateBar=lv_bar_create(root);lv_obj_set_pos(updateBar,58,101);lv_obj_set_size(updateBar,1164,2);lv_bar_set_range(updateBar,0,100);
     lv_obj_set_style_bg_color(updateBar,lv_color_hex(PINK),LV_PART_INDICATOR);lv_obj_add_flag(updateBar,LV_OBJ_FLAG_HIDDEN);

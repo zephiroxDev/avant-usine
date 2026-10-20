@@ -4,6 +4,7 @@
 #include "lvgl.h"
 #include "lyrics_model.h"
 #include <memory>
+#include "account_model.h"
 namespace ui {
 struct Actions {
     std::function<void(int)> play;
@@ -11,6 +12,8 @@ struct Actions {
     std::function<void()> previous,next;
     std::function<void(int)> seek;
     std::function<void(double)> seekTo;
+    std::function<void(std::string,std::string)> signIn;
+    std::function<void()> signOut;
     std::function<void(int)> volume;
     std::function<bool(bool)> hintsChanged;
     std::function<void()> checkUpdates;
@@ -23,6 +26,10 @@ void showCollection();
 void showAlbum(int index);
 void showSettings();
 void showLyrics();
+void showAccount();
+void setAccount(const account::View& view);
+bool textEntryActive();
+void finishTextEntry();
 void setLyrics(int track,std::shared_ptr<const lyrics::Document> document,const std::string& message);
 void showUpdate(const std::string& version);
 void showUpdateReady(const std::string& version,unsigned seconds,bool handingOff=false);

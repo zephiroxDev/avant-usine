@@ -50,6 +50,12 @@ int main(int argc,char** argv) {
     stableFlushes=flushes;for(int i=0;i<20;++i){ui::setPlayback(0,43,180,true);lv_refr_now(display);}require(flushes==stableFlushes);
     ui::moveFocus(ui::Direction::Right);ui::activateFocused();require(selectedTime>=40&&selectedTime<=45);
     ui::showAlbum(0);
+    puts("Render native account and controller keyboard");
+    ui::showAccount();capture(display,out+"/account.bgra");
+    auto* accountGroup=ui::navigationGroup();ui::activateFocused();require(ui::textEntryActive()&&ui::navigationGroup()!=accountGroup);
+    ui::moveFocus(ui::Direction::Right);ui::activateFocused();capture(display,out+"/keyboard.bgra");
+    ui::finishTextEntry();require(!ui::textEntryActive()&&ui::navigationGroup()==accountGroup);
+    ui::showAlbum(0);
     auto* mainGroup=ui::navigationGroup();
     puts("Render update");ui::showUpdate("1.0.1");require(ui::navigationGroup()!=mainGroup);capture(display,out+"/update.bgra");
     ui::back();require(ui::navigationGroup()==mainGroup);require(choice==0);

@@ -9,6 +9,7 @@
 #include "alus_build_version.h"
 #include "lyrics_service.h"
 #include "public_backend_config.h"
+#include "account_service.h"
 #include <orbis/Pad.h>
 #include <orbis/UserService.h>
 #include <orbis/libkernel.h>
@@ -37,6 +38,12 @@ static void pollController() {
         repeatAt=now+(direction==heldDirection?110:350);
     }
     heldDirection=direction;
+    if(ui::textEntryActive()) {
+        if(pressed&ORBIS_PAD_BUTTON_CIRCLE)ui::back();
+        else if(pressed&ORBIS_PAD_BUTTON_OPTIONS)ui::finishTextEntry();
+        else if(pressed&ORBIS_PAD_BUTTON_CROSS)ui::activateFocused();
+        return;
+    }
     if(pressed&ORBIS_PAD_BUTTON_CIRCLE)ui::back();
     else if(pressed&ORBIS_PAD_BUTTON_OPTIONS)ui::showSettings();
     else if(pressed&ORBIS_PAD_BUTTON_SQUARE)ui::showCollection();
@@ -57,6 +64,7 @@ int main() {
     bool audioReady=player::init();
     updates::Service updater("/data/avant-usine-ps4",ALUS_VERSION);
     lyrics::Service lyricService;
+    account::Service accounts("/data/avant-usine-ps4/account-refresh");accounts.restore();
     ui::Actions actions;
     auto playTrack=[audioReady](int index){
         if(audioReady&&index>=0&&index<int(sizeof(tracks)/sizeof(*tracks))) {
@@ -69,6 +77,8 @@ int main() {
     actions.next=next;
     actions.seek=[](int seconds){player::seek(seconds);};
     actions.seekTo=[](double seconds){player::seekTo(seconds);if(!player::state().playing)player::toggle();};
+    actions.signIn=[&](std::string email,std::string password){accounts.signIn(std::move(email),std::move(password));};
+    actions.signOut=[&](){accounts.signOut();};
     actions.previous=[playTrack](){int total=int(sizeof(tracks)/sizeof(*tracks));playTrack(activeTrack<=0?total-1:activeTrack-1);};
     actions.volume=[](int percent){currentVolume=percent;player::setVolume(float(percent)/100);};
     actions.hintsChanged=[](bool enabled){return writeHints("/data/avant-usine-ps4/settings.ini",enabled);};
@@ -85,6 +95,7 @@ int main() {
     uint64_t previous=sceKernelGetProcessTime(),lastPlayback=0;
     updates::Phase displayedPhase=updates::Phase::Idle;
     int requestedLyrics=-1;unsigned lyricRevision=0;
+    unsigned accountRevision=0;
     while(video::healthy()) {
         uint64_t now=sceKernelGetProcessTime();uint32_t ms=uint32_t((now-previous)/1000);
         if(ms){lv_tick_inc(ms);previous+=uint64_t(ms)*1000;}
@@ -93,11 +104,13 @@ int main() {
         if(activeTrack>=0&&requestedLyrics!=activeTrack){requestedLyrics=activeTrack;lyricService.request(public_backend::trackKeys[activeTrack]);}
         auto lyricState=lyricService.snapshot();
         if(lyricState.revision!=lyricRevision){lyricRevision=lyricState.revision;ui::setLyrics(requestedLyrics,lyricState.document,lyricState.message);}
+        auto accountState=accounts.tick(now/1000);
+        if(accountState.revision!=accountRevision){accountRevision=accountState.revision;ui::setAccount(accountState);}
         pollController();
         lv_timer_handler();
         auto update=updater.tick(sceKernelGetProcessTime()/1000);
         using updates::Phase;
-        if(update.phase==Phase::Offered&&displayedPhase!=Phase::Offered)ui::showUpdate(update.version);
+        if(update.phase==Phase::Offered&&displayedPhase!=Phase::Offered&&!ui::textEntryActive())ui::showUpdate(update.version);
         if(update.phase==Phase::Countdown||update.phase==Phase::HandingOff)ui::showUpdateReady(update.version,update.seconds,update.phase==Phase::HandingOff);
         if(update.phase==Phase::Error&&displayedPhase!=Phase::Error&&update.notify)ui::showUpdateNotice(update.message);
         if(update.phase==Phase::Idle&&displayedPhase==Phase::Checking&&update.notify)ui::showUpdateNotice(update.message);
@@ -110,7 +123,7 @@ int main() {
             bool saved=writeUpdateSession("/data/avant-usine-ps4/update-session.ini",activeTrack,audio.position,currentVolume);
             updater.authorizeHandoff(saved);
         }
-        displayedPhase=update.phase;
+        if(update.phase!=Phase::Offered||!ui::textEntryActive())displayedPhase=update.phase;
         if(update.phase==Phase::CloseApproved)break;
         sceKernelUsleep(5000);
     }
