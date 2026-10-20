@@ -1,0 +1,42 @@
+name: PS4 native interface development
+on:
+  push:
+    branches: [console/ps4-test]
+    paths: ['work/ps4-app/ui/**', 'work/ps4-app/src/update_policy.*', 'work/ps4-app/tests/update_policy.cpp', 'work/ps4-app/scripts/prepare_ui_engine.py', '.github/workflows/ps4-native-ui.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  interface:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: work/ps4-app
+      - name: Test update policy and durable skip choice
+        run: |
+          mkdir -p "$RUNNER_TEMP/update-policy"
+          g++ -std=c++17 -Wall -Wextra -Werror -Wno-misleading-indentation -fsanitize=address,undefined -g -Iwork/ps4-app/src work/ps4-app/tests/update_policy.cpp work/ps4-app/src/update_policy.cpp -o "$RUNNER_TEMP/update-policy-test"
+          "$RUNNER_TEMP/update-policy-test" "$RUNNER_TEMP/update-policy"
+      - name: Prepare verified native UI engine
+        run: python3 work/ps4-app/scripts/prepare_ui_engine.py
+      - name: Compile native interface
+        run: |
+          cmake -S work/ps4-app/ui -B work/ps4-app/build/ui -DCMAKE_BUILD_TYPE=Release
+          cmake --build work/ps4-app/build/ui -j2
+      - name: Render real native widgets
+        run: |
+          mkdir -p work/ps4-app/build/ui-captures
+          work/ps4-app/build/ui/ui-preview "$GITHUB_WORKSPACE/work/ps4-app/ui/assets" "$GITHUB_WORKSPACE/work/ps4-app/build/ui-captures"
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          for source in Path('work/ps4-app/build/ui-captures').glob('*.bgra'):
+            Image.frombytes('RGB',(1280,720),source.read_bytes(),'raw','BGRX').save(source.with_suffix('.png'))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ps4-native-interface-preview
+          path: work/ps4-app/build/ui-captures/*.png
+          if-no-files-found: error
