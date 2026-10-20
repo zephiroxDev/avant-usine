@@ -18,12 +18,12 @@ Le 20 octobre 2026, l’utilisateur confirme le démarrage de 0.1.0-test4 sur sa
 | Élément | État |
 | --- | --- |
 | Test4 | Démarrage confirmé par l’utilisateur, paquet préservé |
-| Accueil, collection, album, lecteur | Composants C++ écrits ; compilation/rendu en validation |
-| Raccordement au lecteur natif existant | Entrée de développement écrite ; pas encore testée sur console |
-| Navigation à la manette | Adaptateur écrit ; validation physique nécessaire |
+| Accueil, collection, album, lecteur | Composants C++ compilés ; premières captures natives vérifiées |
+| Raccordement au lecteur natif existant | Exécutable de développement lié et converti en SELF ; pas encore testé sur console |
+| Navigation à la manette | Adaptateur compilé ; validation physique nécessaire |
 | Version suivante, report, version ignorée persistante | Tests ASan/UBSan réussis sur hôte |
-| Boîte de choix de mise à jour | Écrite ; rendu en validation |
-| Recherche HTTPS, téléchargement vérifié, installation PS4 | À implémenter et à tester, pas encore opérationnels |
+| Boîte de choix de mise à jour | Rendu vérifié et test de restauration du focus réussi |
+| Recherche HTTPS, téléchargement vérifié, installation PS4 | Cache transactionnel et SHA-256 testés ; client HTTPS écrit, sélection de release et installateur à raccorder |
 | Local complet, albums, métadonnées, ZIP et sauvegardes | À porter ; le lecteur Local du prototype ne suffit pas |
 | Paroles synchronisées, immersion et Atelier | À porter depuis les vraies données et minutages |
 | Compte, rôles, communauté, annotations, commentaires, messages | À porter avec authentification et règles backend réelles |
@@ -47,3 +47,12 @@ Les builds de développement ne portent pas le marqueur de publication et ne mod
 - Inter : https://github.com/google/fonts/tree/main/ofl/inter — licence OFL jointe dans `ui/assets/Inter-OFL.txt`. Police reçue SHA-256 `29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031`.
 - Pochettes : conversions PNG des huit fichiers WebP existants du projet, sans remplacement de l’illustration.
 - Documentation du système d’installation examinée : OpenOrbis (AppInstUtil/Bgft), flatz/ps4_remote_pkg_installer, apexlions16/OrbisShelf. Aucun code d’installation d’une source tierce incorporé à ce stade.
+
+
+## Connexion PS4 retenue
+
+L’utilisateur a choisi les deux méthodes : identifiants à la manette et QR code avec le téléphone. Ne pas présenter une simple ouverture du site comme une connexion native. Ne jamais transférer les rôles depuis une déclaration locale ni embarquer de clé service_role. Le choix du QR code autorise sa préparation, pas l’affaiblissement des autorisations du compte.
+
+Le guide Supabase a été consulté, puis son changelog et sa documentation d’authentification. La notice officielle du 12 octobre 2026 annonce le retrait de quatre suites TLS 1.2 CBC à partir du 10 novembre. Tester les suites modernes de la PS4 avant de livrer l’authentification : https://supabase.com/changelog/cbc-tls-ciphers-deprecated . Ne jamais désactiver la validation TLS pour contourner un problème de connexion.
+
+Inventaire statique partiel des RPC réutilisables : backend-port-inventory.json. Cet inventaire ne constitue pas une vérification du schéma en production ; aucune donnée personnelle ni aucun jeton de session n’a été récupéré, aucune modification Supabase effectuée.

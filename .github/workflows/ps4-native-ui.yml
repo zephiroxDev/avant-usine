@@ -21,6 +21,8 @@ jobs:
           "$RUNNER_TEMP/update-policy-test" "$RUNNER_TEMP/update-policy"
           g++ -std=c++17 -Wall -Wextra -Werror -Wno-misleading-indentation -fsanitize=address,undefined -g -Iwork/ps4-app/src -Iwork/ps4-app/vendor work/ps4-app/tests/update_staging.cpp work/ps4-app/src/update_staging.cpp -o "$RUNNER_TEMP/update-staging-test"
           "$RUNNER_TEMP/update-staging-test" "$RUNNER_TEMP/update-policy"
+          g++ -std=c++17 -Wall -Wextra -Werror -Wno-misleading-indentation -fsanitize=address,undefined -g -Iwork/ps4-app/src work/ps4-app/tests/url_policy.cpp work/ps4-app/src/url_policy.cpp -o "$RUNNER_TEMP/url-policy-test"
+          "$RUNNER_TEMP/url-policy-test"
       - name: Prepare verified native UI engine
         run: python3 work/ps4-app/scripts/prepare_ui_engine.py
       - name: Compile native interface

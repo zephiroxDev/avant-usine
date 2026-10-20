@@ -1,0 +1,44 @@
+{
+  "app-17v01.js": {
+    "rpc": [
+      "au_account_access",
+      "au_account_library_get",
+      "au_account_library_save",
+      "au_add_annotation",
+      "au_backup_role_18v06",
+      "au_blind_history_17v01",
+      "au_delete_annotation",
+      "au_list_annotations",
+      "au_lyrics_v12",
+      "au_moderation_v12",
+      "au_repertoire",
+      "au_social",
+      "au_vote_annotation"
+    ],
+    "tables": []
+  },
+  "sharing-17v06.js": {
+    "rpc": [
+      "au_track_share_17v06"
+    ],
+    "tables": []
+  },
+  "maintenance-19v01.js": {
+    "rpc": [
+      "au_maintenance_19"
+    ],
+    "tables": []
+  },
+  "statistics-engine-17v01.js": {
+    "rpc": [],
+    "tables": []
+  },
+  "studio-19v00.js": {
+    "rpc": [],
+    "tables": []
+  },
+  "backup-18v06.js": {
+    "rpc": [],
+    "tables": []
+  }
+}

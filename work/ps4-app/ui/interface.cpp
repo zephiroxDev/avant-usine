@@ -15,6 +15,10 @@ static std::vector<unsigned char> fontBytes;
 static std::string assets;
 static Actions actions;
 static int activeTrack=-1;
+static int volumePercent=100;
+static bool hintsEnabled=true;
+static lv_obj_t *hintsLabel,*volumeLabel;
+static std::string settingsNotice;
 static lv_obj_t* panel(lv_obj_t* parent,int w,int h,uint32_t color,int radius=12) {
     auto* o=lv_obj_create(parent);lv_obj_remove_style_all(o);lv_obj_set_size(o,w,h);
     lv_obj_set_style_bg_color(o,lv_color_hex(color),0);lv_obj_set_style_bg_opa(o,LV_OPA_COVER,0);
@@ -86,11 +90,20 @@ void showAlbum(int index) {
     }
 }
 void showSettings() {
+    if(updateShade)return;
     clearContent();label(content,"Réglages",0,0,1000,heading);
     label(content,"Mises à jour de l’application PS4",0,100,1000,large);
     label(content,"Les nouvelles versions seront proposées directement dans l’application.",0,152,1030,normal,MUTED);
     auto* check=button(content,actions.checkUpdates?"Rechercher une mise à jour":"Mises à jour : raccordement en cours",0,205,520,50,[](lv_event_t*){if(actions.checkUpdates)actions.checkUpdates();});
     if(!actions.checkUpdates)lv_obj_add_state(check,LV_STATE_DISABLED);
+    button(content,std::string(hintsEnabled?"Masquer":"Afficher")+" les indications de la manette",0,285,620,50,[](lv_event_t*){
+        bool wanted=!hintsEnabled;
+        if(actions.hintsChanged&&!actions.hintsChanged(wanted)) {settingsNotice="Impossible d’enregistrer le réglage : stockage inaccessible.";showSettings();return;}
+        hintsEnabled=wanted;settingsNotice.clear();
+        if(hintsEnabled)lv_obj_remove_flag(hintsLabel,LV_OBJ_FLAG_HIDDEN);else lv_obj_add_flag(hintsLabel,LV_OBJ_FLAG_HIDDEN);
+        showSettings();
+    });
+    if(!settingsNotice.empty())label(content,settingsNotice,0,365,1080,normal,PINK);
 }
 static void closeUpdate(int choice) {
     if(!updateShade)return;
@@ -116,17 +129,18 @@ void showUpdate(const std::string& version) {
     auto* skipLabel=lv_obj_get_child(lv_obj_get_child(modal,-1),0);lv_label_set_long_mode(skipLabel,LV_LABEL_LONG_WRAP);
     lv_group_focus_obj(later);
 }
-void setPlayback(int track,float position,float duration,bool playing) {
+void setPlayback(int track,float position,float duration,bool playing,const std::string& status) {
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks))&&track!=activeTrack) {
-        activeTrack=track;lv_label_set_text(dockTitle,tracks[track].title);lv_label_set_text(dockSubtitle,volumes[tracks[track].volume].title);
+        activeTrack=track;lv_label_set_text(dockTitle,tracks[track].title);
     }
+    if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks)))lv_label_set_text(dockSubtitle,(std::string(volumes[tracks[track].volume].title)+(status.empty()?"":" · "+status)).c_str());
     lv_label_set_text(playButtonLabel,playing?"Pause":"Lecture");
     int seconds=position>0?int(position):0,total=duration>0?int(duration):0;char time[64];
     snprintf(time,sizeof(time),"%d:%02d / %d:%02d",seconds/60,seconds%60,total/60,total%60);lv_label_set_text(clockLabel,time);
     lv_bar_set_value(progress,total>0?int(1000.0f*position/duration):0,LV_ANIM_OFF);
 }
-bool create(const std::string& directory,Actions callbacks) {
-    assets=directory;actions=std::move(callbacks);
+bool create(const std::string& directory,Actions callbacks,bool hints) {
+    assets=directory;actions=std::move(callbacks);hintsEnabled=hints;
     FILE* f=fopen((assets+"/Inter.ttf").c_str(),"rb");if(!f)return false;
     fseek(f,0,SEEK_END);long size=ftell(f);rewind(f);if(size<=0||size>4*1024*1024){fclose(f);return false;}
     fontBytes.resize(size);bool ok=fread(fontBytes.data(),1,fontBytes.size(),f)==fontBytes.size();fclose(f);if(!ok)return false;
@@ -143,11 +157,22 @@ bool create(const std::string& directory,Actions callbacks) {
     content=lv_obj_create(root);lv_obj_remove_style_all(content);lv_obj_set_pos(content,58,103);lv_obj_set_size(content,1164,479);
     lv_obj_set_scroll_dir(content,LV_DIR_VER);lv_obj_set_scrollbar_mode(content,LV_SCROLLBAR_MODE_AUTO);
     auto* dock=panel(root,1164,94,SURFACE,15);lv_obj_set_pos(dock,58,598);
-    dockTitle=label(dock,"Choisissez un morceau",22,17,455);dockSubtitle=label(dock,"La collection",22,48,455,normal,MUTED);
-    auto* toggle=button(dock,"Lecture",503,18,145,48,[](lv_event_t*){if(actions.toggle)actions.toggle();});playButtonLabel=lv_obj_get_child(toggle,0);
-    clockLabel=label(dock,"0:00 / 0:00",700,15,400,normal,MUTED);
+    dockTitle=label(dock,"Choisissez un morceau",22,17,340);dockSubtitle=label(dock,"La collection",22,48,340,normal,MUTED);
+    button(dock,"‹",400,18,44,48,[](lv_event_t*){if(actions.previous)actions.previous();});
+    auto* toggle=button(dock,"Lecture",460,18,145,48,[](lv_event_t*){if(actions.toggle)actions.toggle();});playButtonLabel=lv_obj_get_child(toggle,0);
+    button(dock,"›",621,18,44,48,[](lv_event_t*){if(actions.next)actions.next();});
+    clockLabel=label(dock,"0:00 / 0:00",700,15,210,normal,MUTED);
+    auto changeVolume=[](lv_event_t* e){int step=int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)));
+        volumePercent=volumePercent+step;if(volumePercent<0)volumePercent=0;if(volumePercent>100)volumePercent=100;
+        lv_label_set_text(volumeLabel,(std::to_string(volumePercent)+" %").c_str());if(actions.volume)actions.volume(volumePercent);};
+    button(dock,"−",940,8,44,44,changeVolume,reinterpret_cast<void*>(intptr_t(-10)));
+    volumeLabel=label(dock,"100 %",997,20,78,normal,MUTED);
+    button(dock,"+",1080,8,44,44,changeVolume,reinterpret_cast<void*>(intptr_t(10)));
     progress=lv_bar_create(dock);lv_obj_set_pos(progress,700,55);lv_obj_set_size(progress,430,5);lv_bar_set_range(progress,0,1000);
-    lv_obj_set_style_bg_color(progress,lv_color_hex(PINK),LV_PART_INDICATOR);showHome();return true;
+    lv_obj_set_style_bg_color(progress,lv_color_hex(PINK),LV_PART_INDICATOR);
+    hintsLabel=label(root,"Croix : choisir · Rond : retour · Triangle : lecture/pause · L1/R1 : −10/+10 s · Options : réglages",58,699,1164,normal,MUTED);
+    if(!hintsEnabled)lv_obj_add_flag(hintsLabel,LV_OBJ_FLAG_HIDDEN);
+    showHome();return true;
 }
 lv_group_t* navigationGroup() { return group; }
 }

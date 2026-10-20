@@ -32,6 +32,7 @@ static std::string pending,message="Choisir un morceau";
 static unsigned pendingID=0;
 static size_t cursor=0;static bool playing=false,busy=false;
 static int port=-1;
+static std::atomic<float> outputLevel(1.0f);
 static constexpr size_t maxBytes=64*1024*1024;
 static bool archiveURL(const std::string& u) {
     if(u.compare(0,8,"https://")!=0)return false;
@@ -150,6 +151,7 @@ static void audioLoop() {
             if(playing){size_t n=std::min(size_t(512),samples.size()-cursor);
                 std::copy_n(samples.data()+cursor,n,block);cursor+=n;
                 if(cursor>=samples.size()){playing=false;message="Termine";}}}
+        float level=outputLevel.load();if(level<1.0f)for(auto& sample:block)sample=int16_t(sample*level);
         if(sceAudioOutOutput(port,block)<0){std::lock_guard<std::mutex> guard(lock);message="Erreur sortie audio";playing=false;sceKernelUsleep(20000);}
     }
     sceAudioOutOutput(port,nullptr);
@@ -174,6 +176,7 @@ void open(const std::string& src){unsigned id=++generation;abortDownload();std::
 void toggle(){std::lock_guard<std::mutex> guard(lock);if(!samples.empty()&&!busy){if(cursor>=samples.size())cursor=0;playing=!playing;message=playing?"Lecture":"Pause";}}
 void stop(){++generation;abortDownload();std::lock_guard<std::mutex> guard(lock);pending.clear();playing=false;busy=false;cursor=0;samples.clear();message="Arrete";}
 void seek(int seconds){std::lock_guard<std::mutex> guard(lock);int64_t p=int64_t(cursor)+int64_t(seconds)*48000*2;cursor=size_t(std::max(int64_t(0),std::min(p,int64_t(samples.size()))));}
+void setVolume(float level){if(level>=0.0f&&level<=1.0f)outputLevel=level;}
 State state(){std::lock_guard<std::mutex> guard(lock);return {message,float(cursor)/96000,float(samples.size())/96000,playing,busy};}
 void shutdown(){exiting=true;++generation;abortDownload();wake.notify_all();native_thread::join(loader);native_thread::join(audio);if(port>=0){sceAudioOutClose(port);port=-1;}}
 }
