@@ -68,7 +68,7 @@ int main() {
     auto next=[playTrack](){playTrack((activeTrack+1)%int(sizeof(tracks)/sizeof(*tracks)));};
     actions.next=next;
     actions.seek=[](int seconds){player::seek(seconds);};
-    actions.seekTo=[](double seconds){player::seekTo(seconds);};
+    actions.seekTo=[](double seconds){player::seekTo(seconds);if(!player::state().playing)player::toggle();};
     actions.previous=[playTrack](){int total=int(sizeof(tracks)/sizeof(*tracks));playTrack(activeTrack<=0?total-1:activeTrack-1);};
     actions.volume=[](int percent){currentVolume=percent;player::setVolume(float(percent)/100);};
     actions.hintsChanged=[](bool enabled){return writeHints("/data/avant-usine-ps4/settings.ini",enabled);};

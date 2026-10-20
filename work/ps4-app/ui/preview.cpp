@@ -22,6 +22,7 @@ int main(int argc,char** argv) {
     lv_display_set_buffers(display,pixels.data(),nullptr,pixels.size(),LV_DISPLAY_RENDER_MODE_DIRECT);
     lv_display_set_flush_cb(display,flush);
     int choice=-1,readyChoice=-1;ui::Actions callbacks;callbacks.updateChoice=[&choice](int value){choice=value;};
+    double selectedTime=-1;callbacks.seekTo=[&selectedTime](double time){selectedTime=time;};
     callbacks.readyChoice=[&readyChoice](int value){readyChoice=value;};
     puts("Create native interface");require(ui::create(argv[1],callbacks));std::string out=argv[2];
     puts("Render home");
@@ -47,6 +48,7 @@ int main(int argc,char** argv) {
     require(lyrics::parse(R"({"duration":180,"sync_mode":"highlight","tracks":[{"id":"main","kind":"main"},{"id":"back","kind":"back"}],"lines":["Une phrase de démonstration","Une seconde phrase","Une voix en arrière-plan"],"times":[40,45,42],"line_ends":[46,50,44],"line_tracks":["main","main","back"],"curves":[[[0,40],[27,46]],[[0,45],[18,50]],[[0,42],[24,44]]]})",*lyricDocument,error));
     ui::setLyrics(0,lyricDocument,"");ui::showLyrics();ui::setPlayback(0,43,180,true);capture(display,out+"/lyrics.bgra");
     stableFlushes=flushes;for(int i=0;i<20;++i){ui::setPlayback(0,43,180,true);lv_refr_now(display);}require(flushes==stableFlushes);
+    ui::moveFocus(ui::Direction::Right);ui::activateFocused();require(selectedTime>=40&&selectedTime<=45);
     ui::showAlbum(0);
     auto* mainGroup=ui::navigationGroup();
     puts("Render update");ui::showUpdate("1.0.1");require(ui::navigationGroup()!=mainGroup);capture(display,out+"/update.bgra");

@@ -38,6 +38,7 @@ static bool lyricsFollow=true;
 static std::shared_ptr<const lyrics::Document> lyricsDocument;
 static std::string lyricsMessage;
 static lv_obj_t* lyricsList=nullptr;
+static lv_obj_t* lyricsFollowLabel=nullptr;
 struct LyricRow {lv_obj_t* object;lv_obj_t* spans;lv_span_t *spoken,*remaining;size_t shown;bool active;};
 static std::vector<LyricRow> lyricRows;
 static void paintLyrics();
@@ -117,7 +118,7 @@ static void focusFirstContent() {
         if(!usable(o))continue;
         for(auto* p=lv_obj_get_parent(o);p;p=lv_obj_get_parent(p))if(p==content){lv_group_focus_obj(o);lv_obj_scroll_to_view(o,LV_ANIM_OFF);return;}}
 }
-static void clearContent() {lyricRows.clear();lyricsList=nullptr;followedLine=-1;lv_obj_clean(content);lv_obj_scroll_to_y(content,0,LV_ANIM_OFF);}
+static void clearContent() {lyricRows.clear();lyricsList=nullptr;lyricsFollowLabel=nullptr;followedLine=-1;lv_obj_clean(content);lv_obj_scroll_to_y(content,0,LV_ANIM_OFF);}
 static void albumEvent(lv_event_t* e) { showAlbum(int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)))); }
 static void trackEvent(lv_event_t* e) {
     int index=int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)));
@@ -195,11 +196,13 @@ void showSettings() {
     focusFirstContent();
 }
 void showLyrics() {
-    if(updateShade)return;page=Page::Lyrics;clearContent();
+    if(updateShade)return;
+    page=Page::Lyrics;clearContent();
     if(activeTrack<0){label(content,"Choisissez un morceau pour ouvrir ses paroles.",0,30,1100,large);return;}
     cover(content,tracks[activeTrack].volume,0,16,330);
     label(content,tracks[activeTrack].title,0,370,360,large);
-    button(content,lyricsFollow?"Suivi auto : activé":"Suivi auto : désactivé",0,421,350,44,[](lv_event_t*){lyricsFollow=!lyricsFollow;showLyrics();});
+    auto* follow=button(content,lyricsFollow?"Suivi auto : activé":"Suivi auto : désactivé",0,421,350,44,[](lv_event_t*){lyricsFollow=!lyricsFollow;showLyrics();});
+    lyricsFollowLabel=lv_obj_get_child(follow,0);
     lyricsList=panel(content,744,470,PAPER,0);lv_obj_set_pos(lyricsList,400,0);
     lv_obj_add_flag(lyricsList,LV_OBJ_FLAG_SCROLLABLE);lv_obj_set_scroll_dir(lyricsList,LV_DIR_VER);
     lv_obj_set_style_anim_duration(lyricsList,0,0);
@@ -212,7 +215,7 @@ void showLyrics() {
     int y=10;
     for(size_t i=0;i<lyricsDocument->lines.size();++i) {
         const auto& line=lyricsDocument->lines[i];
-        auto* row=button(lyricsList,"",4,y,718,100,[](lv_event_t* e){size_t index=size_t(reinterpret_cast<uintptr_t>(lv_event_get_user_data(e)));if(lyricsDocument&&index<lyricsDocument->lines.size()&&actions.seekTo)actions.seekTo(lyricsDocument->lines[index].start);},reinterpret_cast<void*>(uintptr_t(i)));
+        auto* row=button(lyricsList,"",4,y,718,100,[](lv_event_t* e){size_t index=size_t(reinterpret_cast<uintptr_t>(lv_event_get_user_data(e)));if(lyricsDocument&&index<lyricsDocument->lines.size()&&actions.seekTo){lyricsFollow=true;followedLine=-1;if(lyricsFollowLabel)textIfChanged(lyricsFollowLabel,"Suivi auto : activé");actions.seekTo(lyricsDocument->lines[index].start);}},reinterpret_cast<void*>(uintptr_t(i)));
         lv_obj_set_style_bg_opa(row,LV_OPA_TRANSP,0);lv_obj_set_style_bg_opa(row,LV_OPA_20,LV_STATE_FOCUSED);
         auto* spans=lv_spangroup_create(row);lv_obj_set_pos(spans,10,10);lv_obj_set_width(spans,656);
         lv_spangroup_set_mode(spans,LV_SPAN_MODE_BREAK);
@@ -287,15 +290,18 @@ void moveFocus(Direction direction) {
             bool horizontal=direction==Direction::Left||direction==Direction::Right;
             int advance=direction==Direction::Left?-dx:direction==Direction::Right?dx:direction==Direction::Up?-dy:dy;
             if(advance<=0)continue;
-            // Left/right stay on the same visual row, never jump to a distant row.
-            if(horizontal&&(to.y2<from.y1||to.y1>from.y2))continue;
+            // Prefer the same visual row, but allow entering a lyrics column
+            // whose final visible phrase is above the left-hand controls.
             if(!same&&(to.y2<103||to.y1>582)&&inContent(candidate))continue;
             int lateral=horizontal?std::abs(dy):std::abs(dx);
             int64_t score=int64_t(advance)+int64_t(lateral)*4;
             if(score<bestScore){bestScore=score;best=candidate;}
         }
     }
-    if(best){lv_group_focus_obj(best);lv_obj_scroll_to_view(best,LV_ANIM_OFF);}
+    if(best){
+        if(page==Page::Lyrics&&lyricsList&&lv_obj_get_parent(best)==lyricsList){lyricsFollow=false;if(lyricsFollowLabel)textIfChanged(lyricsFollowLabel,"Suivi auto : désactivé");}
+        lv_group_focus_obj(best);lv_obj_scroll_to_view(best,LV_ANIM_OFF);
+    }
 }
 void showUpdate(const std::string& version) {
     if(updateShade)return;
