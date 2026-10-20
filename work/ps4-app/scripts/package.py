@@ -1,5 +1,6 @@
 from pathlib import Path
 import os,json,subprocess,hashlib,struct,shutil
+import xml.etree.ElementTree as ET
 r=Path(__file__).resolve().parents[1];os.chdir(r)
 sdk=Path(os.environ['OO_PS4_TOOLCHAIN']);tool=Path(os.environ.get('PS4_PKG_TOOL',str(sdk/'bin/linux/PkgTool.Core')))
 gp4=Path(os.environ.get('PS4_GP4_TOOL',str(sdk/'bin/linux/create-gp4')))
@@ -29,6 +30,18 @@ if interface:
  for name in assets:assert (r/name).is_file(),name
  files+=assets
 subprocess.run([str(gp4),'-out','pkg.gp4','--content-id='+release['contentId'],'--files',' '.join(files)],check=True)
+# create-gp4's template does not declare newly added nested asset directories.
+# PkgTool requires every target parent in rootdir, even when files list them.
+project=ET.parse(r/'pkg.gp4')
+rootdir=project.getroot().find('rootdir')
+assert rootdir is not None,'GP4 rootdir missing'
+for name in files:
+ parent=rootdir
+ for part in Path(name).parts[:-1]:
+  child=next((d for d in parent.findall('dir') if d.get('targ_name')==part),None)
+  if child is None:child=ET.SubElement(parent,'dir',{'targ_name':part})
+  parent=child
+project.write(r/'pkg.gp4',encoding='utf-8',xml_declaration=True)
 run('pkg_build','pkg.gp4','.')
 p=r/(release['contentId']+'.pkg');assert p.is_file() and p.stat().st_size>16384
 with p.open('rb') as f:assert f.read(4)==b'\x7fCNT','Invalid PKG header'
