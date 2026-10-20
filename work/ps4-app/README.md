@@ -1,5 +1,7 @@
 # Avant l’usine — prototype PS4 natif
 
+V4 (0.1.0-test4 / APP_VER 01.01) : taille de pile explicite de 2 Mo pour les threads du lecteur et buffers de lecture réduits. Correction d'un dépassement potentiel du défaut de 64 Ko identifié dans test3. Le lancement sur la console reste à confirmer ; ce paquet n'est pas annoncé comme validé physiquement. Rapport automatisé de pile : build/stack-validation.json.
+
 Application de test indépendante : graphismes, manette, HTTPS, décodage MP3 et sortie audio natifs. Aucun navigateur, WebView, HTML ou lancement du site. Le catalogue public est inclus comme instantané ; l’audio est récupéré à ses adresses HTTPS existantes. Aucun compte ni identifiant n’est inclus.
 
 Ce premier prototype concerne le catalogue, la lecture et l’import de fichiers locaux depuis USB. Il ne prétend pas contenir toutes les fonctions sociales, l’Atelier ou les sauvegardes des applications mobiles. La musique se charge avant lecture. Une PS4 avec homebrew actif et une connexion Internet sont nécessaires pour le catalogue distant. La compatibilité physique en 13.52 reste à confirmer ; la PS5 n’est pas validée.

@@ -1,4 +1,10 @@
-Avant l’usine — PS4 — prototype natif 0.1.0-test3
+Avant l’usine — PS4 — prototype natif 0.1.0-test4
+
+Correction ciblée d'un défaut de pile des threads : le chargeur de test3 réservait plus de 80 Ko dès son entrée, avant les appels HTTPS/décodage, alors que les attributs par défaut du firmware analysé indiquent 64 Ko. Les threads natifs demandent désormais explicitement 2 Mo ; la taille configurée est vérifiée avant création. Les buffers de lecture locale et HTTPS passent de 64 Ko à 8 Ko. Un échec de création nettoie les threads déjà lancés et ferme la sortie audio.
+
+La compilation mesure les réservations de pile et refuse une fonction du lecteur dépassant 32 Ko. Les tests couvrent aussi les échecs d'attributs, de création et de jonction. Ce correctif traite un défaut confirmé du code ; la disparition du crash au lancement sur la console reste à vérifier. Métadonnées APP_VER/VERSION 01.01 pour distinguer l'installation de la V3, identifiant ALUS00001 conservé. Aucun autre produit n'est mis à jour et aucun fichier Local n'est supprimé.
+
+Historique du test3 :
 
 Nouvel essai après refus de lancement des tests 1 et 2 : ajout au paquet des fichiers de support fournis avec l’exemple officiel OpenOrbis (sce_module/libc.prx, sce_module/libSceFios2.prx et sce_sys/about/right.sprx), omis dans les premiers paquets. Le build vérifie leur présence et leur empreinte, puis les inclut explicitement dans le projet PKG. Métadonnées APP_VER/VERSION alignées sur 01.00 comme l’exemple officiel, même identifiant ALUS00001. Aucun fichier Local n’est supprimé.
 

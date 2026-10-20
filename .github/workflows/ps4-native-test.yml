@@ -19,6 +19,8 @@ jobs:
           mkdir -p "$RUNNER_TEMP/core"
           g++ -std=c++17 -Wall -Wextra -Werror -Wno-misleading-indentation -fsanitize=address,undefined -g -Iwork/ps4-app/src work/ps4-app/tests/core.cpp work/ps4-app/src/settings.cpp work/ps4-app/src/local_store.cpp work/ps4-app/src/pcm.cpp -o "$RUNNER_TEMP/core-test"
           "$RUNNER_TEMP/core-test" "$RUNNER_TEMP/core"
+          g++ -std=c++17 -Wall -Wextra -Werror -Wno-misleading-indentation -fsanitize=address,undefined -g -Iwork/ps4-app/tests/fake-orbis -Iwork/ps4-app/src work/ps4-app/tests/native_thread.cpp work/ps4-app/src/native_thread.cpp -o "$RUNNER_TEMP/thread-test"
+          "$RUNNER_TEMP/thread-test"
       - name: Install native compiler
         run: sudo apt-get update -qq && sudo apt-get install -y clang-18 lld-18
       - name: Download and verify OpenOrbis
@@ -56,6 +58,7 @@ jobs:
         run: |
           make -j2 PS4_FSELF="$PS4_FSELF"
           python3 scripts/validate_executable.py
+          python3 scripts/check_stack_usage.py
       - name: Build test PKG
         working-directory: work/ps4-app
         env:
@@ -79,6 +82,8 @@ jobs:
             work/ps4-app/build/*.oelf
             work/ps4-app/build/executable-validation.json
             work/ps4-app/build/package-files.json
+            work/ps4-app/build/stack-validation.json
+            work/ps4-app/build/src/*.su
             work/ps4-app/eboot.bin
             work/ps4-app/README.md
   publish-test:

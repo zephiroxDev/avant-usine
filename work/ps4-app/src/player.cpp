@@ -1,5 +1,6 @@
 #include "player.h"
 #include "pcm.h"
+#include "native_thread.h"
 #include <orbis/AudioOut.h>
 #include <orbis/UserService.h>
 #include <orbis/Net.h>
@@ -7,7 +8,6 @@
 #include <orbis/Http.h>
 #include <orbis/Sysmodule.h>
 #include <orbis/libkernel.h>
-#include <thread>
 #include <mutex>
 #include <condition_variable>
 #include <atomic>
@@ -19,7 +19,7 @@
 namespace player {
 static std::mutex lock;
 static std::condition_variable wake;
-static std::thread loader,audio;
+static native_thread::Thread loader,audio;
 static std::atomic<bool> exiting(false);
 static std::atomic<unsigned> generation(0);
 static std::mutex requestLock;
@@ -88,7 +88,7 @@ struct Network {
             int32_t kind=0;size_t length=0;
             bool known=sceHttpGetResponseContentLength(req,&kind,&length)>=0&&length>0;
             if(known&&length>maxBytes){cleanup();error="Fichier trop volumineux pour ce prototype";return false;}
-            uint8_t buffer[65536];bool ok=true;
+            uint8_t buffer[8192];bool ok=true;
             while(!exiting&&id==generation){int n=sceHttpReadData(req,buffer,sizeof(buffer));
                 if(n<0){ok=false;break;}if(n==0)break;
                 if(bytes.size()+size_t(n)>maxBytes){ok=false;break;}
@@ -104,7 +104,7 @@ struct Network {
     }
 };
 static bool readFile(const std::string& path,std::vector<uint8_t>& bytes) {
-    FILE*f=fopen(path.c_str(),"rb");if(!f)return false;uint8_t chunk[65536];bool ok=true;
+    FILE*f=fopen(path.c_str(),"rb");if(!f)return false;uint8_t chunk[8192];bool ok=true;
     for(;;){size_t n=fread(chunk,1,sizeof(chunk),f);if(bytes.size()+n>maxBytes){ok=false;break;}
         bytes.insert(bytes.end(),chunk,chunk+n);if(n<sizeof(chunk)){ok=!ferror(f);break;}}
     fclose(f);return ok&&!bytes.empty();
@@ -151,14 +151,26 @@ static void audioLoop() {
     }
     sceAudioOutOutput(port,nullptr);
 }
+static void* loadEntry(void*) {loadLoop();return nullptr;}
+static void* audioEntry(void*) {audioLoop();return nullptr;}
 bool init() {
+    if(loader.started&&audio.started)return true;
+    exiting=false;
     sceAudioOutInit();port=sceAudioOutOpen(ORBIS_USER_SERVICE_USER_ID_SYSTEM,ORBIS_AUDIO_OUT_PORT_TYPE_MAIN,0,256,48000,ORBIS_AUDIO_OUT_PARAM_FORMAT_S16_STEREO);
-    if(port<0)return false;loader=std::thread(loadLoop);audio=std::thread(audioLoop);return true;
+    if(port<0)return false;
+    int rc=native_thread::start(loader,loadEntry,"alus-loader");
+    if(rc==0)rc=native_thread::start(audio,audioEntry,"alus-audio");
+    if(rc!=0){
+        exiting=true;wake.notify_all();native_thread::join(loader);native_thread::join(audio);
+        sceAudioOutClose(port);port=-1;message="Impossible de creer les threads audio";
+        return false;
+    }
+    return true;
 }
 void open(const std::string& src){unsigned id=++generation;abortDownload();std::lock_guard<std::mutex> guard(lock);pending=src;pendingID=id;busy=true;playing=false;cursor=0;samples.clear();message="Chargement";wake.notify_one();}
 void toggle(){std::lock_guard<std::mutex> guard(lock);if(!samples.empty()&&!busy){if(cursor>=samples.size())cursor=0;playing=!playing;message=playing?"Lecture":"Pause";}}
 void stop(){++generation;abortDownload();std::lock_guard<std::mutex> guard(lock);pending.clear();playing=false;busy=false;cursor=0;samples.clear();message="Arrete";}
 void seek(int seconds){std::lock_guard<std::mutex> guard(lock);int64_t p=int64_t(cursor)+int64_t(seconds)*48000*2;cursor=size_t(std::max(int64_t(0),std::min(p,int64_t(samples.size()))));}
 State state(){std::lock_guard<std::mutex> guard(lock);return {message,float(cursor)/96000,float(samples.size())/96000,playing,busy};}
-void shutdown(){exiting=true;++generation;abortDownload();wake.notify_all();if(loader.joinable())loader.join();if(audio.joinable())audio.join();if(port>=0)sceAudioOutClose(port);}
+void shutdown(){exiting=true;++generation;abortDownload();wake.notify_all();native_thread::join(loader);native_thread::join(audio);if(port>=0){sceAudioOutClose(port);port=-1;}}
 }
