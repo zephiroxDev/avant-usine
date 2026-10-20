@@ -48,7 +48,7 @@ int main(int argc,char** argv) {
     require(lyrics::parse(R"({"duration":180,"sync_mode":"highlight","tracks":[{"id":"main","kind":"main"},{"id":"back","kind":"back"}],"lines":["Une phrase de démonstration","Une seconde phrase","Une voix en arrière-plan"],"times":[40,45,42],"line_ends":[46,50,44],"line_tracks":["main","main","back"],"curves":[[[0,40],[27,46]],[[0,45],[18,50]],[[0,42],[24,44]]]})",*lyricDocument,error));
     ui::setLyrics(0,lyricDocument,"");ui::showLyrics();ui::setPlayback(0,43,180,true);capture(display,out+"/lyrics.bgra");
     stableFlushes=flushes;for(int i=0;i<20;++i){ui::setPlayback(0,43,180,true);lv_refr_now(display);}require(flushes==stableFlushes);
-    ui::moveFocus(ui::Direction::Right);ui::activateFocused();require(selectedTime>=40&&selectedTime<=45);
+    ui::moveFocus(ui::Direction::Down);ui::activateFocused();require(selectedTime==42);
     ui::showAlbum(0);
     puts("Render native account and controller keyboard");
     ui::showAccount();capture(display,out+"/account.bgra");

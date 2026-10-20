@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include "public_backend_config.h"
 #include <sstream>
+#include <numeric>
 namespace ui {
 static constexpr uint32_t PAPER=0x151316,INK=0xf5eff3,MUTED=0xb6a9b3,PINK=0xe4a5d1,SURFACE=0x211c23;
 static lv_obj_t *content,*dockTitle,*dockSubtitle,*progress,*clockLabel,*playButtonLabel;
@@ -39,7 +40,7 @@ static std::shared_ptr<const lyrics::Document> lyricsDocument;
 static std::string lyricsMessage;
 static lv_obj_t* lyricsList=nullptr;
 static lv_obj_t* lyricsFollowLabel=nullptr;
-struct LyricRow {lv_obj_t* object;lv_obj_t* spans;lv_span_t *spoken,*remaining;size_t shown;bool active;};
+struct LyricRow {lv_obj_t* object;lv_obj_t* spans;lv_span_t *spoken,*remaining;size_t shown,source;bool active;};
 static std::vector<LyricRow> lyricRows;
 static void paintLyrics();
 static account::View accountView;
@@ -61,7 +62,7 @@ static bool usable(lv_obj_t* object) {
 }
 static void hintVisibility(lv_obj_t* object) {
     if(lv_obj_has_flag(object,LV_OBJ_FLAG_USER_1)) {
-        if(hintsEnabled)lv_obj_remove_flag(object,LV_OBJ_FLAG_HIDDEN);
+        if(hintsEnabled&&(!lv_obj_has_flag(object,LV_OBJ_FLAG_USER_2)||lv_obj_has_state(lv_obj_get_parent(object),LV_STATE_FOCUSED)))lv_obj_remove_flag(object,LV_OBJ_FLAG_HIDDEN);
         else lv_obj_add_flag(object,LV_OBJ_FLAG_HIDDEN);
     }
     for(uint32_t i=0;i<lv_obj_get_child_count(object);++i)hintVisibility(lv_obj_get_child(object,i));
@@ -98,8 +99,16 @@ static lv_obj_t* keyIcon(lv_obj_t* parent,KeyIcon key,int x,int y) {
     if(!hintsEnabled)lv_obj_add_flag(box,LV_OBJ_FLAG_HIDDEN);
     return box;
 }
+static lv_obj_t* primaryBadge(lv_obj_t* button) {
+    for(uint32_t i=0;i<lv_obj_get_child_count(button);++i){auto* child=lv_obj_get_child(button,i);if(lv_obj_has_flag(child,LV_OBJ_FLAG_USER_1)&&!lv_obj_has_flag(child,LV_OBJ_FLAG_USER_2))return child;}
+    return nullptr;
+}
 static void shortcut(lv_obj_t* button,KeyIcon key) {
-    auto* old=lv_obj_get_child(button,1);if(old&&lv_obj_has_flag(old,LV_OBJ_FLAG_USER_1))lv_obj_delete(old);
+    auto* old=primaryBadge(button);if(old)lv_obj_delete(old);
+    if(key==KeyIcon::Touchpad) {
+        for(uint32_t i=0;i<lv_obj_get_child_count(button);++i){auto* child=lv_obj_get_child(button,i);if(lv_obj_has_flag(child,LV_OBJ_FLAG_USER_2)){lv_obj_delete(child);break;}}
+        lv_obj_set_width(lv_obj_get_child(button,0),lv_obj_get_style_width(button,0)-52);
+    }
     keyIcon(button,key,lv_obj_get_style_width(button,0)-37,(lv_obj_get_style_height(button,0)-26)/2);
 }
 static lv_obj_t* panel(lv_obj_t* parent,int w,int h,uint32_t color,int radius=12) {
@@ -119,8 +128,12 @@ static lv_obj_t* button(lv_obj_t* parent,const std::string& title,int x,int y,in
     lv_obj_set_style_outline_pad(b,4,LV_STATE_FOCUSED);lv_obj_remove_flag(b,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_SCROLL_ON_FOCUS));
     lv_obj_set_style_bg_color(b,lv_color_hex(0x463447),LV_STATE_FOCUSED);
     lv_obj_set_style_anim_duration(b,0,0);
-    auto* l=label(b,title,12,0,std::max(1,w-52));lv_obj_set_height(l,lv_font_get_line_height(normal));lv_obj_align(l,LV_ALIGN_LEFT_MID,12,0);
+    auto* l=label(b,title,12,0,std::max(1,w-(w>=200?88:52)));lv_obj_set_height(l,lv_font_get_line_height(normal));lv_obj_align(l,LV_ALIGN_LEFT_MID,12,0);
     keyIcon(b,KeyIcon::Cross,w-37,(h-26)/2);
+    if(w>=200) {
+        auto* arrows=keyIcon(b,KeyIcon::Arrows,w-73,(h-26)/2);lv_obj_add_flag(arrows,LV_OBJ_FLAG_USER_2);lv_obj_add_flag(arrows,LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_event_cb(b,[](lv_event_t* e){auto code=lv_event_get_code(e);if(code!=LV_EVENT_FOCUSED&&code!=LV_EVENT_DEFOCUSED)return;hintVisibility(static_cast<lv_obj_t*>(lv_event_get_target(e)));},LV_EVENT_ALL,nullptr);
+    }
     lv_obj_add_event_cb(b,callback,LV_EVENT_CLICKED,data);lv_group_add_obj(group,b);return b;
 }
 static void focusFirstContent() {
@@ -174,7 +187,8 @@ static void albumCard(lv_obj_t* parent,int index,int x,int y,int size) {
     lv_obj_set_style_bg_opa(card,LV_OPA_TRANSP,0);cover(card,index,0,0,size);
     label(card,volumes[index].title,0,size+12,size,normal);
     label(card,std::to_string(volumes[index].count)+" morceaux",0,size+38,size,normal,MUTED);
-    auto* badge=lv_obj_get_child(card,1);lv_obj_set_pos(badge,size-36,8);lv_obj_move_foreground(badge);
+    auto* badge=primaryBadge(card);lv_obj_set_pos(badge,size-36,8);lv_obj_move_foreground(badge);
+    for(uint32_t i=0;i<lv_obj_get_child_count(card);++i){auto* child=lv_obj_get_child(card,i);if(lv_obj_has_flag(child,LV_OBJ_FLAG_USER_2)){lv_obj_set_pos(child,size-72,8);lv_obj_move_foreground(child);break;}}
 }
 void showHome() {
     page=Page::Home;
@@ -210,7 +224,7 @@ void showAlbum(int index) {
         auto* row=button(content,"",0,244+n*64,1110,54,trackEvent,reinterpret_cast<void*>(intptr_t(i)));
         lv_obj_set_style_bg_color(row,lv_color_hex(n%2?PAPER:SURFACE),0);
         label(row,std::to_string(n+1),16,15,40,normal,MUTED);
-        label(row,tracks[i].title,66,15,990);
+        label(row,tracks[i].title,66,15,950);
     }
     focusFirstContent();
 }
@@ -331,11 +345,13 @@ void showLyrics() {
         focusFirstContent();return;
     }
     int y=10;
-    for(size_t i=0;i<lyricsDocument->lines.size();++i) {
+    std::vector<size_t> order(lyricsDocument->lines.size());std::iota(order.begin(),order.end(),size_t(0));
+    std::stable_sort(order.begin(),order.end(),[](size_t a,size_t b){return lyricsDocument->lines[a].start<lyricsDocument->lines[b].start;});
+    for(size_t i:order) {
         const auto& line=lyricsDocument->lines[i];
         auto* row=button(lyricsList,"",4,y,718,100,[](lv_event_t* e){size_t index=size_t(reinterpret_cast<uintptr_t>(lv_event_get_user_data(e)));if(lyricsDocument&&index<lyricsDocument->lines.size()&&actions.seekTo){lyricsFollow=true;followedLine=-1;if(lyricsFollowLabel)textIfChanged(lyricsFollowLabel,"Suivi auto : activé");actions.seekTo(lyricsDocument->lines[index].start);}},reinterpret_cast<void*>(uintptr_t(i)));
         lv_obj_set_style_bg_opa(row,LV_OPA_TRANSP,0);lv_obj_set_style_bg_opa(row,LV_OPA_20,LV_STATE_FOCUSED);
-        auto* spans=lv_spangroup_create(row);lv_obj_set_pos(spans,10,10);lv_obj_set_width(spans,656);
+        auto* spans=lv_spangroup_create(row);lv_obj_set_pos(spans,10,10);lv_obj_set_width(spans,620);
         lv_spangroup_set_mode(spans,LV_SPAN_MODE_BREAK);
         auto* spoken=lv_spangroup_new_span(spans);auto* remaining=lv_spangroup_new_span(spans);
         for(auto* span:{spoken,remaining}){lv_style_set_text_font(lv_span_get_style(span),line.back?normal:large);}
@@ -343,10 +359,13 @@ void showLyrics() {
         lv_style_set_text_color(lv_span_get_style(remaining),lv_color_hex(MUTED));
         lv_span_set_text(spoken,"");lv_span_set_text(remaining,line.text.c_str());lv_spangroup_refresh(spans);
         lv_obj_update_layout(spans);int height=std::max(72,int(lv_obj_get_height(spans))+24);lv_obj_set_height(row,height);
-        auto* badge=lv_obj_get_child(row,1);lv_obj_set_y(badge,(height-26)/2);
-        lyricRows.push_back({row,spans,spoken,remaining,size_t(-1),false});y+=height+18;
+        auto* badge=primaryBadge(row);lv_obj_set_y(badge,(height-26)/2);
+        for(uint32_t c=0;c<lv_obj_get_child_count(row);++c){auto* child=lv_obj_get_child(row,c);if(lv_obj_has_flag(child,LV_OBJ_FLAG_USER_2))lv_obj_set_y(child,(height-26)/2);}
+        lyricRows.push_back({row,spans,spoken,remaining,size_t(-1),i,false});y+=height+18;
     }
-    paintLyrics();focusFirstContent();
+    paintLyrics();
+    if(!lyricRows.empty()){size_t selected=followedLine>=0?size_t(followedLine):0;lv_group_focus_obj(lyricRows[selected].object);lv_obj_scroll_to_view(lyricRows[selected].object,LV_ANIM_OFF);}
+    else focusFirstContent();
 }
 void setLyrics(int track,std::shared_ptr<const lyrics::Document> document,const std::string& message) {
     lyricsTrack=track;lyricsDocument=std::move(document);lyricsMessage=message;
@@ -356,10 +375,10 @@ static void paintLyrics() {
     if(updateShade||page!=Page::Lyrics||!lyricsDocument||lyricsTrack!=activeTrack)return;
     int target=-1;
     for(size_t i=0;i<lyricRows.size();++i) {
-        auto& row=lyricRows[i];const auto& line=lyricsDocument->lines[i];
+        auto& row=lyricRows[i];const auto& line=lyricsDocument->lines[row.source];
         bool active=playbackPosition>=line.start&&playbackPosition<line.end;
         size_t shown=active?lyrics::revealed(line,playbackPosition,lyricsDocument->highlight):0;
-        if(active&&(target<0||(lyricsDocument->lines[size_t(target)].back&&!line.back)))target=int(i);
+        if(active&&(target<0||(lyricsDocument->lines[lyricRows[size_t(target)].source].back&&!line.back)))target=int(i);
         if(shown!=row.shown||active!=row.active) {
             std::string spoken=lyrics::prefix(line.text,shown);
             lv_span_set_text(row.spoken,spoken.c_str());lv_span_set_text(row.remaining,line.text.substr(spoken.size()).c_str());
@@ -368,6 +387,7 @@ static void paintLyrics() {
         }
     }
     if(lyricsFollow&&target>=0&&target!=followedLine) {
+        auto* selected=lv_group_get_focused(group);if(selected&&lv_obj_get_parent(selected)==lyricsList)lv_group_focus_obj(lyricRows[size_t(target)].object);
         lv_obj_scroll_to_view(lyricRows[size_t(target)].object,LV_ANIM_OFF);followedLine=target;
     }
 }
