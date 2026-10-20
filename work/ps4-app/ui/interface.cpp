@@ -21,7 +21,7 @@ enum class Dialog {Offer,Ready,Notice};
 static Dialog dialog=Dialog::Offer;
 static bool updateLocked=false;
 static lv_obj_t *countdownLabel,*readyLater,*readyNow,*updateStatus,*updateBar;
-static lv_font_t *normal,*large,*heading;
+static lv_font_t *normal,*large,*heading,*lyricFont;
 static std::vector<unsigned char> fontBytes;
 static std::string assets;
 static Actions actions;
@@ -203,14 +203,9 @@ static void albumCard(lv_obj_t* parent,int index,int x,int y,int size) {
 void showHome() {
     page=Page::Home;
     clearContent();
-    auto* hero=panel(content,1128,246,SURFACE,20);lv_obj_set_pos(hero,0,0);
-    label(hero,"LA COLLECTION · JUL",28,25,650,normal,PINK);
-    label(hero,"avant l’usine",28,67,720,heading);
-    label(hero,"Toute la collection, à portée de manette.",28,133,720,normal,MUTED);
-    button(hero,"Explorer la collection",28,180,260,44,[](lv_event_t*){showCollection();});
-    cover(hero,7,876,25,196);
-    label(content,"La collection",0,274,900,large);
-    for(int i=0;i<4;++i)albumCard(content,i,i*286,326,242);
+    label(content,"À l’écoute",0,0,1050,heading);
+    label(content,"Jul · Avant l’usine · Choisissez un volume",0,70,1050,normal,MUTED);
+    for(int i=0;i<8;++i)albumCard(content,i,(i%4)*286,120+(i/4)*320,220);
     focusFirstContent();
 }
 void showCollection() {
@@ -376,7 +371,7 @@ void showLyrics() {
         auto* spans=lv_spangroup_create(row);lv_obj_set_pos(spans,10,10);lv_obj_set_width(spans,620);
         lv_spangroup_set_mode(spans,LV_SPAN_MODE_BREAK);
         auto* spoken=lv_spangroup_new_span(spans);auto* remaining=lv_spangroup_new_span(spans);
-        for(auto* span:{spoken,remaining}){lv_style_set_text_font(lv_span_get_style(span),line.back?normal:large);}
+        for(auto* span:{spoken,remaining}){lv_style_set_text_font(lv_span_get_style(span),line.back?large:lyricFont);}
         lv_style_set_text_color(lv_span_get_style(spoken),lv_color_hex(line.back?PINK:INK));
         lv_style_set_text_color(lv_span_get_style(remaining),lv_color_hex(MUTED));
         lv_span_set_text(spoken,"");lv_span_set_text(remaining,line.text.c_str());lv_spangroup_refresh(spans);
@@ -565,8 +560,10 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     normal=lv_tiny_ttf_create_data(fontBytes.data(),fontBytes.size(),19);
     large=lv_tiny_ttf_create_data(fontBytes.data(),fontBytes.size(),28);
     heading=lv_tiny_ttf_create_data(fontBytes.data(),fontBytes.size(),51);
-    if(!normal||!large||!heading)return false;
+    lyricFont=lv_tiny_ttf_create_data(fontBytes.data(),fontBytes.size(),42);
+    if(!normal||!large||!heading||!lyricFont)return false;
     normal->fallback=&lv_font_montserrat_14;large->fallback=&lv_font_montserrat_14;heading->fallback=&lv_font_montserrat_14;
+    lyricFont->fallback=&lv_font_montserrat_14;
     group=lv_group_create();lv_group_set_default(group);
     auto* root=lv_screen_active();lv_obj_set_style_bg_color(root,lv_color_hex(PAPER),0);lv_obj_remove_flag(root,LV_OBJ_FLAG_SCROLLABLE);
     auto* menu=button(root,"avant l’usine",50,26,238,46,[](lv_event_t*){showMenu();});menuChrome=menu;shortcut(menu,KeyIcon::Touchpad);
@@ -597,7 +594,7 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     button(dock,"+",1083,8,70,44,changeVolume,reinterpret_cast<void*>(intptr_t(10)));
     progress=lv_bar_create(dock);lv_obj_set_pos(progress,640,55);lv_obj_set_size(progress,240,5);lv_bar_set_range(progress,0,1000);
     button(dock,"Paroles",923,57,110,32,[](lv_event_t*){if(page==Page::Lyrics)back();else showLyrics();});
-    button(dock,"Immersion",1041,57,112,32,[](lv_event_t*){showImmersion();});
+    auto* immersive=button(dock,"Immersion",1041,57,112,32,[](lv_event_t*){showImmersion();});lv_obj_set_style_text_font(lv_obj_get_child(immersive,0),&lv_font_montserrat_14,0);
     lv_obj_set_style_bg_color(progress,lv_color_hex(PINK),LV_PART_INDICATOR);
     shortcut(button(dock,"−10 s",340,57,118,32,[](lv_event_t*){if(actions.seek)actions.seek(-10);}),KeyIcon::L2);
     shortcut(button(dock,"+10 s",474,57,126,32,[](lv_event_t*){if(actions.seek)actions.seek(10);}),KeyIcon::R2);

@@ -5,7 +5,7 @@ Ce système est raccordé à l’exécutable de développement `ui-development`,
 ## Parcours implémenté
 
 - Recherche en arrière-plan au démarrage et toutes les six heures ; recherche manuelle dans Réglages.
-- Releases GitHub du seul dépôt `zephiroxDev/avant-usine`, tags `ps4-vX.Y.Z`, hors brouillons et préversions. Parcours paginé ; erreur explicite si la limite empêche de garantir la sélection.
+- Releases GitHub du seul dépôt `zephiroxDev/avant-usine`, tags numériques `ps4-v0.xx` ou `ps4-vX.Y.Z`, hors brouillons ; les préversions numériques 0.xx sont acceptées à partir de 0.24. Parcours paginé ; erreur explicite si la limite empêche de garantir la sélection.
 - Comparaison numérique des versions et fenêtre Plus tard / Sauter / Installer. Le choix Sauter est enregistré atomiquement ; un échec d’écriture est signalé.
 - Après Installer, téléchargement par le worker natif avec pile vérifiée de 2 Mio. La musique et la navigation restent utilisables. Progression affichée sous l’en-tête.
 - Vérification taille/SHA-256/magie PKG, puis vérification native du Title ID ALUS00001. Aucun remplacement de l’installation courante par du code du programme ; aucune désinstallation ou option de remplacement forcé.
@@ -24,7 +24,7 @@ Un essai physique est indispensable pour vérifier la préparation, le report, l
 
 ## Publication d’une future version stable
 
-`scripts/generate_update_manifest.py` produit `ps4-update.json` à partir du vrai PKG, avec son nom, sa taille, son SHA-256, sa version et son identité PS4. La création d’un manifeste stable exige `deviceTested: true` après vérification physique réelle. Les builds de test ne produisent aucun manifeste public.
+`scripts/generate_update_manifest.py` produit `ps4-update.json` à partir du vrai PKG, avec son nom, sa taille, son SHA-256, sa version et son identité PS4. La création d’un manifeste stable exige `deviceTested: true` après vérification physique réelle. Les versions numériques 0.xx produisent un manifeste indiquant leur canal de développement et la valeur réelle de deviceTested. Les suffixes historiques restent exclus.
 
 Le PKG et ce manifeste doivent être joints à la même release stable `ps4-vX.Y.Z` avant sa publication. Le workflow actuel de prototypes conserve ses releases en préversion ; il n’est pas transformé en publication officielle par ce travail. Le site et les autres applications ne sont pas modifiés.
 

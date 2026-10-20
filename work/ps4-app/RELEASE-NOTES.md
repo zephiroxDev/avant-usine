@@ -1,13 +1,14 @@
-Avant l’usine — PS4 — aperçu natif 0.2.0-preview2
+Avant l’usine — PS4 0.24
 
-Correction du plantage immédiat capturé dans le thread alus-update : son contexte était remplacé par un pointeur nul lors de la création du thread. Le contexte est désormais transmis à son point d’entrée. Un test vérifie sa réception et son utilisation. Le correctif cible le crash constaté ; le nouveau lancement sur console reste à confirmer.
+- Nouvelle présentation adaptée à la télévision : navigation arrondie, bibliothèque aérée et grandes paroles.
+- Symboles de manette réservés aux véritables raccourcis. Retour et Paroles retirés du menu supérieur ; paroles accessibles depuis le lecteur.
+- Défilement approximatif rétabli pour les textes non synchronisés, sans remplacer les minutages précis.
+- Correctif de concurrence mémoire : activation des verrous de musl avant les threads natifs, ciblant les crashs constatés dans malloc/free pendant les chargements audio et Highlight.
+- Immersion plein écran avec fond uni et couleur personnalisable, conservée sur la console.
+- Recherche des prochaines versions 0.xx, téléchargement vérifié et choix Plus tard / Sauter / Installer.
 
-Nouvelle interface native : accueil, collection de huit volumes, pochettes, albums et lecteur permanent. Navigation à la manette, lecture MP3 distante, pause, déplacement dans le morceau, volume et indications des touches réglables.
+Version PS4 en développement. Compilation, tests mémoire et rendus contrôlés ; disparition des crashs et installation des mises à jour à confirmer sur console. Les contrôles automatiques ne constituent pas une validation physique.
 
-Cet aperçu public ne contient pas encore l’ensemble du site : comptes, Local complet, paroles, Atelier, playlists, Blind Test et fonctions communautaires restent à porter. Aucun navigateur ni WebView.
+Le portage Windows complet reste inachevé. Collection, lecteur, paroles, connexion par identifiants et première bibliothèque locale sont présents. Aucun navigateur ni WebView.
 
-La recherche de mises à jour, le téléchargement vérifié et le passage à l’installateur sont intégrés au code. Leur fonctionnement sur console, notamment la mise à jour de l’application elle-même, doit encore être testé. Les préversions ne sont pas proposées automatiquement par le service de mises à jour stables.
-
-Ce nouveau moteur d’interface n’a pas encore été exécuté sur une console physique. Le démarrage confirmé de l’ancien test4 ne valide pas cet aperçu. Les contrôles automatisés ne remplacent pas cet essai. Ne pas désinstaller l’application pour mettre à jour ; conserver les sauvegardes habituelles.
-
-Identifiant ALUS00001, APP_VER 01.02. Aucune autre plateforme modifiée. Sources et licences : work/ps4-app, branche console/ps4-test du dépôt zephiroxDev/avant-usine.
+Installation initiale de cet essai via GoldHEN depuis USB0. Les anciens clients excluent les préversions ; 0.24 accepte ensuite les versions numériques 0.xx publiées avec un manifeste correspondant au vrai PKG.

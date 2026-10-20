@@ -69,6 +69,13 @@ jobs:
         run: |
           make ui-development -j2 PS4_FSELF="$PS4_FSELF"
           python3 scripts/check_stack_usage.py
+      - name: Check native interface memory before packaging
+        working-directory: work/ps4-app
+        run: |
+          cmake -S ui -B build/ui-host -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer" -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer" -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"
+          cmake --build build/ui-host -j2
+          mkdir -p build/ui-host-captures
+          timeout 180s build/ui-host/ui-preview "$PWD/ui/assets" "$PWD/build/ui-host-captures"
       - name: Build test PKG
         working-directory: work/ps4-app
         env:
