@@ -53,7 +53,7 @@ static void iconLine(lv_obj_t* parent,const lv_point_precise_t* points,uint32_t 
 }
 static lv_obj_t* keyIcon(lv_obj_t* parent,KeyIcon key,int x,int y) {
     auto* box=lv_obj_create(parent);lv_obj_remove_style_all(box);lv_obj_set_pos(box,x,y);lv_obj_set_size(box,28,26);
-    lv_obj_remove_flag(box,LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_remove_flag(box,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_CLICKABLE));
     lv_obj_add_flag(box,LV_OBJ_FLAG_USER_1);
     static const lv_point_precise_t crossA[]={{7,6},{21,20}},crossB[]={{21,6},{7,20}};
     static const lv_point_precise_t triangle[]={{14,4},{24,21},{4,21},{14,4}};
@@ -65,7 +65,7 @@ static lv_obj_t* keyIcon(lv_obj_t* parent,KeyIcon key,int x,int y) {
     else if(key==KeyIcon::Options){iconLine(box,optionsA,2,INK);iconLine(box,optionsB,2,INK);iconLine(box,optionsC,2,INK);}
     else if(key==KeyIcon::Arrows){iconLine(box,up,3,INK);iconLine(box,down,3,INK);iconLine(box,left,3,INK);iconLine(box,right,3,INK);}
     else {
-        auto* shape=lv_obj_create(box);lv_obj_remove_style_all(shape);lv_obj_remove_flag(shape,LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_SCROLLABLE);
+        auto* shape=lv_obj_create(box);lv_obj_remove_style_all(shape);lv_obj_remove_flag(shape,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_SCROLLABLE));
         bool circle=key==KeyIcon::Circle,square=key==KeyIcon::Square;
         lv_obj_set_pos(shape,circle||square?5:1,circle||square?4:3);lv_obj_set_size(shape,circle||square?18:26,circle||square?18:20);
         lv_obj_set_style_border_width(shape,2,0);lv_obj_set_style_radius(shape,circle?LV_RADIUS_CIRCLE:(square?1:5),0);
@@ -93,7 +93,7 @@ static lv_obj_t* button(lv_obj_t* parent,const std::string& title,int x,int y,in
     auto* b=lv_button_create(parent);lv_obj_remove_style_all(b);lv_obj_set_pos(b,x,y);lv_obj_set_size(b,w,h);
     lv_obj_set_style_bg_color(b,lv_color_hex(0x2c252f),0);lv_obj_set_style_bg_opa(b,LV_OPA_COVER,0);lv_obj_set_style_radius(b,9,0);
     lv_obj_set_style_outline_color(b,lv_color_hex(PINK),LV_STATE_FOCUSED);lv_obj_set_style_outline_width(b,3,LV_STATE_FOCUSED);
-    lv_obj_set_style_outline_pad(b,4,LV_STATE_FOCUSED);lv_obj_remove_flag(b,LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_set_style_outline_pad(b,4,LV_STATE_FOCUSED);lv_obj_remove_flag(b,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_SCROLL_ON_FOCUS));
     lv_obj_set_style_bg_color(b,lv_color_hex(0x463447),LV_STATE_FOCUSED);
     lv_obj_set_style_anim_duration(b,0,0);
     auto* l=label(b,title,12,0,std::max(1,w-56));lv_obj_align(l,LV_ALIGN_LEFT_MID,12,0);
