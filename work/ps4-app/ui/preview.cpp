@@ -42,6 +42,12 @@ int main(int argc,char** argv) {
     unsigned stableFlushes=flushes;
     for(int i=0;i<20;++i){ui::setPlayback(0,43,180,true);ui::setUpdateStatus("Vérification terminée");lv_refr_now(display);}
     require(flushes==stableFlushes);puts("Repeated unchanged playback and update state cause zero redraws");
+    puts("Render timed lyrics with overlapping backing voice");
+    auto lyricDocument=std::make_shared<lyrics::Document>();std::string error;
+    require(lyrics::parse(R"({"duration":180,"sync_mode":"highlight","tracks":[{"id":"main","kind":"main"},{"id":"back","kind":"back"}],"lines":["Une phrase de démonstration","Une seconde phrase","Une voix en arrière-plan"],"times":[40,45,42],"line_ends":[46,50,44],"line_tracks":["main","main","back"],"curves":[[[0,40],[27,46]],[[0,45],[18,50]],[[0,42],[24,44]]]})",*lyricDocument,error));
+    ui::setLyrics(0,lyricDocument,"");ui::showLyrics();ui::setPlayback(0,43,180,true);capture(display,out+"/lyrics.bgra");
+    stableFlushes=flushes;for(int i=0;i<20;++i){ui::setPlayback(0,43,180,true);lv_refr_now(display);}require(flushes==stableFlushes);
+    ui::showAlbum(0);
     auto* mainGroup=ui::navigationGroup();
     puts("Render update");ui::showUpdate("1.0.1");require(ui::navigationGroup()!=mainGroup);capture(display,out+"/update.bgra");
     ui::back();require(ui::navigationGroup()==mainGroup);require(choice==0);

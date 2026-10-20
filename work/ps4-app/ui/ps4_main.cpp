@@ -7,6 +7,8 @@
 #include "catalog.h"
 #include "update_service.h"
 #include "alus_build_version.h"
+#include "lyrics_service.h"
+#include "public_backend_config.h"
 #include <orbis/Pad.h>
 #include <orbis/UserService.h>
 #include <orbis/libkernel.h>
@@ -54,6 +56,7 @@ int main() {
     local::directory("/data/avant-usine-ps4");
     bool audioReady=player::init();
     updates::Service updater("/data/avant-usine-ps4",ALUS_VERSION);
+    lyrics::Service lyricService;
     ui::Actions actions;
     auto playTrack=[audioReady](int index){
         if(audioReady&&index>=0&&index<int(sizeof(tracks)/sizeof(*tracks))) {
@@ -65,6 +68,7 @@ int main() {
     auto next=[playTrack](){playTrack((activeTrack+1)%int(sizeof(tracks)/sizeof(*tracks)));};
     actions.next=next;
     actions.seek=[](int seconds){player::seek(seconds);};
+    actions.seekTo=[](double seconds){player::seekTo(seconds);};
     actions.previous=[playTrack](){int total=int(sizeof(tracks)/sizeof(*tracks));playTrack(activeTrack<=0?total-1:activeTrack-1);};
     actions.volume=[](int percent){currentVolume=percent;player::setVolume(float(percent)/100);};
     actions.hintsChanged=[](bool enabled){return writeHints("/data/avant-usine-ps4/settings.ini",enabled);};
@@ -80,11 +84,15 @@ int main() {
     updater.start();
     uint64_t previous=sceKernelGetProcessTime(),lastPlayback=0;
     updates::Phase displayedPhase=updates::Phase::Idle;
+    int requestedLyrics=-1;unsigned lyricRevision=0;
     while(video::healthy()) {
         uint64_t now=sceKernelGetProcessTime();uint32_t ms=uint32_t((now-previous)/1000);
         if(ms){lv_tick_inc(ms);previous+=uint64_t(ms)*1000;}
         if(now-lastPlayback>=100000){auto state=player::state();ui::setPlayback(activeTrack,state.position,state.duration,state.playing,audioReady?state.message:"Sortie audio indisponible");
             if(state.message=="Termine"&&!state.busy)next();lastPlayback=now;}
+        if(activeTrack>=0&&requestedLyrics!=activeTrack){requestedLyrics=activeTrack;lyricService.request(public_backend::trackKeys[activeTrack]);}
+        auto lyricState=lyricService.snapshot();
+        if(lyricState.revision!=lyricRevision){lyricRevision=lyricState.revision;ui::setLyrics(requestedLyrics,lyricState.document,lyricState.message);}
         pollController();
         lv_timer_handler();
         auto update=updater.tick(sceKernelGetProcessTime()/1000);

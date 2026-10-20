@@ -2,12 +2,15 @@
 #include <functional>
 #include <string>
 #include "lvgl.h"
+#include "lyrics_model.h"
+#include <memory>
 namespace ui {
 struct Actions {
     std::function<void(int)> play;
     std::function<void()> toggle;
     std::function<void()> previous,next;
     std::function<void(int)> seek;
+    std::function<void(double)> seekTo;
     std::function<void(int)> volume;
     std::function<bool(bool)> hintsChanged;
     std::function<void()> checkUpdates;
@@ -19,6 +22,8 @@ void showHome();
 void showCollection();
 void showAlbum(int index);
 void showSettings();
+void showLyrics();
+void setLyrics(int track,std::shared_ptr<const lyrics::Document> document,const std::string& message);
 void showUpdate(const std::string& version);
 void showUpdateReady(const std::string& version,unsigned seconds,bool handingOff=false);
 void showUpdateNotice(const std::string& message);

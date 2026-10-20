@@ -8,6 +8,8 @@
 #include <cstring>
 #include <limits>
 #include <cstdlib>
+#include "public_backend_config.h"
+#include <sstream>
 namespace ui {
 static constexpr uint32_t PAPER=0x151316,INK=0xf5eff3,MUTED=0xb6a9b3,PINK=0xe4a5d1,SURFACE=0x211c23;
 static lv_obj_t *content,*dockTitle,*dockSubtitle,*progress,*clockLabel,*playButtonLabel;
@@ -28,8 +30,17 @@ static bool hintsEnabled=true;
 static lv_obj_t *volumeLabel;
 static std::string settingsNotice;
 static std::string applicationVersion="Développement";
-enum class Page {Home,Collection,Album,Settings};
+enum class Page {Home,Collection,Album,Settings,Lyrics};
 static Page page=Page::Home;
+static int lyricsTrack=-1,followedLine=-1;
+static double playbackPosition=0;
+static bool lyricsFollow=true;
+static std::shared_ptr<const lyrics::Document> lyricsDocument;
+static std::string lyricsMessage;
+static lv_obj_t* lyricsList=nullptr;
+struct LyricRow {lv_obj_t* object;lv_obj_t* spans;lv_span_t *spoken,*remaining;size_t shown;bool active;};
+static std::vector<LyricRow> lyricRows;
+static void paintLyrics();
 enum class KeyIcon {Cross,Circle,Square,Triangle,L1,R1,L2,R2,Options,Arrows};
 static void textIfChanged(lv_obj_t* target,const std::string& text) {
     if(std::strcmp(lv_label_get_text(target),text.c_str()))lv_label_set_text(target,text.c_str());
@@ -106,7 +117,7 @@ static void focusFirstContent() {
         if(!usable(o))continue;
         for(auto* p=lv_obj_get_parent(o);p;p=lv_obj_get_parent(p))if(p==content){lv_group_focus_obj(o);lv_obj_scroll_to_view(o,LV_ANIM_OFF);return;}}
 }
-static void clearContent() { lv_obj_clean(content);lv_obj_scroll_to_y(content,0,LV_ANIM_OFF); }
+static void clearContent() {lyricRows.clear();lyricsList=nullptr;followedLine=-1;lv_obj_clean(content);lv_obj_scroll_to_y(content,0,LV_ANIM_OFF);}
 static void albumEvent(lv_event_t* e) { showAlbum(int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)))); }
 static void trackEvent(lv_event_t* e) {
     int index=int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)));
@@ -183,6 +194,62 @@ void showSettings() {
     if(!settingsNotice.empty())label(content,settingsNotice,0,365,1080,normal,PINK);
     focusFirstContent();
 }
+void showLyrics() {
+    if(updateShade)return;page=Page::Lyrics;clearContent();
+    if(activeTrack<0){label(content,"Choisissez un morceau pour ouvrir ses paroles.",0,30,1100,large);return;}
+    cover(content,tracks[activeTrack].volume,0,16,330);
+    label(content,tracks[activeTrack].title,0,370,360,large);
+    button(content,lyricsFollow?"Suivi auto : activé":"Suivi auto : désactivé",0,421,350,44,[](lv_event_t*){lyricsFollow=!lyricsFollow;showLyrics();});
+    lyricsList=panel(content,744,470,PAPER,0);lv_obj_set_pos(lyricsList,400,0);
+    lv_obj_add_flag(lyricsList,LV_OBJ_FLAG_SCROLLABLE);lv_obj_set_scroll_dir(lyricsList,LV_DIR_VER);
+    lv_obj_set_style_anim_duration(lyricsList,0,0);
+    if(!lyricsDocument||lyricsTrack!=activeTrack) {
+        std::string plain=public_backend::plainLyrics[activeTrack];
+        if(!plain.empty()) {auto* text=label(lyricsList,plain,8,12,704,large);lv_label_set_long_mode(text,LV_LABEL_LONG_WRAP);}
+        else {auto* text=label(lyricsList,lyricsMessage.empty()?"Chargement des paroles…":lyricsMessage,8,20,704,large);lv_label_set_long_mode(text,LV_LABEL_LONG_WRAP);}
+        focusFirstContent();return;
+    }
+    int y=10;
+    for(size_t i=0;i<lyricsDocument->lines.size();++i) {
+        const auto& line=lyricsDocument->lines[i];
+        auto* row=button(lyricsList,"",4,y,718,100,[](lv_event_t* e){size_t index=size_t(reinterpret_cast<uintptr_t>(lv_event_get_user_data(e)));if(lyricsDocument&&index<lyricsDocument->lines.size()&&actions.seekTo)actions.seekTo(lyricsDocument->lines[index].start);},reinterpret_cast<void*>(uintptr_t(i)));
+        lv_obj_set_style_bg_opa(row,LV_OPA_TRANSP,0);lv_obj_set_style_bg_opa(row,LV_OPA_20,LV_STATE_FOCUSED);
+        auto* spans=lv_spangroup_create(row);lv_obj_set_pos(spans,10,10);lv_obj_set_width(spans,656);
+        lv_spangroup_set_mode(spans,LV_SPAN_MODE_BREAK);
+        auto* spoken=lv_spangroup_new_span(spans);auto* remaining=lv_spangroup_new_span(spans);
+        for(auto* span:{spoken,remaining}){lv_style_set_text_font(lv_span_get_style(span),line.back?normal:large);}
+        lv_style_set_text_color(lv_span_get_style(spoken),lv_color_hex(line.back?PINK:INK));
+        lv_style_set_text_color(lv_span_get_style(remaining),lv_color_hex(MUTED));
+        lv_span_set_text(spoken,"");lv_span_set_text(remaining,line.text.c_str());lv_spangroup_refresh(spans);
+        lv_obj_update_layout(spans);int height=std::max(72,int(lv_obj_get_height(spans))+24);lv_obj_set_height(row,height);
+        auto* badge=lv_obj_get_child(row,1);lv_obj_set_y(badge,(height-26)/2);
+        lyricRows.push_back({row,spans,spoken,remaining,size_t(-1),false});y+=height+18;
+    }
+    paintLyrics();focusFirstContent();
+}
+void setLyrics(int track,std::shared_ptr<const lyrics::Document> document,const std::string& message) {
+    lyricsTrack=track;lyricsDocument=std::move(document);lyricsMessage=message;
+    if(page==Page::Lyrics&&!updateShade)showLyrics();
+}
+static void paintLyrics() {
+    if(updateShade||page!=Page::Lyrics||!lyricsDocument||lyricsTrack!=activeTrack)return;
+    int target=-1;
+    for(size_t i=0;i<lyricRows.size();++i) {
+        auto& row=lyricRows[i];const auto& line=lyricsDocument->lines[i];
+        bool active=playbackPosition>=line.start&&playbackPosition<line.end;
+        size_t shown=active?lyrics::revealed(line,playbackPosition,lyricsDocument->highlight):0;
+        if(active&&(target<0||(lyricsDocument->lines[size_t(target)].back&&!line.back)))target=int(i);
+        if(shown!=row.shown||active!=row.active) {
+            std::string spoken=lyrics::prefix(line.text,shown);
+            lv_span_set_text(row.spoken,spoken.c_str());lv_span_set_text(row.remaining,line.text.substr(spoken.size()).c_str());
+            lv_obj_set_style_opa(row.spans,active?LV_OPA_COVER:LV_OPA_40,0);lv_spangroup_refresh(row.spans);
+            row.shown=shown;row.active=active;
+        }
+    }
+    if(lyricsFollow&&target>=0&&target!=followedLine) {
+        lv_obj_scroll_to_view(lyricRows[size_t(target)].object,LV_ANIM_OFF);followedLine=target;
+    }
+}
 static void closeUpdate(int choice,bool notify=true) {
     if(!updateShade)return;
     if(updateLocked&&notify)return;
@@ -192,6 +259,7 @@ static void closeUpdate(int choice,bool notify=true) {
     updateLocked=false;
     if(notify&&previousDialog==Dialog::Offer&&actions.updateChoice)actions.updateChoice(choice);
     if(notify&&previousDialog==Dialog::Ready&&actions.readyChoice)actions.readyChoice(choice);
+    if(page==Page::Lyrics)showLyrics();
 }
 void back() { if(updateShade)closeUpdate(0);else if(page==Page::Album)showCollection();else showHome(); }
 void activateFocused() {
@@ -287,14 +355,17 @@ void setVolumeLevel(int percent) {
 void adjustVolume(int step) {setVolumeLevel(std::max(0,std::min(100,volumePercent+step)));if(actions.volume)actions.volume(volumePercent);}
 void setApplicationVersion(const std::string& version){applicationVersion=version;}
 void setPlayback(int track,float position,float duration,bool playing,const std::string& status) {
+    playbackPosition=position;
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks))&&track!=activeTrack) {
         activeTrack=track;textIfChanged(dockTitle,tracks[track].title);
+        if(page==Page::Lyrics&&!updateShade)showLyrics();
     }
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks)))textIfChanged(dockSubtitle,std::string(volumes[tracks[track].volume].title)+(status.empty()?"":" · "+status));
     textIfChanged(playButtonLabel,playing?"Pause":"Lecture");
     int seconds=position>0?int(position):0,total=duration>0?int(duration):0;char time[64];
     snprintf(time,sizeof(time),"%d:%02d / %d:%02d",seconds/60,seconds%60,total/60,total%60);textIfChanged(clockLabel,time);
     lv_bar_set_value(progress,total>0?int(1000.0f*position/duration):0,LV_ANIM_OFF);
+    paintLyrics();
 }
 bool create(const std::string& directory,Actions callbacks,bool hints) {
     assets=directory;actions=std::move(callbacks);hintsEnabled=hints;
@@ -310,6 +381,7 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     label(root,"avant l’usine",50,28,310,large);
     button(root,"Accueil",350,26,130,46,[](lv_event_t*){showHome();});
     shortcut(button(root,"Collection",496,26,165,46,[](lv_event_t*){showCollection();}),KeyIcon::Square);
+    button(root,"Paroles",690,26,160,46,[](lv_event_t*){showLyrics();});
     shortcut(button(root,"Retour",906,26,140,46,[](lv_event_t*){back();}),KeyIcon::Circle);
     shortcut(button(root,"Réglages",1062,26,160,46,[](lv_event_t*){showSettings();}),KeyIcon::Options);
     updateStatus=label(root,"",58,78,1164,normal,MUTED);

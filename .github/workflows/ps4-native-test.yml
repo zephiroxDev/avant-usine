@@ -23,6 +23,8 @@ jobs:
           "$RUNNER_TEMP/thread-test"
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=address,undefined -g -Iwork/ps4-app/ui work/ps4-app/tests/frame_copy.cpp -o "$RUNNER_TEMP/frame-test"
           "$RUNNER_TEMP/frame-test"
+          g++ -std=c++17 -Wall -Wextra -Werror -Iwork/ps4-app/src -Iwork/ps4-app/vendor -fsanitize=address,undefined -g work/ps4-app/tests/lyrics_model.cpp work/ps4-app/src/lyrics_model.cpp -o "$RUNNER_TEMP/lyrics-test"
+          "$RUNNER_TEMP/lyrics-test"
       - name: Install native compiler
         run: sudo apt-get update -qq && sudo apt-get install -y clang-18 lld-18
       - name: Download and verify OpenOrbis
