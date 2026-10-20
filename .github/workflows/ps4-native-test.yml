@@ -119,7 +119,7 @@ jobs:
           VERSION=$(python3 -c "import json; print(json.load(open('work/ps4-app/release.json'))['version'])")
           cd ps4-package
           sha256sum -c SHA256SUMS.txt
-          gh release create "ps4-v$VERSION" "Avant-Usine-PS4-$VERSION.pkg" SHA256SUMS.txt README.md \
+          gh release create "ps4-v$VERSION" "Avant-l-usine-$VERSION.pkg" ps4-update.json SHA256SUMS.txt README.md \
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
-            --title "Avant l'usine PS4 - prototype $VERSION" --prerelease --latest=false \
+            --title "Avant l'usine $VERSION" --prerelease --latest=false \
             --notes-file "$GITHUB_WORKSPACE/work/ps4-app/RELEASE-NOTES.md"

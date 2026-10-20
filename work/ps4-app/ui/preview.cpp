@@ -49,6 +49,12 @@ int main(int argc,char** argv) {
     ui::setLyrics(0,lyricDocument,"");ui::showLyrics();ui::setPlayback(0,43,180,true);capture(display,out+"/lyrics.bgra");
     stableFlushes=flushes;for(int i=0;i<20;++i){ui::setPlayback(0,43,180,true);lv_refr_now(display);}require(flushes==stableFlushes);
     ui::moveFocus(ui::Direction::Down);ui::activateFocused();require(selectedTime==42);
+    puts("Repeated Highlight frame updates, lyric mode changes and immersion");
+    for(int pass=0;pass<12;++pass){
+        ui::showAlbum(0);ui::setLyrics(0,nullptr,"Chargement");ui::setLyrics(0,lyricDocument,"");ui::showLyrics();
+        for(int tick=0;tick<80;++tick){ui::setPlayback(0,40.0f+tick*.1f,180,true);lv_refr_now(display);}
+    }
+    ui::setPlayback(0,43,180,true);ui::showImmersion();capture(display,out+"/immersion.bgra");ui::back();
     ui::showAlbum(0);
     puts("Render native account and controller keyboard");
     ui::showAccount();capture(display,out+"/account.bgra");

@@ -11,6 +11,10 @@ static std::string get(const std::string&p){std::ifstream f(p,std::ios::binary);
 int main(int argc,char**argv) {
     assert(argc==2);std::string r=argv[1];assert(local::directory(r));
     auto config=r+"/settings.ini";assert(readHints(config));
+    auto color=r+"/immersion-color.ini";assert(readImmersionColor(color)==0x101c31);
+    assert(writeImmersionColor(color,0xabcdef)&&readImmersionColor(color)==0xabcdef);
+    assert(!writeImmersionColor(color,0x1000000)&&readImmersionColor(color)==0xabcdef);
+    put(color,"oops");assert(readImmersionColor(color)==0x101c31);
     assert(writeHints(config,false));assert(!readHints(config));
     assert(writeHints(config,true));assert(readHints(config));
     put(config,"hints=0\nextra");assert(readHints(config));

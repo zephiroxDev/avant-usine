@@ -5,7 +5,9 @@
 int main(int argc,char** argv) {
     assert(argc==2);using namespace updates;
     Version value;
-    for(const auto* invalid:{"","1.0","1.0.0-test4","1.0.0\n","01.0.0","1.0.42949672960","1.0.-1","1.0.1/file"})assert(!parseVersion(invalid,value));
+    for(const auto* invalid:{"","1","1.0.0-test4","1.0.0\n","01.0.0","1.0.42949672960","1.0.-1","1.0.1/file"})assert(!parseVersion(invalid,value));
+    assert(parseVersion("0.24",value)&&value.major==0&&value.minor==24&&value.patch==0);
+    assert(Policy().shouldOffer("0.24","0.25",0));
     assert(parseVersion("v1.0.10",value));assert(value.patch==10);
     Policy policy;
     assert(policy.shouldOffer("1.0.9","1.0.10",0));

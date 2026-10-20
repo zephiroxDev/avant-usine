@@ -12,6 +12,7 @@
 #include "account_service.h"
 #include "local_service.h"
 #include <algorithm>
+#include <cstdio>
 #include <orbis/Pad.h>
 #include <orbis/UserService.h>
 #include <orbis/libkernel.h>
@@ -25,7 +26,7 @@ static uint32_t heldDirection=0;
 static uint64_t repeatAt=0,volumeAt=0;
 static void pollController() {
     OrbisPadData data{};
-    if(scePadReadState(pad,&data)<0){lastButtons=0;heldDirection=0;return;}
+    if(scePadReadState(pad,&data)<0||!data.connected){lastButtons=0;heldDirection=0;return;}
     uint64_t now=sceKernelGetProcessTime()/1000;
     uint32_t buttons=data.buttons;
     int x=int(data.leftStick.x)-128,y=int(data.leftStick.y)-128;
@@ -109,11 +110,13 @@ int main() {
     };
     actions.volume=[](int percent){currentVolume=percent;player::setVolume(float(percent)/100);};
     actions.hintsChanged=[](bool enabled){return writeHints("/data/avant-usine-ps4/settings.ini",enabled);};
+    actions.immersionColorChanged=[](uint32_t color){return writeImmersionColor("/data/avant-usine-ps4/immersion-color.ini",color);};
     actions.checkUpdates=[&](){updater.check();};
     actions.updateChoice=[&](int choice){updater.choose(choice,sceKernelGetProcessTime()/1000);};
     actions.readyChoice=[&](int choice){updater.readyChoice(choice,sceKernelGetProcessTime()/1000);};
     if(!ui::create("/app0/ui/assets",std::move(actions),readHints("/data/avant-usine-ps4/settings.ini"))){player::shutdown();video::shutdown();return 3;}
     ui::setApplicationVersion(ALUS_BUILD_VERSION);
+    ui::setImmersionColor(readImmersionColor("/data/avant-usine-ps4/immersion-color.ini"));
     int savedTrack=-1;float savedPosition=0;
     if(readUpdateSession("/data/avant-usine-ps4/update-session.ini",savedTrack,savedPosition,currentVolume)){
         player::setVolume(float(currentVolume)/100);ui::setVolumeLevel(currentVolume);
@@ -123,6 +126,8 @@ int main() {
     updates::Phase displayedPhase=updates::Phase::Idle;
     int requestedLyrics=-1;unsigned lyricRevision=0;
     unsigned accountRevision=0;
+    uint64_t metricsStarted=previous,handlerTotal=0,handlerMaximum=0,loopCount=0;
+    auto previousMetrics=video::metrics();
     while(video::healthy()) {
         uint64_t now=sceKernelGetProcessTime();uint32_t ms=uint32_t((now-previous)/1000);
         if(ms){lv_tick_inc(ms);previous+=uint64_t(ms)*1000;}
@@ -136,7 +141,19 @@ int main() {
         auto accountState=accounts.tick(now/1000);
         if(accountState.revision!=accountRevision){accountRevision=accountState.revision;ui::setAccount(accountState);}
         pollController();
+        uint64_t handlerStarted=sceKernelGetProcessTime();
         lv_timer_handler();
+        uint64_t handlerElapsed=sceKernelGetProcessTime()-handlerStarted;
+        handlerTotal+=handlerElapsed;handlerMaximum=std::max(handlerMaximum,handlerElapsed);++loopCount;
+        if(now-metricsStarted>=10000000) {
+            auto measured=video::metrics();
+            FILE* diagnostics=fopen("/data/avant-usine-ps4/performance.json.tmp","wb");
+            if(diagnostics){fprintf(diagnostics,"{\"build\":\"%s\",\"windowUs\":%llu,\"inputPolls\":%llu,\"presentedFrames\":%llu,\"handlerTotalUs\":%llu,\"handlerMaxUs\":%llu,\"presentTotalUs\":%llu,\"presentLifetimeMaxUs\":%llu,\"idleFramesAreNotRedrawn\":true}\n",ALUS_BUILD_VERSION,
+                (unsigned long long)(now-metricsStarted),(unsigned long long)loopCount,(unsigned long long)(measured.presented-previousMetrics.presented),
+                (unsigned long long)handlerTotal,(unsigned long long)handlerMaximum,(unsigned long long)(measured.totalPresentUs-previousMetrics.totalPresentUs),(unsigned long long)measured.maxPresentUs);
+                if(fclose(diagnostics)==0)rename("/data/avant-usine-ps4/performance.json.tmp","/data/avant-usine-ps4/performance.json");}
+            metricsStarted=now;handlerTotal=handlerMaximum=loopCount=0;previousMetrics=measured;
+        }
         auto update=updater.tick(sceKernelGetProcessTime()/1000);
         using updates::Phase;
         if(update.phase==Phase::Offered&&displayedPhase!=Phase::Offered&&!ui::textEntryActive())ui::showUpdate(update.version);

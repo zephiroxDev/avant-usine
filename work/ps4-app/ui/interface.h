@@ -20,6 +20,7 @@ struct Actions {
     std::function<void(size_t,unsigned)> localSelect;
     std::function<void(int)> volume;
     std::function<bool(bool)> hintsChanged;
+    std::function<bool(uint32_t)> immersionColorChanged;
     std::function<void()> checkUpdates;
     std::function<void(int)> updateChoice; // 0 later, 1 skip, 2 install
     std::function<void(int)> readyChoice; // 0 later, 1 close now
@@ -30,6 +31,8 @@ void showCollection();
 void showAlbum(int index);
 void showSettings();
 void showLyrics();
+void showImmersion();
+void setImmersionColor(uint32_t color);
 void showAccount();
 void showMenu();
 void showLocal();

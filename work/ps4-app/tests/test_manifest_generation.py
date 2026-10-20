@@ -7,6 +7,9 @@ with tempfile.TemporaryDirectory(dir=root/'build') as directory:
     package=Path(directory)/'Avant-Usine-PS4-1.0.1.pkg';data=b'\x7fCNT'+b'\0'*20000;package.write_bytes(data)
     result=generate(release,package);assert result['bytes']==len(data) and result['sha256']==hashlib.sha256(data).hexdigest()
     assert generate({**release,'version':'1.0.1-test'},package) is None
+    development=Path(directory)/'Avant-l-usine-0.24.pkg';development.write_bytes(data)
+    result=generate({**release,'version':'0.24','deviceTested':False},development)
+    assert result['channel']=='development' and result['deviceTested'] is False
     try:generate({**release,'deviceTested':False},package)
     except ValueError:pass
     else:raise AssertionError('Untested stable release must be blocked')

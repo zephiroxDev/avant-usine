@@ -3,6 +3,17 @@
 #include <cstring>
 #include <unistd.h>
 #include <cmath>
+uint32_t readImmersionColor(const std::string& path) {
+    FILE* f=fopen(path.c_str(),"rb");if(!f)return 0x101c31;
+    char data[16]={};size_t n=fread(data,1,sizeof(data),f);fclose(f);unsigned color=0;int end=0;
+    return n==7&&sscanf(data,"%6x\n%n",&color,&end)==1&&end==7?color:0x101c31;
+}
+bool writeImmersionColor(const std::string& path,uint32_t color) {
+    if(color>0xffffff)return false;auto temporary=path+".tmp";FILE* f=fopen(temporary.c_str(),"wb");if(!f)return false;
+    bool ok=fprintf(f,"%06x\n",unsigned(color))==7&&fflush(f)==0;
+    if(ok)ok=fsync(fileno(f))==0;if(fclose(f)!=0)ok=false;
+    if(ok)ok=rename(temporary.c_str(),path.c_str())==0;if(!ok)remove(temporary.c_str());return ok;
+}
 bool readHints(const std::string& path) {
     FILE* file=fopen(path.c_str(),"rb"); if(!file)return true;
     char value[64]={0};size_t n=fread(value,1,sizeof(value)-1,file);fclose(file);

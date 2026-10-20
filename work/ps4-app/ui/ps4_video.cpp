@@ -18,7 +18,11 @@ static std::vector<uint32_t> cpuPixels;
 static int nextBuffer=0;
 static frame_copy::Rect dirty{};
 static bool hasDirty=false;
+static Metrics measurements;
+static uint64_t flushStarted=0;
+Metrics metrics(){return measurements;}
 static void flush(lv_display_t* target,const lv_area_t* area,uint8_t*) {
+    if(!hasDirty)flushStarted=sceKernelGetProcessTime();
     frame_copy::Rect rect{area->x1,area->y1,area->x2,area->y2};
     frame_copy::copy(static_cast<uint32_t*>(buffers[nextBuffer]),cpuPixels.data(),1280,720,rect);
     dirty=hasDirty?frame_copy::unite(dirty,rect):rect;hasDirty=true;
@@ -40,6 +44,7 @@ static void flush(lv_display_t* target,const lv_area_t* area,uint8_t*) {
         frame_copy::copy(static_cast<uint32_t*>(buffers[nextBuffer]),cpuPixels.data(),1280,720,dirty);
     }
     hasDirty=false;
+    if(ready){uint64_t elapsed=sceKernelGetProcessTime()-flushStarted;++measurements.presented;measurements.totalPresentUs+=elapsed;if(elapsed>measurements.maxPresentUs)measurements.maxPresentUs=elapsed;}
     // LVGL must not wait forever after an output error; main exits on !healthy().
     lv_display_flush_ready(target);
 }

@@ -12,7 +12,7 @@
 #include <sstream>
 #include <numeric>
 namespace ui {
-static constexpr uint32_t PAPER=0x151316,INK=0xf5eff3,MUTED=0xb6a9b3,PINK=0xe4a5d1,SURFACE=0x211c23;
+static constexpr uint32_t PAPER=0x101c31,INK=0xf7f9ff,MUTED=0x9aaecb,PINK=0xb9b9ff,SURFACE=0x1b2c47;
 static lv_obj_t *content,*dockTitle,*dockSubtitle,*progress,*clockLabel,*playButtonLabel;
 static lv_group_t* group;
 static lv_group_t* underlyingGroup=nullptr;
@@ -35,6 +35,8 @@ enum class Page {Home,Collection,Album,Settings,Lyrics,Account,Menu,Local};
 static Page page=Page::Home;
 static int lyricsTrack=-1,followedLine=-1;
 static double playbackPosition=0;
+static double playbackDuration=0;
+static bool approximateLyrics=false;
 static bool lyricsFollow=true;
 static std::shared_ptr<const lyrics::Document> lyricsDocument;
 static std::string lyricsMessage;
@@ -51,6 +53,18 @@ static void openKeyboard(lv_obj_t* field);
 static local::View localView;
 static size_t localPage=0;
 static bool localPlayback=false;
+static bool immersionMode=false;
+static uint32_t immersionColor=0x101c31;
+static lv_obj_t *menuChrome=nullptr,*navigationChrome=nullptr,*colorPreview=nullptr;
+static lv_obj_t* colorValues[3]={nullptr,nullptr,nullptr};
+static void applyImmersionLayout() {
+    for(auto* object:{menuChrome,navigationChrome,updateStatus})if(object){if(immersionMode)lv_obj_add_flag(object,LV_OBJ_FLAG_HIDDEN);else lv_obj_remove_flag(object,LV_OBJ_FLAG_HIDDEN);}
+    lv_obj_set_style_bg_color(lv_screen_active(),lv_color_hex(immersionMode?immersionColor:PAPER),0);
+    lv_obj_set_pos(content,58,immersionMode?28:103);lv_obj_set_size(content,1164,immersionMode?550:479);
+    if(immersionMode&&lyricsList){lv_obj_set_height(lyricsList,540);lv_obj_set_style_bg_color(lyricsList,lv_color_hex(immersionColor),0);}
+}
+void setImmersionColor(uint32_t color){if(color<=0xffffff){immersionColor=color;if(content)applyImmersionLayout();}}
+void showImmersion(){if(updateShade||keyboardShade)return;immersionMode=!immersionMode;showLyrics();}
 enum class KeyIcon {Cross,Circle,Square,Triangle,L1,R1,L2,R2,Options,Arrows,Touchpad};
 static void textIfChanged(lv_obj_t* target,const std::string& text) {
     if(std::strcmp(lv_label_get_text(target),text.c_str()))lv_label_set_text(target,text.c_str());
@@ -105,6 +119,7 @@ static lv_obj_t* primaryBadge(lv_obj_t* button) {
 }
 static void shortcut(lv_obj_t* button,KeyIcon key) {
     auto* old=primaryBadge(button);if(old)lv_obj_delete(old);
+    lv_obj_set_width(lv_obj_get_child(button,0),std::max(1,lv_obj_get_style_width(button,0)-52));
     if(key==KeyIcon::Touchpad) {
         for(uint32_t i=0;i<lv_obj_get_child_count(button);++i){auto* child=lv_obj_get_child(button,i);if(lv_obj_has_flag(child,LV_OBJ_FLAG_USER_2)){lv_obj_delete(child);break;}}
         lv_obj_set_width(lv_obj_get_child(button,0),lv_obj_get_style_width(button,0)-52);
@@ -123,17 +138,12 @@ static lv_obj_t* label(lv_obj_t* parent,const std::string& text,int x,int y,int 
 }
 static lv_obj_t* button(lv_obj_t* parent,const std::string& title,int x,int y,int w,int h,lv_event_cb_t callback,void* data=nullptr) {
     auto* b=lv_button_create(parent);lv_obj_remove_style_all(b);lv_obj_set_pos(b,x,y);lv_obj_set_size(b,w,h);
-    lv_obj_set_style_bg_color(b,lv_color_hex(0x2c252f),0);lv_obj_set_style_bg_opa(b,LV_OPA_COVER,0);lv_obj_set_style_radius(b,9,0);
+    lv_obj_set_style_bg_color(b,lv_color_hex(0x243650),0);lv_obj_set_style_bg_opa(b,LV_OPA_COVER,0);lv_obj_set_style_radius(b,22,0);
     lv_obj_set_style_outline_color(b,lv_color_hex(PINK),LV_STATE_FOCUSED);lv_obj_set_style_outline_width(b,3,LV_STATE_FOCUSED);
     lv_obj_set_style_outline_pad(b,4,LV_STATE_FOCUSED);lv_obj_remove_flag(b,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_SCROLL_ON_FOCUS));
-    lv_obj_set_style_bg_color(b,lv_color_hex(0x463447),LV_STATE_FOCUSED);
+    lv_obj_set_style_bg_color(b,lv_color_hex(0x435b80),LV_STATE_FOCUSED);
     lv_obj_set_style_anim_duration(b,0,0);
-    auto* l=label(b,title,12,0,std::max(1,w-(w>=200?88:52)));lv_obj_set_height(l,lv_font_get_line_height(normal));lv_obj_align(l,LV_ALIGN_LEFT_MID,12,0);
-    keyIcon(b,KeyIcon::Cross,w-37,(h-26)/2);
-    if(w>=200) {
-        auto* arrows=keyIcon(b,KeyIcon::Arrows,w-73,(h-26)/2);lv_obj_add_flag(arrows,LV_OBJ_FLAG_USER_2);lv_obj_add_flag(arrows,LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_event_cb(b,[](lv_event_t* e){auto code=lv_event_get_code(e);if(code!=LV_EVENT_FOCUSED&&code!=LV_EVENT_DEFOCUSED)return;hintVisibility(static_cast<lv_obj_t*>(lv_event_get_target(e)));},LV_EVENT_ALL,nullptr);
-    }
+    auto* l=label(b,title,12,0,std::max(1,w-24));lv_obj_set_height(l,lv_font_get_line_height(normal));lv_obj_align(l,LV_ALIGN_LEFT_MID,12,0);
     lv_obj_add_event_cb(b,callback,LV_EVENT_CLICKED,data);lv_group_add_obj(group,b);return b;
 }
 static void focusFirstContent() {
@@ -169,7 +179,7 @@ static void openKeyboard(lv_obj_t* field) {
     lv_obj_add_event_cb(textKeyboard,[](lv_event_t*){finishTextEntry();},LV_EVENT_READY,nullptr);
     lv_obj_add_event_cb(textKeyboard,[](lv_event_t*){finishTextEntry();},LV_EVENT_CANCEL,nullptr);
 }
-static void clearContent() {lyricRows.clear();lyricsList=nullptr;lyricsFollowLabel=nullptr;followedLine=-1;emailField=passwordField=nullptr;lv_obj_clean(content);lv_obj_scroll_to_y(content,0,LV_ANIM_OFF);}
+static void clearContent() {if(page!=Page::Lyrics)immersionMode=false;approximateLyrics=false;lyricRows.clear();lyricsList=nullptr;lyricsFollowLabel=nullptr;followedLine=-1;emailField=passwordField=nullptr;lv_obj_clean(content);lv_obj_scroll_to_y(content,0,LV_ANIM_OFF);applyImmersionLayout();}
 static void albumEvent(lv_event_t* e) { showAlbum(int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)))); }
 static void trackEvent(lv_event_t* e) {
     int index=int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)));
@@ -187,7 +197,7 @@ static void albumCard(lv_obj_t* parent,int index,int x,int y,int size) {
     lv_obj_set_style_bg_opa(card,LV_OPA_TRANSP,0);cover(card,index,0,0,size);
     label(card,volumes[index].title,0,size+12,size,normal);
     label(card,std::to_string(volumes[index].count)+" morceaux",0,size+38,size,normal,MUTED);
-    auto* badge=primaryBadge(card);lv_obj_set_pos(badge,size-36,8);lv_obj_move_foreground(badge);
+    auto* badge=primaryBadge(card);if(badge){lv_obj_set_pos(badge,size-36,8);lv_obj_move_foreground(badge);}
     for(uint32_t i=0;i<lv_obj_get_child_count(card);++i){auto* child=lv_obj_get_child(card,i);if(lv_obj_has_flag(child,LV_OBJ_FLAG_USER_2)){lv_obj_set_pos(child,size-72,8);lv_obj_move_foreground(child);break;}}
 }
 void showHome() {
@@ -245,6 +255,17 @@ void showSettings() {
         showSettings();
     });
     if(!settingsNotice.empty())label(content,settingsNotice,0,365,1080,normal,PINK);
+    label(content,"Fond uni du mode immersion",0,415,900,large);
+    label(content,"Gauche / droite : ajuster la couleur. Enregistrer pour la conserver.",0,462,1050,normal,MUTED);
+    colorPreview=panel(content,150,160,immersionColor,15);lv_obj_set_pos(colorPreview,920,505);
+    for(int channel=0;channel<3;++channel){
+        int shift=(2-channel)*8,y=510+channel*60;
+        label(content,channel==0?"Rouge":channel==1?"Vert":"Bleu",0,y,100);
+        auto* slider=lv_slider_create(content);lv_obj_set_pos(slider,118,y+6);lv_obj_set_size(slider,610,18);lv_slider_set_range(slider,0,255);lv_slider_set_value(slider,(immersionColor>>shift)&255,LV_ANIM_OFF);lv_group_add_obj(group,slider);
+        colorValues[channel]=label(content,std::to_string((immersionColor>>shift)&255),780,y,90);
+        lv_obj_add_event_cb(slider,[](lv_event_t* e){int c=int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e))),shift=(2-c)*8;auto* slider=static_cast<lv_obj_t*>(lv_event_get_target(e));int value=lv_slider_get_value(slider);immersionColor=(immersionColor&~(0xffu<<shift))|(uint32_t(value)<<shift);lv_obj_set_style_bg_color(colorPreview,lv_color_hex(immersionColor),0);textIfChanged(colorValues[c],std::to_string(value));},LV_EVENT_VALUE_CHANGED,reinterpret_cast<void*>(intptr_t(channel)));
+    }
+    button(content,"Enregistrer la couleur",0,708,450,50,[](lv_event_t*){settingsNotice=actions.immersionColorChanged&&actions.immersionColorChanged(immersionColor)?"Couleur enregistrée.":"Impossible d’enregistrer la couleur.";showSettings();});
     focusFirstContent();
 }
 void showAccount() {
@@ -336,11 +357,12 @@ void showLyrics() {
     auto* follow=button(content,lyricsFollow?"Suivi auto : activé":"Suivi auto : désactivé",0,421,350,44,[](lv_event_t*){lyricsFollow=!lyricsFollow;showLyrics();});
     lyricsFollowLabel=lv_obj_get_child(follow,0);
     lyricsList=panel(content,744,470,PAPER,0);lv_obj_set_pos(lyricsList,400,0);
+    applyImmersionLayout();
     lv_obj_add_flag(lyricsList,LV_OBJ_FLAG_SCROLLABLE);lv_obj_set_scroll_dir(lyricsList,LV_DIR_VER);
     lv_obj_set_style_anim_duration(lyricsList,0,0);
     if(!lyricsDocument||lyricsTrack!=activeTrack) {
         std::string plain=public_backend::plainLyrics[activeTrack];
-        if(!plain.empty()) {auto* text=label(lyricsList,plain,8,12,704,large);lv_label_set_long_mode(text,LV_LABEL_LONG_WRAP);}
+        if(!plain.empty()) {auto* text=label(lyricsList,plain,8,12,704,large);lv_label_set_long_mode(text,LV_LABEL_LONG_WRAP);approximateLyrics=true;}
         else {auto* text=label(lyricsList,lyricsMessage.empty()?"Chargement des paroles…":lyricsMessage,8,20,704,large);lv_label_set_long_mode(text,LV_LABEL_LONG_WRAP);}
         focusFirstContent();return;
     }
@@ -359,7 +381,7 @@ void showLyrics() {
         lv_style_set_text_color(lv_span_get_style(remaining),lv_color_hex(MUTED));
         lv_span_set_text(spoken,"");lv_span_set_text(remaining,line.text.c_str());lv_spangroup_refresh(spans);
         lv_obj_update_layout(spans);int height=std::max(72,int(lv_obj_get_height(spans))+24);lv_obj_set_height(row,height);
-        auto* badge=primaryBadge(row);lv_obj_set_y(badge,(height-26)/2);
+        auto* badge=primaryBadge(row);if(badge)lv_obj_set_y(badge,(height-26)/2);
         for(uint32_t c=0;c<lv_obj_get_child_count(row);++c){auto* child=lv_obj_get_child(row,c);if(lv_obj_has_flag(child,LV_OBJ_FLAG_USER_2))lv_obj_set_y(child,(height-26)/2);}
         lyricRows.push_back({row,spans,spoken,remaining,size_t(-1),i,false});y+=height+18;
     }
@@ -372,10 +394,17 @@ void setLyrics(int track,std::shared_ptr<const lyrics::Document> document,const 
     if(page==Page::Lyrics&&!updateShade)showLyrics();
 }
 static void paintLyrics() {
+    if(!updateShade&&page==Page::Lyrics&&lyricsList&&approximateLyrics&&lyricsFollow&&playbackDuration>0){
+        lv_obj_update_layout(lyricsList);
+        int extent=lv_obj_get_scroll_bottom(lyricsList)+lv_obj_get_scroll_y(lyricsList);
+        double fraction=std::max(0.0,std::min(1.0,playbackPosition/playbackDuration));
+        lv_obj_scroll_to_y(lyricsList,int(std::max(0,extent)*fraction),LV_ANIM_OFF);
+        return;
+    }
     if(updateShade||page!=Page::Lyrics||!lyricsDocument||lyricsTrack!=activeTrack)return;
     int target=-1;
     for(size_t i=0;i<lyricRows.size();++i) {
-        auto& row=lyricRows[i];const auto& line=lyricsDocument->lines[row.source];
+        auto& row=lyricRows[i];if(row.source>=lyricsDocument->lines.size())continue;const auto& line=lyricsDocument->lines[row.source];
         bool active=playbackPosition>=line.start&&playbackPosition<line.end;
         size_t shown=active?lyrics::revealed(line,playbackPosition,lyricsDocument->highlight):0;
         if(active&&(target<0||(lyricsDocument->lines[lyricRows[size_t(target)].source].back&&!line.back)))target=int(i);
@@ -425,6 +454,9 @@ void moveFocus(Direction direction) {
     lv_obj_update_layout(lv_screen_active());
     lv_obj_update_layout(lv_layer_top());
     auto* selected=lv_group_get_focused(group);if(!selected){focusFirstContent();return;}
+    if(lv_obj_check_type(selected,&lv_slider_class)&&(direction==Direction::Left||direction==Direction::Right)){
+        lv_slider_set_value(selected,lv_slider_get_value(selected)+(direction==Direction::Left?-1:1),LV_ANIM_OFF);lv_obj_send_event(selected,LV_EVENT_VALUE_CHANGED,nullptr);return;
+    }
     auto inContent=[](lv_obj_t* object){for(auto* p=object;p;p=lv_obj_get_parent(p))if(p==content)return true;return false;};
     lv_area_t from;lv_obj_get_coords(selected,&from);
     int cx=(from.x1+from.x2)/2,cy=(from.y1+from.y2)/2;
@@ -513,7 +545,7 @@ void setVolumeLevel(int percent) {
 void adjustVolume(int step) {setVolumeLevel(std::max(0,std::min(100,volumePercent+step)));if(actions.volume)actions.volume(volumePercent);}
 void setApplicationVersion(const std::string& version){applicationVersion=version;}
 void setPlayback(int track,float position,float duration,bool playing,const std::string& status) {
-    playbackPosition=position;
+    playbackPosition=position;playbackDuration=duration;
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks))&&track!=activeTrack) {
         localPlayback=false;activeTrack=track;textIfChanged(dockTitle,tracks[track].title);
         if(page==Page::Lyrics&&!updateShade)showLyrics();
@@ -537,14 +569,14 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     normal->fallback=&lv_font_montserrat_14;large->fallback=&lv_font_montserrat_14;heading->fallback=&lv_font_montserrat_14;
     group=lv_group_create();lv_group_set_default(group);
     auto* root=lv_screen_active();lv_obj_set_style_bg_color(root,lv_color_hex(PAPER),0);lv_obj_remove_flag(root,LV_OBJ_FLAG_SCROLLABLE);
-    auto* menu=button(root,"avant l’usine",50,26,238,46,[](lv_event_t*){showMenu();});shortcut(menu,KeyIcon::Touchpad);
+    auto* menu=button(root,"avant l’usine",50,26,238,46,[](lv_event_t*){showMenu();});menuChrome=menu;shortcut(menu,KeyIcon::Touchpad);
     lv_obj_set_style_bg_opa(menu,LV_OPA_TRANSP,0);auto* brand=lv_obj_get_child(menu,0);lv_obj_set_style_text_font(brand,large,0);lv_obj_set_height(brand,lv_font_get_line_height(large));
-    button(root,"Accueil",300,26,130,46,[](lv_event_t*){showHome();});
-    shortcut(button(root,"Collection",442,26,160,46,[](lv_event_t*){showCollection();}),KeyIcon::Square);
-    button(root,"Paroles",614,26,140,46,[](lv_event_t*){showLyrics();});
-    button(root,"Mon compte",766,26,180,46,[](lv_event_t*){showAccount();});
-    shortcut(button(root,"Retour",958,26,122,46,[](lv_event_t*){back();}),KeyIcon::Circle);
-    shortcut(button(root,"Réglages",1092,26,136,46,[](lv_event_t*){showSettings();}),KeyIcon::Options);
+    auto* navigation=panel(root,918,62,SURFACE,31);navigationChrome=navigation;lv_obj_set_pos(navigation,310,18);
+    button(navigation,"Accueil",10,8,150,46,[](lv_event_t*){showHome();});
+    shortcut(button(navigation,"Collection",174,8,190,46,[](lv_event_t*){showCollection();}),KeyIcon::Square);
+    button(navigation,"Local",378,8,140,46,[](lv_event_t*){showLocal();});
+    button(navigation,"Mon compte",532,8,180,46,[](lv_event_t*){showAccount();});
+    shortcut(button(navigation,"Réglages",726,8,180,46,[](lv_event_t*){showSettings();}),KeyIcon::Options);
     updateStatus=label(root,"",58,78,1164,normal,MUTED);
     updateBar=lv_bar_create(root);lv_obj_set_pos(updateBar,58,101);lv_obj_set_size(updateBar,1164,2);lv_bar_set_range(updateBar,0,100);
     lv_obj_set_style_bg_color(updateBar,lv_color_hex(PINK),LV_PART_INDICATOR);lv_obj_add_flag(updateBar,LV_OBJ_FLAG_HIDDEN);
@@ -564,6 +596,8 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     volumeLabel=label(dock,"100 %",1002,20,78,normal,MUTED);
     button(dock,"+",1083,8,70,44,changeVolume,reinterpret_cast<void*>(intptr_t(10)));
     progress=lv_bar_create(dock);lv_obj_set_pos(progress,640,55);lv_obj_set_size(progress,240,5);lv_bar_set_range(progress,0,1000);
+    button(dock,"Paroles",923,57,110,32,[](lv_event_t*){if(page==Page::Lyrics)back();else showLyrics();});
+    button(dock,"Immersion",1041,57,112,32,[](lv_event_t*){showImmersion();});
     lv_obj_set_style_bg_color(progress,lv_color_hex(PINK),LV_PART_INDICATOR);
     shortcut(button(dock,"−10 s",340,57,118,32,[](lv_event_t*){if(actions.seek)actions.seek(-10);}),KeyIcon::L2);
     shortcut(button(dock,"+10 s",474,57,126,32,[](lv_event_t*){if(actions.seek)actions.seek(10);}),KeyIcon::R2);

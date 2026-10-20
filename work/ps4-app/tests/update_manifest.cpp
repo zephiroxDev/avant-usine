@@ -9,6 +9,8 @@ static Json release(const std::string& version,bool prerelease=false) {
 }
 int main() {
     updates::Release selected;std::string error;
+    auto development=release("0.24",true);development["assets"][0]["name"]="Avant-l-usine-0.24.pkg";development["assets"][0]["browser_download_url"]="https://github.com/zephiroxDev/avant-usine/releases/download/ps4-v0.24/Avant-l-usine-0.24.pkg";
+    assert(updates::selectRelease(Json::array({development,release("9.0.0",true)}).dump(),selected,error));assert(selected.version=="0.24"&&selected.packageName=="Avant-l-usine-0.24.pkg");
     assert(updates::selectRelease(Json::array({release("1.0.9"),release("9.0.0",true),release("1.0.10")}).dump(),selected,error));
     assert(selected.version=="1.0.10");assert(selected.bytes==20000);
     Json manifest={{"platform","ps4"},{"native",true},{"browser",false},{"titleId","ALUS00001"},{"contentId","IV0000-ALUS00001_00-AVANTUSINEPS4001"},{"version","1.0.10"},{"appVersion","01.12"},{"package",selected.packageName},{"bytes",20000u},{"sha256",std::string(64,'a')}};

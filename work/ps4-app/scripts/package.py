@@ -45,7 +45,7 @@ project.write(r/'pkg.gp4',encoding='utf-8',xml_declaration=True)
 run('pkg_build','pkg.gp4','.')
 p=r/(release['contentId']+'.pkg');assert p.is_file() and p.stat().st_size>16384
 with p.open('rb') as f:assert f.read(4)==b'\x7fCNT','Invalid PKG header'
-target=r/('Avant-Usine-PS4-'+release['version']+'.pkg')
+target=r/('Avant-l-usine-'+release['version']+'.pkg')
 if p!=target:p.rename(target)
 assert (r/('build/ui-development.elf' if interface else 'build/avant-usine.elf')).read_bytes()[:4]==b'\x7fELF'
 (r/'SHA256SUMS.txt').write_text(hashlib.sha256(target.read_bytes()).hexdigest()+'  '+target.name+'\n')

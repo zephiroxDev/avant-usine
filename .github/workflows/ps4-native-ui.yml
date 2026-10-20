@@ -34,12 +34,12 @@ jobs:
         run: python3 work/ps4-app/scripts/prepare_ui_engine.py
       - name: Compile native interface
         run: |
-          cmake -S work/ps4-app/ui -B work/ps4-app/build/ui -DCMAKE_BUILD_TYPE=Release
+          cmake -S work/ps4-app/ui -B work/ps4-app/build/ui -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer" -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer" -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"
           cmake --build work/ps4-app/build/ui -j2
       - name: Render real native widgets
         run: |
           mkdir -p work/ps4-app/build/ui-captures
-          timeout 60s work/ps4-app/build/ui/ui-preview "$GITHUB_WORKSPACE/work/ps4-app/ui/assets" "$GITHUB_WORKSPACE/work/ps4-app/build/ui-captures"
+          timeout 180s work/ps4-app/build/ui/ui-preview "$GITHUB_WORKSPACE/work/ps4-app/ui/assets" "$GITHUB_WORKSPACE/work/ps4-app/build/ui-captures"
           python3 work/ps4-app/scripts/convert_ui_captures.py work/ps4-app/build/ui-captures
       - uses: actions/upload-artifact@v4
         with:

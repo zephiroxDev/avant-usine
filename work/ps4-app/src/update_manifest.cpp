@@ -34,15 +34,17 @@ bool selectRelease(const std::string& body,Release& output,std::string& error,si
     if(entries)*entries=data.size();
     bool found=false;Version best{};Release selected;
     for(const auto& item:data) {
-        if(!item.is_object()||!flag(item,"draft",false)||!flag(item,"prerelease",false))continue;
+        if(!item.is_object()||!flag(item,"draft",false)||!item.contains("prerelease")||!item["prerelease"].is_boolean())continue;
         std::string tag=text(item,"tag_name");if(tag.compare(0,5,"ps4-v")!=0)continue;
         std::string value=tag.substr(5);Version parsed;
         if(value.empty()||value[0]<'0'||value[0]>'9'||!parseVersion(value,parsed))continue;
+        if(item["prerelease"].get<bool>()&&parsed.major!=0)continue;
         if(!item.contains("assets")||!item["assets"].is_array())continue;
-        Release candidate;candidate.version=value;candidate.tag=tag;candidate.packageName="Avant-Usine-PS4-"+value+".pkg";
+        Release candidate;candidate.version=value;candidate.tag=tag;candidate.packageName="Avant-l-usine-"+value+".pkg";
         for(const auto& asset:item["assets"]) {
             if(!asset.is_object())continue;
             const auto name=text(asset,"name"),url=text(asset,"browser_download_url");
+            if(name=="Avant-Usine-PS4-"+value+".pkg")candidate.packageName=name; // Existing published packages.
             if(name=="ps4-update.json"&&assetUrl(url,tag,name))candidate.manifestUrl=url;
             if(name==candidate.packageName&&assetUrl(url,tag,name)){candidate.packageUrl=url;candidate.bytes=number(asset,"size");}
         }

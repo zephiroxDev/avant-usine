@@ -16,6 +16,7 @@ bool parseVersion(const std::string& input,Version& result) {
             values[field]=values[field]*10+digit;++pos;
         }
         if(pos==start||(pos-start>1&&input[start]=='0'))return false;
+        if(field==1&&pos==input.size())break; // Public console numbering: 0.24 == 0.24.0.
         if(field<2) { if(pos==input.size()||input[pos++]!='.')return false; }
     }
     if(pos!=input.size())return false; // No test/prerelease builds in the public updater.
