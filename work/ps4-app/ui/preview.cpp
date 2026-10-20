@@ -7,7 +7,8 @@
 #include <string>
 static std::vector<unsigned char> pixels(1280*720*4);
 static unsigned flushes=0;
-static void require(bool condition) { if(!condition){fputs("Native preview check failed\n",stderr);std::abort();} }
+static void requireAt(bool condition,int line) { if(!condition){fprintf(stderr,"Native preview check failed at line %d\n",line);std::abort();} }
+#define require(condition) requireAt((condition),__LINE__)
 static void flush(lv_display_t* display,const lv_area_t*,uint8_t*) {++flushes;lv_display_flush_ready(display);}
 static void capture(lv_display_t* display,const std::string& file) {
     lv_obj_update_layout(lv_screen_active());lv_refr_now(display);

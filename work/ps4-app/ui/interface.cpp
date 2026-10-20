@@ -200,6 +200,7 @@ void activateFocused() {
 }
 void moveFocus(Direction direction) {
     lv_obj_update_layout(lv_screen_active());
+    lv_obj_update_layout(lv_layer_top());
     auto* selected=lv_group_get_focused(group);if(!selected){focusFirstContent();return;}
     auto inContent=[](lv_obj_t* object){for(auto* p=object;p;p=lv_obj_get_parent(p))if(p==content)return true;return false;};
     lv_area_t from;lv_obj_get_coords(selected,&from);
