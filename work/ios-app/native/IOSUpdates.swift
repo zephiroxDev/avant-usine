@@ -97,7 +97,7 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
                   hash.range(of: "^[a-fA-F0-9]{64}$", options: .regularExpression) != nil,
                   let size = call.getInt("size"), size > 0,
                   let name = call.getString("name"),
-                  ((url.host == "github.com" && name.range(of: "^Avant-Usine-iOS-[0-9]+\\.[0-9]+\\.[0-9]+-non-signe\\.ipa$", options: .regularExpression) != nil) || (url.host == "djjfzymrkncwhrocpxjo.supabase.co" && name.range(of: "^betatesting-20-0-2-test-[1-9][0-9]*\\.ipa$", options: .regularExpression) != nil))
+                  ((url.host == "github.com" && name.range(of: "^Avant-Usine-iOS-[0-9]+\\.[0-9]+\\.[0-9]+-non-signe\\.ipa$", options: .regularExpression) != nil) || (url.host == "djjfzymrkncwhrocpxjo.supabase.co" && name.range(of: "^betatesting-[0-9]+-[0-9]+-[0-9]+-test-[1-9][0-9]*\\.ipa$", options: .regularExpression) != nil))
             else { call.reject("Informations du paquet invalides."); return }
             self.pending = call
             self.expectedHash = hash.lowercased()
@@ -161,3 +161,4 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
         }
     }
 }
+

@@ -1,7 +1,7 @@
 {
   "platform": "ios",
   "version": "2.0.4",
-  "buildNumber": 32,
+  "buildNumber": 33,
   "releaseId": "20.0.4",
   "channel": "unsigned-beta",
   "source": "../github-sync-import",
