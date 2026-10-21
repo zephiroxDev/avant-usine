@@ -1,0 +1,55 @@
+name: Pause Windows Android and PS4
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/pause-platforms.yml', 'platform-policy.json']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: write
+jobs:
+  pause:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Pause distributions and build workflows, preserving iOS and Pages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import os,json,urllib.request,re,pathlib
+          base='https://api.github.com/repos/'+os.environ['GH_REPO']
+          def api(path,method='GET',body=None):
+              request=urllib.request.Request(base+path,method=method,data=None if body is None else json.dumps(body).encode(),headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json'})
+              with urllib.request.urlopen(request,timeout=60) as response:
+                  data=response.read();return json.loads(data) if data else None
+          releases=[];page=1
+          while True:
+              rows=api('/releases?per_page=100&page='+str(page));releases+=rows
+              if len(rows)<100:break
+              page+=1
+          def paused(tag):return tag.startswith(('android-v','ps4-v')) or re.fullmatch(r'v\d+\.\d+(?:\.\d+)?',tag) is not None
+          targets=[r for r in releases if paused(r['tag_name'])]
+          assert not any(r['tag_name'].startswith('ios-') for r in targets)
+          workflows=api('/actions/workflows?per_page=100')['workflows']
+          names={'windows-release.yml','android-build.yml','android-release.yml'}
+          selected=[w for w in workflows if w['path'].split('/')[-1] in names or w['path'].split('/')[-1].startswith('ps4-')]
+          assert not any('ios' in w['path'] or 'pages' in w['path'] for w in selected)
+          snapshot={'releases':[{'id':r['id'],'tag':r['tag_name'],'draft':r['draft']} for r in targets],'workflows':[{'id':w['id'],'path':w['path'],'state':w['state']} for w in selected]}
+          pathlib.Path('pause-platforms-before.json').write_text(json.dumps(snapshot,indent=2))
+          for w in selected:
+              if w['state']=='active':api('/actions/workflows/'+str(w['id'])+'/disable','PUT')
+          for r in targets:
+              if not r['draft']:api('/releases/'+str(r['id']),'PATCH',{'draft':True})
+          for r in targets:assert api('/releases/'+str(r['id']))['draft']
+          for w in selected:assert api('/actions/workflows/'+str(w['id']))['state']!='active'
+          result={'pausedReleases':len(targets),'disabledWorkflows':len(selected),'iosPreserved':True,'websitePreserved':True,'noAssetsDeleted':True}
+          pathlib.Path('pause-platforms-result.json').write_text(json.dumps(result,indent=2));print(json.dumps(result))
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: platform-pause-receipt
+          path: pause-platforms-*.json
+

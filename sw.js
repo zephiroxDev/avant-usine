@@ -1,5 +1,5 @@
 /* Cache uniquement l’interface locale. Les MP3, paroles et contributions restent en ligne. */
-const AU_CACHE='avant-usine-shell-20v00-4-r1-20261021';
+const AU_CACHE='avant-usine-shell-platform-pause-r2-20261021';
 const AU_BASE=new URL('./',self.location.href);
 const AU_INDEX=new URL('./index.html',AU_BASE).href;
 const AU_OFFLINE=new URL('./offline.html',AU_BASE).href;
@@ -16,4 +16,5 @@ self.addEventListener('fetch',event=>{
  }
  if(AU_ASSETS.includes(url.href))event.respondWith(fetch(request).then(response=>{if(response.ok){const clone=response.clone();event.waitUntil(caches.open(AU_CACHE).then(cache=>cache.put(request,clone)));}return response;}).catch(()=>caches.match(request)));
 });
+
 
