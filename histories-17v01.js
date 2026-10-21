@@ -2116,6 +2116,18 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "ps4": [
     [
+      "0.25 · Application PS4",
+      "21 octobre 2026",
+      "Prisme : une nouvelle direction artistique et des correctifs de stabilité.",
+      [
+        "Accueil asymétrique, plans diagonaux turquoise, grande pochette inclinée et accès aux morceaux et aux volumes.",
+        "Correction de l’activation des verrous mémoire pendant les chargements audio et Highlight. Le binaire compilé est maintenant contrôlé avant publication ; le résultat doit encore être confirmé sur console.",
+        "Accès au dossier racine des données revu pour les explorateurs de fichiers. Les données sont conservées et le fichier de connexion reste privé.",
+        "Version publique 0.25 et numéro système PS4 V10.25. La continuité de l’installation ALUS00001 est conservée.",
+        "La recherche et le téléchargement des versions 0.xx sont conservés. L’installation depuis la 0.24 reste à valider sur PS4."
+      ]
+    ],
+    [
       "0.24 · Application PS4",
       "20 octobre 2026",
       "Nouvelle interface PS4 et correctifs du lecteur. Version en développement.",
@@ -2123,7 +2135,7 @@ window.AU_PLATFORM_HISTORIES={
         "Nouvelle présentation pour la télévision : navigation arrondie, bibliothèque aérée et grandes paroles.",
         "Les indications de manette sont réservées aux véritables raccourcis. Retour et Paroles quittent le menu supérieur ; les paroles sont accessibles dans le lecteur.",
         "Les paroles non synchronisées retrouvent un défilement approximatif pendant la lecture.",
-        "Activation des verrous de mémoire avant les threads natifs pour corriger les corruptions constatées pendant les chargements audio et Highlight. Disparition des crashs à confirmer sur console.",
+        "Première tentative de correction des corruptions mémoire pendant les chargements audio et Highlight, incomplète dans ce binaire et reprise dans la version 0.25.",
         "Immersion plein écran avec un fond uni dont la couleur peut être réglée et enregistrée.",
         "Recherche des prochaines versions numériques 0.xx, téléchargement vérifié et choix Plus tard, Sauter ou Installer. Installation de la mise à jour à confirmer sur PS4."
       ]
