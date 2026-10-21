@@ -79,14 +79,15 @@ jobs:
           VERSION=$(node -p 'require("./release.json").version')
           mkdir -p build/ipa/Payload
           ditto build/Build/Products/Release-iphoneos/App.app build/ipa/Payload/App.app
-          ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload "build/betatesting-20-0-3-test-2.ipa"
-          python scripts/verify-ipa.py "build/betatesting-20-0-3-test-2.ipa"
+          ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload "build/betatesting-20-0-3-test-3.ipa"
+          python scripts/verify-ipa.py "build/betatesting-20-0-3-test-3.ipa"
       - name: Preserve verified IPA before publication
         uses: actions/upload-artifact@v7
         with:
-          name: ios-beta-20-0-3-test-2
+          name: ios-beta-20-0-3-test-3
           path: |
             work/ios-app/build/*.ipa
             work/ios-app/build/livraison.json
           if-no-files-found: error
           retention-days: 7
+

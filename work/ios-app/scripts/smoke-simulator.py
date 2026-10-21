@@ -33,7 +33,7 @@ for phase in ['nativeSeed','nativeVerified']:
     captures=Path('build/simulator-captures');captures.mkdir(parents=True,exist_ok=True)
     run('xcrun','simctl','launch',udid,'com.apple.Preferences')
     samples=[]
-    for step in range(10):
+    for step in range(24):
         time.sleep(5)
         assert background_probe.exists(), 'Native background probe missing'
         sample=json.loads(background_probe.read_text());samples.append(sample)
@@ -52,3 +52,4 @@ for phase in ['nativeSeed','nativeVerified']:
     print('SIMULATOR BACKGROUND VERIFIED '+phase+': '+json.dumps(samples))
     run('xcrun','simctl','terminate',udid,'dev.zephirox.avantusine.ios')
 run('xcrun','simctl','shutdown',udid)
+
