@@ -6,14 +6,14 @@
 // pthread_create bookkeeping. Without this flag malloc/free skip their locks.
 // Layout verified against the pinned SDK ELF (__libc size 112, flag offset 12)
 // and OpenOrbis/musl src/internal/libc.h. Keep locking enabled for process life.
-#if defined(__FreeBSD__) && defined(__x86_64__)
+#if defined(ALUS_OPENORBIS_RUNTIME)
 extern "C" {
 struct AlusMuslRuntime {
     int canDoThreads,threaded,secure;volatile int threadsMinusOne;
     void* auxv;void* tlsHead;size_t tlsSize,tlsAlign,tlsCount,pageSize;
     const void* locale[6];
 };
-extern AlusMuslRuntime __libc;
+extern AlusMuslRuntime __libc __attribute__((visibility("hidden")));
 }
 static_assert(sizeof(AlusMuslRuntime)==112 && offsetof(AlusMuslRuntime,threadsMinusOne)==12,"Pinned musl runtime ABI changed");
 #endif
@@ -21,7 +21,7 @@ static_assert(sizeof(AlusMuslRuntime)==112 && offsetof(AlusMuslRuntime,threadsMi
 namespace native_thread {
 int start(Thread& thread, Entry entry, const char* name, void* argument) {
     if(thread.started || !entry) return -1;
-#if defined(__FreeBSD__) && defined(__x86_64__)
+#if defined(ALUS_OPENORBIS_RUNTIME)
     int expected=0;
     __atomic_compare_exchange_n(&__libc.threadsMinusOne,&expected,1,false,__ATOMIC_SEQ_CST,__ATOMIC_SEQ_CST);
 #endif

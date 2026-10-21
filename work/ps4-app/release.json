@@ -1,7 +1,7 @@
 {
   "platform": "ps4",
-  "version": "0.24",
-  "appVersion": "01.06",
+  "version": "0.25",
+  "appVersion": "10.25",
   "titleId": "ALUS00001",
   "contentId": "IV0000-ALUS00001_00-AVANTUSINEPS4001",
   "target": "PS4 avec homebrew actif ; validation physique requise",
@@ -9,5 +9,5 @@
   "native": true,
   "browser": false,
   "entrypoint": "native-ui",
-  "title": "Avant l'usine 0.24"
+  "title": "Avant l'usine 0.25"
 }

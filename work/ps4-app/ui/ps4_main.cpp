@@ -64,7 +64,7 @@ int main() {
     sceUserServiceInitialize(nullptr);scePadInit();int user=0;sceUserServiceGetInitialUser(&user);
     pad=scePadOpen(user,0,0,nullptr);if(pad<0)return 1;
     lv_init();if(!video::init())return 2;
-    local::directory("/data/avant-usine-ps4");
+    if(!local::applicationDirectory("/data/avant-usine-ps4"))fprintf(stderr,"Application data directory is not browsable\n");
     bool audioReady=player::init();
     updates::Service updater("/data/avant-usine-ps4",ALUS_VERSION);
     lyrics::Service lyricService;

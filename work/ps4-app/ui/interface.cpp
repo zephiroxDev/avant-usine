@@ -12,7 +12,7 @@
 #include <sstream>
 #include <numeric>
 namespace ui {
-static constexpr uint32_t PAPER=0x101c31,INK=0xf7f9ff,MUTED=0x9aaecb,PINK=0xb9b9ff,SURFACE=0x1b2c47;
+static constexpr uint32_t PAPER=0x111523,INK=0xf5f4f5,MUTED=0xa9b9c6,PINK=0x85eddf,SURFACE=0x1c303d;
 static lv_obj_t *content,*dockTitle,*dockSubtitle,*progress,*clockLabel,*playButtonLabel;
 static lv_group_t* group;
 static lv_group_t* underlyingGroup=nullptr;
@@ -56,9 +56,10 @@ static bool localPlayback=false;
 static bool immersionMode=false;
 static uint32_t immersionColor=0x101c31;
 static lv_obj_t *menuChrome=nullptr,*navigationChrome=nullptr,*colorPreview=nullptr;
+static lv_obj_t *prismBack=nullptr,*prismFront=nullptr;
 static lv_obj_t* colorValues[3]={nullptr,nullptr,nullptr};
 static void applyImmersionLayout() {
-    for(auto* object:{menuChrome,navigationChrome,updateStatus})if(object){if(immersionMode)lv_obj_add_flag(object,LV_OBJ_FLAG_HIDDEN);else lv_obj_remove_flag(object,LV_OBJ_FLAG_HIDDEN);}
+    for(auto* object:{menuChrome,navigationChrome,updateStatus,prismBack,prismFront})if(object){if(immersionMode)lv_obj_add_flag(object,LV_OBJ_FLAG_HIDDEN);else lv_obj_remove_flag(object,LV_OBJ_FLAG_HIDDEN);}
     lv_obj_set_style_bg_color(lv_screen_active(),lv_color_hex(immersionMode?immersionColor:PAPER),0);
     lv_obj_set_pos(content,58,immersionMode?28:103);lv_obj_set_size(content,1164,immersionMode?550:479);
     if(immersionMode&&lyricsList){lv_obj_set_height(lyricsList,540);lv_obj_set_style_bg_color(lyricsList,lv_color_hex(immersionColor),0);}
@@ -138,10 +139,10 @@ static lv_obj_t* label(lv_obj_t* parent,const std::string& text,int x,int y,int 
 }
 static lv_obj_t* button(lv_obj_t* parent,const std::string& title,int x,int y,int w,int h,lv_event_cb_t callback,void* data=nullptr) {
     auto* b=lv_button_create(parent);lv_obj_remove_style_all(b);lv_obj_set_pos(b,x,y);lv_obj_set_size(b,w,h);
-    lv_obj_set_style_bg_color(b,lv_color_hex(0x243650),0);lv_obj_set_style_bg_opa(b,LV_OPA_COVER,0);lv_obj_set_style_radius(b,22,0);
+    lv_obj_set_style_bg_color(b,lv_color_hex(SURFACE),0);lv_obj_set_style_bg_opa(b,LV_OPA_COVER,0);lv_obj_set_style_radius(b,5,0);
     lv_obj_set_style_outline_color(b,lv_color_hex(PINK),LV_STATE_FOCUSED);lv_obj_set_style_outline_width(b,3,LV_STATE_FOCUSED);
     lv_obj_set_style_outline_pad(b,4,LV_STATE_FOCUSED);lv_obj_remove_flag(b,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_SCROLL_ON_FOCUS));
-    lv_obj_set_style_bg_color(b,lv_color_hex(0x435b80),LV_STATE_FOCUSED);
+    lv_obj_set_style_bg_color(b,lv_color_hex(0x35545b),LV_STATE_FOCUSED);
     lv_obj_set_style_anim_duration(b,0,0);
     auto* l=label(b,title,12,0,std::max(1,w-24));lv_obj_set_height(l,lv_font_get_line_height(normal));lv_obj_align(l,LV_ALIGN_LEFT_MID,12,0);
     lv_obj_add_event_cb(b,callback,LV_EVENT_CLICKED,data);lv_group_add_obj(group,b);return b;
@@ -185,12 +186,13 @@ static void trackEvent(lv_event_t* e) {
     int index=int(reinterpret_cast<intptr_t>(lv_event_get_user_data(e)));
     if(actions.play)actions.play(index);
 }
-static void cover(lv_obj_t* parent,int index,int x,int y,int size) {
+static lv_obj_t* cover(lv_obj_t* parent,int index,int x,int y,int size) {
     auto* frame=panel(parent,size,size,PAPER,7);lv_obj_set_pos(frame,x,y);lv_obj_set_style_clip_corner(frame,true,0);
     auto* image=lv_image_create(frame);char file[64];snprintf(file,sizeof(file),"/cover-%02d.png",index+1);
     std::string src="A:"+assets+file;lv_image_set_src(image,src.c_str());
     lv_obj_set_pos(image,0,0);lv_image_set_scale(image,size*256/360);
     lv_image_set_pivot(image,0,0);
+    return frame;
 }
 static void albumCard(lv_obj_t* parent,int index,int x,int y,int size) {
     auto* card=button(parent,"",x,y,size,size+65,albumEvent,reinterpret_cast<void*>(intptr_t(index)));
@@ -203,9 +205,24 @@ static void albumCard(lv_obj_t* parent,int index,int x,int y,int size) {
 void showHome() {
     page=Page::Home;
     clearContent();
-    label(content,"À l’écoute",0,0,1050,heading);
-    label(content,"Jul · Avant l’usine · Choisissez un volume",0,70,1050,normal,MUTED);
-    for(int i=0;i<8;++i)albumCard(content,i,(i%4)*286,120+(i/4)*320,220);
+    const int selected=activeTrack>=0?activeTrack:0;
+    label(content,"JUL / AVANT L’USINE",0,12,680,normal,PINK);
+    label(content,tracks[selected].title,0,55,690,heading);
+    label(content,volumes[tracks[selected].volume].title,0,123,640,normal,MUTED);
+    auto* listen=button(content,"Écouter",0,168,182,48,trackEvent,reinterpret_cast<void*>(intptr_t(selected)));
+    lv_obj_set_style_bg_color(listen,lv_color_hex(PINK),0);
+    lv_obj_set_style_text_color(lv_obj_get_child(listen,0),lv_color_hex(PAPER),0);
+    button(content,"Paroles",200,168,180,48,[](lv_event_t*){showLyrics();});
+    auto* artwork=cover(content,tracks[selected].volume,800,54,298);
+    lv_obj_set_style_transform_rotation(artwork,-80,0);
+    for(int n=0;n<4;++n){
+        int i=(selected+n)%int(sizeof(tracks)/sizeof(*tracks));
+        auto* row=button(content,"",0,241+n*57,684,48,trackEvent,reinterpret_cast<void*>(intptr_t(i)));
+        lv_obj_set_style_bg_opa(row,LV_OPA_30,0);
+        label(row,std::to_string(n+1),14,13,34,normal,MUTED);
+        label(row,tracks[i].title,57,13,545);
+    }
+    button(content,"Tous les volumes",800,389,298,48,[](lv_event_t*){showCollection();});
     focusFirstContent();
 }
 void showCollection() {
@@ -544,6 +561,7 @@ void setPlayback(int track,float position,float duration,bool playing,const std:
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks))&&track!=activeTrack) {
         localPlayback=false;activeTrack=track;textIfChanged(dockTitle,tracks[track].title);
         if(page==Page::Lyrics&&!updateShade)showLyrics();
+        else if(page==Page::Home&&!updateShade)showHome();
     }
     if(track>=0&&track<int(sizeof(tracks)/sizeof(*tracks)))textIfChanged(dockSubtitle,std::string(volumes[tracks[track].volume].title)+(status.empty()?"":" · "+status));
     textIfChanged(playButtonLabel,playing?"Pause":"Lecture");
@@ -566,9 +584,17 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     lyricFont->fallback=&lv_font_montserrat_14;
     group=lv_group_create();lv_group_set_default(group);
     auto* root=lv_screen_active();lv_obj_set_style_bg_color(root,lv_color_hex(PAPER),0);lv_obj_remove_flag(root,LV_OBJ_FLAG_SCROLLABLE);
+    // Static diagonal planes: no animation, offscreen widget tree or per-frame blur.
+    static const lv_point_precise_t backPoints[]={{1110,-160},{590,850}},frontPoints[]={{1400,-160},{880,850}};
+    auto plane=[root](const lv_point_precise_t* points,uint32_t color,int width){
+        auto* line=lv_line_create(root);lv_obj_set_pos(line,0,0);lv_line_set_points(line,points,2);
+        lv_obj_set_style_line_color(line,lv_color_hex(color),0);lv_obj_set_style_line_width(line,width,0);
+        lv_obj_remove_flag(line,static_cast<lv_obj_flag_t>(LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_SCROLLABLE));return line;
+    };
+    prismBack=plane(backPoints,0x244950,260);prismFront=plane(frontPoints,0x30656b,260);
     auto* menu=button(root,"avant l’usine",50,26,238,46,[](lv_event_t*){showMenu();});menuChrome=menu;shortcut(menu,KeyIcon::Touchpad);
     lv_obj_set_style_bg_opa(menu,LV_OPA_TRANSP,0);auto* brand=lv_obj_get_child(menu,0);lv_obj_set_style_text_font(brand,large,0);lv_obj_set_height(brand,lv_font_get_line_height(large));
-    auto* navigation=panel(root,918,62,SURFACE,31);navigationChrome=navigation;lv_obj_set_pos(navigation,310,18);
+    auto* navigation=panel(root,918,62,SURFACE,5);navigationChrome=navigation;lv_obj_set_pos(navigation,310,18);lv_obj_set_style_bg_opa(navigation,LV_OPA_TRANSP,0);
     button(navigation,"Accueil",10,8,150,46,[](lv_event_t*){showHome();});
     shortcut(button(navigation,"Collection",174,8,190,46,[](lv_event_t*){showCollection();}),KeyIcon::Square);
     button(navigation,"Local",378,8,140,46,[](lv_event_t*){showLocal();});
@@ -580,7 +606,7 @@ bool create(const std::string& directory,Actions callbacks,bool hints) {
     content=lv_obj_create(root);lv_obj_remove_style_all(content);lv_obj_set_pos(content,58,103);lv_obj_set_size(content,1164,479);
     lv_obj_set_scroll_dir(content,LV_DIR_VER);lv_obj_set_scrollbar_mode(content,LV_SCROLLBAR_MODE_AUTO);
     lv_obj_set_style_anim_duration(content,0,0);
-    auto* dock=panel(root,1164,94,SURFACE,15);lv_obj_set_pos(dock,58,598);
+    auto* dock=panel(root,1164,94,SURFACE,5);lv_obj_set_pos(dock,58,598);
     dockTitle=label(dock,"Choisissez un morceau",22,12,295);dockSubtitle=label(dock,"La collection",22,43,295,normal,MUTED);
     shortcut(button(dock,"",340,10,52,40,[](lv_event_t*){if(actions.previous)actions.previous();}),KeyIcon::L1);
     auto* toggle=button(dock,"Lecture",404,10,132,40,[](lv_event_t*){if(actions.toggle)actions.toggle();});playButtonLabel=lv_obj_get_child(toggle,0);

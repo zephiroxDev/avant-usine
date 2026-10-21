@@ -6,10 +6,18 @@
 #include <iterator>
 #include <unistd.h>
 #include <iostream>
+#include <sys/stat.h>
 static void put(const std::string&p,const std::string&v){std::ofstream f(p,std::ios::binary);f<<v;}
 static std::string get(const std::string&p){std::ifstream f(p,std::ios::binary);return {std::istreambuf_iterator<char>(f),{}};}
 int main(int argc,char**argv) {
     assert(argc==2);std::string r=argv[1];assert(local::directory(r));
+    auto appRoot=r+"/app-root";assert(local::applicationDirectory(appRoot));
+    struct stat mode{};assert(stat(appRoot.c_str(),&mode)==0&&(mode.st_mode&0777)==0755);
+    auto secret=appRoot+"/account-refresh";put(secret,"private");assert(chmod(secret.c_str(),0600)==0);
+    assert(chmod(appRoot.c_str(),0700)==0&&local::applicationDirectory(appRoot));
+    assert(stat(secret.c_str(),&mode)==0&&(mode.st_mode&0777)==0600&&get(secret)=="private");
+    auto appLink=r+"/app-link";assert(symlink(appRoot.c_str(),appLink.c_str())==0);
+    assert(!local::applicationDirectory(appLink));
     auto config=r+"/settings.ini";assert(readHints(config));
     auto color=r+"/immersion-color.ini";assert(readImmersionColor(color)==0x101c31);
     assert(writeImmersionColor(color,0xabcdef)&&readImmersionColor(color)==0xabcdef);

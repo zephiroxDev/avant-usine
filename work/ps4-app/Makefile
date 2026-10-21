@@ -2,7 +2,7 @@ SDK := $(OO_PS4_TOOLCHAIN)
 CXX := clang++-18
 LD := ld.lld-18
 PS4_FSELF ?= $(SDK)/bin/linux/create-fself
-FLAGS := --target=x86_64-pc-freebsd12-elf -D_GNU_SOURCE -fPIC -funwind-tables -fstack-usage -std=c++17 -O2 -isysroot $(SDK) -isystem $(SDK)/include -isystem $(SDK)/include/c++/v1 -Isrc -Ivendor
+FLAGS := --target=x86_64-pc-freebsd12-elf -DALUS_OPENORBIS_RUNTIME=1 -D_GNU_SOURCE -fPIC -funwind-tables -fstack-usage -std=c++17 -O2 -isysroot $(SDK) -isystem $(SDK)/include -isystem $(SDK)/include/c++/v1 -Isrc -Ivendor
 SOURCES := $(wildcard src/*.cpp) vendor/graphics.cpp
 OBJECTS := $(patsubst %.cpp,build/%.o,$(SOURCES))
 LIBS := -lc -lkernel -lc++ -lSceVideoOut -lSceSysmodule -lScePad -lSceUserService -lSceAudioOut -lSceNet -lSceSsl -lSceHttp
@@ -26,5 +26,6 @@ ui-development: build/alus_build_version.h $(filter-out build/src/main.o build/v
 	$(CXX) $(FLAGS) -Iui -Ibuild -Ireference/lvgl -DLV_CONF_INCLUDE_SIMPLE -c ui/ps4_main.cpp -o build/ui-main.o
 	$(CXX) $(FLAGS) -Iui -Ireference/lvgl -DLV_CONF_INCLUDE_SIMPLE -c ui/ps4_video.cpp -o build/ui-video.o
 	$(LD) -m elf_x86_64 -pie --script $(SDK)/link.x --eh-frame-hdr -L$(SDK)/lib build/ui-main.o build/ui-video.o $(filter-out build/src/main.o build/vendor/graphics.o build/src/lyrics_model.o build/src/account_model.o,$(OBJECTS)) build/ui-native/libavant_ui.a build/ui-native/liblvgl.a $(LIBS) $(SDK)/lib/crt1.o -o build/ui-development.elf
+	python3 scripts/verify_runtime_heap.py build/ui-development.elf
 	$(PS4_FSELF) -in=build/ui-development.elf -out=build/ui-development.oelf --eboot build/ui-development.bin --paid 0x3800000000000011
 .PHONY: ui-development

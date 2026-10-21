@@ -19,6 +19,14 @@ bool directory(const std::string& p) {
     struct stat s{};return (mkdir(p.c_str(),0700)==0)||
         (errno==EEXIST&&lstat(p.c_str(),&s)==0&&S_ISDIR(s.st_mode));
 }
+bool applicationDirectory(const std::string& p) {
+    if(!directory(p))return false;
+    int fd=open(p.c_str(),O_RDONLY|O_NOFOLLOW);
+    if(fd<0)return false;
+    struct stat s{};
+    bool ok=fstat(fd,&s)==0&&S_ISDIR(s.st_mode)&&fchmod(fd,0755)==0;
+    close(fd);return ok;
+}
 std::vector<Entry> list(const std::string& p) {
     std::vector<Entry> result;DIR* d=opendir(p.c_str());if(!d)return result;
     while(auto e=readdir(d)) {

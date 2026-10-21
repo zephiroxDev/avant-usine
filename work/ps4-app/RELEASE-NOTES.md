@@ -1,14 +1,10 @@
-Avant l’usine — PS4 0.24
+Avant l’usine — PS4 0.25
 
-- Nouvelle présentation adaptée à la télévision : navigation arrondie, bibliothèque aérée et grandes paroles.
-- Symboles de manette réservés aux véritables raccourcis. Retour et Paroles retirés du menu supérieur ; paroles accessibles depuis le lecteur.
-- Défilement approximatif rétabli pour les textes non synchronisés, sans remplacer les minutages précis.
-- Correctif de concurrence mémoire : activation des verrous de musl avant les threads natifs, ciblant les crashs constatés dans malloc/free pendant les chargements audio et Highlight.
-- Immersion plein écran avec fond uni et couleur personnalisable, conservée sur la console.
-- Recherche des prochaines versions 0.xx, téléchargement vérifié et choix Plus tard / Sauter / Installer.
+- Direction artistique Prisme : plans diagonaux turquoise, accueil asymétrique, grande pochette inclinée, sélection de morceaux et accès aux volumes.
+- Correction de l’activation des verrous mémoire avant les threads natifs. La condition de compilation de la 0.24 excluait cette activation du binaire. Un contrôle du vrai exécutable empêche désormais l’empaquetage si elle est absente.
+- Le dossier de données racine devient parcourable après le lancement de l’application. Les fichiers de connexion restent privés ; aucune suppression des données existantes. Le crash de PS4-Xplorer signalé à l’ouverture doit encore être retesté sur console.
+- Version affichée 0.25, numéro système V10.25 et identifiant ALUS00001 conservé pour la continuité de l’installation.
 
-Version PS4 en développement. Compilation, tests mémoire et rendus contrôlés ; disparition des crashs et installation des mises à jour à confirmer sur console. Les contrôles automatiques ne constituent pas une validation physique.
+Version PS4 en développement. Les contrôles de compilation, de mémoire et du binaire ne constituent pas une validation physique. Les crashs Highlight et la mise à jour de l’installation 0.24 nécessitent encore un essai sur la console.
 
-Le portage Windows complet reste inachevé. Collection, lecteur, paroles, connexion par identifiants et première bibliothèque locale sont présents. Aucun navigateur ni WebView.
-
-Installation initiale de cet essai via GoldHEN depuis USB0. Les anciens clients excluent les préversions ; 0.24 accepte ensuite les versions numériques 0.xx publiées avec un manifeste correspondant au vrai PKG.
+Les choix Plus tard / Sauter / Installer et la vérification du téléchargement sont conservés. Les données locales et les réglages restent conservés. Les autres plateformes ne sont pas modifiées par ce paquet.
