@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "20.0.4 · Site PC",
+      "21 octobre 2026",
+      "Les paroles suivent vos déplacements dans le morceau.",
+      [
+        "Cliquer sur une phrase rejoint son horodatage de début et réactive le suivi automatique des paroles.",
+        "Les anciennes phrases ne réapparaissent plus en fondu après un saut. Les backs et chevauchements prévus sont conservés."
+      ]
+    ],
+    [
       "20.0.2 · Site PC",
       "16 octobre 2026",
       "Les paroles deviennent des repères de lecture.",
@@ -973,6 +982,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "20.0.4 · Site mobile",
+      "21 octobre 2026",
+      "Les paroles suivent vos déplacements dans le morceau.",
+      [
+        "Cliquer sur une phrase rejoint son horodatage de début et réactive le suivi automatique des paroles.",
+        "Les anciennes phrases ne réapparaissent plus en fondu après un saut. Les backs et chevauchements prévus sont conservés."
+      ]
+    ],
     [
       "20.0.2 · Site mobile",
       "16 octobre 2026",

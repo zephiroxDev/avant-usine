@@ -2,6 +2,29 @@
   "format": 1,
   "images": [
     {
+      "id": "20v00-4",
+      "patch": "20.0.4",
+      "image": "promo-20v00-4.png",
+      "original": "promo-20v00-4.png",
+      "animation": "promo-20v00-4-anime.mp4",
+      "platforms": [
+        "Site PC et mobile",
+        "Windows 0.6.4",
+        "Android 0.3.4",
+        "iPhone et iPad 2.0.4"
+      ]
+    },
+    {
+      "id": "ps4-0-25",
+      "patch": "0.25",
+      "image": "promo-ps4-0-25.png",
+      "original": "promo-ps4-0-25.png",
+      "animation": "promo-ps4-0-25-anime.mp4",
+      "platforms": [
+        "PS4 0.25"
+      ]
+    },
+    {
       "id": "20v00-3",
       "patch": "20.0.3",
       "image": "promo-20v00-3-vivant.png",
