@@ -1,6 +1,7 @@
 // Private build transport. Creator JWTs can mint five-minute download tickets;
 // only the existing deployment credential can upload a fixed, verified test build.
 import {sha256} from 'npm:@noble/hashes@1.8.0/sha256';
+import {allowedBetaRelease} from './beta-metadata.mjs';
 const root=Deno.env.get('SUPABASE_URL')!,key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,bucket='au-beta-builds';
 const cors={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'authorization,apikey,content-type,x-client-info','Access-Control-Allow-Methods':'POST,GET,OPTIONS'};
 const enc=new TextEncoder(),hex=(v:Uint8Array)=>Array.from(v,n=>n.toString(16).padStart(2,'0')).join('');
@@ -34,7 +35,7 @@ Deno.serve(async request=>{
   if(body.action==='download'){const owner=await creator(token),rows=await api('/rest/v1/au_beta_builds_20?id=eq.'+encodeURIComponent(body.id)+'&ready=eq.true&select=id');if(!rows.length)return result({error:'unavailable'},404);const ticket=b64(JSON.stringify({id:rows[0].id,user:owner,exp:Date.now()+300000}));return result({url:root+'/functions/v1/beta-builds?ticket='+ticket+'&signature='+await mac(ticket)});}
   await deployment(token);
   if(body.action==='prepare'){
-   const m=body.metadata;if(!m||m.patch!=='20.0.2'||m.platform!=='ios'||!/^betatesting-20-0-2-test-[1-9][0-9]*\.ipa$/.test(m.object_path)||!/^2\.0\.2$/.test(m.version)||!Number.isInteger(m.build_number)||m.build_number<30||m.bytes<1||m.bytes>300000000||!/^[a-f0-9]{64}$/.test(m.sha256)||!Array.isArray(m.parts)||m.parts.length<1||m.parts.length>80)throw Error('invalid_metadata');
+   const m=body.metadata;if(!allowedBetaRelease(m)||m.platform!=='ios'||!Number.isInteger(m.build_number)||m.build_number<30||m.bytes<1||m.bytes>300000000||!/^[a-f0-9]{64}$/.test(m.sha256)||!Array.isArray(m.parts)||m.parts.length<1||m.parts.length>80)throw Error('invalid_metadata');
    let total=0;for(let i=0;i<m.parts.length;i++){const p=m.parts[i];if(p.path!==m.object_path+'/part-'+String(i).padStart(3,'0')||!Number.isInteger(p.bytes)||p.bytes<1||p.bytes>4194304||!/^[a-f0-9]{64}$/.test(p.sha256))throw Error('invalid_part');total+=p.bytes;}if(total!==m.bytes)throw Error('invalid_size');
    const existing=await api('/rest/v1/au_beta_builds_20?object_path=eq.'+encodeURIComponent(m.object_path)+'&select=id,ready');if(existing[0]?.ready)throw Error('immutable_build');
    const record={patch:m.patch,platform:m.platform,version:m.version,build_number:m.build_number,object_path:m.object_path,sha256:m.sha256,bytes:m.bytes,notes:String(m.notes||'').slice(0,4000),parts:m.parts,ready:false};let id;
@@ -49,3 +50,4 @@ Deno.serve(async request=>{
   return result({error:'unknown_action'},400);
  }catch(e){const message=e instanceof Error?e.message:'';return result({error:message==='not_creator'||message==='not_deployment'?'access_denied':'beta_service_unavailable'},message==='not_creator'||message==='not_deployment'?403:502);}
 });
+
