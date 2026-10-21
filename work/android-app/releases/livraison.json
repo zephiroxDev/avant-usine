@@ -1,270 +1,216 @@
 {
   "platform": "android",
-  "version": "0.3.3",
-  "versionCode": 25,
-  "file": "Avant-Usine-Android-0.3.3.apk",
-  "bytes": 151465706,
-  "sha256": "cf89063f421dabe7e92cd11a4602aea856ebca6b1f96a267e90b2583059edf5a",
+  "version": "0.3.4",
+  "versionCode": 26,
+  "sourceCommit": "2daff408e443617226b5a65545bbb2ae841867f2",
+  "file": "Avant-Usine-Android-0.3.4.apk",
+  "bytes": 140361443,
+  "sha256": "0ac5514f53480c30106b41c4c7370e66871d10a3bcd2c6119fb9d6a934090c56",
   "certificateSha256": "c56f1a5c2043a653b57729f8ad8cb7346c95fae2917c79307c4c699398a751b3",
   "parts": [
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part000",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part000",
       "bytes": 4194304,
-      "sha256": "e59870509b1d9442eb4d5d26142a2cf1b9a877042b95abcb5e4deb0bd204d425",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part000"
+      "sha256": "f8b73aaba6346706274586f15750abb071466cd7e8ae4fe136e836c7574d6712",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part000"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part001",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part001",
       "bytes": 4194304,
-      "sha256": "0a5e1eedc8c915496bea727b9745da382e9e20d86e8a63a6413d24f1c6425b2d",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part001"
+      "sha256": "7278da93c1e4324c61323f3b2675919307ffe87f38f33662e487e63341ad7147",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part001"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part002",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part002",
       "bytes": 4194304,
-      "sha256": "f8896e1b0fedbd939af13fbbaa6c715cf027415a3ee1b74def70652f82e3de62",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part002"
+      "sha256": "02794a38b6db013b7add9887edecb224a2009666159c7bfdeaf519d9fab9aff6",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part002"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part003",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part003",
       "bytes": 4194304,
-      "sha256": "0b3f6b69bf849a71550435c28a4ba6dbd9666015d939102974b92aacaac2d7f7",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part003"
+      "sha256": "96d9ae4b751a7da242bdeb02cd3855998794745827298ca2b6639f6d0fa5fba3",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part003"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part004",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part004",
       "bytes": 4194304,
-      "sha256": "2a6e322870ffbbe3550b53032aac06d2943c4b21c8441eeafa20d7e318aef129",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part004"
+      "sha256": "fc32b7ea42c4531e31c6a139d96db21e7a104ed9fb63c7469837e710542fa0e3",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part004"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part005",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part005",
       "bytes": 4194304,
-      "sha256": "73f64c9ce47cef36b27658369ab92eced9756d56c1c6a57f100b059d0fee9038",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part005"
+      "sha256": "f3bdfcf2f4680b5d64d42093a0b555f814521deaf6f715a637f2ed6aee610a4b",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part005"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part006",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part006",
       "bytes": 4194304,
-      "sha256": "00854ec0e87d25af1ad1d2263c59bc0400135a6b778b9c3aca4a4766571238d8",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part006"
+      "sha256": "840bf46e9958605105a0a83a068ecdee36e740e7888d9e264edc1d48a32f39c8",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part006"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part007",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part007",
       "bytes": 4194304,
-      "sha256": "6becb921c7b4424d771cca97b0ecc8376a9ff4318f460c35f642ea2fbb9678e1",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part007"
+      "sha256": "7db1f5b08bd72615d55b98ca3f2e964b0b93864d6f4bf31369b6b8066880b151",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part007"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part008",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part008",
       "bytes": 4194304,
-      "sha256": "0be6c21522f2c8a8a12a85d17a0239b3d7fbe61ba2be26ad833729663f9ac611",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part008"
+      "sha256": "7e4c2baa3e71c662901f19d2a53d03055b84398b843915548ddc327fbf07ebb9",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part008"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part009",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part009",
       "bytes": 4194304,
-      "sha256": "42860ac14f96b2dc2b6ecbfdd5c5f4b433e60f4eb13509533dfc3c9207d96b58",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part009"
+      "sha256": "fb783f5c69ad283e500e6ee5e7c659fddc49c5208938d340769cd6cfa2bcb385",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part009"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part010",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part010",
       "bytes": 4194304,
-      "sha256": "60e73f34bdc57b1daf29a4303cfb2c94b49aa6d82b40085ecdf7854c987a59aa",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part010"
+      "sha256": "3b0de9d611d376615950d052c8e53f7a9122af1a554349e9fef6e1808ccb47fb",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part010"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part011",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part011",
       "bytes": 4194304,
-      "sha256": "94ccecf86253686fc197ef6d34ac4053e293ae212abf2a598eb80a36e433f3b2",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part011"
+      "sha256": "2c0cb58278e3fe959c717d1c833e0d7a73eb3aec159a11273978a11273d6a108",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part011"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part012",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part012",
       "bytes": 4194304,
-      "sha256": "5900deaf5b7e5bd0a6bad7da8469eadb2d62711d409574db726fe5676a9dc907",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part012"
+      "sha256": "58f99b547322178e35a0f0ae0ea1b4ac4f52f478467e7984763f263820ed8b96",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part012"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part013",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part013",
       "bytes": 4194304,
-      "sha256": "2184f86d368b76ef5ff71f23af9ef65e4da1cb909164b9534cac6df5e422ec6a",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part013"
+      "sha256": "5fbffb92c8d3d318851f95888d7578f5ebd04fd96557beefaeab246df4809e48",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part013"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part014",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part014",
       "bytes": 4194304,
-      "sha256": "77f9200bad23c3dd7ef74ab19036fb9f86974fe2a3404d074306e4bdd7fec903",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part014"
+      "sha256": "37a46767c9f4976e48eaab4ad4c43e6cbf050a5845ba8485a5d1b49dbff6127e",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part014"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part015",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part015",
       "bytes": 4194304,
-      "sha256": "463c08ad23073d1579ca1c2a6a8a5bb511155af41edd75aa1dd8ba1b2dc1bd76",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part015"
+      "sha256": "339a703f4cd786b7c04641112facf19819f8e402529d9e0d85266d9c4d37d80d",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part015"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part016",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part016",
       "bytes": 4194304,
-      "sha256": "2fc7a4f1bea089e7fa634f2c25aca2752e0e63558f4a59650d8b568980d7224e",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part016"
+      "sha256": "467d3bb2f8eba1bc3597315feaa7a56d57bb386b92ccc3fc2084c9f07343c982",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part016"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part017",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part017",
       "bytes": 4194304,
-      "sha256": "49c1c3eb8fbe83e9b1ecdb1e92d45e7b2fc5e092f08c549e808d2965ddf87335",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part017"
+      "sha256": "a46aa1631f6c06698d42cd944d209da066f96d5bf417b16d66901971c40006fb",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part017"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part018",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part018",
       "bytes": 4194304,
-      "sha256": "26f112198fa7721b89e0b13df0d85aed33f79078e15e43ce6317f51347541c98",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part018"
+      "sha256": "e9698debbba10b485494c0653a4c2bb38d08c327649cf5ab825b89c2e4aa2da5",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part018"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part019",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part019",
       "bytes": 4194304,
-      "sha256": "d50af1982706930fe6e961312b9043698dc5312a54bf2ba09fe0723e40faba01",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part019"
+      "sha256": "d91662e4bf1c0afd6880bab3cd3bc7d1bf0617847f5ddb23fcfb52b99f400123",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part019"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part020",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part020",
       "bytes": 4194304,
-      "sha256": "284022f79870cb3dc273f05e8cbb1b4b81d2c7ec5701dba8f19d2300424c8728",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part020"
+      "sha256": "9409339966ac3c5957e361cf5c3cebf552aac6eb2b4cfa707725d03b444d4594",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part020"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part021",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part021",
       "bytes": 4194304,
-      "sha256": "d2a2e4869e64d1ad7de9ef0ca7eb0443a4766b7f0515eb3ae9145e5d57ae341e",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part021"
+      "sha256": "5e85e32aedd3d55aa40ce485d33490c8c49109b6e13230f945d19f633305bd16",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part021"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part022",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part022",
       "bytes": 4194304,
-      "sha256": "c1482ba6f0e37df53d23f5a45442110218da938c8bc2dcf0d2ffab0b89a58901",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part022"
+      "sha256": "1d3e446542e2fa21bd1b0bc61a5741ca6d6b555f8b57c310cc53b7cd1bc84306",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part022"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part023",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part023",
       "bytes": 4194304,
-      "sha256": "4934ab361f9c5fc573db8640488de1f37d24eb50ad9e3b0e51709d2857ba53f9",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part023"
+      "sha256": "1abf95154c78bc3ee96bfe8378b11aeff1a92ba131c65ce6b01707c02729fdc9",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part023"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part024",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part024",
       "bytes": 4194304,
-      "sha256": "91e01cb7fd0bc6fa62dd568ec822b0db7c4bf76ebe185700b78319aafab9ff68",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part024"
+      "sha256": "e6cc656d72fc242b526b7f8c1cd231ee9f7755440ff02e58935f8695aa064eb7",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part024"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part025",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part025",
       "bytes": 4194304,
-      "sha256": "e7746171ea40d5d219387a1cd30186d3b347bf598a3607fc2c09ff3819a55ee0",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part025"
+      "sha256": "2314c3d01cce99be4e63f3b52c83af14df9034cc949db8075976ca4beb7e6e9a",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part025"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part026",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part026",
       "bytes": 4194304,
-      "sha256": "2fa31d5678dec3da3f6a791d651d17efd16f85c80e76a7b3e72a3b87d280aa51",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part026"
+      "sha256": "b7d2c8513d387464a350aa04332f47541d6c8a42d7ee8a25c2c2cd15f6f1976d",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part026"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part027",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part027",
       "bytes": 4194304,
-      "sha256": "2990718300b3b62bb467442afb198f76da84cf3e8d38c7de889bf0a49c057cfa",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part027"
+      "sha256": "708c89b2eaf86de1f3289ae0ee5ab2e00ba755e4cdb5a87b028bbd98d57ab397",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part027"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part028",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part028",
       "bytes": 4194304,
-      "sha256": "c8f1add2f023eba825eb20744a2e053f8bcdfbf2a1f9540e6c671285a3487c2c",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part028"
+      "sha256": "d871dbb2995c64cdef860c0ad693e33e4fffa117c214168ca6f25dc861c05f29",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part028"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part029",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part029",
       "bytes": 4194304,
-      "sha256": "3af9154bb48ee96922a1f1b718964d36511431c141b04ce06e824a31f9c492d8",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part029"
+      "sha256": "cf3af712ea9e4e8dda3652312f6d5fa1b85885f84fc9206f1e750369eaa37103",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part029"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part030",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part030",
       "bytes": 4194304,
-      "sha256": "d811a3baff433caae1b6150f636d5c4b4da2881cbf4df1c74d0f37b02fe2fd66",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part030"
+      "sha256": "d90866e7775a0bbfdf03ec16df3da5e02b65d497645b1bd96ece48af28a39a49",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part030"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part031",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part031",
       "bytes": 4194304,
-      "sha256": "79713784252a08419c9748bb6555728cb5f807e2ac591a29b6c51e498738b205",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part031"
+      "sha256": "52af8089f1f15f10b3b7aa89ce38a3268b2d60cd5ec8be2b45a9be377d267634",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part031"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part032",
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part032",
       "bytes": 4194304,
-      "sha256": "ade68dfe5a67a21bab2c585e59387310b99dfa8b0ad4add1e224a5fc187faccc",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part032"
+      "sha256": "4286f4b392c77d9b8bf58efce84d366063e5b35674becb8a65cc1a612ae249f6",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part032"
     },
     {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part033",
-      "bytes": 4194304,
-      "sha256": "7e9ffc04f4c137d4f758c2291cdda5072f4de2fbd1a60237c312b6847ec80e77",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part033"
-    },
-    {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part034",
-      "bytes": 4194304,
-      "sha256": "e244a2253ee954cdd707b3d4427fb0bf6f05dfa5a3770070f353272ccf5a3b13",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part034"
-    },
-    {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part035",
-      "bytes": 4194304,
-      "sha256": "b868d46e32d25a928448e78dfd8febd1d967c4a505dfb9d172b26c3b4727f1a5",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part035"
-    },
-    {
-      "file": "Avant-Usine-Android-0.3.3.apk.b64part036",
-      "bytes": 470762,
-      "sha256": "84ee6fc4b62e57ed11ed301b6b01e046b1f397a03a9245d0b7f30b706d78b799",
-      "encoding": "base64",
-      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.3/Avant-Usine-Android-0.3.3.apk.b64part036"
+      "file": "Avant-Usine-Android-0.3.4.apk.b64part033",
+      "bytes": 1949411,
+      "sha256": "355eb6f82911f5c171823c4d1cfd70a92ef24711443996b8624b1cab592cc146",
+      "url": "https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-0.3.4/Avant-Usine-Android-0.3.4.apk.b64part033"
     }
   ]
 }
