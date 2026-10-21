@@ -1,0 +1,86 @@
+# LOCAL PREPARATION ONLY. Do not send to GitHub without user approval.
+# Private test artifact only: no Pages deployment, release, tag or promotion.
+name: iPhone validated experience - beta only
+on:
+  push:
+    branches: [ios/experience-beta]
+    paths: ['work/experience-ios/**', 'work/experience-integration/**', '.github/workflows/ios-experience-beta.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ios-experience-beta
+  cancel-in-progress: false
+jobs:
+  beta:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm install --global pnpm@11.25.0
+      - name: Select installed Xcode 26
+        run: |
+          XCODE_PATH=$(python3 - <<'PY'
+          import glob,re
+          paths=[p for p in glob.glob('/Applications/Xcode_26*.app') if re.search(r'Xcode_26[.\d]*\.app$',p)]
+          assert paths, 'Xcode 26 is unavailable'
+          print(max(paths,key=lambda p:tuple(map(int,re.search(r'Xcode_([\d.]+)\.app',p)[1].split('.')))))
+          PY
+          )
+          sudo xcode-select --switch "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
+      - name: Prepare beta only
+        working-directory: work/experience-ios
+        run: |
+          python3 -m venv "$RUNNER_TEMP/experience-python"
+          "$RUNNER_TEMP/experience-python/bin/pip" install Pillow
+          echo "$RUNNER_TEMP/experience-python/bin" >> "$GITHUB_PATH"
+          export PATH="$RUNNER_TEMP/experience-python/bin:$PATH"
+          pnpm install --frozen-lockfile
+          pnpm run prepare:site
+          pnpm exec cap add ios
+          pnpm exec cap sync ios
+          node scripts/configure-native.cjs
+      - name: Verify native bridge in simulator
+        working-directory: work/experience-ios
+        run: python scripts/smoke-simulator.py
+      - name: Compile iPhone and iPad beta
+        working-directory: work/experience-ios
+        run: |
+          set -o pipefail
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' \
+            build > build-output.log 2>&1
+          lipo -archs build/Build/Products/Release-iphoneos/App.app/App | grep arm64
+      - name: Package and verify test IPA
+        working-directory: work/experience-ios
+        run: |
+          mkdir -p build/ipa/Payload
+          ditto build/Build/Products/Release-iphoneos/App.app build/ipa/Payload/App.app
+          ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload build/betatesting-2-0-5-test-1.ipa
+          python scripts/verify-ipa.py build/betatesting-2-0-5-test-1.ipa
+      - uses: actions/upload-artifact@v7
+        if: success()
+        with:
+          name: iphone-experience-beta
+          path: |
+            work/experience-ios/build/betatesting-2-0-5-test-1.ipa
+            work/experience-ios/build/livraison.json
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: iphone-experience-beta-diagnostics
+          path: |
+            work/experience-ios/build-output.log
+            work/experience-ios/build/simulator-captures/
+          if-no-files-found: ignore
+          retention-days: 7

@@ -1,0 +1,333 @@
+[
+  [
+    "20.0.4 · iPhone et iPad 2.0.4",
+    "21 octobre 2026",
+    "Les paroles suivent vos déplacements dans le morceau.",
+    [
+      "Cliquer sur une phrase rejoint son horodatage de début et réactive le suivi automatique des paroles.",
+      "Les anciennes phrases ne réapparaissent plus en fondu après un saut. Les backs et chevauchements prévus sont conservés."
+    ]
+  ],
+  [
+    "20.0.3 · iPhone et iPad 2.0.3",
+    "20 octobre 2026",
+    "Une immersion aux couleurs de votre choix.",
+    [
+      "Le mode immersion utilise désormais un fond uni fixe, sans image ni dégradé en arrière-plan.",
+      "Choisissez sa couleur directement dans le mode immersion. Votre choix est conservé sur cet appareil."
+    ]
+  ],
+  [
+    "20.0.2 · iPhone et iPad 2.0.2",
+    "16 octobre 2026",
+    "Les paroles deviennent des repères de lecture.",
+    [
+      "Touchez une phrase synchronisée pour rejoindre son passage dans le morceau, y compris les backs, en classique et en Highlight.",
+      "Après un défilement manuel, le bouton « Revenir aux paroles en cours » recentre le chant et réactive le suivi automatique."
+    ]
+  ],
+  [
+    "20V00.1 · iPhone et iPad 2.0.1",
+    "16 octobre 2026",
+    "Correctifs du lecteur et des paroles.",
+    [
+      "Les paroles terminées ne réapparaissent plus brièvement à la fin de leur transition.",
+      "Les commandes du bas du lecteur sont mieux espacées et tiennent compte des marges de sécurité du téléphone.",
+      "Le mode immersion récupère aussi les synchronisations déjà chargées avant son ouverture.",
+      "Le volume utilise un réglage audio effectif sur iPhone et iPad.",
+      "Le rendu natif des paroles dans la Dynamic Island est simplifié ; le fonctionnement après signature reste à confirmer sur appareil."
+    ]
+  ],
+  [
+    "20.0 · iPhone et iPad 2.0",
+    "15 octobre 2026",
+    "Une nouvelle finition pour Avant l’usine.",
+    [
+      "Une interface plus sobre et cohérente : typographie, espacements, commandes et fenêtres retravaillés, avec des accents rose et violet discrets.",
+      "Un écran de paroles repensé : pochette à gauche sur grand écran, petite pochette en haut à droite sur téléphone, fond diffus aux couleurs du volume.",
+      "Paroles classiques et Highlight : texte plus lisible, mise en lumière douce, défilement fluide et voix secondaires distinctes, avec les minutages existants.",
+      "Les réglages de visibilité de 0 à 100, les transitions et les explications restent accessibles dans les options des paroles.",
+      "Le contrôle de volume adopte un ruban en relief qui réagit au déplacement, avec un affichage en pourcentage.",
+      "Le mode immersion reprend la nouvelle composition, adaptée à la taille de l’écran."
+    ]
+  ],
+  [
+    "19V08.2 · Application iPhone 1.1.13",
+    "15 octobre 2026",
+    "Rétablir les paroles dans la Dynamic Island.",
+    [
+      "Le rendu précédent des paroles est rétabli après le signalement d’une Dynamic Island noire sur la 1.1.12.",
+      "Après une nouvelle installation ou une mise à jour, l’ancienne activité est fermée avant de créer celle de la version installée.",
+      "Le relais audio anticipé et le diagnostic du dernier passage en arrière-plan sont conservés. Affichage et disparition du gel à confirmer sur appareil réel."
+    ]
+  ],
+  [
+    "19V08 · Application iPhone 1.1.12",
+    "15 octobre 2026",
+    "Des gestes plus simples, des paroles qui suivent.",
+    [
+      "Dans l’Atelier, Refaire cette phrase replace la musique trois secondes avant son départ, sans perdre les autres phrases ; Annuler retrouve les repères précédents.",
+      "La barre Highlight continue à enregistrer lorsque le doigt sort au-dessus ou au-dessous de la barre ; le relâchement termine le geste.",
+      "Le défilement automatique des paroles synchronisées fonctionne en immersion, en classique et en Highlight, avec pause et reprise du suivi.",
+      "Le partage des morceaux fonctionne à nouveau avec et sans compte ; les liens retrouvent leur auteur et leur date initiale.",
+      "Sur iPhone, le relais audio est anticipé dès la perte du premier plan et les mises à jour intermédiaires du Highlight sont espacées pour alléger le rendu.",
+      "Le texte de la Dynamic Island conserve son identité entre les phrases ; le diagnostic garde le dernier passage en arrière-plan. La disparition du gel reste à confirmer sur iPhone réel.",
+      "« Wesh le clin’s » reçoit le JSON Highlight terminé : 49 phrases, avec tous les repères du fichier conservés."
+    ]
+  ],
+  [
+    "19V07 · Application iPhone 1.1.11",
+    "14 octobre 2026",
+    "Les paroles et l’immersion sur mobile.",
+    [
+      "Le suivi Dynamic Island utilise un relais audio natif en arrière-plan et retrouve la position réelle du morceau au retour dans l’application.",
+      "Les chargements temporaires ne ferment plus immédiatement les paroles ; l’activité est conservée lors des changements de piste.",
+      "Le Highlight suit la position du lecteur natif avec des actualisations plus rapprochées ; la fluidité finale reste soumise à l’affichage autorisé par iOS.",
+      "Immersion recouvre les quatre côtés de l’écran sans laisser apparaître la page précédente.",
+      "Le diagnostic distingue les interruptions pendant la lecture et indique l’état du relais natif. Validation prolongée sur iPhone réel nécessaire pour confirmer la disparition du gel."
+    ]
+  ],
+  [
+    "19V06.2 · Application iPhone 1.1.10",
+    "14 octobre 2026",
+    "Dynamic Island plus lisible, reprise du suivi renforcée.",
+    [
+      "Le nom Avant l’usine est supprimé du coin supérieur droit de Dynamic Island pour libérer la place des paroles.",
+      "Les arrêts, changements de piste et reprises du suivi sont mieux coordonnés ; une activité terminée est reconnue lors de la reprise.",
+      "Le suivi classique évite les actualisations de lettres inutiles, et le Highlight limite leur fréquence sans retarder les changements de phrase.",
+      "Un diagnostic local dans Mon compte aide à identifier les blocages en arrière-plan. Leur résolution complète reste à confirmer sur appareil."
+    ]
+  ],
+  [
+    "19V06 · Application iPhone 1.1.9",
+    "14 octobre 2026",
+    "Plus de place pour les paroles, un compte plus clair.",
+    [
+      "Les fonctions personnelles sont regroupées dans le panneau principal de Mon compte.",
+      "Les commandes et réglages des paroles sont placés en dehors du texte défilant pour faciliter sa lecture.",
+      "Dans les applications, Immersion utilise tout l’espace interne disponible sans activer le plein écran du système.",
+      "Sur les iPhone compatibles, les paroles synchronisées peuvent apparaître dans Dynamic Island. Le Highlight est une option expérimentale à activer dans Mon compte."
+    ]
+  ],
+  [
+    "19V05 · Application iPhone 1.1.8",
+    "14 octobre 2026",
+    "Les transitions des paroles, à ton goût.",
+    [
+      "Choisis parmi neuf effets de disparition du texte ou désactive les transitions, avec un aperçu et un choix mémorisé.",
+      "Le réglage se trouve à côté du défilement automatique et respecte les minutages classiques, Highlight et les backs superposés.",
+      "La visibilité des paroles non chantées se règle désormais de 0 à 100 %, à l’unité près.",
+      "Une phrase terminée ne réapparaît plus brièvement après sa disparition."
+    ]
+  ],
+  [
+    "19V04 · Application iPhone 1.1.7",
+    "13 octobre 2026",
+    "Choisis les paroles que tu veux voir.",
+    [
+      "La visibilité des paroles non chantées se règle de 0 à 100 %, par paliers de 10 : phrase actuelle seule ou texte complet.",
+      "Le réglage est mémorisé et s’applique aussi aux backs, à la synchronisation classique et à l’Immersion des applications."
+    ]
+  ],
+  [
+    "19V03.2 · Application iPhone 1.1.6",
+    "13 octobre 2026",
+    "Une fin de phrase complète et plus naturelle.",
+    [
+      "Les phrases Highlight se révèlent jusqu’à la dernière lettre avant de disparaître, backs compris."
+    ]
+  ],
+  [
+    "19V03 · Application iOS 1.1.5",
+    "13 octobre 2026",
+    "Les paroles prennent vie au rythme du morceau.",
+    [
+      "Les paroles Highlight apparaissent progressivement à la lettre près, backs compris.",
+      "En synchronisation classique, le texte se révèle par un fondu du haut vers le bas pendant la phrase."
+    ]
+  ],
+  [
+    "19V02 · iOS 1.1.3",
+    "12 octobre 2026",
+    "Une interface plus lisible et plus facile à parcourir.",
+    [
+      "Nouvelle direction artistique Néon industriel.",
+      "Boutons et commandes mieux espacés sur tous les écrans.",
+      "Annonces fermables et réaffichables depuis le bas de page."
+    ]
+  ],
+  [
+    "19V01 · iOS 1.1.2",
+    "11 octobre 2026",
+    "Atelier temporairement fermé pour réparation.",
+    [
+      "L’Atelier de synchronisation est temporairement fermé pour réparation. Un message explique son indisponibilité.",
+      "Les paroles déjà synchronisées restent disponibles dans les lecteurs. Les brouillons existants sont conservés."
+    ]
+  ],
+  [
+    "19V01 · iOS 1.1.1",
+    "11 octobre 2026",
+    "Atelier temporairement fermé pour réparation.",
+    [
+      "L’Atelier de synchronisation est temporairement fermé pour réparation. Un message explique son indisponibilité.",
+      "Les paroles déjà synchronisées restent disponibles dans les lecteurs. Les brouillons existants sont conservés."
+    ]
+  ],
+  [
+    "19V00 · iOS 1.1.0",
+    "11 octobre 2026",
+    "Un nouvel Atelier et une immersion repensée.",
+    [
+      "Atelier simplifié : un bouton ou Espace pour marquer les phrases, puis un passage facultatif pour affiner les mots. Les outils avancés restent repliés.",
+      "Voix principale, backs, ad-libs et pistes personnalisées indépendantes. Les phrases peuvent se chevaucher et les backs commencer avant la voix principale.",
+      "Timeline avec zoom, forme d’onde à charger, déplacement des phrases et réglage des débuts, fins et repères des mots. Boucle avec préécoute et reprise depuis un mot.",
+      "Modifier ou supprimer une phrase, couper, fusionner et dupliquer un refrain ; décaler une phrase ou une piste ; annuler, rétablir et verrouiller les passages.",
+      "Mes projets en cours : brouillons privés, sauvegarde automatique, reprise, renommage, archivage et suppression. Avancement et états À faire, À revoir et Terminé.",
+      "Aperçu dans le lecteur et validation avant export. JSON avec pistes et repères détaillés ; LRC simple avec avertissement sur les informations non conservées.",
+      "Vitesses 0,50×, 0,75×, 1× et 2× : les repères suivent toujours la position réelle du morceau. Interface adaptée aux petits écrans.",
+      "Immersion repensée : pochette en décor plein écran flouté, paroles nettes au centre et commandes discrètes. Les paroles synchronisées suivent les voix en cours ; les textes simples défilent approximativement. Le mode reste réservé aux applications."
+    ]
+  ],
+  [
+    "iOS 1.0.11 · 18V08",
+    "10 octobre 2026",
+    "Paroles au bon moment et historiques publics entièrement clarifiés.",
+    [
+      "Paroles synchronisées : seules les lignes actuellement prononcées restent affichées dans le lecteur normal et le mode immersion des applications. Les lignes précédentes et suivantes sont masquées.",
+      "Les lignes dont les timings se chevauchent restent visibles ensemble. Le Highlight Progression continue sur chacune d’elles, sans masquer une phrase encore chantée.",
+      "Les silences entre des lignes possédant une fin précise n’affichent plus une ancienne phrase. Un retour en arrière retrouve les paroles correspondant à la position audio.",
+      "Les anciennes Patch Notes ont été relues pour ne conserver que les fonctionnalités destinées au public."
+    ]
+  ],
+  [
+    "iOS 1.0.10 · 18V08",
+    "10 octobre 2026",
+    "Paroles au bon moment et historiques publics clarifiés.",
+    [
+      "Paroles synchronisées : seules les lignes actuellement prononcées restent affichées dans le lecteur normal et le mode immersion des applications. Les lignes précédentes et suivantes sont masquées.",
+      "Les lignes dont les timings se chevauchent restent visibles ensemble. Le Highlight Progression continue sur chacune d’elles, sans masquer une phrase encore chantée.",
+      "Les silences entre des lignes possédant une fin précise n’affichent plus une ancienne phrase. Un retour en arrière retrouve les paroles correspondant à la position audio.",
+      "Les anciennes Patch Notes ont été relues pour ne conserver que les fonctionnalités destinées au public."
+    ]
+  ],
+  [
+    "iOS 1.0.9 · 18V07",
+    "10 octobre 2026",
+    "Lecteur mobile temporairement masquable et fichiers Local durables.",
+    [
+      "Une croix sur le lecteur permanent ouvre un choix avant de le masquer : jusqu’à la prochaine ouverture, ou pendant une durée personnalisée de 1 à 60 minutes.",
+      "La musique continue pendant le masquage. Le lecteur revient automatiquement à la fin du délai, y compris après un passage en arrière-plan. Une durée personnalisée reste applicable après réouverture.",
+      "Le bouton Réafficher le lecteur permet de le retrouver immédiatement. Le masquage libère le bas de page et l’accès aux réglages. Cette option concerne uniquement le site mobile et les applications Android et iPhone.",
+      "Ordre de chargement des animations fiabilisé pour éviter une erreur de démarrage lorsque le catalogue répond très vite ou hors ligne.",
+      "Les imports Local conservent une copie autonome du contenu audio, des pochettes fixes et animées, avec vérification de leur intégrité. Ils ne dépendent plus du fichier temporaire fourni par le sélecteur.",
+      "Les anciens fichiers encore lisibles sont convertis automatiquement. Albums, playlists et leur ordre, métadonnées, favoris, paroles, synchronisations et brouillons sont conservés.",
+      "Un ancien audio déjà inaccessible peut être rattaché depuis sa fiche, en conservant les informations du morceau. La lecture et les exports signalent les fichiers manquants ; aucun ZIP incomplet n’est présenté comme réussi.",
+      "La sauvegarde et la restauration protégées utilisent également ce stockage pour conserver les fichiers après fermeture et réouverture de l’application."
+    ]
+  ],
+  [
+    "iOS 1.0.8 · 18V06",
+    "9 octobre 2026",
+    "Correction de la lisibilité des historiques.",
+    [
+      "Accents et caractères des historiques des autres plateformes corrigés dans l’application iPhone.",
+      "Sauvegardes protégées, transfert facultatif du rôle, immersion et recherche manuelle de mise à jour conservés."
+    ]
+  ],
+  [
+    "iOS 1.0.7 · 18V06",
+    "9 octobre 2026",
+    "Sauvegardes protégées et immersion épurée.",
+    [
+      "Sauvegarde portable complète : fichiers audio Local, albums, playlists et leur ordre, favoris, pochettes fixes et animées, métadonnées, paroles, synchronisations et brouillons. Favoris et playlists du catalogue, préférences et positions de lecture inclus.",
+      "Code personnel de six chiffres obligatoire pour les nouvelles sauvegardes. Chiffrement et vérification des fichiers avant restauration ; seules les sauvegardes .au-backup protégées sont importables. Aucun compte, mot de passe ou session n’est exporté.",
+      "Immersion : seule la phrase synchronisée actuellement chantée est visible. Les paroles et leurs minutages sont conservés.",
+      "Après dix secondes sans interaction, les commandes et informations disparaissent : pochette carrée à gauche et paroles à droite, ou pochette seule centrée et agrandie. Tout geste réaffiche immédiatement l’interface et remet le délai à zéro.",
+      "Le bouton Forcer une mise à jour est accessible dans Mon compte, y compris sans connexion, pour rechercher immédiatement une nouvelle version et suivre le parcours habituel."
+    ]
+  ],
+  [
+    "iOS 1.0.6 · 18V05.2",
+    "9 octobre 2026",
+    "Immersion reconstruite et réservée aux applications.",
+    [
+      "Immersion réservée aux applications Windows, Android et iPhone. Écran reconstruit : pochette carrée à gauche, paroles à droite, commandes et fermeture accessibles sans faire défiler toute la page.",
+      "Paroles synchronisées : minutages, progression et suivi automatique conservés. Paroles simples : défilement approximatif selon la position audio. Défilement manuel et reprise automatique possibles.",
+      "Prise en charge des morceaux Local et des futurs ajouts de paroles ; message explicite pour les morceaux sans paroles.",
+      "Site PC et mobile : le bouton Immersion affiche le message d’exclusivité aux applications. Infos, fonctionnalités & astuces actualisé dans Lire le reste."
+    ]
+  ],
+  [
+    "iOS 1.0.5 · Service natif réparé",
+    "9 octobre 2026",
+    "Correction de l’initialisation du service de mise à jour iPhone et iPad.",
+    [
+      "La scène iOS ouvre désormais le contrôleur personnalisé qui enregistre le service IOSUpdates. Le contrôleur standard contournait cette initialisation malgré la modification du storyboard.",
+      "Rétablissement de la recherche native, du téléchargement vérifié de l’IPA et de l’ouverture dans un outil de signature. Les réglages natifs de transparence et de contraste sont également accessibles.",
+      "Les anciennes installations privées du service nécessitent une installation manuelle de cet IPA pour recevoir ce correctif. Signature et confirmation d’installation restent nécessaires sur iOS.",
+      "Fonctionnalités 18V05 et présentation verre conservées. Aucun changement de version des autres plateformes."
+    ]
+  ],
+  [
+    "iOS 1.0.4 · 18V05",
+    "9 octobre 2026",
+    "Écoute, sauvegardes locales et diagnostic des versions.",
+    [
+      "Minuteur de sommeil : arrêt après 15, 30 ou 60 minutes, ou à la fin du morceau sans enchaîner. Contrôle par échéance réelle, événements audio et retour dans l’interface.",
+      "Local : reprise du dernier morceau à sa position mémorisée, proposée sans lecture automatique. Reprise du catalogue conservée.",
+      "Sauvegarde complète Local au format ZIP : audio, pochettes et animations, albums, playlists, ordre, favoris, paroles, synchronisations, métadonnées et brouillons. Empreintes SHA-256 vérifiées avant restauration.",
+      "Restauration après aperçu : ajout atomique d’une copie complète avec nouveaux identifiants, sans remplacer les données existantes. Sauvegarde corrompue refusée ; limite ZIP de 4 Go.",
+      "Diagnostic des mises à jour : version installée, dernière version disponible, date de recherche et erreurs. Le guide Infos, fonctionnalités & astuces est complété dans Lire le reste."
+    ]
+  ],
+  [
+    "iOS 1.0.3 · Interface verre",
+    "2026-10-09",
+    "Présentation translucide dédiée à iPhone et iPad et recherche de mise à jour renforcée.",
+    [
+      "Rendu inspiré du Liquid Glass : navigation, lecteur, boutons, panneaux, cartes, formulaires et fenêtres translucides avec reflets subtils. Pochettes et contrastes des images conservés.",
+      "Apparence iOS dédiée : bouton jour/sombre désactivé, y compris après connexion. Réduction de la transparence et augmentation du contraste iOS prises en compte ; effets réduits et réduction des mouvements conservés.",
+      "Nouveautés : historique iOS en premier, autres applications ensuite, historiques Site mobile et Site PC en bas.",
+      "Recherche des versions par le réseau natif iOS, sans cache local et avec délai limité. Vérification au retour dans l’application ; une erreur de recherche est signalée au lieu de rester silencieuse.",
+      "Compte → Forcer une mise à jour conserve la recherche immédiate, le téléchargement vérifié et l’ouverture dans un outil de signature compatible. Signature et installation de l’IPA restent nécessaires.",
+      "Infos, fonctionnalités & astuces complété dans Lire le reste. Les autres plateformes conservent leurs versions et leur interface."
+    ]
+  ],
+  [
+    "iOS 1.0.2",
+    "2026-10-08",
+    "Recherche de mise à jour depuis le compte.",
+    [
+      "Bouton « Forcer une mise à jour » dans le panneau Compte : recherche immédiate de la dernière version disponible.",
+      "La recherche manuelle contourne le report et le saut d’une version, tout en conservant les choix habituels de mise à jour.",
+      "Si aucune version plus récente n’existe, un message confirme que l’application est à jour.",
+      "Téléchargement vérifié ; paramètres et données locales conservés. L’IPA est ensuite transmis à un outil de signature compatible ; signature et installation restent manuelles."
+    ]
+  ],
+  [
+    "iOS 1.0.1",
+    "2026-10-08",
+    "Choix libre de l’outil de signature pour les mises à jour.",
+    [
+      "Bouton « Ouvrir dans un outil de signature » : l’IPA téléchargé peut être transmis à toute application compatible proposée par iOS.",
+      "Instructions de signature générales ; ESign reste un exemple et n’est plus présenté comme obligatoire.",
+      "En cas d’échec d’ouverture, importer le fichier depuis Fichiers > Avant l’usine > MisesAJour dans l’outil choisi.",
+      "Détection dynamique de cette version depuis iOS 1.0, téléchargement natif avec contrôle de taille et SHA-256 ; signature et installation restent à effectuer avec un certificat et un profil valides."
+    ]
+  ],
+  [
+    "iOS 1.0",
+    "2026-10-08",
+    "Première version iPhone et iPad à signer avant installation.",
+    [
+      "Interface mobile embarquée, collection, paroles, Atelier et bibliothèque locale.",
+      "Pochettes animées et néons avec réglages de réduction des effets.",
+      "Export des fichiers locaux par le menu de partage iOS.",
+      "Détection des nouvelles versions iOS sur GitHub, report ou saut d’une version.",
+      "Téléchargement natif de l’IPA avec progression et contrôle SHA-256.",
+      "Bouton « Ouvrir dans ESign » via le menu de partage pour signer et installer le fichier.",
+      "IPA non signé : certificat et profil de signature valides requis. Installation et conservation des données à confirmer sur appareil réel."
+    ]
+  ]
+]

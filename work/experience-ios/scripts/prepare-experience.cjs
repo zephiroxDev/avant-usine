@@ -1,0 +1,26 @@
+/* Isolated iPhone preparation; no paused platform build or public release. */
+const fs=require('node:fs'),path=require('node:path');
+const root=path.resolve(__dirname,'..'),source=path.resolve(root,'../experience-integration'),dest=path.join(root,'site'),release=require('../release.json');
+if(release.channel!=='creator-testing')throw Error('Private beta only');
+fs.mkdirSync(dest,{recursive:true});
+for(const name of fs.readdirSync(source))if(/\.(?:html|css|js|webp|mp4|png|ico)$/.test(name)||['archive-downloads.json','promo-manifest.json'].includes(name))fs.copyFileSync(path.join(source,name),path.join(dest,name));
+const {adaptCopy}=require('../../desktop-app/scripts/desktop-copy.cjs');
+let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
+html=html.replace('<head>','<head><script>document.documentElement.dataset.auApp="ios";</script>');
+html=html.replace(/<aside id="desktopAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./release-download.js" defer></script>','');
+html=adaptCopy(html).replaceAll('sur ton ordinateur','sur ton appareil').replace('<link rel="stylesheet" href="./experience.css">','');
+html=html.replace('</head>','<link rel="stylesheet" href="./ios.css"><link rel="stylesheet" href="./experience.css"></head>');
+html=html.replace('</body>','<script src="./ios.js" defer></script><script src="./ios-lyrics-audio.js" defer></script><script src="./ios-lyrics.js" defer></script></body>');
+fs.writeFileSync(path.join(dest,'index.html'),html);
+for(const [from,to]of [['ios.js','ios.js'],['ios.css','ios.css'],['lyrics-audio.js','ios-lyrics-audio.js'],['lyrics-island.js','ios-lyrics.js']])fs.writeFileSync(path.join(dest,to),fs.readFileSync(path.join(root,'web',from),'utf8').replaceAll('__IOS_VERSION__',release.version));
+const main=html.match(/src="\.\/(app-\d+v\d+\.js)"/)[1],file=path.join(dest,main);
+let code=adaptCopy(fs.readFileSync(file,'utf8')).replaceAll('sur ton ordinateur','sur ton appareil');
+code=code.replace("new URL('./',location.href).href","'https://zephiroxdev.github.io/avant-usine/'");
+code=code.replace("return {key,title:t?.title||'',audio,data:nativeLyricCache.get(key)||null};","return {key,title:t?.title||'',audio,audioEdit:t?.audio_edit,data:nativeLyricCache.get(key)||null};");
+code=code.replace("root.dataset.theme=t==='light'?'light':'dark';","root.dataset.theme='dark';");
+code=code.replace("$('accountHeading').parentElement.after(themeButton);","$('accountHeading').parentElement.after(themeButton);themeButton.disabled=true;themeButton.hidden=true;");
+fs.writeFileSync(file,code);
+const activity=path.join(dest,'activity-17v01.js');fs.writeFileSync(activity,fs.readFileSync(activity,'utf8').replace("  window.addEventListener('pagehide'","  window.addEventListener('au:native-listening',event=>{const d=event.detail,song=getTrack();if(!accountId||!song||d?.key!==song.key)return;for(const segment of d.segments||[]){if(!(segment.seconds>0&&segment.seconds<=35))continue;if(!sessionId)sessionId=crypto.randomUUID();lastActivity=Date.now();emit('listening',{trackKey:song.key,volume:song.volume,playbackId:playback?.playbackId,duration:d.duration,seconds:segment.seconds,startPosition:segment.startPosition,endPosition:segment.endPosition,sessionId});}flush();});\n  window.addEventListener('pagehide'"));
+const comfort=path.join(dest,'comfort-18v05.js');fs.writeFileSync(comfort,fs.readFileSync(comfort,'utf8').replace('setInterval(elapsed,1000);',"window.addEventListener('au:native-sleep',finish);setInterval(elapsed,1000);"));
+const history=path.join(dest,'histories-17v01.js'),prefix='window.AU_PLATFORM_HISTORIES=';const histories=JSON.parse(fs.readFileSync(history,'utf8').slice(prefix.length).trim().replace(/;$/,''));histories.ios=require('../patch-notes.json');fs.writeFileSync(history,prefix+JSON.stringify(histories)+';');
+console.log('Prepared isolated iPhone beta '+release.version+' ('+release.buildNumber+'); no Windows/Android build.');

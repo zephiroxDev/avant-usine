@@ -1,0 +1,17 @@
+const fs=require('node:fs'),path=require('node:path'),xcode=require('xcode');
+const root=path.resolve(__dirname,'..'),projectPath=path.join(root,'ios/App/App.xcodeproj/project.pbxproj'),project=xcode.project(projectPath);project.parseSync();
+const mainGroup=project.findPBXGroupKey({name:'App'})||project.findPBXGroupKey({path:'App'}),main=project.getFirstTarget();
+for(const file of ['LiveLyrics.swift','LyricsAttributes.swift','LyricsAudio.swift']){fs.copyFileSync(path.join(root,'native',file),path.join(root,'ios/App/App',file));project.addSourceFile(file,{target:main.uuid},mainGroup);}
+let target=Object.entries(project.pbxNativeTargetSection()).find(([id,value])=>!id.endsWith('_comment')&&value.name?.replaceAll('"','')==='LyricsIsland');
+const extension=target?{uuid:target[0],pbxNativeTarget:target[1]}:project.addTarget('LyricsIsland','app_extension','LyricsIsland','dev.zephirox.avantusine.ios.lyrics');
+const folder=path.join(root,'ios/App/LyricsIsland');fs.mkdirSync(folder,{recursive:true});
+let group=project.findPBXGroupKey({name:'LyricsIsland'});if(!group){group=project.addPbxGroup([],'LyricsIsland').uuid;project.addToPbxGroup(group,project.getFirstProject().firstProject.mainGroup);}delete project.getPBXGroupByKey(group).path;
+if(!extension.pbxNativeTarget.buildPhases.some(p=>p.comment==='Sources'))project.addBuildPhase([],'PBXSourcesBuildPhase','Sources',extension.uuid);
+if(!extension.pbxNativeTarget.buildPhases.some(p=>p.comment==='Frameworks'))project.addBuildPhase([],'PBXFrameworksBuildPhase','Frameworks',extension.uuid);
+for(const file of ['LyricsWidget.swift','LyricsAttributes.swift']){fs.copyFileSync(path.join(root,'native',file),path.join(folder,file));project.addSourceFile('LyricsIsland/'+file,{target:extension.uuid},group);}
+const release=require('../release.json'),configs=project.pbxXCBuildConfigurationSection();
+for(const id of Object.values(project.pbxXCConfigurationList()[extension.pbxNativeTarget.buildConfigurationList].buildConfigurations).map(v=>v.value)){
+ const config=configs[id].buildSettings;Object.assign(config,{IPHONEOS_DEPLOYMENT_TARGET:'16.2',SWIFT_VERSION:'5.0',SDKROOT:'iphoneos',TARGETED_DEVICE_FAMILY:'"1,2"',APPLICATION_EXTENSION_API_ONLY:'YES',GENERATE_INFOPLIST_FILE:'NO',INFOPLIST_FILE:'"LyricsIsland/LyricsIsland-Info.plist"',MARKETING_VERSION:release.version,CURRENT_PROJECT_VERSION:String(release.buildNumber),PRODUCT_BUNDLE_IDENTIFIER:'dev.zephirox.avantusine.ios.lyrics',CODE_SIGN_STYLE:'Automatic',SWIFT_EMIT_LOC_STRINGS:'YES'});
+}
+fs.writeFileSync(path.join(folder,'LyricsIsland-Info.plist'),`<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleDisplayName</key><string>Avant lâ€™usine Â· Paroles</string><key>CFBundleExecutable</key><string>$(EXECUTABLE_NAME)</string><key>CFBundleIdentifier</key><string>$(PRODUCT_BUNDLE_IDENTIFIER)</string><key>CFBundleName</key><string>$(PRODUCT_NAME)</string><key>CFBundlePackageType</key><string>XPC!</string><key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string><key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string><key>NSExtension</key><dict><key>NSExtensionPointIdentifier</key><string>com.apple.widgetkit-extension</string></dict></dict></plist>`);
+fs.writeFileSync(projectPath,project.writeSync());xcode.project(projectPath).parseSync();console.log('Extension native des paroles intÃ©grÃ©e et embarquÃ©e dans la cible App.');
