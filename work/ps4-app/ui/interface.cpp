@@ -209,8 +209,9 @@ void showHome() {
     label(content,"JUL / AVANT L’USINE",0,12,680,normal,PINK);
     label(content,tracks[selected].title,0,55,690,heading);
     label(content,volumes[tracks[selected].volume].title,0,123,640,normal,MUTED);
-    auto* listen=button(content,"Écouter",0,168,182,48,trackEvent,reinterpret_cast<void*>(intptr_t(selected)));
+    auto* listen=button(content,"Écouter",8,168,174,48,trackEvent,reinterpret_cast<void*>(intptr_t(selected)));
     lv_obj_set_style_bg_color(listen,lv_color_hex(PINK),0);
+    lv_obj_set_style_bg_color(listen,lv_color_hex(PINK),LV_STATE_FOCUSED);
     lv_obj_set_style_text_color(lv_obj_get_child(listen,0),lv_color_hex(PAPER),0);
     button(content,"Paroles",200,168,180,48,[](lv_event_t*){showLyrics();});
     auto* artwork=cover(content,tracks[selected].volume,800,54,298);
