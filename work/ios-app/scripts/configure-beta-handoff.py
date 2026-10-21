@@ -17,6 +17,11 @@ s=s.replace('    private var lastStopReason = "aucun"','    private var lastStop
 needle='                self.notifyListeners("applicationState", data: ["active": false])'
 assert needle in s
 s=s.replace(needle,needle+'\n                self.beginNativeHandoff()')
+needle='                self.backgroundLastPosition = self.backgroundFirstPosition'
+assert needle in s
+s=s.replace(needle,needle+'\n                self.beginNativeHandoff()')
+# willResignActive can still observe .active. Retry at the actual background boundary.
+s=s.replace('"updates": updateCount]', '"updates": updateCount, "handoffError": nativeHandoffError, "handoffPending": nativeHandoffPending, "preparedKey": audio.key, "sourceID": s.id]')
 needle='                self.notifyListeners("applicationState", data: ["active": true])'
 s=s.replace(needle,'                self.notifyListeners("applicationState", data: ["active": true, "nativeOwned": self.audio.ownsPlayback, "key": self.audio.key, "playing": self.audio.playing])')
 needle='            self?.lastStopReason = call.getString("reason") ?? "demande du lecteur"'

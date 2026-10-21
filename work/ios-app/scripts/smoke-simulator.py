@@ -30,12 +30,14 @@ for phase in ['nativeSeed','nativeVerified']:
     else:raise AssertionError('iOS readiness probe did not pass: '+json.dumps(state))
     # Launch Settings to genuinely put the music application in background.
     background_probe=container/'Documents/au-debug-background-lyrics.json'
+    captures=Path('build/simulator-captures');captures.mkdir(parents=True,exist_ok=True)
     run('xcrun','simctl','launch',udid,'com.apple.Preferences')
     samples=[]
     for step in range(10):
         time.sleep(5)
         assert background_probe.exists(), 'Native background probe missing'
         sample=json.loads(background_probe.read_text());samples.append(sample)
+        (captures/(phase+'-background-samples.json')).write_text(json.dumps(samples,indent=2))
         assert sample['playing'] and sample['nativeAudio'] and sample['background'], sample
         assert sample['highlight']==(phase=='nativeVerified'), sample
         if len(samples)>1:assert sample['position']>samples[-2]['position']+2, 'Native playback clock froze'
