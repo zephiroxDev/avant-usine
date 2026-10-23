@@ -10,7 +10,7 @@ permissions:
   contents: read
 concurrency:
   group: ios-experience-beta
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   beta:
     runs-on: macos-15
