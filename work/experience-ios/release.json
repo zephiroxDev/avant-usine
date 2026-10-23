@@ -1,8 +1,8 @@
 {
   "platform": "ios",
   "version": "2.0.5",
-  "buildNumber": 35,
-  "releaseId": "experience-beta-local",
+  "buildNumber": 36,
+  "releaseId": "experience-lyrics-beta-2",
   "channel": "creator-testing",
   "source": "../experience-integration",
   "immersionBackground": "solid-customizable"
