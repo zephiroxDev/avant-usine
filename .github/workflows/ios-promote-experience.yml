@@ -1,0 +1,25 @@
+name: Publish exact verified iPhone experience
+on:
+  push:
+    branches: [main]
+    paths: ['work/experience-ios/verified-release.json', '.github/workflows/ios-promote-experience.yml']
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: ios-promote-experience
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Promote exact verified IPA without rebuilding
+        working-directory: work/experience-ios
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: python scripts/promote-experience.py

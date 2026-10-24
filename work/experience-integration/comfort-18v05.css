@@ -1,0 +1,2 @@
+.au-comfort-dialog{width:min(94vw,620px);max-height:85dvh;overflow:auto;border:1px solid var(--line);border-radius:20px;padding:24px;background:var(--paper);color:var(--ink)}
+.au-comfort-dialog p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}.au-comfort-dialog .button{margin:5px;white-space:normal}.au-comfort-dialog progress{width:100%}.au-comfort-dialog::backdrop{background:#0009}

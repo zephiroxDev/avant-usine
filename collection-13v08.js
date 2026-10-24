@@ -1,11 +1,11 @@
 "use strict";
-// Catalogue initial ; les modifications publiées sont fusionnées au démarrage.
+// Catalog preserved; only verified album ZIP destinations change.
 const COLLECTION = [
   {
     "number": 1,
     "title": "Volume 01",
     "cover": "./cover-01.webp",
-    "zip": "https://mega.nz/file/hINBEQ7I#gx_wJx1vw3Dj1AI082V5EI3CBcivSqIHGvDLq-oVd1E",
+    "zip": "https://archive.org/download/avant-lusine-vol.-2/Avant%20l%E2%80%99usine%20vol.1.zip",
     "tracks": [
       {
         "number": 1,
@@ -446,7 +446,7 @@ const COLLECTION = [
     "number": 2,
     "title": "Volume 02",
     "cover": "./cover-02.webp",
-    "zip": "https://mega.nz/file/8FcG0Z4Q#b1JLW2QanBTI5cgDjNWF_vnyEuv38532jRxVLb6sRDs",
+    "zip": "https://archive.org/download/avant-lusine-vol.-2/Avant%20l%E2%80%99usine%20vol.2.zip",
     "tracks": [
       {
         "number": 1,
@@ -887,7 +887,7 @@ const COLLECTION = [
     "number": 3,
     "title": "Volume 03",
     "cover": "./cover-03.webp",
-    "zip": "https://mega.nz/file/BN91VbKY#ToqdoDNIH9VaGV-yEQ60n_3EG4Jy8MrQb9IBy6G0mlk",
+    "zip": "https://archive.org/download/avant-lusine-vol.-2/Avant%20l%E2%80%99usine%20vol.3.zip",
     "tracks": [
       {
         "number": 1,

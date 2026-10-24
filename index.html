@@ -15,7 +15,8 @@
 <link rel="stylesheet" href="./promo-18v08.css"><link rel="stylesheet" href="./studio-19v00.css">
 <link rel="stylesheet" href="./neon-industrial.css">
 <link rel="stylesheet" href="./design-20.css">
-</head>
+<link rel="stylesheet" href="./experience.css"><link rel="stylesheet" href="./listening-beta.css"><link rel="stylesheet" href="./renewal-beta.css">
+<link rel="stylesheet" href="./audio-editor-beta-4.css"><link rel="stylesheet" href="./site-editor.css"></head>
 <body>
 <noscript><p class="noscript">Active JavaScript pour afficher la collection et écouter les morceaux.</p></noscript>
 <div class="shell">
@@ -46,15 +47,15 @@
    <div class="collection-grid" id="collectionGrid"></div><p class="collection-note" id="collectionCount" role="status"></p>
   <aside class="au-kofi-banner" aria-label="Soutenir le créateur du site"><div><strong>Tu aimes ce projet ?</strong><p>Soutiens Zephirox, le créateur d’Avant l’usine, sur Ko-fi. Merci pour ton soutien.</p></div><a href="https://ko-fi.com/zephirox" target="_blank" rel="noopener noreferrer" class="au-kofi-link" aria-label="Soutenir Zephirox sur Ko-fi (nouvel onglet)">Soutenir sur Ko-fi ↗</a></aside></section>
   <section class="page" id="ecoute" aria-labelledby="albumTitle" hidden>
-   <div class="listen-top"><button class="text-button" type="button" data-go="collection">← Toute la collection</button><label class="select-label" for="albumSelect">Choisir un volume<select id="albumSelect" aria-label="Choisir un volume"></select></label></div>
+   <div class="listen-top"><button class="text-button" type="button" data-go="accueil">← Retour</button><label class="select-label" for="albumSelect">Choisir un volume<select id="albumSelect" aria-label="Choisir un volume"></select></label></div>
    <div class="album-hero"><canvas id="albumCover" width="440" height="440" role="img" aria-label="Pochette du volume"></canvas><div class="album-copy"><p class="eyebrow">JuL · Avant l’usine</p><h1 id="albumTitle" tabindex="-1"></h1><p id="albumInfo"></p><div class="actions"><button class="button pink" id="albumPlay" type="button">Écouter le volume ▶</button><a class="button secondary" id="albumZip" target="_blank" rel="noopener noreferrer">Télécharger le ZIP ↗</a></div></div></div>
    <div id="tracksArea"><div class="tracks-top"><h2>Les morceaux.</h2><div class="search-wrap"><label class="sr-only" for="search">Rechercher un morceau dans ce volume</label><input id="search" type="search" placeholder="Rechercher un morceau…" autocomplete="off"></div></div><p class="tracks-count" id="trackCount" role="status"></p><ol id="tracklist" class="tracklist"></ol><p class="empty" id="noResults" hidden>Aucun morceau trouvé. Essaie un autre titre.</p></div>
    <div class="empty" id="comingSoon" hidden><strong>La suite arrive.</strong>La pochette est là. Les morceaux de ce volume seront ajoutés prochainement.</div>
   <aside class="au-kofi-banner" aria-label="Soutenir le créateur du site"><div><strong>Tu aimes ce projet ?</strong><p>Soutiens Zephirox, le créateur d’Avant l’usine, sur Ko-fi. Merci pour ton soutien.</p></div><a href="https://ko-fi.com/zephirox" target="_blank" rel="noopener noreferrer" class="au-kofi-link" aria-label="Soutenir Zephirox sur Ko-fi (nouvel onglet)">Soutenir sur Ko-fi ↗</a></aside></section>
   <section class="page" id="telechargements" aria-labelledby="downloadsTitle" hidden>
-   <div class="page-heading"><p class="eyebrow">Les archives à emporter</p><h1 id="downloadsTitle" tabindex="-1">Téléchargements.</h1><p class="lede">Récupère chaque volume en une seule archive ZIP, avec ses morceaux numérotés.</p></div><div id="downloadGrid" class="download-grid"></div><div class="download-card" style="margin-top:22px"><h2>Les pochettes</h2><p>Télécharge toutes les pochettes de la collection.</p><a class="button" href="https://mega.nz/file/VN9wlAwY#ZLQni_ZMuq8ROXibMS-47kOb4j-AeMlB4T_POjPn7kU" target="_blank" rel="noopener noreferrer">Télécharger les pochettes sur MEGA ↗</a><small>Le téléchargement s’ouvre dans un nouvel onglet.</small></div>
-   <div class="download-card" style="margin-top:22px"><p class="eyebrow">Les pochettes prennent vie</p><h2>Les pochettes animées.</h2><p>Retrouve les pochettes animées dans le dossier de téléchargement MEGA.</p><a class="button" href="https://mega.nz/file/YNM0VAJT#vSt4RvZygX6zH9S0jg6htKh5-mCsg-nyysKVWOrS7Qw" target="_blank" rel="noopener noreferrer">Télécharger les pochettes animées sur MEGA ↗</a><small>Les fichiers de ce lien sont actualisés sur MEGA. Le téléchargement s’ouvre dans un nouvel onglet.</small></div>
-   <div class="faq"><h2>Bon à savoir.</h2><details><summary>Comment écouter directement sur le site ?</summary><p>Ouvre la rubrique Écoute, choisis un volume puis un morceau. Le lecteur reste présent quand tu navigues entre les rubriques de ce site.</p></details><details><summary>Comment récupérer un volume complet ?</summary><p>Le bouton de téléchargement ouvre MEGA dans un nouvel onglet. Télécharge le ZIP puis extrais-le pour retrouver les fichiers audio individuels.</p></details><details><summary>Et les prochains volumes ?</summary><p>Leurs pochettes sont visibles dans la collection. L’écoute et le téléchargement seront proposés au fil des sorties.</p></details></div>
+   <div class="page-heading"><p class="eyebrow">Les archives à emporter</p><h1 id="downloadsTitle" tabindex="-1">Téléchargements.</h1><p class="lede">Récupère chaque volume en une seule archive ZIP, avec ses morceaux numérotés.</p></div><div id="downloadGrid" class="download-grid"></div><div class="download-card" style="margin-top:22px"><h2>Les pochettes</h2><p>Télécharge toutes les pochettes de la collection.</p><a class="button" href="https://mega.nz/file/VN9wlAwY#ZLQni_ZMuq8ROXibMS-47kOb4j-AeMlB4T_POjPn7kU" target="_blank" rel="noopener noreferrer">Télécharger les pochettes sur Archive.org ↗</a><small>Le téléchargement s’ouvre dans un nouvel onglet.</small></div>
+   <div class="download-card" style="margin-top:22px"><p class="eyebrow">Les pochettes prennent vie</p><h2>Les pochettes animées.</h2><p>Retrouve les pochettes animées dans le dossier de téléchargement Archive.org.</p><a class="button" href="https://mega.nz/file/YNM0VAJT#vSt4RvZygX6zH9S0jg6htKh5-mCsg-nyysKVWOrS7Qw" target="_blank" rel="noopener noreferrer">Télécharger les pochettes animées sur Archive.org ↗</a><small>Les fichiers de ce lien sont actualisés sur Archive.org. Le téléchargement s’ouvre dans un nouvel onglet.</small></div>
+   <div class="faq"><h2>Bon à savoir.</h2><details><summary>Comment écouter directement sur le site ?</summary><p>Ouvre la rubrique Écoute, choisis un volume puis un morceau. Le lecteur reste présent quand tu navigues entre les rubriques de ce site.</p></details><details><summary>Comment récupérer un volume complet ?</summary><p>Le bouton de téléchargement ouvre Archive.org dans un nouvel onglet. Télécharge le ZIP puis extrais-le pour retrouver les fichiers audio individuels.</p></details><details><summary>Et les prochains volumes ?</summary><p>Leurs pochettes sont visibles dans la collection. L’écoute et le téléchargement seront proposés au fil des sorties.</p></details></div>
   <aside class="au-kofi-banner" aria-label="Soutenir le créateur du site"><div><strong>Tu aimes ce projet ?</strong><p>Soutiens Zephirox, le créateur d’Avant l’usine, sur Ko-fi. Merci pour ton soutien.</p></div><a href="https://ko-fi.com/zephirox" target="_blank" rel="noopener noreferrer" class="au-kofi-link" aria-label="Soutenir Zephirox sur Ko-fi (nouvel onglet)">Soutenir sur Ko-fi ↗</a></aside></section>
   <section class="page" id="paroles" aria-labelledby="lyricsHeading" hidden>
    <button class="text-button" type="button" data-go="ecoute">← Retour aux morceaux</button>
@@ -69,7 +70,8 @@
 <p class="community-footnote">Les explications sont publiées par les visiteurs, sans validation préalable. Les votes expriment leur avis.</p>
 </aside></div>
   <aside class="au-kofi-banner" aria-label="Soutenir le créateur du site"><div><strong>Tu aimes ce projet ?</strong><p>Soutiens Zephirox, le créateur d’Avant l’usine, sur Ko-fi. Merci pour ton soutien.</p></div><a href="https://ko-fi.com/zephirox" target="_blank" rel="noopener noreferrer" class="au-kofi-link" aria-label="Soutenir Zephirox sur Ko-fi (nouvel onglet)">Soutenir sur Ko-fi ↗</a></aside></section>
- <section class="page" id="bibliotheque" aria-labelledby="libraryHeading" hidden>
+ <section class="page" id="recherche" hidden aria-labelledby="xpSearchTitle"><div class="xp-intro"><h1 id="xpSearchTitle" tabindex="-1">Rechercher</h1><p>Un morceau, un volume, une envie.</p></div><div id="xpSearchBody"></div></section>
+<section class="page" id="bibliotheque" aria-labelledby="libraryHeading" hidden>
  <div class="page-heading"><p class="eyebrow">Ton coin à toi</p><h1 id="libraryHeading" tabindex="-1">Ma musique.</h1><p class="lede">Tes favoris, tes playlists, ton ordre d’écoute. Sur cet appareil sans compte, ou synchronisés avec ton compte.</p></div>
  <p id="libraryNotice" class="au-notice" role="status" aria-live="polite"></p>
  <div class="au-library-top"><div class="au-panel"><label for="myListSelect">Ouvrir une sélection</label><select id="myListSelect"></select><form id="playlistCreate" class="au-inline-form"><label class="sr-only" for="playlistName">Nom de la nouvelle playlist</label><input id="playlistName" maxlength="60" placeholder="Une nouvelle playlist…" required><button class="button" type="submit">Créer</button></form></div><div class="au-panel au-library-summary"><p class="eyebrow">À écouter à ta façon</p><h2 id="myListTitle">Mes favoris</h2><p id="myListCount"></p><div class="actions"><button class="button" id="playMyList">Écouter la sélection ▶</button><button class="text-button" id="renamePlaylist" hidden>Renommer</button><button class="text-button" id="deletePlaylist" hidden>Supprimer la playlist</button></div></div></div>
@@ -149,13 +151,13 @@
 <script src="./studio-19v00.js"></script>
 <script src="./maintenance-19v01.js"></script>
 <script src="./audio-edits-19v06.js"></script>
-<script src="./app-17v01.js"></script>
+<script src="./highlight-tail-20.js"></script>
+<script src="./site-editor-model.js"></script><script src="./site-editor-runtime.js"></script><script src="./site-editor.js"></script><script src="./app-17v01.js"></script>
 <script src="./comfort-18v05.js" defer></script>
 <script src="./interface-layout.js" defer></script>
 <script src="./design-20.js" defer></script>
 <script src="./release-download.js" defer></script>
-<script src="./mobile-player-18v07.js" defer></script></body>
+<script src="./mobile-player-18v07.js" defer></script><script src="./experience.js" defer></script><script src="./listening-beta.js" defer></script><script src="./renewal-beta.js" defer></script><script src="./beat-reactivity.js" defer></script></body>
 </html>
 
 <!-- Livraison Web 18V04 : néon des pochettes. -->
-

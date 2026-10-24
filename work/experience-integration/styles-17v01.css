@@ -1,0 +1,44 @@
+/* Additional controls inherit the established neon palette. */
+.au-blind-selection{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;max-height:55vh;overflow:auto;padding:12px 0;margin:16px 0}
+.au-blind-choice{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #ffffff20;border-radius:8px;cursor:pointer}
+.au-blind-choice input{flex:0 0 auto;width:18px;height:18px}
+.au-blind-choice[hidden]{display:none}
+#blindtest output{display:block;font-variant-numeric:tabular-nums;font-size:clamp(28px,5vw,48px);margin:20px 0}
+#blindtest form{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+#blindtest input[type=search],#blindtest input:not([type]),#statistiques select,#statistiques input{max-width:100%;padding:10px;border:1px solid #ffffff40;border-radius:6px;background:#101b2b;color:inherit}
+#blindtest table{width:100%;border-collapse:collapse;margin:20px 0}
+#blindtest td,#blindtest th{padding:10px;text-align:left;border-bottom:1px solid #ffffff20;overflow-wrap:anywhere}
+.au-summary-categories{display:grid;gap:16px;margin:24px 0}
+.au-summary-categories summary{cursor:pointer;font-size:20px;font-weight:700;padding:8px 0}
+.au-stat-metric{padding:16px 0;border-bottom:1px solid #ffffff20;overflow-wrap:anywhere}
+.au-stat-metric h3{font-size:16px;margin:0 0 10px}
+.au-stat-metric dl{display:grid;grid-template-columns:minmax(80px,1fr) minmax(0,2fr);gap:8px;margin:0}
+.au-stat-metric dd{margin:0;min-width:0}.au-stat-metric ol{padding-left:24px}
+#statistiques form label{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:14px 0}
+#statistiques>.actions{flex-wrap:wrap}
+.au-trophy{border:1px solid #ffffff25;position:relative;padding-left:60px}
+.au-trophy:before{content:'✦';position:absolute;left:18px;top:20px;font-size:30px;color:#5cecff;text-shadow:0 0 16px #5cecff80}
+.au-trophy[data-level='10']:before,.au-trophy[data-level='11']:before,.au-trophy[data-level='12']:before{color:#f2cb67;text-shadow:0 0 20px #f2cb6780}
+@media(max-width:600px){.au-blind-selection{grid-template-columns:1fr}.au-stat-metric dl{grid-template-columns:1fr}.au-stat-metric dd{padding-left:12px}#blindtest td,#blindtest th{padding:6px;font-size:13px}}
+
+.au-trophy[data-level]{border-color:hsl(var(--trophy-hue,190) 65% 65% / .5)}
+.au-trophy[data-level]:before{color:hsl(var(--trophy-hue,190) 80% 75%);text-shadow:0 0 18px hsl(var(--trophy-hue,190) 80% 65% / .6)}
+
+/* 17V06 : partage et vitesse de synchronisation */
+.track-share{flex:0 0 auto;margin-inline:4px;padding:8px;font-size:.8rem}.dock-share{font-size:.8rem;padding:6px 10px}.track-share-dialog .major-dialog-body{display:flex;flex-direction:column;gap:14px}.share-link{width:100%;min-width:0;box-sizing:border-box}.sync-speed{margin-block:12px}.sync-speed small{display:block;line-height:1.5;margin-top:6px}.track-share-dialog time{font-size:.85rem;color:var(--muted)}
+@media(max-width:480px){.track-share{padding:8px 4px;font-size:.7rem}.au-track-row{flex-wrap:wrap}.track-share-dialog .button{white-space:normal}}
+
+/* Panneau unique des applications : PC, Android et iOS. */
+.au-app-announcement{display:block;padding:22px 26px}
+.au-app-announcement .au-app-intro h2{font-size:clamp(21px,2.6vw,30px);margin:0 0 8px}
+.au-app-announcement .au-app-intro p{max-width:none;font-size:13px}
+.au-app-platforms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.au-app-platform{display:flex;flex-direction:column;gap:9px;padding:14px;border:1px solid #53769166;border-radius:8px;background:#10203388;min-width:0}
+.au-app-platform h3{margin:0;font-size:17px;color:#eefaff}
+.au-app-announcement .au-app-platform p{font-size:12px;line-height:1.5;flex:1}
+.au-app-platform .button{width:100%;font-size:12px;padding:11px 9px;text-align:center}
+.au-app-platform .text-button{font-size:11px;color:#c8dceb;text-align:center;line-height:1.5}
+@media(max-width:680px){.au-app-platforms{grid-template-columns:1fr;gap:10px}.au-app-platform{padding:12px}.au-app-announcement{padding:18px}}
+
+.au-current-lyrics-only .au-lyric-line[hidden]{display:none!important}
+.au-current-lyrics-only .au-lyric-line{opacity:1;transform:none}

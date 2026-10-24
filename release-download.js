@@ -28,4 +28,3 @@
  refresh().catch(()=>{});
  link.addEventListener('click',async event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();if(link.getAttribute('aria-busy')==='true')return;link.setAttribute('aria-busy','true');try{await refresh();location.assign(current?.url||releasesPage);}catch{location.assign(current?.url||releasesPage);}finally{link.removeAttribute('aria-busy');}});
 })();
-
