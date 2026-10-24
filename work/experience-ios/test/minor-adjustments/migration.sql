@@ -125,7 +125,7 @@ begin
 end;$$;
 revoke all on function au_editor_private.presentation_diff(jsonb,jsonb),au_editor_private.note_value(jsonb) from public,anon,authenticated;
 create or replace function au_editor_private.preview_minor(p jsonb) returns jsonb language plpgsql security definer set search_path='' as $$
-declare d au_editor_private.drafts%rowtype;pub au_editor_private.published%rowtype;k text;targets text[];changes jsonb:='[]';versions jsonb:='{}';item jsonb;grouped jsonb;changed boolean:=false;
+declare d au_editor_private.drafts%rowtype;pub au_editor_private.published%rowtype;k text;targets text[];changes jsonb:='[]';versions jsonb:='{}';v_item jsonb;grouped jsonb;changed boolean:=false;
 begin
  if auth.uid() is null or not coalesce(public.au_is_creator(),false) then raise insufficient_privilege using message='Accès réservé au Créateur.';end if;
  select * into d from au_editor_private.drafts where id=(p->>'id')::uuid;
@@ -138,14 +138,14 @@ begin
   select * into pub from au_editor_private.published where profile=k;
   versions=jsonb_set(versions,array[k],to_jsonb(pub.revision));
   if pub.document is distinct from d.documents->k then changed=true;end if;
-  for item in select * from au_editor_private.presentation_diff(pub.document,d.documents->k) loop changes=changes||jsonb_build_array(item||jsonb_build_object('profile',k));end loop;
+  for v_item in select * from au_editor_private.presentation_diff(pub.document,d.documents->k) loop changes=changes||jsonb_build_array(v_item||jsonb_build_object('profile',k));end loop;
  end loop;
  select coalesce(jsonb_agg(jsonb_build_object('id',md5(text),'text',text,'platforms',profiles) order by text),'[]') into grouped from (select item->>'text' text,jsonb_agg(distinct item->>'profile') profiles from jsonb_array_elements(changes) item group by item->>'text') x;
  return jsonb_build_object('changes',grouped,'revisions',versions,'changed',changed,'draftRevision',d.revision,'nextNumber',(select last_number+1 from au_editor_private.minor_counter where singleton));
 end;$$;
 revoke all on function au_editor_private.preview_minor(jsonb) from public,anon,authenticated;
 create or replace function au_editor_private.api(p_action text,p jsonb default '{}') returns jsonb language plpgsql security definer set search_path='' as $$
-declare preview jsonb;d au_editor_private.drafts%rowtype;k text;targets text[];minor_number bigint;changes jsonb;version_number text;revisions jsonb:='{}';
+declare preview jsonb;d au_editor_private.drafts%rowtype;k text;targets text[];minor_number bigint;v_changes jsonb;version_number text;revisions jsonb:='{}';
 begin
  if p_action='minor_history' then return coalesce((select jsonb_agg(jsonb_build_object('number',h.number,'created_at',h.created_at,'changes',h.changes) order by h.number desc) from (select * from au_editor_private.minor_publications where nullif(p->>'before','') is null or number<(p->>'before')::bigint order by number desc limit 25) h),'[]');end if;
  if p_action='preview_minor' then return au_editor_private.preview_minor(p);end if;
@@ -157,16 +157,16 @@ begin
  preview=au_editor_private.preview_minor(p);
  if not (preview->>'changed')::boolean then raise exception 'Aucun changement à publier pour ces destinations.';end if;
  if p->'expected_revisions' is distinct from preview->'revisions' then raise exception 'La présentation publiée a changé. Actualise l’éditeur et relis les ajustements avant de publier.';end if;
- changes=preview->'changes';
- if jsonb_array_length(changes)>0 then
+ v_changes=preview->'changes';
+ if jsonb_array_length(v_changes)>0 then
   update au_editor_private.minor_counter set last_number=last_number+1 where singleton returning last_number into minor_number;
   if p?'notes' then
    if jsonb_typeof(p->'notes') is distinct from 'object' then raise exception 'Notes invalides.';end if;
-   if exists(select 1 from jsonb_object_keys(p->'notes') x where not exists(select 1 from jsonb_array_elements(changes) c where c->>'id'=x)) then raise exception 'Une note ne correspond plus aux changements.';end if;
+   if exists(select 1 from jsonb_object_keys(p->'notes') x where not exists(select 1 from jsonb_array_elements(v_changes) c where c->>'id'=x)) then raise exception 'Une note ne correspond plus aux changements.';end if;
    if exists(select 1 from jsonb_each(p->'notes') x where jsonb_typeof(x.value)<>'string' or length(btrim(x.value#>>'{}')) not between 1 and 1000) then raise exception 'Chaque note doit contenir entre 1 et 1000 caractères.';end if;
-   select jsonb_agg(c||jsonb_build_object('text',coalesce(p->'notes'->> (c->>'id'),c->>'text'))) into changes from jsonb_array_elements(changes) c;
+   select jsonb_agg(c||jsonb_build_object('text',coalesce(p->'notes'->> (c->>'id'),c->>'text'))) into v_changes from jsonb_array_elements(v_changes) c;
   end if;
-  insert into au_editor_private.minor_publications(number,changes) values(minor_number,changes);
+  insert into au_editor_private.minor_publications(number,changes) values(minor_number,v_changes);
  end if;
  foreach k in array targets loop
   if d.documents->k is not distinct from (select document from au_editor_private.published where profile=k) then continue;end if;
