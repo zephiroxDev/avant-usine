@@ -7,6 +7,8 @@ with zipfile.ZipFile(p) as archive:
     info=plistlib.loads(archive.read('Payload/App.app/Info.plist'))
     assert info['CFBundleIdentifier']=='dev.zephirox.avantusine.ios'
     assert info['CFBundleShortVersionString']==release['version']
+    assert str(info['CFBundleVersion'])==str(release['buildNumber'])
+    assert info['CFBundleDisplayName']==('betatesting Avant l’usine' if release.get('channel')=='creator-testing' else 'Avant l’usine')
     assert info['UIDeviceFamily']==[1,2]
     assert 'iPhoneOS' in info['CFBundleSupportedPlatforms']
     assert archive.read('Payload/App.app/'+info['CFBundleExecutable'])[:4] in [b'\xcf\xfa\xed\xfe',b'\xca\xfe\xba\xbe',b'\xca\xfe\xba\xbf'], 'Not a device executable'

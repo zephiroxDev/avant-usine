@@ -18,7 +18,7 @@ function create({host,phrase,audio,status,onCapture,onAdvance}){
  function save(complete=false){if(!stroke)return true;const record=stroke;stroke=null;bar.dataset.recording='false';try{onCapture(record.id,record.points,complete);return true;}catch(e){status.textContent=e.message;return false;} }
  function sample(value){if(!stroke||audio.paused||audio.seeking)return;let x=Math.max(0,Math.min(stroke.length,value*stroke.length)),t=clock(),points=stroke.points,last=points.at(-1);if(x<=last[0]||t<=last[1]){paint(last[0]/stroke.length);return;}
   // An almost identical position preserves audible holds without duplicate offsets.
-  if(t-last[1]>.12&&x-last[0]>.001)points.push([last[0]+.0001,t-.001]);
+  if(x<stroke.length&&t-last[1]>.12&&x-last[0]>.001)points.push([last[0]+.0001,t-.001]);
   points.push([x,t]);if(points.length>1800)stroke.points=points.filter((_,i)=>i===0||i===points.length-1||i%2===0);paint(x/stroke.length);
   if(x>=stroke.length&&save(true)){reset=true;onAdvance();status.textContent=line?(audio.paused?'Phrase suivante prête. Reprends la musique pour continuer.':'Phrase suivante prête : ramène la barre au début, puis continue.'):'Cette voix est synchronisée. Vérifie son aperçu.';}
  }
@@ -38,3 +38,4 @@ function create({host,phrase,audio,status,onCapture,onAdvance}){
 }
 window.AU_SYNC_SLIDER_19V03={create};
 })();
+

@@ -6,7 +6,7 @@ release=json.loads((root/'release.json').read_text())
 app=root/'ios/App/App'
 p=app/'Info.plist'
 info=plistlib.loads(p.read_bytes())
-info.update(CFBundleDisplayName='betatesting Avant l’usine', CFBundleShortVersionString=release['version'],
+info.update(CFBundleDisplayName=('betatesting Avant l’usine' if release.get('channel')=='creator-testing' else 'Avant l’usine'), CFBundleShortVersionString=release['version'],
             CFBundleVersion=str(release['buildNumber']), UIFileSharingEnabled=True,
             LSSupportsOpeningDocumentsInPlace=True, NSSupportsLiveActivities=True, UIBackgroundModes=['audio'])
 p.write_bytes(plistlib.dumps(info))

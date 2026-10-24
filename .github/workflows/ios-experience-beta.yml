@@ -1,6 +1,6 @@
 # LOCAL PREPARATION ONLY. Do not send to GitHub without user approval.
 # Private test artifact only: no Pages deployment, release, tag or promotion.
-name: iPhone validated experience - beta only
+name: iPhone public experience 2.0.5 verification
 on:
   push:
     branches: [ios/experience-beta]
@@ -64,14 +64,14 @@ jobs:
         run: |
           mkdir -p build/ipa/Payload
           ditto build/Build/Products/Release-iphoneos/App.app build/ipa/Payload/App.app
-          ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload build/betatesting-2-0-5-test-3.ipa
-          python scripts/verify-ipa.py build/betatesting-2-0-5-test-3.ipa
+          ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload build/Avant-Usine-iOS-2.0.5-non-signe.ipa
+          python scripts/verify-ipa.py build/Avant-Usine-iOS-2.0.5-non-signe.ipa
       - uses: actions/upload-artifact@v7
         if: success()
         with:
           name: iphone-experience-beta
           path: |
-            work/experience-ios/build/betatesting-2-0-5-test-3.ipa
+            work/experience-ios/build/Avant-Usine-iOS-2.0.5-non-signe.ipa
             work/experience-ios/build/livraison.json
           if-no-files-found: error
           retention-days: 7

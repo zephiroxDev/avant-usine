@@ -1,6 +1,16 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "20.0.5",
+      "24 octobre 2026",
+      "Une expérience plus claire, des paroles plus fluides.",
+      [
+        "Interface repensée : navigation plus lisible, Communauté réorganisée, Blind Test modernisé et commandes mieux espacées.",
+        "Paroles affinées : progression des dernières lettres Highlight plus régulière et suivi recalculé lors des sauts entre phrases.",
+        "Effets de lumière liés au rythme du morceau, avec une intensité réglable et une désactivation possible."
+      ]
+    ],
+    [
       "20.0.4 · Site PC",
       "21 octobre 2026",
       "Les paroles suivent vos déplacements dans le morceau.",
@@ -992,6 +1002,16 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "web-mobile": [
     [
+      "20.0.5",
+      "24 octobre 2026",
+      "Une expérience plus claire, des paroles plus fluides.",
+      [
+        "Interface repensée : navigation plus lisible, Communauté réorganisée, Blind Test modernisé et commandes mieux espacées.",
+        "Paroles affinées : progression des dernières lettres Highlight plus régulière et suivi recalculé lors des sauts entre phrases.",
+        "Effets de lumière liés au rythme du morceau, avec une intensité réglable et une désactivation possible."
+      ]
+    ],
+    [
       "20.0.4 · Site mobile",
       "21 octobre 2026",
       "Les paroles suivent vos déplacements dans le morceau.",
@@ -1827,6 +1847,17 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "2.0.5 · iPhone et iPad",
+      "24 octobre 2026",
+      "Une expérience plus claire, des paroles plus fluides.",
+      [
+        "Interface repensée : navigation plus lisible, Communauté réorganisée, Blind Test modernisé et commandes mieux espacées.",
+        "Paroles affinées : progression des dernières lettres Highlight plus régulière et suivi recalculé lors des sauts entre phrases.",
+        "Effets de lumière liés au rythme du morceau, avec une intensité réglable et une désactivation possible.",
+        "Dans l’application, bibliothèque Local simplifiée et commandes regroupées selon le contexte."
+      ]
+    ],
     [
       "20.0.4 · iPhone et iPad 2.0.4",
       "21 octobre 2026",

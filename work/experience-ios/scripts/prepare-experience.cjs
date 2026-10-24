@@ -1,9 +1,10 @@
 /* Isolated iPhone preparation; no paused platform build or public release. */
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),source=path.resolve(root,'../experience-integration'),dest=path.join(root,'site'),release=require('../release.json');
-if(release.channel!=='creator-testing')throw Error('Private beta only');
+if(!['creator-testing','stable'].includes(release.channel))throw Error('Unknown release channel');
+require('../../experience-integration/prepare-editor-preview.cjs');
 fs.mkdirSync(dest,{recursive:true});
-for(const name of fs.readdirSync(source))if(/\.(?:html|css|js|webp|mp4|png|ico)$/.test(name)||['archive-downloads.json','promo-manifest.json'].includes(name))fs.copyFileSync(path.join(source,name),path.join(dest,name));
+for(const name of fs.readdirSync(source))if(!name.startsWith('test-')&&name!=='editor-test.html'&&(/\.(?:html|css|js|webp|mp4|png|ico)$/.test(name)||['archive-downloads.json','promo-manifest.json'].includes(name)))fs.copyFileSync(path.join(source,name),path.join(dest,name));
 const {adaptCopy}=require('../../desktop-app/scripts/desktop-copy.cjs');
 let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
 html=html.replace('<head>','<head><script>document.documentElement.dataset.auApp="ios";</script>');
