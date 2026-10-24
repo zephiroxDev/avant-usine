@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "20.0.5.2",
+      "24 octobre 2026",
+      "Un historique distinct pour les ajustements mineurs.",
+      [
+        "Nouvelle rubrique Ajustements mineurs : détails avant/après et plateformes indiquées pour chaque changement.",
+        "Les retouches de présentation sont distinguées des nouvelles versions des applications."
+      ]
+    ],
+    [
       "20.0.5",
       "24 octobre 2026",
       "Une expérience plus claire, des paroles plus fluides.",
@@ -1001,6 +1010,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "20.0.5.2",
+      "24 octobre 2026",
+      "Un historique distinct pour les ajustements mineurs.",
+      [
+        "Nouvelle rubrique Ajustements mineurs : détails avant/après et plateformes indiquées pour chaque changement.",
+        "Les retouches de présentation sont distinguées des nouvelles versions des applications."
+      ]
+    ],
     [
       "20.0.5",
       "24 octobre 2026",

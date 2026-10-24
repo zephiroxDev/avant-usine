@@ -1,6 +1,15 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "20.0.5.2",
+      "24 octobre 2026",
+      "Un historique distinct pour les ajustements mineurs.",
+      [
+        "Nouvelle rubrique Ajustements mineurs : détails avant/après et plateformes indiquées pour chaque changement.",
+        "Les retouches de présentation sont distinguées des nouvelles versions des applications."
+      ]
+    ],
+    [
       "20.0.5",
       "24 octobre 2026",
       "Une expérience plus claire, des paroles plus fluides.",
@@ -1002,6 +1011,15 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "web-mobile": [
     [
+      "20.0.5.2",
+      "24 octobre 2026",
+      "Un historique distinct pour les ajustements mineurs.",
+      [
+        "Nouvelle rubrique Ajustements mineurs : détails avant/après et plateformes indiquées pour chaque changement.",
+        "Les retouches de présentation sont distinguées des nouvelles versions des applications."
+      ]
+    ],
+    [
       "20.0.5",
       "24 octobre 2026",
       "Une expérience plus claire, des paroles plus fluides.",
@@ -1847,6 +1865,15 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "2.0.6 · iPhone et iPad",
+      "24 octobre 2026",
+      "Les ajustements de présentation ont leur propre historique.",
+      [
+        "Nouvelle rubrique Ajustements mineurs, avec les plateformes concernées indiquées pour chaque changement.",
+        "Les ajustements de présentation sont distingués des nouvelles versions du fichier d’application."
+      ]
+    ],
     [
       "2.0.5 · iPhone et iPad",
       "24 octobre 2026",
