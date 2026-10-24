@@ -79,12 +79,13 @@ create or replace function au_editor_private.note_value(v jsonb) returns text la
  select case when v is null or v='null'::jsonb then 'valeur d’origine' else regexp_replace(left(v#>>'{}',240),'([0-9])(%|px)$','\1 \2') end;
 $$;
 create or replace function au_editor_private.presentation_diff(a jsonb,b jsonb) returns setof jsonb language plpgsql immutable set search_path='' as $$
-declare item_key text;p jsonb;q jsonb;baseline jsonb;label text;subject text;genitive text;prop text;old_value jsonb;new_value jsonb;sentence text;old_place jsonb;new_place jsonb;prop_names constant jsonb:='{"font-size":"Taille du texte","width":"Largeur","max-width":"Largeur maximale","min-height":"Hauteur minimale","padding":"Espace intérieur","margin":"Marge extérieure","gap":"Espacement","border-radius":"Arrondi","color":"Couleur du texte","background-color":"Couleur du fond","opacity":"Opacité","font-weight":"Épaisseur du texte","text-align":"Alignement du texte"}';
+declare item_key text;p jsonb;q jsonb;baseline jsonb;label text;subject text;genitive text;prop text;old_value jsonb;new_value jsonb;sentence text;old_place jsonb;new_place jsonb;block_patch jsonb;prop_names constant jsonb:='{"font-size":"Taille du texte","width":"Largeur","max-width":"Largeur maximale","min-height":"Hauteur minimale","padding":"Espace intérieur","margin":"Marge extérieure","gap":"Espacement","border-radius":"Arrondi","color":"Couleur du texte","background-color":"Couleur du fond","opacity":"Opacité","font-weight":"Épaisseur du texte","text-align":"Alignement du texte"}';
 begin
  for item_key in select x->>'key' from jsonb_array_elements(a->'patches') x union select x->>'key' from jsonb_array_elements(b->'patches') x loop
   select x into p from jsonb_array_elements(a->'patches') x where x->>'key'=item_key;
   select x into q from jsonb_array_elements(b->'patches') x where x->>'key'=item_key;
   if coalesce(q->'meta'->>'private',p->'meta'->>'private','false')='true' or coalesce(q->>'selector',p->>'selector','')~*'#(accountDialog|creatorDialog|catalogDialog)|data-au-access|data-secret-zone' then continue;end if;
+  if exists(select 1 from jsonb_array_elements(b->'blocks') x where '#au-custom-'||(x->>'id')=q->>'selector') and not exists(select 1 from jsonb_array_elements(a->'blocks') x where '#au-custom-'||(x->>'id')=q->>'selector') then continue;end if;
   baseline=coalesce(p->'before',q->'before','{}');label=left(coalesce(q->'meta'->>'label',p->'meta'->>'label',baseline->>'label','Élément'),100);
   subject=coalesce(q->'meta'->>'kind',p->'meta'->>'kind','élément')||' « '||label||' »';genitive=case when subject like 'image %' then 'de l’'||subject when subject like 'élément %' then 'de l’'||subject else 'du '||subject end;
   for prop in select jsonb_object_keys(coalesce(p->'styles','{}')) union select jsonb_object_keys(coalesce(q->'styles','{}')) loop
@@ -98,7 +99,7 @@ begin
   for prop in select unnest(array['text','href','image','hidden']) loop
    old_value=coalesce(p->prop,baseline->prop,case when prop='hidden' then 'false'::jsonb else null end);new_value=coalesce(q->prop,baseline->prop,case when prop='hidden' then 'false'::jsonb else null end);
    if old_value is distinct from new_value then
-    sentence=case prop when 'text' then 'Texte '||genitive||' : « '||au_editor_private.note_value(old_value)||' » → « '||au_editor_private.note_value(new_value)||' ».' when 'href' then 'Destination du lien '||genitive||' modifiée.' when 'image' then 'Image '||genitive||' remplacée.' else case when new_value='true'::jsonb then 'Masquage de ' else 'Réaffichage de ' end||subject||'.' end;
+    sentence=case prop when 'text' then 'Texte '||genitive||' : « '||au_editor_private.note_value(old_value)||' » → « '||au_editor_private.note_value(new_value)||' ».' when 'href' then 'Destination du lien '||genitive||' : de « '||au_editor_private.note_value(old_value)||' » vers « '||au_editor_private.note_value(new_value)||' ».' when 'image' then 'Image '||genitive||' remplacée.' else case when new_value='true'::jsonb then 'Masquage de ' else 'Réaffichage de ' end||subject||'.' end;
     return next jsonb_build_object('text',sentence,'kind',prop);
    end if;
   end loop;
@@ -115,8 +116,10 @@ begin
   select x into p from jsonb_array_elements(a->'blocks') x where x->>'id'=item_key;
   select x into q from jsonb_array_elements(b->'blocks') x where x->>'id'=item_key;
   if coalesce(q->>'private',p->>'private','false')='true' or coalesce(q->>'parent',p->>'parent','')~*'#(accountDialog|creatorDialog|catalogDialog)|data-au-access|data-secret-zone' then continue;end if;
-  label=left(coalesce(q->>'text',p->>'text','Élément'),100);
-  if p is null then sentence='Ajout de '||case q->>'type' when 'heading' then 'titre' when 'button' then 'bouton-lien' when 'image' then 'image' else 'texte' end||' « '||label||' » dans « '||coalesce(q->>'parentLabel','le bloc choisi')||' ».';
+  select x into block_patch from jsonb_array_elements(b->'patches') x where x->>'selector'='#au-custom-'||item_key;
+  if p is null and block_patch->>'hidden'='true' then continue;end if;
+  label=left(coalesce(block_patch->>'text',q->>'text',p->>'text','Élément'),100);
+  if p is null then sentence='Ajout de '||case q->>'type' when 'heading' then 'titre' when 'button' then 'bouton-lien' when 'image' then 'image' else 'texte' end||' « '||label||' » dans « '||coalesce(block_patch->'place'->>'label',q->>'parentLabel','le bloc choisi')||' ».';
   elsif q is null then sentence='Suppression de l’élément « '||label||' ».';
   elsif p is distinct from q then sentence='Modification de l’élément ajouté « '||label||' ».';
   else continue;end if;
