@@ -147,7 +147,7 @@ revoke all on function au_editor_private.preview_minor(jsonb) from public,anon,a
 create or replace function au_editor_private.api(p_action text,p jsonb default '{}') returns jsonb language plpgsql security definer set search_path='' as $$
 declare preview jsonb;d au_editor_private.drafts%rowtype;k text;targets text[];minor_number bigint;changes jsonb;version_number text;revisions jsonb:='{}';
 begin
- if p_action='minor_history' then return coalesce((select jsonb_agg(jsonb_build_object('number',number,'created_at',created_at,'changes',changes) order by number desc) from (select * from au_editor_private.minor_publications where nullif(p->>'before','') is null or number<(p->>'before')::bigint order by number desc limit 25) h),'[]');end if;
+ if p_action='minor_history' then return coalesce((select jsonb_agg(jsonb_build_object('number',h.number,'created_at',h.created_at,'changes',h.changes) order by h.number desc) from (select * from au_editor_private.minor_publications where nullif(p->>'before','') is null or number<(p->>'before')::bigint order by number desc limit 25) h),'[]');end if;
  if p_action='preview_minor' then return au_editor_private.preview_minor(p);end if;
  if p_action<>'publish' then return au_editor_private.base_api(p_action,p);end if;
  if auth.uid() is null or not coalesce(public.au_is_creator(),false) then raise insufficient_privilege using message='Accès réservé au Créateur.';end if;
