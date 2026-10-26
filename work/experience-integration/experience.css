@@ -22,3 +22,18 @@ html[data-experience] .xp-cover{--xp-art-radius:8px}html[data-experience] .xp-he
 html[data-experience] :is(.xp-cover,.xp-hero-cover,.xp-song-art,.xp-mini-cover,.xp-player-art,.au20-player-art,.album-cover,.now-cover,.au-im-picture)>:is(canvas,img,video,.au-motion-cover){border-radius:inherit!important;max-width:100%;max-height:100%}
 html[data-experience] .au-motion-cover>:is(canvas,img,video){display:block;border-radius:inherit!important;clip-path:inherit}
 @media(prefers-reduced-motion:reduce){html[data-experience] *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+/* V21: reserve the game screen for its answers, including on short displays. */
+html[data-xp-route=blindtest] .xp-mini{display:none!important}
+/* Anchor the scroll container inside the viewport instead of allowing its
+   intrinsic content height to push the beginning above the reachable area. */
+html[data-experience] .xp-full-player{
+ box-sizing:border-box;position:fixed;inset:16px 0;margin:0 auto;
+ height:calc(100dvh - 32px);max-height:calc(100dvh - 32px)!important;
+ overflow-y:auto;overscroll-behavior:contain;scroll-padding-top:24px;
+}
+.xp-full-player .xp-dialog-body{min-height:0;min-width:0}
+.xp-full-player .xp-player-art{flex-shrink:0}
+@media(max-width:700px){html[data-experience] .xp-full-player{
+ inset:8px 0;margin:0 auto;height:calc(100dvh - 16px);
+ max-height:calc(100dvh - 16px)!important;
+}}

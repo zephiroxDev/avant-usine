@@ -6,7 +6,7 @@
   const full=document.querySelector('.xp-full-player'),api=window.AU_EXPERIENCE;
   if(mounted||!full||!api)return;mounted=true;
   const body=full.querySelector('.xp-dialog-body'),normal=full.querySelector('.xp-player-normal'),dock=full.querySelector('.player-dock'),lyrics=full.querySelector('#paroles');
-  const footer=document.createElement('section');footer.className='xp-listening-transport';footer.setAttribute('aria-label','Commandes de lecture');body.insertBefore(footer,body.querySelector('.xp-player-switch'));
+  const identity=lyrics.querySelector('.au20-art-column'),identityHome=identity?.parentElement;const footer=document.createElement('section');footer.className='xp-listening-transport';footer.setAttribute('aria-label','Commandes de lecture');body.insertBefore(footer,body.querySelector('.xp-player-switch'));
   const options=lyrics.querySelector('.au20-lyric-options'),annotations=lyrics.querySelector('.xp-annotations');if(options&&annotations)options.append(annotations);
   const glass=document.createElement('div');glass.className='xp-listening-light';glass.setAttribute('aria-hidden','true');full.prepend(glass);
   let timer=0,deadline=0,idle=false,ignoreWakeClick=false;
@@ -18,7 +18,7 @@
    if(full.querySelector('details[open],input:focus,textarea:focus,select:focus,:focus-visible')||[...document.querySelectorAll('dialog[open]')].some(d=>d!==full)){wake();return;}setIdle(true);
   }
   function wake(){setIdle(false);clearTimeout(timer);if(active()){deadline=performance.now()+10000;timer=setTimeout(settle,10000);}}
-  function sync(){if(active()){if(dock.parentElement!==footer)footer.append(dock);wake();}else{if(dock.parentElement!==normal)normal.append(dock);clearTimeout(timer);setIdle(false);}}
+  function sync(){if(active()){if(identity&&identity.parentElement!==footer)footer.prepend(identity);if(dock.parentElement!==footer)footer.append(dock);wake();}else{if(identity&&identityHome&&identity.parentElement!==identityHome)identityHome.prepend(identity);if(dock.parentElement!==normal)normal.append(dock);clearTimeout(timer);setIdle(false);}}
   function activity(e){if(!active())return;const wasIdle=idle;wake();if(e.type==='pointerdown'){ignoreWakeClick=wasIdle;if(wasIdle){e.preventDefault();e.stopImmediatePropagation();}}}
   full.addEventListener('click',e=>{if(ignoreWakeClick){ignoreWakeClick=false;e.preventDefault();e.stopImmediatePropagation();}},{capture:true});
   for(const event of ['pointerdown','pointermove','keydown','wheel','focusin'])full.addEventListener(event,activity,{capture:true,passive:false});

@@ -1,6 +1,18 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "21.0",
+      "26 octobre 2026",
+      "Une lecture plus claire, des albums prêts à emporter.",
+      [
+        "Navigation redistribuée et accès direct au Blind Test ; le lecteur ne recouvre plus ses réponses.",
+        "Nouvelle présentation des paroles classiques, approximatives et Highlight : texte blanc, transitions adoucies et backs distincts.",
+        "Commandes des paroles regroupées dans les réglages d’écoute ; grand lecteur adapté à l’écran.",
+        "Albums préparés avec les titres et métadonnées actuels, les paroles, les synchronisations et les pochettes fixes et animées.",
+        "Sur les sites, espace Local temporaire réservé à la préparation des albums du catalogue. Dans les applications, les albums peuvent être conservés dans Local."
+      ]
+    ],
+    [
       "20.0.5.2",
       "24 octobre 2026",
       "Un historique distinct pour les ajustements mineurs.",
@@ -579,6 +591,17 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "21.0 · Windows 0.7.0",
+      "26 octobre 2026",
+      "Une lecture plus claire, des albums prêts à emporter.",
+      [
+        "Navigation redistribuée et accès direct au Blind Test ; le lecteur ne recouvre plus ses réponses.",
+        "Nouvelle présentation des paroles classiques, approximatives et Highlight : texte blanc, transitions adoucies et backs distincts.",
+        "Commandes des paroles regroupées dans les réglages d’écoute ; grand lecteur adapté à l’écran.",
+        "Albums préparés avec les titres et métadonnées actuels, les paroles, les synchronisations et les pochettes fixes et animées."
+      ]
+    ],
+    [
       "20.0.4 · Windows 0.6.4",
       "21 octobre 2026",
       "Les paroles suivent vos déplacements dans le morceau.",
@@ -1010,6 +1033,18 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "21.0",
+      "26 octobre 2026",
+      "Une lecture plus claire, des albums prêts à emporter.",
+      [
+        "Navigation redistribuée et accès direct au Blind Test ; le lecteur ne recouvre plus ses réponses.",
+        "Nouvelle présentation des paroles classiques, approximatives et Highlight : texte blanc, transitions adoucies et backs distincts.",
+        "Commandes des paroles regroupées dans les réglages d’écoute ; grand lecteur adapté à l’écran.",
+        "Albums préparés avec les titres et métadonnées actuels, les paroles, les synchronisations et les pochettes fixes et animées.",
+        "Sur les sites, espace Local temporaire réservé à la préparation des albums du catalogue. Dans les applications, les albums peuvent être conservés dans Local."
+      ]
+    ],
     [
       "20.0.5.2",
       "24 octobre 2026",
@@ -1865,6 +1900,17 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "2.1.0 · iPhone et iPad",
+      "26 octobre 2026",
+      "Une lecture plus claire, des albums prêts à emporter.",
+      [
+        "Navigation redistribuée et accès direct au Blind Test ; le lecteur ne recouvre plus ses réponses.",
+        "Nouvelle présentation des paroles classiques, approximatives et Highlight : texte blanc, transitions adoucies et backs distincts.",
+        "Commandes des paroles regroupées dans les réglages d’écoute ; grand lecteur adapté à l’écran.",
+        "Albums préparés avec les titres et métadonnées actuels, les paroles, les synchronisations et les pochettes fixes et animées."
+      ]
+    ],
     [
       "2.0.6 · iPhone et iPad",
       "24 octobre 2026",

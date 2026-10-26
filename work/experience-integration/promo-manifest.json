@@ -2,6 +2,18 @@
   "format": 1,
   "images": [
     {
+      "id": "21v00",
+      "patch": "21.0",
+      "image": "promo-21v00.png",
+      "original": "promo-21v00.png",
+      "animation": "promo-21v00-anime.mp4",
+      "platforms": [
+        "Sites PC et mobile 21.0",
+        "Windows 0.7.0",
+        "iPhone et iPad 2.1.0"
+      ]
+    },
+    {
       "id": "20v00-4",
       "patch": "20.0.4",
       "image": "promo-20v00-4.png",

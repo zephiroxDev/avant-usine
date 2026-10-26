@@ -1,16 +1,16 @@
 {
   "format": 1,
-  "updatedAt": "2026-10-21",
+  "updatedAt": "2026-10-26",
   "active": [
     "web-pc",
     "web-mobile",
-    "ios"
+    "ios",
+    "desktop"
   ],
   "paused": [
-    "desktop",
     "android",
     "ps4"
   ],
-  "message": "Windows, Android et PS4 sont temporairement en pause. Les sites et l’application iPhone et iPad restent disponibles.",
+  "message": "Android et PS4 sont temporairement en pause. Les sites, Windows et iPhone/iPad restent disponibles.",
   "preserveUserData": true
 }

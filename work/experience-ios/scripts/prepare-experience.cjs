@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,'..'),source=path.resolve(root,'../experience-
 if(!['creator-testing','stable'].includes(release.channel))throw Error('Unknown release channel');
 require('../../experience-integration/prepare-editor-preview.cjs');
 fs.mkdirSync(dest,{recursive:true});
-for(const name of fs.readdirSync(source))if(!name.startsWith('test-')&&name!=='editor-test.html'&&(/\.(?:html|css|js|webp|mp4|png|ico)$/.test(name)||['archive-downloads.json','promo-manifest.json'].includes(name)))fs.copyFileSync(path.join(source,name),path.join(dest,name));
+for(const name of fs.readdirSync(source))if(!name.startsWith('test-')&&!name.startsWith('preview-v21')&&name!=='editor-test.html'&&(/\.(?:html|css|js|mjs|webp|mp4|png|ico)$/.test(name)||['archive-downloads.json','promo-manifest.json','mediabunny-LICENSE.txt'].includes(name)))fs.copyFileSync(path.join(source,name),path.join(dest,name));
 const {adaptCopy}=require('../../desktop-app/scripts/desktop-copy.cjs');
 let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
 html=html.replace('<head>','<head><script>document.documentElement.dataset.auApp="ios";</script>');

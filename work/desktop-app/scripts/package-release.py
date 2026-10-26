@@ -7,7 +7,7 @@ assert install.is_file() and portable.is_file(),'Construire les deux exécutable
 bundle=output/f"Avant-Usine-Site-{release['releaseId']}.zip"
 with zipfile.ZipFile(bundle,'w',zipfile.ZIP_DEFLATED) as archive:
  for file in website.iterdir():
-  if file.is_file() and (file.name=='promo-manifest.json' or file.suffix.lower() in ['.html','.js','.css','.png','.ico','.webp','.mp4','.webmanifest','.md','.sql']):
+  if file.is_file() and not file.name.startswith(('preview-v21','editor-test','test-')) and (file.name in ['promo-manifest.json','archive-downloads.json','mediabunny-LICENSE.txt'] or file.suffix.lower() in ['.html','.js','.mjs','.css','.png','.ico','.webp','.mp4','.webmanifest','.md','.sql']):
    archive.write(file,file.name)
 manifest={**release,'files':[{'name':file.name,'bytes':file.stat().st_size,'sha256':hashlib.sha256(file.read_bytes()).hexdigest()} for file in [install,portable,bundle]]}
 (output/'livraison.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')

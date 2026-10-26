@@ -1,0 +1,41 @@
+name: Publish verified Windows 21
+on:
+  push:
+    branches: [main]
+    paths: ['work/desktop-app/verified-release.json']
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      RELEASE_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Check source identity and download verified package
+        shell: python
+        run: |
+          import json,subprocess,os
+          from pathlib import Path
+          repo=os.environ['GH_REPO']
+          def api(path):return json.loads(subprocess.check_output(['gh','api','repos/'+repo+'/'+path]))
+          proof=json.loads(Path('work/desktop-app/verified-release.json').read_text())
+          run=api('actions/runs/'+str(proof['runId']))
+          assert run['head_sha']==proof['sourceCommit'] and run['head_branch']=='ios/experience-beta'
+          assert run['conclusion']=='success' and run['path']=='.github/workflows/windows-21-validation.yml'
+          def tree(sha):
+            data=api('git/trees/'+sha+'?recursive=1');assert not data.get('truncated')
+            return {f['path']:f['sha'] for f in data['tree'] if f['type']=='blob' and f['path'].startswith(('work/desktop-app/','work/experience-integration/')) and f['path']!='work/desktop-app/verified-release.json' and not f['path'].split('/')[-1].startswith('promo-')}
+          assert tree(proof['sourceCommit'])==tree(os.environ['GITHUB_SHA']),'Product changed after verification'
+          subprocess.run(['gh','run','download',str(proof['runId']),'--repo',repo,'--name','windows-21-verified','--dir','outputs'],check=True)
+      - name: Publish verified assets with integrity checks
+        shell: pwsh
+        run: ./work/desktop-app/scripts/publish-ci.ps1
+
