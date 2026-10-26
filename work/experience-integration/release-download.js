@@ -22,9 +22,9 @@
  }
  if(typeof module!=='undefined')module.exports={latest,latestMobile,latestPS4,compare};
  if(typeof document==='undefined')return;
- const link=document.getElementById('iosDownload'),label=document.getElementById('iosDownloadVersion');if(!link)return;
- let current=null,inflight=null;
- async function refresh(){if(inflight)return inflight;inflight=(async()=>{const response=await fetch(api,{headers:{Accept:'application/vnd.github+json'},signal:AbortSignal.timeout(15000),cache:'no-store'});if(!response.ok)throw Error('GitHub indisponible');const item=latestMobile(await response.json(),'ios');if(!item)return;current=item;link.href=item.url;if(label){label.href=item.details;label.textContent='Version '+item.version+' \u00b7 IPA \u00e0 signer \u00b7 D\u00e9tails \u2197';}})().finally(()=>inflight=null);return inflight;}
- refresh().catch(()=>{});
- link.addEventListener('click',async event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();if(link.getAttribute('aria-busy')==='true')return;link.setAttribute('aria-busy','true');try{await refresh();location.assign(current?.url||releasesPage);}catch{location.assign(current?.url||releasesPage);}finally{link.removeAttribute('aria-busy');}});
+ for(const [id,labelId,select]of [['iosDownload','iosDownloadVersion',rows=>latestMobile(rows,'ios')],['desktopDownload','desktopDownloadVersion',latest]]){
+ const link=document.getElementById(id),label=document.getElementById(labelId);if(!link)continue;let current=null,inflight=null;
+ async function refresh(){if(inflight)return inflight;inflight=(async()=>{const response=await fetch(api,{headers:{Accept:'application/vnd.github+json'},signal:AbortSignal.timeout(15000),cache:'no-store'});if(!response.ok)throw Error('GitHub indisponible');const item=select(await response.json());if(!item)return;current=item;link.href=item.url;if(label){label.href=item.details;label.textContent='Version '+item.version+' · Détails ↗';}})().finally(()=>inflight=null);return inflight;}
+ refresh().catch(()=>{});link.addEventListener('click',async event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();if(link.getAttribute('aria-busy')==='true')return;link.setAttribute('aria-busy','true');try{await refresh();location.assign(current?.url||releasesPage);}catch{location.assign(current?.url||releasesPage);}finally{link.removeAttribute('aria-busy');}});
+ }
 })();
