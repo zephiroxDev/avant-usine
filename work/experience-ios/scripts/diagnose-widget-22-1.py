@@ -1,4 +1,4 @@
-import json,subprocess,time,sys
+import json,subprocess,time,sys,re
 from pathlib import Path
 from check_island_display import check_display
 def run(*args):return subprocess.check_output(args,text=True)
@@ -27,7 +27,8 @@ container=Path(run('xcrun','simctl','get_app_container',udid,'dev.zephirox.avant
 probe=container/'Documents/au-debug-probe.json'
 # Warm Settings before starting the test audio: first launch can be slow.
 run('xcrun','simctl','launch',udid,'com.apple.Preferences')
-for phase in ['nativeSeed']:
+subprocess.run(['swiftc','scripts/read-widget-text-22-1.swift','-o','build/read-widget-text'],check=True)
+for phase in ['nativeSeed','nativeVerified']:
     probe.unlink(missing_ok=True)
     run('xcrun','simctl','launch',udid,'dev.zephirox.avantusine.ios')
     state={}
@@ -45,7 +46,8 @@ for phase in ['nativeSeed']:
     captures=Path('build/simulator-captures');captures.mkdir(parents=True,exist_ok=True)
     run('xcrun','simctl','launch',udid,'com.apple.Preferences')
     samples=[]
-    for step in range(6):
+    checkpoints=[]
+    for step in range(24):
         time.sleep(5)
         assert background_probe.exists(), 'Native background probe missing'
         sample=json.loads(background_probe.read_text());samples.append(sample)
@@ -53,6 +55,18 @@ for phase in ['nativeSeed']:
         assert sample['playing'] and sample['nativeAudio'] and sample['background'], sample
         assert sample['highlight']==(phase=='nativeVerified'), sample
         if len(samples)>1:assert sample['position']>samples[-2]['position']+2, 'Native playback clock froze'
+        if (step+1)%6 == 0:
+            screenshot=captures/(phase+'-checkpoint-'+str(step+1)+'.png')
+            run('xcrun','simctl','io',udid,'screenshot',str(screenshot))
+            after=json.loads(background_probe.read_text())
+            lines=json.loads(run('build/read-widget-text',str(screenshot)))
+            numbers=re.findall(r'num[eé]ro\s*(\d+)', ' '.join(lines), flags=re.IGNORECASE)
+            expected=range(int(sample['position']//10)+1,int(after['position']//10)+2)
+            result={'seconds':step*5+5,'positionBefore':sample['position'],'positionAfter':after['position'],'ocr':lines,'matchingAudio':any(int(n) in expected for n in numbers)}
+            checkpoints.append(result)
+            (captures/(phase+'-visible-follow.json')).write_text(json.dumps(checkpoints,indent=2))
+            print('VISIBLE FOLLOW CHECK '+phase+': '+json.dumps(result),flush=True)
+
     # Full 120-second acceptance remains in smoke-simulator.py.
 
     # Preserve the actual system presentation, not only ActivityKit update counters.
