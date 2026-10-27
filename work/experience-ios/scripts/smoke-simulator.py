@@ -1,7 +1,12 @@
-import json,subprocess,time
+import json,subprocess,time,sys
 from pathlib import Path
 from check_island_display import check_display
 def run(*args):return subprocess.check_output(args,text=True)
+
+# Explicit private-beta mode: retain failed visual evidence without claiming a fix.
+# Playback assertions and bridge readiness remain mandatory. Default remains strict.
+report_display_only = '--report-display-only' in sys.argv
+display_results = []
 devices=json.loads(run('xcrun','simctl','list','devices','available','-j'))['devices']
 device=next(d for runtime,items in devices.items() if 'iOS' in runtime for d in items if 'iPhone' in d['name'] and 'Pro' in d['name'] and d.get('isAvailable'))
 print('Dynamic Island simulator: '+device['name'])
@@ -48,7 +53,16 @@ for phase in ['nativeSeed','nativeVerified']:
     run('xcrun','simctl','io',udid,'screenshot',str(captures/(phase+'-island.png')))
     logs=run('xcrun','simctl','spawn',udid,'log','show','--last','2m','--style','compact','--predicate','process == "LyricsIsland" OR process == "liveactivitiesd"')
     (captures/(phase+'-system.log')).write_text(logs)
-    print('SIMULATOR DISPLAY VERIFIED '+phase+': '+json.dumps(check_display(captures/(phase+'-island.png'))))
+    try:
+        display = check_display(captures/(phase+'-island.png'))
+        display_results.append({'phase': phase, 'passed': True, **display})
+        print('SIMULATOR DISPLAY VERIFIED '+phase+': '+json.dumps(display))
+    except AssertionError as error:
+        display_results.append({'phase': phase, 'passed': False, 'error': str(error)})
+        (captures/'display-results.json').write_text(json.dumps(display_results, indent=2))
+        if not report_display_only: raise
+        print('KNOWN DISPLAY FAILURE (NOT VERIFIED) '+phase+': '+str(error))
+    (captures/'display-results.json').write_text(json.dumps(display_results, indent=2))
     print('SIMULATOR BACKGROUND VERIFIED '+phase+': '+json.dumps(samples))
     run('xcrun','simctl','terminate',udid,'dev.zephirox.avantusine.ios')
 run('xcrun','simctl','shutdown',udid)

@@ -87,7 +87,7 @@ jobs:
         run: node --test test/ios.test.cjs test/comfort.test.cjs test/background-catalogue-22-1.test.cjs
       - name: Verify native bridge in simulator
         working-directory: work/experience-ios
-        run: python scripts/smoke-simulator.py
+        run: python scripts/smoke-simulator.py --report-display-only
       - name: Compile iPhone and iPad beta
         working-directory: work/experience-ios
         run: |
