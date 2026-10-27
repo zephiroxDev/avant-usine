@@ -1,4 +1,4 @@
-name: Publish verified Windows 21
+name: Publish verified Windows 22
 on:
   push:
     branches: [main]
@@ -34,8 +34,7 @@ jobs:
             data=api('git/trees/'+sha+'?recursive=1');assert not data.get('truncated')
             return {f['path']:f['sha'] for f in data['tree'] if f['type']=='blob' and f['path'].startswith(('work/desktop-app/','work/experience-integration/')) and f['path']!='work/desktop-app/verified-release.json' and not f['path'].split('/')[-1].startswith('promo-')}
           assert tree(proof['sourceCommit'])==tree(os.environ['GITHUB_SHA']),'Product changed after verification'
-          subprocess.run(['gh','run','download',str(proof['runId']),'--repo',repo,'--name','windows-21-verified','--dir','outputs'],check=True)
+          subprocess.run(['gh','run','download',str(proof['runId']),'--repo',repo,'--name','windows-22-verified','--dir','outputs'],check=True)
       - name: Publish verified assets with integrity checks
         shell: pwsh
         run: ./work/desktop-app/scripts/publish-ci.ps1
-

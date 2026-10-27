@@ -1,6 +1,22 @@
 window.AU_PLATFORM_HISTORIES={
   "web-pc": [
     [
+      "22.0",
+      "27 octobre 2026",
+      "Une identité renouvelée, des paroles plus douces et un Atelier plus pratique.",
+      [
+        "Nouvelle identité visuelle et nouvelle icône, avec choix entre les deux modèles dans les applications.",
+        "Navigation plus directe : rubriques redistribuées et suppression du menu supplémentaire.",
+        "Highlight adouci, dernier mot lumineux et présentation des paroles identique pour tous.",
+        "Highlight estimé clairement signalé pour les morceaux sans synchronisation.",
+        "Atelier : modifier le texte et dupliquer une sélection à l’emplacement choisi, avec confirmation avant une remise à zéro.",
+        "Proposer une correction directement depuis les paroles publiées.",
+        "Découpes et fondus : chargement explicite, état du fichier et nouvelle tentative en cas d’erreur.",
+        "Affiche des nouveautés à la première ouverture après le patch.",
+        "Préférences de communications : sujets, fréquence, heures silencieuses et consentement séparé."
+      ]
+    ],
+    [
       "21.0",
       "26 octobre 2026",
       "Une lecture plus claire, des albums prêts à emporter.",
@@ -591,6 +607,22 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
+      "22.0 · Windows 0.8.0",
+      "27 octobre 2026",
+      "Une identité renouvelée, des paroles plus douces et un Atelier plus pratique.",
+      [
+        "Nouvelle identité visuelle et nouvelle icône, avec choix entre les deux modèles dans les applications.",
+        "Navigation plus directe : rubriques redistribuées et suppression du menu supplémentaire.",
+        "Highlight adouci, dernier mot lumineux et présentation des paroles identique pour tous.",
+        "Highlight estimé clairement signalé pour les morceaux sans synchronisation.",
+        "Atelier : modifier le texte et dupliquer une sélection à l’emplacement choisi, avec confirmation avant une remise à zéro.",
+        "Proposer une correction directement depuis les paroles publiées.",
+        "Découpes et fondus : chargement explicite, état du fichier et nouvelle tentative en cas d’erreur.",
+        "Affiche des nouveautés à la première ouverture après le patch.",
+        "Préférences de communications : sujets, fréquence, heures silencieuses et consentement séparé."
+      ]
+    ],
+    [
       "21.0 · Windows 0.7.0",
       "26 octobre 2026",
       "Une lecture plus claire, des albums prêts à emporter.",
@@ -1033,6 +1065,23 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "web-mobile": [
+    [
+      "22.0",
+      "27 octobre 2026",
+      "Une identité renouvelée, des paroles plus douces et un Atelier plus pratique.",
+      [
+        "Nouvelle identité visuelle et nouvelle icône, avec choix entre les deux modèles dans les applications.",
+        "Navigation plus directe : rubriques redistribuées et suppression du menu supplémentaire.",
+        "Highlight adouci, dernier mot lumineux et présentation des paroles identique pour tous.",
+        "Highlight estimé clairement signalé pour les morceaux sans synchronisation.",
+        "Atelier : modifier le texte et dupliquer une sélection à l’emplacement choisi, avec confirmation avant une remise à zéro.",
+        "Proposer une correction directement depuis les paroles publiées.",
+        "Découpes et fondus : chargement explicite, état du fichier et nouvelle tentative en cas d’erreur.",
+        "Affiche des nouveautés à la première ouverture après le patch.",
+        "Préférences de communications : sujets, fréquence, heures silencieuses et consentement séparé.",
+        "Rendu du défilement mobile ajusté pour éviter les artefacts de composition."
+      ]
+    ],
     [
       "21.0",
       "26 octobre 2026",
@@ -1900,6 +1949,24 @@ window.AU_PLATFORM_HISTORIES={
     ]
   ],
   "ios": [
+    [
+      "2.2.0 · iPhone et iPad",
+      "27 octobre 2026",
+      "Une identité renouvelée, des paroles plus douces et un Atelier plus pratique.",
+      [
+        "Nouvelle identité visuelle et nouvelle icône, avec choix entre les deux modèles dans les applications.",
+        "Navigation plus directe : rubriques redistribuées et suppression du menu supplémentaire.",
+        "Highlight adouci, dernier mot lumineux et présentation des paroles identique pour tous.",
+        "Highlight estimé clairement signalé pour les morceaux sans synchronisation.",
+        "Atelier : modifier le texte et dupliquer une sélection à l’emplacement choisi, avec confirmation avant une remise à zéro.",
+        "Proposer une correction directement depuis les paroles publiées.",
+        "Découpes et fondus : chargement explicite, état du fichier et nouvelle tentative en cas d’erreur.",
+        "Affiche des nouveautés à la première ouverture après le patch.",
+        "Préférences de communications : sujets, fréquence, heures silencieuses et consentement séparé.",
+        "Menus principaux et navigation inférieure avec une nouvelle finition de verre translucide.",
+        "Rendu du défilement mobile ajusté pour éviter les artefacts de composition."
+      ]
+    ],
     [
       "2.1.0 · iPhone et iPad",
       "26 octobre 2026",

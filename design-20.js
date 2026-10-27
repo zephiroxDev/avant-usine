@@ -33,8 +33,13 @@ function composition(){
  for(const node of [...card.childNodes])text.append(node);const title=text.querySelector('#lyricsTitle');art.append(picture);if(title)art.append(title);art.append(artist);card.append(art,text);tidyLyrics();
 }
 function tidyDock(){
- const dock=document.querySelector('.dock-status');if(!dock)return;let menu=dock.querySelector(':scope > .au20-dock-menu');if(!menu){menu=document.createElement('details');menu.className='au20-dock-menu';const summary=document.createElement('summary');summary.textContent='Options d’écoute';menu.append(summary);dock.append(menu);}
- for(const button of dock.querySelectorAll(':scope > button'))if(!['openLyrics','retry'].includes(button.id)&&!button.classList.contains('au-mobile-player-close'))menu.append(button);
+ const dock=document.querySelector('.dock-status');if(!dock)return;let menu=dock.querySelector(':scope > .au20-dock-menu');
+ const buttons=[...dock.querySelectorAll(':scope > button')].filter(button=>!['openLyrics','retry'].includes(button.id)&&!button.classList.contains('au-mobile-player-close'));
+ // The current experience already exposes these controls in its listening settings.
+ // Do not leave a second, empty disclosure after the controls have been moved.
+ if(!buttons.length&&!menu?.querySelector('button')){menu?.remove();return;}
+ if(!menu){menu=document.createElement('details');menu.className='au20-dock-menu';const summary=document.createElement('summary');summary.textContent='Options d’écoute';menu.append(summary);dock.append(menu);}
+ for(const button of buttons)menu.append(button);
 }
 async function update(){
  if(!context)return;composition();const v=context.getVolume(),t=context.track(),key=v?.number+':'+t?.number;const picture=document.querySelector('.au20-player-art'),artist=document.querySelector('.au20-track-artist');if(artist)artist.textContent=(t?.artist||'JuL')+' · '+(v?.title||'');

@@ -34,16 +34,21 @@ function attach(audio,getEdit,{bypass=()=>false}={}){let ended=false,disposed=fa
 /* Source fragment inserted into audio-edits-19v06.js by the build preparation. */
 /* Creator audio editor fragment, embedded in audio-edits-19v06.js. */
 /* Creator audio editor fragment, embedded in audio-edits-19v06.js. */
+/* Creator audio editor fragment, embedded in audio-edits-19v06.js. */
+/* Creator audio editor fragment, embedded in audio-edits-19v06.js. */
+/* Creator audio editor fragment, embedded in audio-edits-19v06.js. */
+/* Creator audio editor fragment, embedded in audio-edits-19v06.js. */
 function editor(host,track,onchange,{pauseOthers=()=>{}}={}){
  const E=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;},box=E('details'),summary=E('summary','Découpe et fondus'),body=E('div'),audio=E('audio'),state=E('p','Charge le morceau pour choisir le début et la fin.'),message=E('p'),inputs={},abort=new AbortController();
  box.className='au-audio-edit au21-audio-editor';body.className='au21-audio-body';message.setAttribute('role','status');box.append(summary,body);host.append(box);
- let duration=0,disposed=false,previewing=false,busy=false,epoch=0;
+ let duration=0,disposed=false,previewing=false,busy=false,epoch=0,loading=null,loadError='',nativePreview=null;
  let draft={start:Number(track.audio_edit?.start)||0,end:track.audio_edit?.end??null,fadeIn:Number(track.audio_edit?.fadeIn)||0,fadeOut:Number(track.audio_edit?.fadeOut)||0};
  const initial=JSON.stringify(draft),clock=value=>{const n=Math.max(0,Number(value)||0);return Math.floor(n/60)+':'+(n%60).toFixed(1).padStart(4,'0');};
  function button(text,fn){const b=E('button',text);b.type='button';b.className='button secondary';b.onclick=fn;return b;}
  function section(title){const s=E('section');s.append(E('h3',title));body.append(s);return s;}
  const cut=section('1. Choisir le passage à garder');cut.append(E('p','Écoute puis mets en pause à l’endroit voulu. Les temps ci-dessous peuvent aussi être saisis directement.'));
- audio.controls=true;audio.preload='none';audio.crossOrigin='anonymous';audio.src=track.src;cut.append(audio);
+ audio.controls=true;audio.preload='metadata';audio.crossOrigin='anonymous';if(track.src)audio.src=track.src;cut.append(audio);
+ const loadButton=button('Charger le morceau',async()=>{loadError='';try{await ready(true);}catch(e){loadError=e.message;message.textContent=e.message;}render();});cut.append(loadButton);
  function field(parent,key,label){const wrap=E('label',label),input=E('input');input.type='number';input.min='0';input.step='.1';input.setAttribute('aria-label',label+' en secondes');wrap.append(input,E('small','secondes'));parent.append(wrap);inputs[key]=input;input.onchange=()=>{const n=Number(input.value);if(!Number.isFinite(n)||n<0){input.setCustomValidity('Entre un nombre de secondes positif.');return;}const next={...draft,[key]:n};if(duration&&((key==='start'&&n>=(next.end??duration))||(key==='end'&&(n<=next.start||n>duration)))){input.setCustomValidity('Le début doit être avant la fin, dans la durée du morceau.');input.reportValidity();return;}input.setCustomValidity('');draft=next;changed();};}
  const marks=E('div'),times=E('div');times.className='au21-audio-fields';cut.append(marks,times);field(times,'start','Début conservé');field(times,'end','Fin conservée');
  marks.append(button('Prendre cette position comme début',()=>{if(!duration)return;draft.start=Math.min(audio.currentTime,(draft.end??duration)-.1);changed();}),button('Prendre cette position comme fin',()=>{if(!duration)return;draft.end=Math.max(draft.start+.1,Math.min(duration,audio.currentTime));changed();}));cut.append(state);
@@ -58,9 +63,16 @@ function editor(host,track,onchange,{pauseOthers=()=>{}}={}){
  function compact(e){return{start:e.start,end:Math.abs(e.end-duration)<.001?null:e.end,fadeIn:e.fadeIn,fadeOut:e.fadeOut};}
  function valid(){const invalid=Object.values(inputs).find(n=>!n.checkValidity());if(!invalid)return true;message.textContent='Vérifie les temps saisis : début avant la fin, fondus dans la durée disponible.';invalid.reportValidity();return false;}
  function changed(){epoch++;audio.pause();previewing=false;binding.refresh();render();message.textContent='Réglages modifiés. Écoute le résultat puis applique-le au brouillon.';}
- function render(){const e=value();for(const[key,input]of Object.entries(inputs)){input.disabled=!duration;input.max=key.startsWith('fade')?Math.max(0,(e?.length||0)/2):duration;input.value=key==='end'?(draft.end??duration):draft[key];}testStart.disabled=testEnd.disabled=apply.disabled=busy||!e;state.textContent=e?'À garder : '+clock(e.start)+' → '+clock(e.end)+' · Durée finale : '+clock(e.length):'La durée du fichier est en cours de chargement.';}
+ function render(){const e=value();for(const[key,input]of Object.entries(inputs)){input.disabled=!duration;input.max=key.startsWith('fade')?Math.max(0,(e?.length||0)/2):duration;input.value=key==='end'?(draft.end??duration):draft[key];}testStart.disabled=testEnd.disabled=apply.disabled=busy||!e;loadButton.hidden=!!e;loadButton.disabled=!!loading;loadButton.textContent=loadError?'Réessayer le chargement':loading?'Chargement…':'Charger le morceau';state.textContent=e?'Prêt · À garder : '+clock(e.start)+' → '+clock(e.end)+' · Durée finale : '+clock(e.length):loadError?'Chargement impossible. Appuie sur Réessayer.':loading?'Chargement du fichier audio…':'Appuie sur Charger le morceau pour commencer.';}
  function wait(event){return new Promise((resolve,reject)=>{const end=()=>{clearTimeout(timer);audio.removeEventListener(event,ok);audio.removeEventListener('error',fail);},ok=()=>{end();resolve();},fail=()=>{end();reject(Error('Le fichier audio ne répond pas. Réessaie.'));},timer=setTimeout(fail,15000);audio.addEventListener(event,ok,{once:true});audio.addEventListener('error',fail,{once:true});});}
- async function ready(){if(audio.readyState>=1)return;const loaded=wait('loadedmetadata');audio.preload='metadata';audio.load();await loaded;}
+ async function ready(gesture=false){if(Number.isFinite(audio.duration)&&audio.duration>0&&(!window.Capacitor?.Plugins?.IOSUpdates?.prepareAudioPreview||nativePreview||!/^https:\/\/(?:[^/]+\.)?archive\.org\//i.test(track.src))){duration=audio.duration;render();return;}if(loading)return loading;if(!track.src)throw Error('Ce morceau n’a pas de source audio.');
+  loading=(async()=>{const native=window.Capacitor?.Plugins?.IOSUpdates;if(!nativePreview&&native?.prepareAudioPreview&&window.Capacitor?.convertFileSrc&&/^https:\/\/(?:[^/]+\.)?archive\.org\//i.test(track.src)){
+    const copy=await native.prepareAudioPreview({url:track.src});if(disposed){await native.releaseAudioPreview({id:copy.id});return;}nativePreview=copy;audio.src=window.Capacitor.convertFileSrc(copy.uri);
+   }const loaded=wait('loadedmetadata');audio.preload='auto';audio.load();
+   // An explicit tap unlocks metadata acquisition on WKWebView installations that defer preloading.
+   if(gesture){pauseOthers();const muted=audio.muted;audio.muted=true;audio.play().then(()=>{if(!disposed&&!previewing)audio.pause();audio.muted=muted;}).catch(()=>{audio.muted=muted;});}
+   await loaded;if(disposed)return;duration=Number.isFinite(audio.duration)?audio.duration:0;if(!duration)throw Error('La durée de ce fichier audio est indisponible.');loadError='';
+  })();render();try{await loading;}catch(e){loadError=e.message;throw e;}finally{loading=null;if(!disposed)render();}}
  async function playOriginal(){try{pauseOthers();await ready();await audio.play();}catch(e){message.textContent=e.message;}}
  async function listen(end){if(busy||!valid())return;const token=++epoch;busy=true;audio.pause();previewing=false;binding.refresh();render();try{pauseOthers();await ready();const e=value();if(!e)throw Error('Durée audio indisponible.');if(e.fadeIn||e.fadeOut)await ensureGraph(audio).context.resume();if(disposed||token!==epoch)return;
    const target=end?Math.max(e.start,e.end-Math.max(6,e.fadeOut+2)):e.start;
@@ -71,9 +83,10 @@ function editor(host,track,onchange,{pauseOthers=()=>{}}={}){
  audio.addEventListener('loadedmetadata',()=>{duration=Number.isFinite(audio.duration)?audio.duration:0;render();},{signal:abort.signal});
  audio.addEventListener('play',()=>pauseOthers(),{signal:abort.signal});
  audio.addEventListener('au:audio-edit-error',e=>{message.textContent=e.detail||'Les fondus ne peuvent pas être lus sur cet appareil.';},{signal:abort.signal});
- box.addEventListener('toggle',()=>{if(box.open)ready().catch(e=>message.textContent=e.message);else{epoch++;audio.pause();}},{signal:abort.signal});
+ box.addEventListener('toggle',()=>{if(box.open)ready().catch(e=>{message.textContent=e.message;render();});else{epoch++;audio.pause();}},{signal:abort.signal});
+ audio.addEventListener('error',()=>{loadError='Le fichier audio ne répond pas. Vérifie la connexion puis réessaie.';message.textContent=loadError;duration=0;render();},{signal:abort.signal});
  const parent=host.closest('dialog');parent?.addEventListener('close',()=>{epoch++;audio.pause();},{signal:abort.signal});
- render();return{dispose(){disposed=true;epoch++;abort.abort();audio.pause();binding.dispose();audio.removeAttribute('src');audio.load();box.remove();}};
+ render();return{dispose(){disposed=true;epoch++;abort.abort();audio.pause();binding.dispose();audio.removeAttribute('src');audio.load();if(nativePreview)window.Capacitor?.Plugins?.IOSUpdates?.releaseAudioPreview?.({id:nativePreview.id}).catch(()=>{});box.remove();}};
 }
 
 const api={normalize,gainAt,attach,editor,installVolume};root.AU_AUDIO_EDITS_19=api;if(typeof module!=='undefined'&&module.exports)module.exports=api;

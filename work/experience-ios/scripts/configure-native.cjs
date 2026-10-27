@@ -13,6 +13,8 @@ for(const file of ['IOSUpdates.swift','ViewController.swift']){
 project.addResourceFile('PrivacyInfo.xcprivacy',{},group);
 project.updateBuildProperty('MARKETING_VERSION',require('../release.json').version);
 project.updateBuildProperty('CURRENT_PROJECT_VERSION',String(require('../release.json').buildNumber));
+project.updateBuildProperty('ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES','AppIconLegacy');
+project.updateBuildProperty('ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS','YES');
 project.updateBuildProperty('TARGETED_DEVICE_FAMILY','"1,2"');
 fs.writeFileSync(projFile,project.writeSync());
 // Check the generated project before attempting a remote build.

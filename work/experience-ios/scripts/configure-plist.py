@@ -16,7 +16,13 @@ privacy={'NSPrivacyTracking':False,'NSPrivacyCollectedDataTypes':[],
 (app/'PrivacyInfo.xcprivacy').write_bytes(plistlib.dumps(privacy))
 icons=app/'Assets.xcassets/AppIcon.appiconset'
 icons.mkdir(parents=True,exist_ok=True)
-with Image.open(root/'assets/logo-source.jpg') as image:
+with Image.open(root/'assets/logo-source.png') as image:
     image.convert('RGB').resize((1024,1024),Image.Resampling.LANCZOS).save(icons/'AppIcon.png')
 (icons/'Contents.json').write_text(json.dumps({'images':[{'filename':'AppIcon.png','idiom':'universal','platform':'ios','size':'1024x1024'}],'info':{'author':'xcode','version':1}}))
 print('iPhone/iPad version and HD icon configured.')
+
+legacy=app/'Assets.xcassets/AppIconLegacy.appiconset'
+legacy.mkdir(parents=True,exist_ok=True)
+with Image.open(root/'assets/logo-source.jpg') as image:
+    image.convert('RGB').resize((1024,1024),Image.Resampling.LANCZOS).save(legacy/'AppIconLegacy.png')
+(legacy/'Contents.json').write_text(json.dumps({'images':[{'filename':'AppIconLegacy.png','idiom':'universal','platform':'ios','size':'1024x1024'}],'info':{'author':'xcode','version':1}}))

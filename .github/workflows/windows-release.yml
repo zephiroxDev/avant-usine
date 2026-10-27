@@ -1,64 +1,10 @@
-name: Windows release
+name: Manual Windows rebuild
 on:
-  push:
-    branches: [main]
-    paths: ['work/desktop-app/release.json', 'work/desktop-app/scripts/publish-ci.ps1']
   workflow_dispatch:
 permissions:
-  contents: write
-concurrency:
-  group: windows-release
-  cancel-in-progress: false
+  contents: read
 jobs:
-  package:
-    runs-on: windows-latest
-    timeout-minutes: 40
+  explain:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          package-manager-cache: false
-      - uses: actions/setup-python@v7
-        with:
-          python-version: '3.13'
-      - name: Prepare build tools
-        shell: pwsh
-        run: |
-          npm install --global pnpm@11.25.0
-          if ($LASTEXITCODE -ne 0) { throw 'pnpm unavailable' }
-          python -m pip install Pillow
-          if ($LASTEXITCODE -ne 0) { throw 'Image tools unavailable' }
-      - name: Test shared rules
-        shell: pwsh
-        run: |
-          node work/mine-sync/test-summary-rules-17v01.cjs
-          if ($LASTEXITCODE -ne 0) { throw 'Summary rules failed' }
-          node work/mine-sync/test-listening-clock-17v01.cjs
-          if ($LASTEXITCODE -ne 0) { throw 'Listening clock failed' }
-          node work/mine-sync/test-statistics-engine-17v01.cjs
-          if ($LASTEXITCODE -ne 0) { throw 'Statistics failed' }
-          node work/mine-sync/test-ui-17v01.cjs
-          if ($LASTEXITCODE -ne 0) { throw 'Product interface tests failed' }
-          node work/mine-sync/test-catalog-audit-17v03.cjs
-          if ($LASTEXITCODE -ne 0) { throw 'Catalog audit tests failed' }
-          node work/mine-sync/test-native-light-17v04.cjs
-          if ($LASTEXITCODE -ne 0) { throw 'Native lighting tests failed' }
-          node work/mine-sync/test-sync-17v05.cjs
-          if ($LASTEXITCODE -ne 0) { throw 'Synchronization tests failed' }
-          node work/mine-sync/test-sharing-17v06.cjs
-          if ($LASTEXITCODE -ne 0) { throw 'Sharing and synchronization speed tests failed' }
-          node work/mine-sync/test-local-18v00.cjs
-          if ($LASTEXITCODE -ne 0) { throw 'Local library tests failed' }
-      - name: Build and verify Windows packages
-        shell: pwsh
-        run: ./work/desktop-app/scripts/release.ps1 -Python python
-      - name: Publish verified draft
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-          RELEASE_COMMIT: ${{ github.sha }}
-        run: ./work/desktop-app/scripts/publish-ci.ps1
+      - run: echo "Use the validation branch and verified artifact promotion for public deliveries."
