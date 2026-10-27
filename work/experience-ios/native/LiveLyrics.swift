@@ -169,7 +169,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func stop(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             self?.lastStopReason = call.getString("reason") ?? "demande du lecteur"
-            self?.finishHandoffTask(); self?.audio.clear(); self?.source = nil; self?.generation += 1; self?.endActivity(); call.resolve()
+            if call.getBool("lyricsOnly") != true { self?.finishHandoffTask(); self?.audio.clear() }; self?.source = nil; self?.generation += 1; self?.endActivity(); call.resolve()
         }
     }
     @objc func preparePlayback(_ call: CAPPluginCall) {
@@ -187,7 +187,9 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
                     url = folder.appendingPathComponent(UUID().uuidString + "." + suffix); try bytes.write(to: url, options: .atomic); owned = url
                 } else if let raw = call.getString("url"), let remote = URL(string: raw), remote.scheme == "https", remote.host != nil { url = remote }
                 else { call.reject("Source audio indisponible."); return }
-                self.audio.prepare(key: key, url: url, ownedFile: owned); call.resolve(["prepared": true])
+                self.audio.prepare(key: key, url: url, ownedFile: owned)
+                self.audio.setMetadata(title: call.getString("title") ?? "", artist: call.getString("artist") ?? "", album: call.getString("album") ?? "", artwork: call.getString("artwork"))
+                call.resolve(["prepared": true])
             } catch { call.reject(error.localizedDescription) }
         }
     }

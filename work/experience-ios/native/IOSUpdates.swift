@@ -1,4 +1,5 @@
 import Foundation
+import AVFoundation
 import Capacitor
 import CryptoKit
 import UIKit
@@ -74,7 +75,13 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
                 let ext = ["mp3", "m4a", "aac", "wav", "flac", "ogg"].contains(url.pathExtension.lowercased()) ? url.pathExtension.lowercased() : "mp3"
                 let file = FileManager.default.temporaryDirectory.appendingPathComponent("au-audio-preview-" + identifier).appendingPathExtension(ext)
                 try FileManager.default.moveItem(at: temporary, to: file)
-                DispatchQueue.main.async { self.audioPreviews[identifier] = file; call.resolve(["id": identifier, "uri": file.absoluteString]) }
+                Task {
+                    do {
+                        let duration = try await AVURLAsset(url: file).load(.duration).seconds
+                        guard duration.isFinite, duration > 0 else { throw NSError(domain: "AudioPreview", code: 1, userInfo: [NSLocalizedDescriptionKey: "Durée audio indisponible"]) }
+                        await MainActor.run { self.audioPreviews[identifier] = file; call.resolve(["id": identifier, "uri": file.absoluteString, "duration": duration]) }
+                    } catch { try? FileManager.default.removeItem(at: file); call.reject(error.localizedDescription) }
+                }
             } catch { call.reject(error.localizedDescription) }
         }.resume()
     }

@@ -1,7 +1,7 @@
 {
   "platform": "ios",
   "version": "2.2.1",
-  "buildNumber": 42,
+  "buildNumber": 43,
   "releaseId": "22.1",
   "channel": "creator-testing",
   "source": "../experience-integration",

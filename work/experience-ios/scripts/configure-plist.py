@@ -9,6 +9,8 @@ info=plistlib.loads(p.read_bytes())
 info.update(CFBundleDisplayName=('betatesting Avant l’usine' if release.get('channel')=='creator-testing' else 'Avant l’usine'), CFBundleShortVersionString=release['version'],
             CFBundleVersion=str(release['buildNumber']), UIFileSharingEnabled=True,
             LSSupportsOpeningDocumentsInPlace=True, NSSupportsLiveActivities=True, UIBackgroundModes=['audio'])
+info['UISupportedInterfaceOrientations']=['UIInterfaceOrientationPortrait']
+info['UISupportedInterfaceOrientations~ipad']=['UIInterfaceOrientationPortrait']
 p.write_bytes(plistlib.dumps(info))
 privacy={'NSPrivacyTracking':False,'NSPrivacyCollectedDataTypes':[],
          'NSPrivacyAccessedAPITypes':[{'NSPrivacyAccessedAPIType':'NSPrivacyAccessedAPICategoryFileTimestamp',

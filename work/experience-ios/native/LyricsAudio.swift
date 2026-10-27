@@ -1,6 +1,7 @@
 import AVFoundation
 import MediaPlayer
 import Foundation
+import UIKit
 
 // Real audio playback, never a silent background keepalive.
 final class LyricsAudio {
@@ -22,6 +23,7 @@ final class LyricsAudio {
     private var finished = false
     private var previousSample: (Double, Double)?
     private var segments: [[String: Double]] = []
+    private var metadata: [String: Any] = [:]
     private var lastNowPlaying: Double = 0
     private var lastNowPlayingRate: Float = -1
     func takeSegments() -> [[String: Double]] { let result = segments; segments.removeAll(); return result }
@@ -32,6 +34,12 @@ final class LyricsAudio {
     var position: Double { let t = player?.currentTime().seconds ?? 0; return t.isFinite ? t : 0 }
     var playing: Bool { ownsPlayback && (player?.rate ?? 0) > 0 }
 
+    func setMetadata(title: String, artist: String, album: String, artwork: String?) {
+        metadata = [MPMediaItemPropertyTitle: title, MPMediaItemPropertyArtist: artist, MPMediaItemPropertyAlbumTitle: album]
+        if let encoded = artwork, encoded.utf8.count <= 6_000_000, let data = Data(base64Encoded: encoded), let image = UIImage(data: data) {
+            metadata[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
+        }
+    }
     func prepare(key: String, url: URL, ownedFile: URL? = nil) {
         clear()
         self.key = key; self.cachedFile = ownedFile; finished = false
@@ -72,7 +80,7 @@ final class LyricsAudio {
         try session.setActive(true)
         ownsPlayback = true; previousSample = (position, Date().timeIntervalSince1970 * 1000)
         p.volume = gain(position); p.playImmediately(atRate: requestedRate)
-        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
+        var info = metadata
         info[MPMediaItemPropertyTitle] = title; info[MPMediaItemPropertyPlaybackDuration] = duration
         info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position; info[MPNowPlayingInfoPropertyPlaybackRate] = requestedRate
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
