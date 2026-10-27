@@ -2,14 +2,22 @@ import Foundation
 import Capacitor
 import CryptoKit
 import UIKit
+import UserNotifications
 
 @objc(IOSUpdatesPlugin)
-public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDelegate, UIDocumentInteractionControllerDelegate {
+public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDelegate, UIDocumentInteractionControllerDelegate, UNUserNotificationCenterDelegate {
     public let identifier = "IOSUpdatesPlugin"
     public let jsName = "IOSUpdates"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "checkReleases", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "accessibility", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setAppIcon", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getAppIcon", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "notificationPermission", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "scheduleCampaign", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clearCampaignNotifications", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "prepareAudioPreview", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "releaseAudioPreview", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "download", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "openIn", returnType: CAPPluginReturnPromise)
     ]
@@ -21,14 +29,85 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
     private var lastProgress = Date.distantPast
     private var documentController: UIDocumentInteractionController?
     private var openCall: CAPPluginCall?
+    private var audioPreviews: [String: URL] = [:]
 
     public override func load() {
+        UNUserNotificationCenter.current().delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(resumed), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(accessibilityChanged), name: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(accessibilityChanged), name: UIAccessibility.darkerSystemColorsStatusDidChangeNotification, object: nil)
     }
 
     deinit { NotificationCenter.default.removeObserver(self) }
+    @objc func prepareAudioPreview(_ call: CAPPluginCall) {
+        guard let raw = call.getString("url"), let url = URL(string: raw), url.scheme == "https",
+              let host = url.host?.lowercased(), host == "archive.org" || host.hasSuffix(".archive.org") else { call.reject("Source audio non prise en charge pour la copie locale"); return }
+        var request = URLRequest(url: url); request.timeoutInterval = 60
+        URLSession.shared.downloadTask(with: request) { [weak self] temporary, response, error in
+            guard let self = self else { call.reject("Prévisualisation fermée"); return }
+            if let error = error { call.reject(error.localizedDescription); return }
+            guard let temporary = temporary, let response = response as? HTTPURLResponse,
+                  (200...299).contains(response.statusCode), let finalHost = response.url?.host?.lowercased(),
+                  finalHost == "archive.org" || finalHost.hasSuffix(".archive.org") else { call.reject("Le fichier audio est inaccessible"); return }
+            do {
+                let size = try FileManager.default.attributesOfItem(atPath: temporary.path)[.size] as? NSNumber
+                guard let size = size, size.intValue > 0, size.intValue <= 64 * 1024 * 1024 else { call.reject("Le fichier dépasse la limite de prévisualisation (64 Mo)"); return }
+                let identifier = UUID().uuidString
+                let ext = ["mp3", "m4a", "aac", "wav", "flac", "ogg"].contains(url.pathExtension.lowercased()) ? url.pathExtension.lowercased() : "mp3"
+                let file = FileManager.default.temporaryDirectory.appendingPathComponent("au-audio-preview-" + identifier).appendingPathExtension(ext)
+                try FileManager.default.moveItem(at: temporary, to: file)
+                DispatchQueue.main.async { self.audioPreviews[identifier] = file; call.resolve(["id": identifier, "uri": file.absoluteString]) }
+            } catch { call.reject(error.localizedDescription) }
+        }.resume()
+    }
+    @objc func releaseAudioPreview(_ call: CAPPluginCall) {
+        guard let id = call.getString("id") else { call.reject("Identifiant absent"); return }
+        DispatchQueue.main.async { if let file = self.audioPreviews.removeValue(forKey: id) { try? FileManager.default.removeItem(at: file) }; call.resolve() }
+    }
+    public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .list, .sound])
+    }
+    public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        notifyListeners("campaignOpened", data: ["id": response.notification.request.content.userInfo["campaign"] as? String ?? ""])
+        completionHandler()
+    }
+
+    @objc func getAppIcon(_ call: CAPPluginCall) {
+        DispatchQueue.main.async { call.resolve(["icon": UIApplication.shared.alternateIconName == nil ? "portrait" : "legacy"]) }
+    }
+    @objc func setAppIcon(_ call: CAPPluginCall) {
+        let icon = call.getString("icon") ?? "portrait"
+        guard ["portrait", "legacy"].contains(icon) else { call.reject("Icône inconnue"); return }
+        DispatchQueue.main.async {
+            guard UIApplication.shared.supportsAlternateIcons else { call.reject("Icônes alternatives indisponibles"); return }
+            UIApplication.shared.setAlternateIconName(icon == "legacy" ? "AppIconLegacy" : nil) { error in
+                if let error = error { call.reject(error.localizedDescription) } else { call.resolve(["icon": icon]) }
+            }
+        }
+    }
+    @objc func notificationPermission(_ call: CAPPluginCall) {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error { call.reject(error.localizedDescription) } else { call.resolve(["granted": granted]) }
+        }
+    }
+    @objc func clearCampaignNotifications(_ call: CAPPluginCall) {
+        let center = UNUserNotificationCenter.current()
+        center.getPendingNotificationRequests { requests in
+            center.removePendingNotificationRequests(withIdentifiers: requests.filter { $0.identifier.hasPrefix("au22-") }.map { $0.identifier })
+            call.resolve()
+        }
+    }
+    @objc func scheduleCampaign(_ call: CAPPluginCall) {
+        guard let id = call.getString("id"), UUID(uuidString: id) != nil,
+              let title = call.getString("title"), let body = call.getString("body"),
+              title.count <= 100, body.count <= 1000 else { call.reject("Message invalide"); return }
+        let content = UNMutableNotificationContent(); content.title = title; content.body = body
+        content.userInfo = ["campaign": id]; content.sound = .default
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(1, call.getDouble("delay") ?? 1), repeats: false)
+        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: "au22-" + id, content: content, trigger: trigger)) { error in
+            if let error = error { call.reject(error.localizedDescription) } else { call.resolve(["scheduled": true]) }
+        }
+    }
 
     @objc private func resumed() { notifyListeners("resume", data: [:]) }
     @objc private func accessibilityChanged() { notifyListeners("accessibility", data: accessibilityValues()) }

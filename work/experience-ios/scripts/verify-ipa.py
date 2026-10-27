@@ -23,6 +23,7 @@ with zipfile.ZipFile(p) as archive:
     assert widget['CFBundleIdentifier']=='dev.zephirox.avantusine.ios.lyrics'
     executable='Payload/App.app/PlugIns/LyricsIsland.appex/'+widget['CFBundleExecutable']
     assert archive.read(executable)[:4] in [b'\xcf\xfa\xed\xfe',b'\xca\xfe\xba\xbe',b'\xca\xfe\xba\xbf'], 'Lyrics widget executable missing or invalid'
+    assert 'AppIconLegacy' in info.get('CFBundleIcons',{}).get('CFBundleAlternateIcons',{}), 'Alternate launcher icon missing'
     assert info.get('NSSupportsLiveActivities') is True
     assert not any(n.endswith('.p12') for n in names)
 metadata={'platform':'ios','version':release['version'],'unsigned':True,'file':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'deviceTested':False}

@@ -1,4 +1,4 @@
-name: iPhone 2.1.0 — validation
+name: iPhone 2.2.0 — validation
 on:
   push:
     branches: [ios/experience-beta]
@@ -96,14 +96,14 @@ jobs:
         run: |
           mkdir -p build/ipa/Payload
           ditto build/Build/Products/Release-iphoneos/App.app build/ipa/Payload/App.app
-          ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload build/Avant-Usine-iOS-2.1.0-non-signe.ipa
-          python scripts/verify-ipa.py build/Avant-Usine-iOS-2.1.0-non-signe.ipa
+          ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload build/Avant-Usine-iOS-2.2.0-non-signe.ipa
+          python scripts/verify-ipa.py build/Avant-Usine-iOS-2.2.0-non-signe.ipa
       - uses: actions/upload-artifact@v7
         if: success()
         with:
           name: iphone-experience-beta
           path: |
-            work/experience-ios/build/Avant-Usine-iOS-2.1.0-non-signe.ipa
+            work/experience-ios/build/Avant-Usine-iOS-2.2.0-non-signe.ipa
             work/experience-ios/build/livraison.json
           if-no-files-found: error
           retention-days: 7

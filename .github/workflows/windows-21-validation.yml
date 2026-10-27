@@ -1,4 +1,4 @@
-name: Windows 0.7.0 validation
+name: Windows 0.8.0 validation
 on:
   push:
     branches: [ios/experience-beta]
@@ -25,9 +25,9 @@ jobs:
         run: ./work/desktop-app/scripts/release.ps1
       - uses: actions/upload-artifact@v7
         with:
-          name: windows-21-verified
+          name: windows-22-verified
           path: |
             outputs/application-windows/
-            outputs/application-windows-0.7.0/update-assets/
+            outputs/application-windows-0.8.0/update-assets/
           if-no-files-found: error
           retention-days: 7
