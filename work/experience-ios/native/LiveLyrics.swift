@@ -88,7 +88,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
             self.lifecycleObservers.append(NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
                 guard let self = self else { return }
                 self.finishHandoffTask()
-                guard self.source?.enabled == true, self.source?.playing == true else { return }
+                // Playback handoff is independent of the optional lyrics activity.
                 self.handoffTask = UIApplication.shared.beginBackgroundTask(withName: "Finish real audio handoff") { [weak self] in self?.finishHandoffTask() }
                 self.notifyListeners("applicationState", data: ["active": false])
             })
@@ -193,7 +193,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     }
     @objc func armPlayback(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, self.audio.key == call.getString("key"), self.source?.id == self.audio.key else { call.reject("La piste a changé."); return }
+            guard let self = self, self.audio.key == call.getString("key") else { call.reject("La piste a changé."); return }
             let position = call.getDouble("position") ?? 0, rate = call.getDouble("rate") ?? 1, end = call.getDouble("end") ?? self.source?.duration ?? 0
             guard position.isFinite, rate.isFinite, rate > 0, rate <= 4, end.isFinite, end > 0 else { call.reject("Position audio invalide."); return }
             self.audio.arm(position: position, rate: rate, volume: call.getDouble("volume") ?? 1, start: call.getDouble("start") ?? 0, end: end, fadeIn: call.getDouble("fadeIn") ?? 0, fadeOut: call.getDouble("fadeOut") ?? 0, sleepDeadline: call.getDouble("sleepDeadline")) { result in
@@ -209,8 +209,11 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
     }
     @objc func commitPlayback(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, let s = self.source, s.id == call.getString("key"), self.audio.key == s.id else { call.reject("La piste a changé."); return }
-            do { try self.audio.commit(title: s.title, duration: s.duration); self.finishHandoffTask(); self.refresh(); call.resolve(["playing": true]) }
+            guard let self = self, self.audio.key == call.getString("key") else { call.reject("La piste a changé."); return }
+            let title = call.getString("title") ?? (self.source?.id == self.audio.key ? self.source?.title : nil) ?? ""
+            let duration = call.getDouble("duration") ?? (self.source?.id == self.audio.key ? self.source?.duration : nil) ?? 0
+            guard duration.isFinite, duration > 0 else { call.reject("Durée audio invalide."); return }
+            do { try self.audio.commit(title: title, duration: duration); self.finishHandoffTask(); self.refresh(); call.resolve(["playing": true]) }
             catch { self.finishHandoffTask(); call.reject(error.localizedDescription) }
         }
     }
@@ -219,7 +222,7 @@ public class LiveLyricsPlugin: CAPPlugin, CAPBridgedPlugin {
             guard let self = self else { call.resolve(); return }
             self.saveBackgroundReport(); self.finishHandoffTask()
             let owned = self.audio.ownsPlayback, snapshot = self.audio.release()
-            if owned, var s = self.source { s.position = snapshot.0; s.playing = snapshot.1; self.source = s; self.anchor = ProcessInfo.processInfo.systemUptime }
+            if owned, var s = self.source, s.id == self.audio.key { s.position = snapshot.0; s.playing = snapshot.1; self.source = s; self.anchor = ProcessInfo.processInfo.systemUptime }
             call.resolve(["owned": owned, "position": snapshot.0, "playing": snapshot.1, "key": self.audio.key, "segments": self.audio.takeSegments()])
         }
     }

@@ -1,0 +1,123 @@
+name: iPhone 22.1 — bêta privée
+on:
+  push:
+    branches: [ios/22.1-private]
+    paths: ['work/experience-ios/**', 'work/experience-integration/**', '.github/workflows/ios-22-1-private.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ios-22-1-private
+  cancel-in-progress: true
+jobs:
+  server-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: isolated-test-password
+          POSTGRES_DB: adjustments_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Verify migration and publication semantics on temporary PostgreSQL
+        env:
+          PGPASSWORD: isolated-test-password
+        working-directory: work/experience-ios/test/minor-adjustments
+        run: |
+          set -o pipefail
+          for script in fixture.sql original.sql migration.sql tests.sql; do
+            psql -h localhost -U postgres -d adjustments_test -v ON_ERROR_STOP=1 -f "$script" | tee -a postgres-tests.log
+          done
+          psql -h localhost -U postgres -d adjustments_test -v ON_ERROR_STOP=1 -f ../visitor-counter/schema.sql | tee -a postgres-tests.log
+          psql -h localhost -U postgres -d adjustments_test -v ON_ERROR_STOP=1 -f ../visitor-counter/tests.sql | tee -a postgres-tests.log
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: minor-adjustments-server-tests
+          path: work/experience-ios/test/minor-adjustments/postgres-tests.log
+  beta:
+    needs: server-tests
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm install --global pnpm@11.25.0
+      - name: Select installed Xcode 26
+        run: |
+          XCODE_PATH=$(python3 - <<'PY'
+          import glob,re
+          paths=[p for p in glob.glob('/Applications/Xcode_26*.app') if re.search(r'Xcode_26[.\d]*\.app$',p)]
+          assert paths, 'Xcode 26 is unavailable'
+          print(max(paths,key=lambda p:tuple(map(int,re.search(r'Xcode_([\d.]+)\.app',p)[1].split('.')))))
+          PY
+          )
+          sudo xcode-select --switch "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
+      - name: Prepare beta only
+        working-directory: work/experience-ios
+        run: |
+          python3 -m venv "$RUNNER_TEMP/experience-python"
+          "$RUNNER_TEMP/experience-python/bin/pip" install Pillow
+          echo "$RUNNER_TEMP/experience-python/bin" >> "$GITHUB_PATH"
+          export PATH="$RUNNER_TEMP/experience-python/bin:$PATH"
+          pnpm install --frozen-lockfile
+          pnpm run prepare:site
+          pnpm exec cap add ios
+          pnpm exec cap sync ios
+          node scripts/configure-native.cjs
+      - name: Test playback, backup and updates before native compilation
+        working-directory: work/experience-ios
+        run: node --test test/ios.test.cjs test/comfort.test.cjs test/background-catalogue-22-1.test.cjs
+      - name: Verify native bridge in simulator
+        working-directory: work/experience-ios
+        run: python scripts/smoke-simulator.py
+      - name: Compile iPhone and iPad beta
+        working-directory: work/experience-ios
+        run: |
+          set -o pipefail
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' \
+            build > build-output.log 2>&1
+          lipo -archs build/Build/Products/Release-iphoneos/App.app/App | grep arm64
+      - name: Package and verify test IPA
+        working-directory: work/experience-ios
+        run: |
+          mkdir -p build/ipa/Payload
+          ditto build/Build/Products/Release-iphoneos/App.app build/ipa/Payload/App.app
+          ditto -c -k --sequesterRsrc --keepParent build/ipa/Payload build/Avant-Usine-iOS-2.2.1-non-signe.ipa
+          python scripts/verify-ipa.py build/Avant-Usine-iOS-2.2.1-non-signe.ipa
+      - uses: actions/upload-artifact@v7
+        if: success()
+        with:
+          name: iphone-22-1-private
+          path: |
+            work/experience-ios/build/Avant-Usine-iOS-2.2.1-non-signe.ipa
+            work/experience-ios/build/livraison.json
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: iphone-22-1-private-diagnostics
+          path: |
+            work/experience-ios/build-output.log
+            work/experience-ios/build/simulator-captures/
+          if-no-files-found: ignore
+          retention-days: 7

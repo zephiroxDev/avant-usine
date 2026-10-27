@@ -11,6 +11,8 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "checkReleases", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "accessibility", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "resetDisplay", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setLyricSelection", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setAppIcon", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getAppIcon", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "notificationPermission", returnType: CAPPluginReturnPromise),
@@ -39,6 +41,22 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
     }
 
     deinit { NotificationCenter.default.removeObserver(self) }
+    @objc func resetDisplay(_ call: CAPPluginCall) {
+        DispatchQueue.main.async {
+            self.webView?.pageZoom = 1
+            self.webView?.scrollView.setZoomScale(1, animated: false)
+            self.webView?.scrollView.pinchGestureRecognizer?.isEnabled = false
+            call.resolve()
+        }
+    }
+    @objc func setLyricSelection(_ call: CAPPluginCall) {
+        let quote = String((call.getString("quote") ?? "").prefix(2000))
+        DispatchQueue.main.async {
+            (self.bridge?.viewController as? ViewController)?.selectedLyricQuote = quote
+            UIMenuSystem.context.setNeedsRebuild()
+            call.resolve()
+        }
+    }
     @objc func prepareAudioPreview(_ call: CAPPluginCall) {
         guard let raw = call.getString("url"), let url = URL(string: raw), url.scheme == "https",
               let host = url.host?.lowercased(), host == "archive.org" || host.hasSuffix(".archive.org") else { call.reject("Source audio non prise en charge pour la copie locale"); return }

@@ -5,7 +5,7 @@ let prepared='',preparing=null,phase='',owner=null,nativePlaying=false,serial=Pr
 const wrapped=new WeakSet();
 const queue=fn=>{serial=serial.then(fn,fn).catch(error=>window.dispatchEvent(new CustomEvent('au:island-relay-error',{detail:error.message||String(error)})));return serial;};
 async function prepare(s){
- if(!s?.data?.lines?.length||!s.audio||phase||!s.key)return;
+ if(!s?.audio||phase||!s.key)return;
  if(!wrapped.has(s.audio)){wrapped.add(s.audio);const a=s.audio,play=a.play.bind(a),pause=a.pause.bind(a);
   const getter=window.HTMLMediaElement&&a instanceof HTMLMediaElement&&Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype,'paused')?.get;let actualPaused=a.paused;
   Object.defineProperty(a,'paused',{configurable:true,get(){return owner?.audio===a&&['native','restoring'].includes(phase)?!nativePlaying:getter?getter.call(a):actualPaused;},set(value){actualPaused=value;}});
@@ -26,7 +26,7 @@ async function prepare(s){
 async function background(){
  if(phase||!(document.hidden||inactive))return;
  const s=window.AU_PLAYBACK_SOURCE_19?.(),a=s?.audio;
- if(!s?.data?.lines?.length||!a||a.paused||a.ended||localStorage.getItem('au-ios-lyrics-island')==='false')return;
+ if(!s?.key||!a||a.paused||a.ended)return;
  await prepare(s);if(!prepared.startsWith(s.key+'|')||!(document.hidden||inactive)||a.paused)return;
  phase='arming';owner=s;
  let pausedByRelay=false;
@@ -37,7 +37,7 @@ async function background(){
   let before=a.currentTime;await arm();
   if(Math.abs(a.currentTime-before)>.2)await arm();
   if(!(document.hidden||inactive)||a.paused||a.ended||window.AU_PLAYBACK_SOURCE_19?.()?.key!==s.key){phase='';owner=null;return;}
-  a.pause();pausedByRelay=true;await native.commitPlayback({key:s.key});nativePlaying=true;phase='native';
+  a.pause();pausedByRelay=true;await native.commitPlayback({key:s.key,title:s.title||'',duration:a.duration});nativePlaying=true;phase='native';
  }catch(error){await native.releasePlayback().catch(()=>{});phase='';owner=null;if(pausedByRelay)await a.play().catch(()=>{});throw error;}
 }
 async function foreground(resumeAfterError=false,allowResume=true){
@@ -48,6 +48,7 @@ async function foreground(resumeAfterError=false,allowResume=true){
  }finally{phase='';owner=null;window.dispatchEvent(new Event('au:island-relay-restored'));}
 }
 window.AU_ISLAND_AUDIO_19={prepare:s=>queue(()=>prepare(s)),get active(){return !!phase;},get phase(){return phase;}};
+document.addEventListener('play',()=>{const s=window.AU_PLAYBACK_SOURCE_19?.();if(s?.audio&&!document.hidden)queue(()=>prepare(s));},true);
 document.addEventListener('visibilitychange',()=>queue(()=>document.hidden||inactive?background():foreground()));
 native.addListener('applicationState',event=>{inactive=!event.active;queue(()=>event.active?foreground():background());});
 window.addEventListener('au:before-trackchange',()=>queue(async()=>{await foreground();prepared='';}));

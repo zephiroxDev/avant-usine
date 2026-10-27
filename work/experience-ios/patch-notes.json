@@ -1,5 +1,18 @@
 [
   [
+    "2.2.1",
+    "2026-10-27",
+    "betatesting 22.1 — corrections en cours de validation",
+    [
+      "Lecture du catalogue en arrière-plan indépendante de l’activation des paroles.",
+      "Paroles : disparition des rectangles blancs, flou progressif et espace de lecture agrandi quand les commandes se masquent.",
+      "Explorer le texte et sélectionner un passage pour lire ou proposer une explication.",
+      "Navigation par glissement et accès aux effets de basses dans Réglages.",
+      "Rétablissement de l’affichage et menu de sélection des paroles sur iPhone.",
+      "Version privée : les comportements sur appareil réel restent à vérifier avant publication."
+    ]
+  ],
+  [
     "2.2.0 · iPhone et iPad",
     "27 octobre 2026",
     "Une identité renouvelée, des paroles plus douces et un Atelier plus pratique.",

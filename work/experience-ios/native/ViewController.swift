@@ -1,13 +1,34 @@
 import Capacitor
 import Foundation
+import UIKit
 
 class ViewController: CAPBridgeViewController {
+    var selectedLyricQuote = ""
+    override func buildMenu(with builder: UIMenuBuilder) {
+        super.buildMenu(with: builder)
+        guard builder.system == UIMenuSystem.context, !selectedLyricQuote.isEmpty else { return }
+        let command = UICommand(title: "Proposer une modification", action: #selector(proposeLyricChange))
+        builder.insertChild(UIMenu(title: "", options: .displayInline, children: [command]), atEndOfMenu: .standardEdit)
+    }
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == #selector(proposeLyricChange) { return !selectedLyricQuote.isEmpty }
+        return super.canPerformAction(action, withSender: sender)
+    }
+    @objc private func proposeLyricChange() {
+        guard !selectedLyricQuote.isEmpty,
+              let bytes = try? JSONSerialization.data(withJSONObject: [selectedLyricQuote]),
+              let args = String(data: bytes, encoding: .utf8) else { return }
+        webView?.evaluateJavaScript("window.AU_RELEASE_22?.proposeSelection.apply(null, " + args + ")", completionHandler: nil)
+    }
+
     override func capacitorDidLoad() {
         #if DEBUG
         // Exercise replacement of a previous installation's activity on the second simulator launch.
         UserDefaults.standard.set("previous-test-build", forKey: "au-island-widget-build")
         #endif
         bridge?.registerPluginInstance(IOSUpdatesPlugin())
+        // Prevent accidental document pinches; iOS system accessibility zoom is independent.
+        webView?.scrollView.pinchGestureRecognizer?.isEnabled = false
         if #available(iOS 16.2, *) { bridge?.registerPluginInstance(LiveLyricsPlugin()) }
     }
 
@@ -20,7 +41,7 @@ class ViewController: CAPBridgeViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             guard let self = self else { return }
             let script = """
-            (()=>{const s={updates:typeof window.Capacitor?.Plugins?.IOSUpdates?.checkReleases==='function',download:typeof window.Capacitor?.Plugins?.IOSUpdates?.download==='function',crypto:typeof window.crypto?.subtle?.encrypt==='function',backup:typeof window.AU_BACKUP_18?.encrypt==='function',force:!!document.getElementById('forceAppUpdate'),lyrics:typeof window.Capacitor?.Plugins?.LiveLyrics?.setSource==='function',readyState:document.readyState};
+            (()=>{const s={updates:typeof window.Capacitor?.Plugins?.IOSUpdates?.checkReleases==='function',download:typeof window.Capacitor?.Plugins?.IOSUpdates?.download==='function',crypto:typeof window.crypto?.subtle?.encrypt==='function',backup:typeof window.AU_BACKUP_18?.encrypt==='function',force:!!document.getElementById('forceAppUpdate'),reset:typeof window.Capacitor?.Plugins?.IOSUpdates?.resetDisplay==='function',selection:typeof window.Capacitor?.Plugins?.IOSUpdates?.setLyricSelection==='function',lyrics:typeof window.Capacitor?.Plugins?.LiveLyrics?.setSource==='function',readyState:document.readyState};
             if(s.lyrics&&!window.__nativeLyricsStarted){window.__nativeLyricsStarted=true;(async()=>{const result=await window.Capacitor.Plugins.LiveLyrics.setSource({source:{id:'__native-lyrics-test',title:'Test des paroles',lines:[...Array.from({length:30},(_,i)=>'Phrase de test numéro '+(i+1)),'Un back'],times:[...Array.from({length:30},(_,i)=>i*10),5],ends:[...Array.from({length:30},(_,i)=>(i+1)*10),9],curves:[...Array.from({length:30},(_,i)=>[[0,i*10],[23,(i+1)*10]]),[[0,5],[7,9]]],tracks:[...Array(30).fill('main'),'backs'],duration:300,position:2,rate:1,playing:true,enabled:true,highlight:!!localStorage.getItem('__native-persistence-test'),transition:'fade'}});if(!result.activityStarted)throw Error('Live Activity was not started');window.__nativeLyricsVerified=true;
             const count=8000*300,b=new Uint8Array(44+count*2),v=new DataView(b.buffer);const text=(n,t)=>{for(let i=0;i<t.length;i++)b[n+i]=t.charCodeAt(i);};text(0,'RIFF');v.setUint32(4,b.length-8,true);text(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,16000,true);v.setUint16(32,2,true);v.setUint16(34,16,true);text(36,'data');v.setUint32(40,count*2,true);for(let i=0;i<count;i++)v.setInt16(44+i*2,Math.round(Math.sin(i*2*Math.PI*440/8000)*1000),true);
             let encoded='';for(let i=0;i<b.length;i+=8192)encoded+=String.fromCharCode(...b.subarray(i,i+8192));const n=window.Capacitor.Plugins.LiveLyrics;
@@ -34,7 +55,7 @@ class ViewController: CAPBridgeViewController {
             self.webView?.evaluateJavaScript(script) { value, error in
                 var state = value as? [String: Any] ?? [:]
                 if let error = error { state["error"] = error.localizedDescription }
-                let ready = ["updates", "download", "crypto", "backup", "force", "lyrics"].allSatisfy { state[$0] as? Bool == true } && state["lyricsActivity"] as? Bool == true && state["nativeRelay"] as? Bool == true && (state["nativeSeed"] as? Bool == true || state["nativeVerified"] as? Bool == true)
+                let ready = ["updates", "download", "crypto", "backup", "force", "lyrics", "reset", "selection"].allSatisfy { state[$0] as? Bool == true } && state["lyricsActivity"] as? Bool == true && state["nativeRelay"] as? Bool == true && (state["nativeSeed"] as? Bool == true || state["nativeVerified"] as? Bool == true)
                 state["ready"] = ready
                 if let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first,
                    let data = try? JSONSerialization.data(withJSONObject: state) {
