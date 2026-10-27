@@ -1,4 +1,3 @@
-import{CanvasSource,BufferTarget,canEncodeVideo,Output,Mp4OutputFormat}from'./mediabunny-1.62.1.mjs';
 export async function jpegCover(blob){
  const bitmap=await createImageBitmap(blob),canvas=document.createElement('canvas');
  const scale=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);
@@ -7,6 +6,7 @@ export async function jpegCover(blob){
 }
 const delay=(ms,signal)=>new Promise((resolve,reject)=>{const stop=()=>{clearTimeout(timer);reject(signal.reason||Error('Préparation annulée.'));},timer=setTimeout(()=>{signal?.removeEventListener('abort',stop);resolve();},ms);signal?.addEventListener('abort',stop,{once:true});if(signal?.aborted)stop();});
 export async function animatedCover(api,volume,host,{signal,onprogress=()=>{}}={}){
+ signal?.throwIfAborted();const {CanvasSource,BufferTarget,canEncodeVideo,Output,Mp4OutputFormat}=await import('./mediabunny-1.62.1.mjs');signal?.throwIfAborted();
  const width=720,frames=72,fps=24;
  if(!await canEncodeVideo('avc',{width,height:width,bitrate:2200000}))throw Error('Export de la pochette animée indisponible sur cet appareil.');
  const canvas=api.canvasFor(volume,width);canvas.classList.add('au21-export-cover');host.append(canvas);

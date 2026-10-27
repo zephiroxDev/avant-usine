@@ -1,7 +1,6 @@
-import{AudioBufferSource,BufferTarget,canEncodeAudio,Output,Mp4OutputFormat,WavOutputFormat}from'./mediabunny-1.62.1.mjs';
 
 export async function exportAudio(blob,{edit,tags={},cover,signal,onprogress=()=>{}}={}){
- signal?.throwIfAborted();const Context=globalThis.AudioContext||globalThis.webkitAudioContext;
+ signal?.throwIfAborted();const {AudioBufferSource,BufferTarget,canEncodeAudio,Output,Mp4OutputFormat,WavOutputFormat}=await import('./mediabunny-1.62.1.mjs');signal?.throwIfAborted();const Context=globalThis.AudioContext||globalThis.webkitAudioContext;
  if(!Context)throw Error('Cet appareil ne permet pas de préparer les fichiers audio.');
  const context=new Context();let decoded;
  try{decoded=await context.decodeAudioData(await blob.arrayBuffer());}finally{await context.close();}
