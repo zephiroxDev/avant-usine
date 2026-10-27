@@ -14,6 +14,9 @@ print('Dynamic Island simulator: '+device['name'])
 udid=device['udid']
 if device['state']!='Booted':run('xcrun','simctl','boot',udid)
 run('xcrun','simctl','bootstatus',udid,'-b')
+# Also start the simulator presentation host; simctl-only rendering is a separate variable.
+subprocess.run(['open','-a','Simulator','--args','-CurrentDeviceUDID',udid],check=True)
+time.sleep(5)
 assert 'rootViewController = ViewController()' in Path('ios/App/App/SceneDelegate.swift').read_text()
 subprocess.run(['xcodebuild','-project','ios/App/App.xcodeproj','-scheme','App','-configuration','Debug','-sdk','iphonesimulator','-destination','id='+udid,'-derivedDataPath','build-simulator','CODE_SIGNING_ALLOWED=NO','build'],stdout=Path('simulator-build.log').open('w'),stderr=subprocess.STDOUT,check=True)
 run('xcrun','simctl','install',udid,'build-simulator/Build/Products/Debug-iphonesimulator/App.app')
@@ -42,7 +45,7 @@ for phase in ['nativeSeed']:
     captures=Path('build/simulator-captures');captures.mkdir(parents=True,exist_ok=True)
     run('xcrun','simctl','launch',udid,'com.apple.Preferences')
     samples=[]
-    for step in range(2):
+    for step in range(6):
         time.sleep(5)
         assert background_probe.exists(), 'Native background probe missing'
         sample=json.loads(background_probe.read_text());samples.append(sample)
