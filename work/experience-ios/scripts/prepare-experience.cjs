@@ -7,7 +7,7 @@ fs.mkdirSync(dest,{recursive:true});
 for(const name of fs.readdirSync(source))if(!name.startsWith('test-')&&!name.startsWith('preview-v21')&&name!=='editor-test.html'&&(/\.(?:html|css|js|mjs|webp|mp4|png|ico)$/.test(name)||['archive-downloads.json','promo-manifest.json','mediabunny-LICENSE.txt'].includes(name)))fs.copyFileSync(path.join(source,name),path.join(dest,name));
 const {adaptCopy}=require('../../desktop-app/scripts/desktop-copy.cjs');
 let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
-html=html.replace('<head>','<head><script>document.documentElement.dataset.auApp="ios";</script>');
+html=html.replace('<head>','<head><script>document.documentElement.dataset.auApp="ios";'+(release.channel==='creator-testing'?'document.documentElement.dataset.auBeta="true";document.documentElement.dataset.auBetaLabel='+JSON.stringify('BÊTA '+release.releaseId+' · '+release.buildNumber)+';':'')+'</script>');
 html=html.replace(/<aside id="desktopAnnouncement"[\s\S]*?<\/aside>/,'').replace('<script src="./release-download.js" defer></script>','');
 html=adaptCopy(html).replaceAll('sur ton ordinateur','sur ton appareil').replace('<link rel="stylesheet" href="./experience.css">','').replace('<link rel="stylesheet" href="./listening-beta.css">','').replace('<link rel="stylesheet" href="./renewal-beta.css">','').replace('<link rel="stylesheet" href="./release-22.css">','');
 html=html.replace('</head>','<link rel="stylesheet" href="./ios.css"><link rel="stylesheet" href="./experience.css"><link rel="stylesheet" href="./listening-beta.css"><link rel="stylesheet" href="./renewal-beta.css"><link rel="stylesheet" href="./release-22.css"></head>');

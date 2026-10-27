@@ -57,7 +57,7 @@ function usability(){const host=document.querySelector('[data-au-general-setting
  const status=document.getElementById('status'),retry=document.getElementById('retry');let loading=false;if(status&&retry)new MutationObserver(()=>{const text=status.textContent;if(!retry.hidden){loading=false;say(text,{retry:()=>retry.click(),persist:true});}else if(/Chargement/.test(text)){loading=true;say(text,{persist:true});}else if(loading){loading=false;say(text);}}).observe(status,{childList:true,characterData:true,subtree:true});
 }
 
-function start(){mount();gestures();usability();if(window.AU_EXPERIENCE)visitorCounter();if(window.AU_EXPERIENCE&&document.querySelector('[data-au-general-settings]'))displayAndSelection();}
+function start(){mount();gestures();usability();if(document.documentElement.dataset.auBeta==='true'){const header=document.querySelector('.xp-header');if(header&&!header.querySelector('.au221-beta-label'))header.append(make('small',document.documentElement.dataset.auBetaLabel||'BÊTA','au221-beta-label'));}if(window.AU_EXPERIENCE)visitorCounter();if(window.AU_EXPERIENCE&&document.querySelector('[data-au-general-settings]'))displayAndSelection();}
 document.addEventListener('au:experience-mounted',()=>queueMicrotask(start));window.addEventListener('au:experience-ready',()=>queueMicrotask(start));start();
 
 window.addEventListener("au:experience-ready",mobilePortrait);if(document.readyState!=="loading")mobilePortrait();else document.addEventListener("DOMContentLoaded",mobilePortrait,{once:true});
