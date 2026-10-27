@@ -1,4 +1,5 @@
 name: iPhone 22.1 — bêta privée
+run-name: Validation privée 22.1 — build 42
 on:
   push:
     branches: [ios/22.1-private]
