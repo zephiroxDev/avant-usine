@@ -1,5 +1,8 @@
 name: Publish exact verified iPhone experience
 on:
+  push:
+    branches: [main]
+    paths: ['work/experience-ios/verified-release.json']
   workflow_run:
     workflows: ['iPhone 2.2.0 — validation']
     types: [completed]
@@ -12,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha == 'f3c8e2f67e533f1e53635444d0539ab9600b664d' }}
+    if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha == 'f3c8e2f67e533f1e53635444d0539ab9600b664d' }}
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
