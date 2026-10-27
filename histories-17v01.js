@@ -11,7 +11,6 @@ window.AU_PLATFORM_HISTORIES={
         "Highlight estimé clairement signalé pour les morceaux sans synchronisation.",
         "Atelier : modifier le texte et dupliquer une sélection à l’emplacement choisi, avec confirmation avant une remise à zéro.",
         "Proposer une correction directement depuis les paroles publiées.",
-        "Découpes et fondus : chargement explicite, état du fichier et nouvelle tentative en cas d’erreur.",
         "Affiche des nouveautés à la première ouverture après le patch.",
         "Préférences de communications : sujets, fréquence, heures silencieuses et consentement séparé."
       ]
@@ -607,7 +606,7 @@ window.AU_PLATFORM_HISTORIES={
   ],
   "desktop-pc": [
     [
-      "22.0 · Windows 0.8.0",
+      "22.0 · Windows 0.8.1",
       "27 octobre 2026",
       "Une identité renouvelée, des paroles plus douces et un Atelier plus pratique.",
       [
@@ -617,7 +616,6 @@ window.AU_PLATFORM_HISTORIES={
         "Highlight estimé clairement signalé pour les morceaux sans synchronisation.",
         "Atelier : modifier le texte et dupliquer une sélection à l’emplacement choisi, avec confirmation avant une remise à zéro.",
         "Proposer une correction directement depuis les paroles publiées.",
-        "Découpes et fondus : chargement explicite, état du fichier et nouvelle tentative en cas d’erreur.",
         "Affiche des nouveautés à la première ouverture après le patch.",
         "Préférences de communications : sujets, fréquence, heures silencieuses et consentement séparé."
       ]
@@ -1076,7 +1074,6 @@ window.AU_PLATFORM_HISTORIES={
         "Highlight estimé clairement signalé pour les morceaux sans synchronisation.",
         "Atelier : modifier le texte et dupliquer une sélection à l’emplacement choisi, avec confirmation avant une remise à zéro.",
         "Proposer une correction directement depuis les paroles publiées.",
-        "Découpes et fondus : chargement explicite, état du fichier et nouvelle tentative en cas d’erreur.",
         "Affiche des nouveautés à la première ouverture après le patch.",
         "Préférences de communications : sujets, fréquence, heures silencieuses et consentement séparé.",
         "Rendu du défilement mobile ajusté pour éviter les artefacts de composition."
@@ -1960,7 +1957,6 @@ window.AU_PLATFORM_HISTORIES={
         "Highlight estimé clairement signalé pour les morceaux sans synchronisation.",
         "Atelier : modifier le texte et dupliquer une sélection à l’emplacement choisi, avec confirmation avant une remise à zéro.",
         "Proposer une correction directement depuis les paroles publiées.",
-        "Découpes et fondus : chargement explicite, état du fichier et nouvelle tentative en cas d’erreur.",
         "Affiche des nouveautés à la première ouverture après le patch.",
         "Préférences de communications : sujets, fréquence, heures silencieuses et consentement séparé.",
         "Menus principaux et navigation inférieure avec une nouvelle finition de verre translucide.",
