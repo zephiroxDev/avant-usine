@@ -1,0 +1,63 @@
+name: iPhone — diagnostic extension
+run-name: Diagnostic extension iPhone 22.1
+on:
+  push:
+    branches: [ios/22.1-island-diagnostic]
+    paths: ['work/experience-ios/**', 'work/experience-integration/**', '.github/workflows/ios-island-diagnostic.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ios-22-1-island-diagnostic
+  cancel-in-progress: true
+jobs:
+  beta:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm install --global pnpm@11.25.0
+      - name: Select installed Xcode 26
+        run: |
+          XCODE_PATH=$(python3 - <<'PY'
+          import glob,re
+          paths=[p for p in glob.glob('/Applications/Xcode_26*.app') if re.search(r'Xcode_26[.\d]*\.app$',p)]
+          assert paths, 'Xcode 26 is unavailable'
+          print(max(paths,key=lambda p:tuple(map(int,re.search(r'Xcode_([\d.]+)\.app',p)[1].split('.')))))
+          PY
+          )
+          sudo xcode-select --switch "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
+      - name: Prepare beta only
+        working-directory: work/experience-ios
+        run: |
+          python3 -m venv "$RUNNER_TEMP/experience-python"
+          "$RUNNER_TEMP/experience-python/bin/pip" install Pillow
+          echo "$RUNNER_TEMP/experience-python/bin" >> "$GITHUB_PATH"
+          export PATH="$RUNNER_TEMP/experience-python/bin:$PATH"
+          pnpm install --frozen-lockfile
+          pnpm run prepare:site
+          pnpm exec cap add ios
+          pnpm exec cap sync ios
+          node scripts/configure-native.cjs
+      - name: Test playback, backup and updates before native compilation
+        working-directory: work/experience-ios
+        run: node --test test/ios.test.cjs test/comfort.test.cjs test/background-catalogue-22-1.test.cjs
+      - name: Verify native bridge in simulator
+        working-directory: work/experience-ios
+        run: python scripts/diagnose-widget-22-1.py
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: iphone-island-diagnostic
+          path: |
+            work/experience-ios/build-output.log
+            work/experience-ios/build/simulator-captures/
+          if-no-files-found: ignore
+          retention-days: 7
