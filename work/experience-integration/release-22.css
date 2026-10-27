@@ -66,3 +66,5 @@ html[data-experience] :is(.actions,.xp-account-links,.rn-community-shortcuts){ga
 @media(pointer:coarse){html[data-experience] :is(.xp-full-player,#auImmersionApp) .au221-depth.au-adjustable-lyrics .au-lyric-line{filter:none!important;backdrop-filter:none!important;isolation:auto!important;will-change:auto!important;backface-visibility:visible!important}html[data-experience] :is(.xp-full-player,#auImmersionApp) .au221-depth .au-lyric-line:not(.is-current):not(.is-exiting) .karaoke-main{filter:blur(var(--au221-blur,0px));transition:filter .24s ease}html[data-experience] :is(.xp-full-player,#auImmersionApp) .au221-depth[data-au221-manual=true] .karaoke-main{filter:none!important}}
 
 .au-beta-build-card{border:1px solid #ea83c7!important;box-shadow:0 0 0 1px #ea83c722,inset 0 0 18px #ea83c709,0 0 18px #ea83c722}
+
+.au221-selected-target{background:#db74bc35;box-shadow:0 0 12px #e47ecb66;border-radius:3px}
