@@ -9,7 +9,7 @@ permissions:
   actions: read
 jobs:
   publish:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha == 'f3c8e2f67e533f1e53635444d0539ab9600b664d' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha == '0bdda24a34d6ab4d0f34acd34188f8a08edbec7e' }}
     runs-on: windows-latest
     timeout-minutes: 15
     env:
