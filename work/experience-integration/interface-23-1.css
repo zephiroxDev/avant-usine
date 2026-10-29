@@ -109,3 +109,4 @@ html[data-composition] .xp-full-player.xp-show-lyrics :is(.au222-lyric-commands,
 html[data-composition] .xp-full-player.xp-show-lyrics :is(.au222-lyric-commands,.au222-lyric-actions)>button{flex:none;white-space:nowrap;font-size:12px!important;padding:8px 10px!important;min-height:38px}
 html[data-composition] .xp-full-player.xp-show-lyrics .au222-lyric-actions{max-height:var(--au221-chrome-height,60px);opacity:1;transition:opacity .35s,max-height .35s,margin .35s}
 html[data-composition] .xp-full-player.xp-show-lyrics.xp-listening-idle :is(.au222-lyric-actions,.au222-lyric-commands){min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;opacity:0!important;overflow:hidden;pointer-events:none}
+html[data-composition] .xp-full-player.xp-show-lyrics.au221-exploring #paroles{display:none!important}
