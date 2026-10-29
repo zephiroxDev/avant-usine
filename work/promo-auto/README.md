@@ -1,5 +1,13 @@
 # Vidéos de patch → TikTok @avant.l.usine
 
+## 29 octobre — limitation Buffer et anciennes erreurs
+
+Edge v5 : un reçu déjà refusé (`error` avec postId) reste dans le journal mais ne déclenche plus une interrogation perpétuelle de Buffer. Les soumissions en cours ou incertaines conservent leur réconciliation et ne sont jamais renvoyées aveuglément. Un HTTP 429 enregistre le délai `Retry-After` dans l’état privé ; les passages suivants du planificateur ne contactent pas Buffer avant son expiration. Un délai absent ou invalide utilise quinze minutes ; une date HTTP est aussi reconnue.
+
+28 tests passent, dont reprise du délai entre deux invocations, absence d’appels pour les anciens refus, sécurité du journal avant envoi et absence de renvoi après interruption. Authentification dédiée et secrets Vault conservés. Ce correctif privé ne figure pas dans les notes publiques.
+
+Référence du protocole : https://developers.buffer.com/guides/api-limits.html. Une limite fournisseur ne peut pas être levée par ce correctif : la nouvelle vidéo reste en attente jusqu’au délai autorisé. Ne jamais annoncer une publication sans `sent` et `sentAt`.
+
 Automatisation serveur du 15 octobre 2026, privée au créateur ; aucune nouvelle
 version du site ni des applications. Ne pas la mettre dans les Patch Notes publiques.
 
@@ -60,3 +68,11 @@ https://supabase.com/docs/guides/database/vault.
 Envoi 20.0.3 confirmé sur TikTok (PS4 0.24 comprise). Buffer rejetait la vidéo depuis GitHub Pages avec InvalidInputError / Video could not be read from its URL. Le service utilise maintenant les URLs publiques du bucket au-promo-media. Avant un premier envoi, media.mjs copie automatiquement depuis GitHub Pages un MP4 dont le nom est strictement contrôlé : 10 Mio maximum, Content-Type vidéo et boîte ftyp, sans transférer de secret à GitHub. L’objet déjà présent est réutilisé et jamais écrasé par ce chemin. Les contrôles de doublons et les reçus demeurent actifs. La case Publiée n’est cochée qu’après sent et sentAt.
 
 Publication confirmée : https://tiktok.com/@avant.l.usine/video/7698859826784390433
+## Réparation du 26 octobre — publication réelle confirmée
+
+- 21.0 publiée automatiquement, reçu Buffer `6adfc2daca308c8a23266b16`, sentAt 2026-10-26T21:16:57.302Z.
+- Lien : https://tiktok.com/@avant.l.usine/video/7701088240643673377
+- Anciens échecs 0.25, 20.0.5 et 2.0.6 : refus explicite TikTok frame_rate_check_failed. Aucun renvoi ni suppression de leur historique.
+- Edge v4 : contrôle des tables de cadence MP4 avant envoi (23–60 fps), diagnostics Buffer conservés, un listing commun réduit les appels, réconciliation des envois incertains, versions à quatre composantes acceptées, entrée invalide isolée.
+- 23 tests passent. Aucune nouvelle version du site ni des applications nécessaire pour cette correction privée.
+- La création des affiches reste une étape de livraison : ce service publie les vidéos ajoutées au catalogue, il ne crée pas seul les visuels de futurs patchs.
