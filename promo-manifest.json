@@ -10,10 +10,9 @@
       "animation": "promo-23v00-public.mp4",
       "title": "L’essentiel, à sa place.",
       "platforms": [
-        "web-pc",
-        "web-mobile",
-        "desktop-pc",
-        "ios"
+        "Sites PC et mobile 23.0",
+        "Windows 0.8.2",
+        "iPhone et iPad 2.2.2"
       ],
       "filename": "23.0 image.png",
       "videoFilename": "23.0 video.mp4"
