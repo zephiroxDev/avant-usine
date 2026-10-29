@@ -4,10 +4,10 @@ const M=window.AU_STUDIO_MODEL_19;
 const E=(tag,text,cls)=>{const n=document.createElement(tag);if(text!=null)n.textContent=text;if(cls)n.className=cls;return n;};
 function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],title='',trackKey='',sourceHash='',local=false,onchange=()=>{},preview,parseImport,projectRevision=null}={}){
  window.AU_MAINTENANCE_19?.assert('sync_studio');
- let disposed=false,selected=null,activeTrack='main',captureMode=initial?.captureMode==='phrases'||(!initial?.captureMode&&initial?.syncMode==='blocks')?'phrases':'glide',cursor=0,armed=false,wordIndex=0,loop=null,revision=projectRevision,timer=0,saving=Promise.resolve(),peaks=null,zoom=1,frame=0,epoch=0,previewView=null;const projectOwner=window.AU_PROJECTS_19.owner(),originalRate=audio.playbackRate||1,originalPitch=audio.preservesPitch;audio.playbackRate=[.5,.75,1,2].includes(initial?.rate)?initial.rate:originalRate;
+ let disposed=false,selected=null,activeTrack='main',captureMode='glide',cursor=0,armed=false,wordIndex=0,loop=null,revision=projectRevision,timer=0,saving=Promise.resolve(),peaks=null,zoom=1,frame=0,epoch=0,previewView=null;const projectOwner=window.AU_PROJECTS_19.owner(),originalRate=audio.playbackRate||1,originalPitch=audio.preservesPitch;audio.playbackRate=[.5,.75,1,2].includes(initial?.rate)?initial.rate:originalRate;
  const root=E('section',null,'au-studio-19'),status=E('p',null,'au-note'),toolbar=E('div',null,'actions'),focus=E('section',null,'studio19-focus'),phrase=E('div',null,'studio19-phrase'),progress=E('p',null,'au-note'),trackSelect=E('select'),modeSelect=E('select');
  status.setAttribute('role','status');trackSelect.setAttribute('aria-label','Voix à synchroniser');modeSelect.setAttribute('aria-label','Passage de synchronisation');
- for(const [value,text]of [['glide','Highlight · barre glissante'],['phrases','Classique · début et fin']]){const option=E('option',text);option.value=value;modeSelect.append(option);}modeSelect.value=captureMode;
+ for(const [value,text]of [['glide','Highlight · barre glissante']]){const option=E('option',text);option.value=value;modeSelect.append(option);}modeSelect.value=captureMode;modeSelect.hidden=true;
  const advanced=E('details',null,'studio19-advanced'),summary=E('summary','Toutes les paroles · outils avancés'),list=E('div',null,'studio19-list'),context=E('div',null,'studio19-context'),timeline=E('div',null,'studio19-timeline'),canvas=E('canvas'),timelineInner=E('div',null,'studio19-timeline-inner'),previewHost=E('div',null,'studio19-preview');
  canvas.setAttribute('aria-label','Forme d’onde du morceau');canvas.height=90;timelineInner.append(canvas);timeline.append(timelineInner);advanced.append(summary,context,list);root.append(toolbar,focus,advanced,status);focus.append(phrase,progress);host.append(root);
  const buttons=[];let moreCommands=null,glide=null;function button(text,fn,parent=toolbar){const b=E('button',text,'button secondary');b.type='button';b.onclick=async()=>{try{glide?.flush();await fn();}catch(e){status.textContent=e.message;}};if(moreCommands&&parent===commands&&!['Modifier','Supprimer la phrase','Début / fin','Reprendre depuis un mot'].includes(text))moreCommands.append(b);else parent.append(b);buttons.push(b);return b;}
@@ -42,7 +42,7 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
 
  button('Aperçu',()=>{previewHost.hidden=!previewHost.hidden;if(!previewHost.hidden)updatePreview();},toolbar);previewHost.hidden=true;focus.append(previewHost);
  const tools=E('div',null,'actions');context.append(tools);
- if(parseImport){const file=E('input');file.type='file';file.accept='.json,.lrc';file.hidden=true;tools.append(file);button('Importer une synchronisation',()=>file.click(),tools);file.onchange=async()=>{const selectedFile=file.files?.[0];if(!selectedFile)return;try{glide.flush();const data=parseImport(await selectedFile.text(),selectedFile.name,audio.duration);model.importSync(data);captureMode=model.project.captureMode;modeSelect.value=captureMode;activeTrack=model.project.tracks[0].id;cursor=0;selected=model.project.phrases[0]?.id;armed=false;wordIndex=0;audio.pause();render();status.textContent='Synchronisation importée directement. Annuler permet de retrouver les paroles précédentes.';}catch(e){status.textContent='Import impossible : '+e.message;}finally{file.value='';}};}
+ if(parseImport){const file=E('input');file.type='file';file.accept='.json';file.hidden=true;tools.append(file);button('Importer une synchronisation',()=>file.click(),tools);file.onchange=async()=>{const selectedFile=file.files?.[0];if(!selectedFile)return;try{glide.flush();const data=parseImport(await selectedFile.text(),selectedFile.name,audio.duration);if(data.sync_mode==='blocks'||!data.curves?.length)throw Error('L’Atelier utilise uniquement le Highlight : importe un fichier JSON contenant sa progression détaillée. Les anciens repères restent conservés dans tes sauvegardes.');model.importSync(data);captureMode='glide';modeSelect.value=captureMode;activeTrack=model.project.tracks[0].id;cursor=0;selected=model.project.phrases[0]?.id;armed=false;wordIndex=0;audio.pause();render();status.textContent='Synchronisation importée directement. Annuler permet de retrouver les paroles précédentes.';}catch(e){status.textContent='Import impossible : '+e.message;}finally{file.value='';}};}
  button('Ajouter une voix',()=>form('Ajouter une voix',[['Nom','Backs','text']],values=>{activeTrack=model.track(values[0],'backs');cursor=0;selected=null;render();}),tools);
  button('Ajouter une phrase',()=>form('Ajouter une phrase',[['Texte','','textarea']],values=>{selected=model.add(values[0],activeTrack);render();}),tools);
  button('Mes projets en cours',()=>window.AU_PROJECTS_19.open(),tools);
@@ -72,6 +72,19 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
  const classicExport=button('Exporter JSON simple',()=>download(JSON.stringify(model.export('blocks'),null,2),'json','application/json'),exports);
  const lrcExport=button('Exporter LRC simple',()=>{const result=M.lrc(model.project);form('Limites du LRC',[],()=>download(result.text,'lrc','text/plain'),null,result.warning);},exports);
  const saveState=E('p',null,'au-note');root.append(saveState);
+ // The approved Atelier shows one clear working area, followed by comfort
+ // and save actions. Existing advanced tools and model references stay intact.
+ if(document.documentElement.dataset.composition==='22.2'){
+  const block=(title,...nodes)=>{const section=E('section',null,'au222-content-block');section.append(E('h2',title),...nodes);return section;};
+  const speedLabel=E('label','Vitesse de lecture');speedLabel.append(speed);
+  const comfort=block('Confort de travail',speedLabel,glide.element.querySelector('.studio19-sensitivity'),autoPauseLabel);
+  comfort.classList.add('au222-studio-comfort');
+  const controls=block('Contrôles de synchronisation',navigation),finish=block('Terminer ou reprendre');
+  const finishActions=E('div',null,'actions');finish.append(finishActions,saveState);button('Enregistrer le travail',()=>flush(),finishActions);
+  for(const label of ['Importer une synchronisation','Mes projets en cours']){const existing=[...tools.querySelectorAll('button')].find(b=>b.textContent===label);if(existing)finishActions.append(existing);}
+  const top=block('Voix à synchroniser',toolbar);focus.prepend(E('h2','La phrase en cours'));
+  root.replaceChildren(top,focus,controls,comfort,finish,advanced,status);
+ }
  const voicePositions=new Map();
  function trackLines(){return model.project.phrases.filter(l=>l.track===activeTrack);}
  function current(){return trackLines()[cursor];}
