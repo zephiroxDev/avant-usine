@@ -6,8 +6,16 @@ fs.mkdirSync(destination,{recursive:true});
 require('../../experience-integration/prepare-editor-preview.cjs');
 const allowed=/\.(?:html|css|js|mjs|webp|mp4|png|ico|webmanifest|json|txt)$/;
 const excluded=/^(?:preview-v21|editor-test|test-|audio-editor-(?:20|21)\.)/;
+// The archive already streams its media from GitHub Pages. Only the current
+// discovery poster must be available locally. Older launchers reject payloads
+// larger than 128 MiB, so never bundle the complete promotional archive.
+const promoCatalogue=JSON.parse(fs.readFileSync(path.join(source,'promo-manifest.json'),'utf8'));
+const desktopRelease=require('../release.json').releaseId;
+const localPromo=new Set(promoCatalogue.images.filter(item=>item.patch===desktopRelease||item.patch==='23.0').flatMap(item=>['image','original','animation','video'].map(key=>item[key]).filter(Boolean)));
+const remotePromo=name=>/^promo-.*\.(?:png|mp4)$/.test(name)&&!localPromo.has(name);
+for(const name of fs.readdirSync(destination))if(remotePromo(name))fs.unlinkSync(path.join(destination,name));
 
-for(const entry of fs.readdirSync(source))if(allowed.test(entry)&&!excluded.test(entry))fs.copyFileSync(path.join(source,entry),path.join(destination,entry));
+for(const entry of fs.readdirSync(source))if(allowed.test(entry)&&!excluded.test(entry)&&!remotePromo(entry))fs.copyFileSync(path.join(source,entry),path.join(destination,entry));
 const htmlPath=path.join(destination,'index.html');let html=fs.readFileSync(htmlPath,'utf8');const active=html.match(/src="\.\/(app-\d+v\d+\.js)"/);if(!active)throw Error('Script principal introuvable');
 html=html.replace(/<link rel="stylesheet" href=".\/mobile-player-18v07.css">/,'').replace(/<script src=".\/mobile-player-18v07.js" defer><\/script>/,'');
 for(const file of ['mobile-player-18v07.js','mobile-player-18v07.css']){const obsolete=path.join(destination,file);if(fs.existsSync(obsolete))fs.unlinkSync(obsolete);}
@@ -32,4 +40,5 @@ fs.copyFileSync(path.join(__dirname,'../build/icon.ico'),path.join(destination,'
 const offline=path.join(destination,'offline.html');fs.writeFileSync(offline,adaptCopy(fs.readFileSync(offline,'utf8')));
 for(const file of fs.readdirSync(destination)){if(/^app-\d+v\d+\.js$/.test(file)&&file!==active[1])fs.unlinkSync(path.join(destination,file));if(/^styles-\d+v\d+\.css$/.test(file)&&!html.includes(file))fs.unlinkSync(path.join(destination,file));}
 const comfortPath=path.join(destination,'comfort-18v05.js');fs.appendFileSync(comfortPath,"\nwindow.AU_UPDATE_DIAGNOSTIC.configure({platform:'desktop',current:'"+require('../release.json').desktopVersion+"'});\n");
+const discoveryPath=path.join(destination,'release-22.js');fs.writeFileSync(discoveryPath,fs.readFileSync(discoveryPath,'utf8').replaceAll('23.0',desktopRelease));
 console.log('Interface locale et historique Windows préparés : '+fs.readdirSync(destination).length+' fichiers.');

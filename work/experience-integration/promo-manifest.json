@@ -2,6 +2,20 @@
   "format": 1,
   "images": [
     {
+      "id": "23v00-2",
+      "patch": "23.0.2",
+      "title": "Mise à jour Windows débloquée",
+      "image": "promo-23v00-2-public.png",
+      "original": "promo-23v00-2-public.png",
+      "animation": "promo-23v00-2-public.mp4",
+      "video": "promo-23v00-2-public.mp4",
+      "platforms": [
+        "Windows 0.8.3"
+      ],
+      "filename": "23.0.2 image.png",
+      "videoFilename": "23.0.2 video.mp4"
+    },
+    {
       "id": "23v00",
       "patch": "23.0",
       "image": "promo-23v00-public.png",

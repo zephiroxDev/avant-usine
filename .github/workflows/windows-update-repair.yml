@@ -1,0 +1,36 @@
+name: Windows 0.8.3 — réparation de la mise à jour
+on:
+  push:
+    branches: [release/windows-0.8.3]
+permissions:
+  contents: write
+concurrency:
+  group: windows-0.8.3-repair
+  cancel-in-progress: false
+jobs:
+  validate-and-publish:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: npm install --global pnpm@11.25.0
+      - run: python -m pip install Pillow
+      - name: Build and test the actual update against the existing launcher validator
+        shell: pwsh
+        run: ./work/desktop-app/scripts/release.ps1
+      - name: Publish verified installer and compatible incremental update
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_COMMIT: ${{ github.sha }}
+        run: ./work/desktop-app/scripts/publish-ci.ps1

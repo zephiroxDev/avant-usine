@@ -1,5 +1,15 @@
 [
   [
+    "23.0.2 · Windows 0.8.3",
+    "29 octobre 2026",
+    "Mise à jour Windows débloquée.",
+    [
+      "Correction d’un blocage empêchant certaines installations de recevoir la mise à jour.",
+      "Téléchargement allégé : les anciens supports promotionnels restent disponibles en ligne dans Gestion promo.",
+      "Bibliothèque Local, préférences et données conservées."
+    ]
+  ],
+  [
     "23.0 · Windows 0.8.2",
     "29 octobre 2026",
     "Une interface plus simple, fidèle à la nouvelle présentation validée.",
