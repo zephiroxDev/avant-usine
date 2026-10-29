@@ -2,6 +2,23 @@
   "format": 1,
   "images": [
     {
+      "id": "23v01",
+      "patch": "23.1",
+      "image": "promo-23v01-public.png",
+      "original": "promo-23v01-public.png",
+      "video": "promo-23v01-public.mp4",
+      "animation": "promo-23v01-public.mp4",
+      "title": "La musique, plus simplement.",
+      "platforms": [
+        "web-pc",
+        "web-mobile",
+        "desktop-pc",
+        "ios"
+      ],
+      "filename": "23.1 image.png",
+      "videoFilename": "23.1 video.mp4"
+    },
+    {
       "id": "23v00-2",
       "patch": "23.0.2",
       "title": "Mise à jour Windows débloquée",

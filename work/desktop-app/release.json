@@ -1,6 +1,6 @@
 {
-  "releaseId": "23.0.2",
-  "desktopVersion": "0.8.3",
+  "releaseId": "23.1",
+  "desktopVersion": "0.8.4",
   "websiteSource": "../experience-integration",
   "publicationPolicy": "Historiques indépendants : publier chaque plateforme dès qu’elle est prête. Publier tous les fichiers de mise à jour et leur manifest avant de rendre la release Windows publique.",
   "immersionBackground": "solid-customizable"
