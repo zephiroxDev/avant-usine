@@ -107,3 +107,5 @@ html[data-composition] .xp-full-player.xp-show-lyrics .xp-player-switch{flex:non
 html[data-composition] .xp-full-player.xp-show-lyrics:not(.au221-exploring) .au221-lyrics-tabs{display:none!important}
 html[data-composition] .xp-full-player.xp-show-lyrics :is(.au222-lyric-commands,.au222-lyric-actions){flex-wrap:nowrap!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;max-width:100%;min-height:40px;box-sizing:border-box}
 html[data-composition] .xp-full-player.xp-show-lyrics :is(.au222-lyric-commands,.au222-lyric-actions)>button{flex:none;white-space:nowrap;font-size:12px!important;padding:8px 10px!important;min-height:38px}
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-lyric-actions{max-height:var(--au221-chrome-height,60px);opacity:1;transition:opacity .35s,max-height .35s,margin .35s}
+html[data-composition] .xp-full-player.xp-show-lyrics.xp-listening-idle :is(.au222-lyric-actions,.au222-lyric-commands){min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;opacity:0;overflow:hidden;pointer-events:none}
