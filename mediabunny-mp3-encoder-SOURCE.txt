@@ -1,0 +1,7 @@
+@mediabunny/mp3-encoder 1.63.0
+Upstream: https://github.com/Vanilagy/mediabunny
+Source archive: https://registry.npmjs.org/@mediabunny/mp3-encoder/-/mp3-encoder-1.63.0.tgz
+License: Mozilla Public License 2.0, included in mediabunny-mp3-encoder-LICENSE.txt.
+The bundled encoder uses LAME. Its included notices are retained in the bundle.
+Local adaptation: the bare mediabunny import points to the existing pinned
+mediabunny-1.62.1.mjs module. The encoder and worker code are unchanged.

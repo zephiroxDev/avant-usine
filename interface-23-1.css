@@ -1,0 +1,112 @@
+/* V23.1: shared geometry and complete visual treatment of existing services.
+   Permissions, destinations and form handlers remain owned by their modules. */
+html[data-composition] dialog.au231-dialog:not(.au222-page-surface){box-sizing:border-box;width:min(1000px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:24px;background:var(--paper)!important;color:var(--ink)!important;border:1px solid var(--line)!important;border-radius:14px!important;box-shadow:0 24px 90px #0005!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:auto}
+html[data-composition] dialog.au231-dialog :is(h1,h2,h3,h4,p,label,small){background:transparent!important}
+html[data-composition] dialog .au-admin-card{box-sizing:border-box;min-width:0;max-width:100%;padding:22px;margin-block:18px;background:var(--surface-raised)!important;border:1px solid var(--line)!important;border-radius:12px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+/* Keep the unread poster pulse: its animated shadow is part of the workflow. */
+html[data-composition] dialog .au-promo-card{box-sizing:border-box;min-width:0;max-width:100%;padding:22px;margin-block:18px;background:var(--surface-raised)!important;border:1px solid var(--line)!important;border-radius:12px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html[data-composition] dialog .au-beta-build-card{border-color:#b68be877!important;box-shadow:0 0 0 1px #b68be822}
+html[data-composition]{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;--au231-field:#211c29;--au231-player-space:110px}
+html[data-composition] body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+html[data-composition] .shell{position:fixed;inset:0;min-width:0;width:100%;height:100dvh;transform:none}
+html[data-composition] #pageScroll{min-width:0;min-height:0;overflow-x:hidden;overscroll-behavior:contain}
+html[data-composition] #main{padding-bottom:calc(var(--au231-player-space) + env(safe-area-inset-bottom))!important}
+html[data-composition] :is(.au222-header,.au222-subnav,.page-heading){min-width:0}
+html[data-composition]:not([data-au-input=gamepad]) :is(button,a,summary):focus:not(:focus-visible){outline:none}
+html[data-composition] dialog.au222-page-surface{display:block;position:fixed!important;inset:0!important;width:min(1100px,100vw)!important;height:min(100dvh,var(--au-vh,100dvh))!important;max-height:min(100dvh,var(--au-vh,100dvh))!important;margin:0 auto!important;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+html[data-composition] dialog.au222-page-surface:not([open]){display:none!important}
+html[data-composition] dialog.au222-page-surface>.au222-page-chrome{flex:none;min-height:0}
+html[data-composition] dialog :is(.major-dialog-head,.au-dialog-head,.xp-dialog-head,.local-dialog-head,.au231-dialog-head){box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;min-width:0;max-width:100%;position:sticky;top:0;z-index:12;margin:0 0 24px!important;padding:16px 0!important;background:var(--paper)!important;border:0!important;box-shadow:0 1px 0 var(--line)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html[data-composition] dialog :is(.major-dialog-head,.au-dialog-head,.xp-dialog-head,.local-dialog-head,.au231-dialog-head)>:is(h1,h2){flex:1;min-width:0;margin:0;overflow-wrap:anywhere;font-size:clamp(23px,3vw,32px);line-height:1.2;letter-spacing:-.8px}
+html[data-composition] dialog :is(.major-dialog-head,.au-dialog-head,.xp-dialog-head,.local-dialog-head,.au231-dialog-head)>button{flex:none;max-width:100%;white-space:normal}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(.major-dialog-body,.au-admin-body,.au-catalog-editor,.au24-workspace,.au21-audio-body){min-width:0;min-height:0}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(.major-card,.au-island-settings,.major-message,.major-panel,.dc-panel,.dc-post,.dc-prompt,.au-panel,.au-card,.local-card,.local-album,.local-panel,.au-catalog-volume,.au-promo-item,.studio19-focus,.studio19-advanced,.studio19-timeline,.au21-audio-body>section){box-sizing:border-box;max-width:100%;min-width:0;background:var(--surface-raised)!important;color:var(--ink);border:1px solid var(--line)!important;border-radius:12px!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:22px;margin-block:18px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(.button,.chip,.dc-button,.control,.au-icon,.sync-choice,.studio19-navigation button,.studio19-sensitivity button){box-sizing:border-box;max-width:100%;min-height:42px;white-space:normal;overflow-wrap:anywhere;font:inherit;font-size:14px;line-height:1.4;font-weight:600;letter-spacing:normal;text-transform:none;color:var(--ink)!important;background:var(--surface-raised)!important;border:1px solid var(--line)!important;border-radius:10px!important;box-shadow:none!important;padding:10px 14px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(.button:not(.secondary),.dc-primary,.xp-primary,.au222-primary){background:var(--accent)!important;color:#201329!important;border-color:transparent!important}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(.actions,.filters,.studio19-navigation,.dc-post-actions,.dc-vote-controls,.au-control-flow,.au-spaced-controls,.local-tabs){display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-block:14px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(label,.dc-field,.major-field){min-width:0;letter-spacing:normal;text-transform:none;font-size:13px;line-height:1.5;gap:8px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) label:has(> :is(input:not([type=checkbox]):not([type=radio]),select,textarea)){display:grid;align-items:start;margin-block:14px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(input:not([type=range]):not([type=checkbox]):not([type=radio]),textarea,select){box-sizing:border-box;min-width:0;max-width:100%;width:100%;padding:12px;background:var(--au231-field)!important;color:var(--ink)!important;border:1px solid #ffffff20!important;border-radius:9px!important;box-shadow:none!important;font:inherit;font-size:16px;line-height:1.5;letter-spacing:normal;text-transform:none}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) textarea{resize:vertical;min-height:110px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(input[type=checkbox],input[type=radio]){width:18px;height:18px;min-width:18px;accent-color:var(--accent)}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) progress{width:100%;accent-color:var(--accent);margin-block:18px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) table{border-collapse:collapse;max-width:100%;width:100%;font-size:13px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(th,td){padding:12px;text-align:left;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) details{box-sizing:border-box;min-width:0;max-width:100%;padding:18px;border-radius:10px!important;border:1px solid var(--line)!important;background:var(--surface-raised)!important;box-shadow:none!important;margin-block:18px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) summary{font-size:14px;font-weight:600;line-height:1.5;letter-spacing:normal;text-transform:none;padding:4px 0;cursor:pointer}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) details[open]>summary{margin-bottom:18px}
+html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) hr{border:0;border-top:1px solid var(--line);margin:24px 0}
+html[data-composition] [data-role-owner]::after{display:none!important;content:none!important}
+html[data-composition] #creatorDialog .au231-refresh{display:block;width:max-content;max-width:100%;margin:28px auto 48px!important}
+html[data-composition] .major-profile{display:flow-root}
+html[data-composition] .major-profile>.major-avatar{float:right;margin:0 0 16px 20px}
+html[data-composition] .au222-all-volumes{margin-top:28px!important}
+html[data-composition] #collection>.page-heading{padding-bottom:14px!important}
+html[data-composition] .album-hero{align-items:start}
+html[data-composition] .album-hero>:is(canvas,.au-motion-cover){align-self:start;margin-top:4px}
+html[data-composition] .au222-subnav{padding-block:16px;gap:8px;row-gap:10px}
+html[data-composition] #textes-expliques>.au222-actions{margin-top:28px;padding-top:22px;border-top:1px solid var(--line);gap:14px}
+html[data-composition] .xp-full-player.xp-show-lyrics .xp-player-normal{display:none!important}
+html[data-composition] .xp-full-player.xp-show-lyrics .xp-listening-transport{position:relative!important;inset:auto!important;min-width:0;width:100%;box-sizing:border-box;padding:18px 0!important;background:var(--paper);margin-top:24px}
+html[data-composition] .xp-full-player.xp-show-lyrics .xp-listening-transport .player-dock{position:static!important;inset:auto!important;transform:none!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important}
+html[data-composition] .xp-full-player.xp-show-lyrics .xp-listening-transport .now-info{display:none!important}
+html[data-composition] .xp-full-player .xp-player-switch{position:static!important;inset:auto!important;display:flex;flex-wrap:wrap;gap:12px;padding:14px 0;margin-top:14px;min-width:0;background:var(--paper)!important}
+html[data-composition] .au24-top{position:sticky;top:0;z-index:12;background:var(--paper);gap:12px}
+html[data-composition] .au24-inspector{background:var(--surface-raised);border:1px solid var(--line);border-radius:12px;color:var(--ink)}
+html[data-composition] .au24-workspace{background:var(--paper);color:var(--ink);font:inherit}
+html[data-composition] .au24-stage{background:var(--paper)}
+html[data-composition] .au24-workspace button[aria-pressed=true]{background:var(--accent);color:#201329}
+html[data-composition] .au24-status{background:var(--surface-raised);color:var(--accent)}
+html[data-composition] .au24-publish>div>label{border-color:var(--line);border-radius:10px}
+html[data-composition][data-au231-no-artwork=true] .rn-beat-glow{background:radial-gradient(ellipse at 40% 70%,#ffffff80,transparent 55%),radial-gradient(ellipse at 75% 35%,#96969655,transparent 65%);filter:grayscale(1)}
+@media(max-width:700px){html[data-composition] :is(dialog,.au222-real-page,[data-au-editor-ui]) :is(.major-card,.au-island-settings,.major-message,.major-panel,.dc-panel,.dc-post,.au-panel,.local-card,.local-album,.local-panel,.studio19-focus,.studio19-advanced,.studio19-timeline){padding:18px}html[data-composition] dialog :is(.major-dialog-head,.au-dialog-head,.xp-dialog-head,.local-dialog-head,.au231-dialog-head){gap:12px;padding-block:14px!important}html[data-composition] .xp-full-player .au-lyrics-viewport{height:52dvh;min-height:220px}html[data-composition] :is(.studio19-timeline,.au-catalog-editor,.au24-workspace){max-width:100%;overflow-wrap:anywhere}}
+
+html[data-composition] .major-profile .major-profile-top{align-items:start;gap:20px}
+
+html[data-composition]:not([data-au231-input=keyboard]):not([data-au-input=gamepad]) .au222-brand:focus{outline:none!important;box-shadow:none!important}
+html[data-composition] .au231-admin-pagination{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:center}
+html[data-composition] .au231-admin-pagination>.au231-refresh{grid-column:1/-1;justify-self:center}
+html[data-composition] #decouvrir .au222-all-volumes :is(.au-section,.au-official-grid>a,.au-kofi-banner){padding:22px;border:1px solid var(--line)!important;border-radius:12px!important;background:var(--surface-raised)!important;box-shadow:none!important;margin-block:20px}
+html[data-composition] #local .local-notice{padding:22px;border:1px solid var(--line)!important;border-radius:12px!important;background:var(--surface-raised)!important;box-shadow:none!important}
+html[data-composition] #local .local-notice h2{margin:0 0 16px}
+html[data-composition] #decouvrir .au-official-grid>a{box-sizing:border-box;min-width:0;max-width:100%;overflow-wrap:anywhere;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html[data-composition] #decouvrir .au-official-grid>a>*{min-width:0;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:480px){html[data-composition] #decouvrir .au-official-grid{grid-template-columns:minmax(0,1fr)!important}}
+@media(max-width:380px){html[data-composition] .au222-nav{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}html[data-composition] .au222-nav-button{min-width:0;font-size:11px!important;padding:8px 4px;white-space:normal;text-align:center;justify-content:center}}
+
+/* Profile backgrounds remain the member's chosen design, not an admin surface. */
+html[data-composition] .major-profile{border-radius:12px;display:flow-root!important}
+html[data-composition] dialog .au-admin-card:not(.au-beta-build-card){box-shadow:none!important}
+html[data-composition] dialog .sync-file-drop{background:var(--surface-raised);border-radius:12px;min-width:0;max-width:100%;box-sizing:border-box}
+
+/* A single bounded reading area; transport always occupies its own row. */
+html[data-composition] .xp-full-player.xp-show-lyrics{display:flex!important;flex-direction:column;overflow:hidden!important}
+html[data-composition] .xp-full-player.xp-show-lyrics>.au222-page-chrome{display:none!important}
+html[data-composition] .xp-full-player.xp-show-lyrics>.xp-dialog-head{flex:none;margin:0 0 10px!important;padding:8px 0!important}
+html[data-composition] .xp-full-player.xp-show-lyrics .xp-dialog-body{display:flex!important;flex-direction:column;flex:1;min-height:0;overflow:hidden;gap:0}
+html[data-composition] .xp-full-player.xp-show-lyrics #paroles{display:flex!important;flex-direction:column;flex:1;min-height:0;overflow:hidden;gap:0}
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-lyric-commands{flex:none;order:1;margin:0 0 8px!important;gap:8px}
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-lyric-identity{flex:none;order:0;margin:0 0 8px!important;gap:12px}
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-lyric-identity h1{font-size:22px!important;line-height:1.2;margin:2px 0 4px!important}
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-lyric-identity .au222-kicker{display:none}
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-lyric-cover{width:48px}
+html[data-composition] .xp-full-player.xp-show-lyrics .lyrics-layout,
+html[data-composition] .xp-full-player.xp-show-lyrics .lyrics-card.au20-listening,
+html[data-composition] .xp-full-player.xp-show-lyrics .au20-layout,
+html[data-composition] .xp-full-player.xp-show-lyrics .au20-text-column{display:flex!important;flex-direction:column;flex:1;min-height:0!important;max-height:100%;width:100%;max-width:760px;margin:0 auto!important;overflow:hidden;gap:0!important;order:2}
+html[data-composition] .xp-full-player.xp-show-lyrics .sync-player:not([hidden]){display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+html[data-composition] .xp-full-player.xp-show-lyrics .sync-player-lines{display:flex;flex-direction:column;flex:1;min-height:0!important;height:auto!important;overflow:hidden}
+html[data-composition] .xp-full-player.xp-show-lyrics .au-lyrics-viewport,
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-static-text{box-sizing:border-box;flex:1;min-height:0!important;height:auto!important;max-height:100%;width:100%;margin:0!important;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-static-text{padding:12px 4px 32px}
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-lyric-actions{flex:none;order:3;margin:8px 0!important;gap:8px}
+html[data-composition] .xp-full-player.xp-show-lyrics .xp-listening-transport{display:block!important;flex:none;grid-column:auto;grid-row:auto;margin:0!important;padding:10px 0!important;overflow:visible;max-width:760px;align-self:center}
+html[data-composition] .xp-full-player.xp-show-lyrics .xp-player-switch{flex:none;flex-direction:row;grid-column:auto;grid-row:auto;margin:0!important;padding:6px 0!important;gap:18px}
+/* These old listening/exploration tabs duplicate the new reader navigation.
+   Keep them when the original manual annotation explorer is actually open. */
+html[data-composition] .xp-full-player.xp-show-lyrics:not(.au221-exploring) .au221-lyrics-tabs{display:none!important}
+html[data-composition] .xp-full-player.xp-show-lyrics :is(.au222-lyric-commands,.au222-lyric-actions){flex-wrap:nowrap!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;max-width:100%;min-height:40px;box-sizing:border-box}
+html[data-composition] .xp-full-player.xp-show-lyrics :is(.au222-lyric-commands,.au222-lyric-actions)>button{flex:none;white-space:nowrap;font-size:12px!important;padding:8px 10px!important;min-height:38px}
+html[data-composition] .xp-full-player.xp-show-lyrics .au222-lyric-actions{max-height:var(--au221-chrome-height,60px);opacity:1;transition:opacity .35s,max-height .35s,margin .35s}
+html[data-composition] .xp-full-player.xp-show-lyrics.xp-listening-idle :is(.au222-lyric-actions,.au222-lyric-commands){min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;opacity:0!important;overflow:hidden;pointer-events:none}
+html[data-composition] .xp-full-player.xp-show-lyrics.au221-exploring #paroles{display:none!important}

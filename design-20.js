@@ -41,9 +41,10 @@ function tidyDock(){
  if(!menu){menu=document.createElement('details');menu.className='au20-dock-menu';const summary=document.createElement('summary');summary.textContent='Options d’écoute';menu.append(summary);dock.append(menu);}
  for(const button of buttons)menu.append(button);
 }
-async function update(){
+async function update(force=false){
+ if(window.AU_PLAYBACK_SOURCE_19?.()?.local)return;if(force===true)coverKey=null;
  if(!context)return;composition();const v=context.getVolume(),t=context.track(),key=v?.number+':'+t?.number;const picture=document.querySelector('.au20-player-art'),artist=document.querySelector('.au20-track-artist');if(artist)artist.textContent=(t?.artist||'JuL')+' · '+(v?.title||'');
- if(picture&&v&&coverKey!==v){coverKey=v;picture.replaceChildren(context.canvasFor(v,900));await context.applyCoverAtmosphere(document.querySelector('.au20-listening'),v);const accent=getComputedStyle(document.querySelector('.au20-listening')).getPropertyValue('--lyrics-accent').trim();if(accent){root.style.setProperty('--au20-cover-accent',accent);window.dispatchEvent(new Event('au:design-color'));}}
+ if(picture&&v&&coverKey!==v){coverKey=v;picture.replaceChildren(context.canvasFor(v,900));await context.applyCoverAtmosphere(document.querySelector('.au20-listening'),v);if(window.AU_PLAYBACK_SOURCE_19?.()?.local)return;const accent=getComputedStyle(document.querySelector('.au20-listening')).getPropertyValue('--lyrics-accent').trim();if(accent){root.style.setProperty('--au20-cover-accent',accent);window.dispatchEvent(new Event('au:design-color'));}}
 }
 function mount(next){context=next;composition();update();}
 function scan(){for(const input of document.querySelectorAll('#volume,input[aria-label="Volume sonore"]'))volume(input);}

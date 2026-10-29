@@ -2,6 +2,37 @@
   "format": 1,
   "images": [
     {
+      "id": "23v01",
+      "patch": "23.1",
+      "image": "promo-23v01-public.png",
+      "original": "promo-23v01-public.png",
+      "video": "promo-23v01-public.mp4",
+      "animation": "promo-23v01-public.mp4",
+      "title": "La musique, plus simplement.",
+      "platforms": [
+        "web-pc",
+        "web-mobile",
+        "desktop-pc",
+        "ios"
+      ],
+      "filename": "23.1 image.png",
+      "videoFilename": "23.1 video.mp4"
+    },
+    {
+      "id": "23v00-2",
+      "patch": "23.0.2",
+      "title": "Mise à jour Windows débloquée",
+      "image": "promo-23v00-2-public.png",
+      "original": "promo-23v00-2-public.png",
+      "animation": "promo-23v00-2-public.mp4",
+      "video": "promo-23v00-2-public.mp4",
+      "platforms": [
+        "Windows 0.8.3"
+      ],
+      "filename": "23.0.2 image.png",
+      "videoFilename": "23.0.2 video.mp4"
+    },
+    {
       "id": "23v00",
       "patch": "23.0",
       "image": "promo-23v00-public.png",
@@ -10,9 +41,10 @@
       "animation": "promo-23v00-public.mp4",
       "title": "L’essentiel, à sa place.",
       "platforms": [
-        "Sites PC et mobile 23.0",
-        "Windows 0.8.2",
-        "iPhone et iPad 2.2.2"
+        "web-pc",
+        "web-mobile",
+        "desktop-pc",
+        "ios"
       ],
       "filename": "23.0 image.png",
       "videoFilename": "23.0 video.mp4"
