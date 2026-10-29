@@ -2,6 +2,23 @@
   "format": 1,
   "images": [
     {
+      "id": "23v00",
+      "patch": "23.0",
+      "image": "promo-23v00-public.png",
+      "original": "promo-23v00-public.png",
+      "video": "promo-23v00-public.mp4",
+      "animation": "promo-23v00-public.mp4",
+      "title": "L’essentiel, à sa place.",
+      "platforms": [
+        "web-pc",
+        "web-mobile",
+        "desktop-pc",
+        "ios"
+      ],
+      "filename": "23.0 image.png",
+      "videoFilename": "23.0 video.mp4"
+    },
+    {
       "id": "22v00",
       "patch": "22.0",
       "image": "promo-22v00-public.png",

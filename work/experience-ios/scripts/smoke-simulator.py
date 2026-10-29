@@ -16,6 +16,9 @@ run('xcrun','simctl','bootstatus',udid,'-b')
 assert 'rootViewController = ViewController()' in Path('ios/App/App/SceneDelegate.swift').read_text()
 subprocess.run(['xcodebuild','-project','ios/App/App.xcodeproj','-scheme','App','-configuration','Debug','-sdk','iphonesimulator','-destination','id='+udid,'-derivedDataPath','build-simulator','CODE_SIGNING_ALLOWED=NO','build'],stdout=Path('simulator-build.log').open('w'),stderr=subprocess.STDOUT,check=True)
 run('xcrun','simctl','install',udid,'build-simulator/Build/Products/Debug-iphonesimulator/App.app')
+registry = run('xcrun','simctl','listapps',udid)
+captures=Path('build/simulator-captures');captures.mkdir(parents=True,exist_ok=True)
+(captures/'installation-registry.txt').write_text(registry)
 container=Path(run('xcrun','simctl','get_app_container',udid,'dev.zephirox.avantusine.ios','data').strip())
 probe=container/'Documents/au-debug-probe.json'
 # Warm Settings before starting the test audio: first launch can be slow.
@@ -51,7 +54,7 @@ for phase in ['nativeSeed','nativeVerified']:
     # Preserve the actual system presentation, not only ActivityKit update counters.
     captures=Path('build/simulator-captures');captures.mkdir(parents=True,exist_ok=True)
     run('xcrun','simctl','io',udid,'screenshot',str(captures/(phase+'-island.png')))
-    logs=run('xcrun','simctl','spawn',udid,'log','show','--last','2m','--style','compact','--predicate','process == "LyricsIsland" OR process == "liveactivitiesd"')
+    logs=run('xcrun','simctl','spawn',udid,'log','show','--last','15m','--style','compact','--predicate','process == "LyricsIsland" OR process == "liveactivitiesd" OR process == "chronod" OR subsystem CONTAINS[c] "widget" OR eventMessage CONTAINS[c] "avantusine"')
     (captures/(phase+'-system.log')).write_text(logs)
     try:
         display = check_display(captures/(phase+'-island.png'))

@@ -10,7 +10,7 @@
   const options=lyrics.querySelector('.au20-lyric-options'),annotations=lyrics.querySelector('.xp-annotations');if(options&&annotations)options.append(annotations);
   const glass=document.createElement('div');glass.className='xp-listening-light';glass.setAttribute('aria-hidden','true');full.prepend(glass);
   let timer=0,deadline=0,idle=false,ignoreWakeClick=false;
-  const surfaces=()=>[full.querySelector('.xp-dialog-head'),footer,full.querySelector('.xp-player-switch'),full.querySelector('#xpOriginalOptions'),options].filter(Boolean);
+  const surfaces=()=>[full.querySelector('.au222-page-chrome'),full.querySelector('.au222-lyric-commands'),full.querySelector('.xp-dialog-head'),footer,full.querySelector('.xp-player-switch'),full.querySelector('#xpOriginalOptions'),options].filter(Boolean);
   const active=()=>full.open&&full.classList.contains('xp-show-lyrics');
   function setIdle(value){if(value&&!idle){for(const n of surfaces())n.style.setProperty('--au221-chrome-height',Math.max(0,n.getBoundingClientRect().height)+'px');}idle=value;full.classList.toggle('xp-listening-idle',value);for(const n of surfaces())n.inert=value;}
   function settle(){clearTimeout(timer);if(!active())return;const remaining=deadline-performance.now();if(remaining>0){timer=setTimeout(settle,remaining);return;}

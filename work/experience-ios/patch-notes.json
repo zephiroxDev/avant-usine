@@ -1,15 +1,17 @@
 [
   [
-    "2.2.1",
-    "2026-10-27",
-    "betatesting 22.1 — corrections en cours de validation",
+    "2.2.2 · iPhone et iPad",
+    "29 octobre 2026",
+    "Une interface plus simple, fidèle à la nouvelle présentation validée.",
     [
-      "Lecture du catalogue en arrière-plan indépendante de l’activation des paroles.",
-      "Paroles : disparition des rectangles blancs, flou progressif et espace de lecture agrandi quand les commandes se masquent.",
-      "Explorer le texte et sélectionner un passage pour lire ou proposer une explication.",
-      "Navigation par glissement et accès aux effets de basses dans Réglages.",
-      "Rétablissement de l’affichage et menu de sélection des paroles sur iPhone.",
-      "Version privée : les comportements sur appareil réel restent à vérifier avant publication."
+      "Navigation simplifiée : Écouter, Ma musique, Communauté et Compte.",
+      "Nouvel accueil, avec accès direct aux volumes et à la recherche.",
+      "Bibliothèque, réglages et outils regroupés dans leur contexte.",
+      "Présentation harmonisée sur ordinateur et téléphone.",
+      "Repères temporels cliquables dans les commentaires.",
+      "Voile blanc animé sur les véritables boutons.",
+      "Blind Test : les quatre choix sont visibles avant le démarrage de l’extrait.",
+      "Commandes PlayStation et Xbox adaptées au Blind Test et au défilement."
     ]
   ],
   [

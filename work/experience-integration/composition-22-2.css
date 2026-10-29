@@ -1,0 +1,231 @@
+/* Same geometry, typography and palette as the approved full-site preview. */
+html[data-composition="22.2"]{--paper:#121116;--ink:#f5f1f8;--muted:#a9a1b2;--accent:#d2b5ef;--surface:#1c1922;--surface-raised:#211c29;--line:#ffffff12;--au222-radius:10px;color-scheme:dark}
+html[data-composition] body{background:#121116!important;color:#f5f1f8;font:14px/1.5 Inter,ui-sans-serif,system-ui,sans-serif}
+html[data-composition] .shell{padding:0!important;display:block;height:100dvh;overflow:hidden}
+html[data-composition] .page-scroll{height:100%;padding:0!important;overflow:auto;scroll-padding-bottom:110px}
+html[data-composition] #main{max-width:1100px;margin:0 auto;padding:0 0 100px!important;min-height:100%}
+html[data-composition] .xp-sidebar,html[data-composition] .xp-header,html[data-composition] .topbar,html[data-composition] .au22-mobile-nav{display:none!important}
+html[data-composition] .au222-header{display:flex;align-items:center;gap:22px;padding:22px 28px;border-bottom:1px solid var(--line);min-width:0;flex-wrap:wrap}
+html[data-composition] .au222-brand{border:0;padding:0;background:none;color:var(--ink);font-size:19px;font-weight:750;letter-spacing:-.8px;white-space:nowrap}
+html[data-composition] .au222-brand em{font-style:normal;color:var(--accent)}
+html[data-composition] .au222-nav{display:flex;gap:4px;flex:1;flex-wrap:wrap;align-items:center}
+html[data-composition] :is(.au222-nav-button,.au222-subnav-button,.au222-search,.au222-primary,.au222-secondary,.au222-text){font:inherit;border:0;border-radius:10px;color:var(--ink);padding:10px 13px;background:none;text-align:left;cursor:pointer;position:relative;isolation:isolate;min-height:40px;text-decoration:none}
+html[data-composition] .au222-nav-button{display:flex;gap:7px;align-items:center;font-size:13px}
+html[data-composition] .au222-symbol{font-size:17px;line-height:1;width:17px;text-align:center}
+html[data-composition] .au222-symbol svg{display:block;width:17px;height:17px}
+html[data-composition] .au222-nav-button[aria-current=page]{background:#ffffff0b;color:var(--accent)}
+html[data-composition] .au222-search{font-size:12px;color:var(--muted);margin-left:auto}
+html[data-composition] .au222-subnav{display:flex;gap:4px;flex-wrap:wrap;padding:13px 28px 0}
+html[data-composition] .au222-subnav-button{font-size:12px;color:var(--muted);padding:8px 12px;min-height:35px}
+html[data-composition] .au222-subnav-button[aria-current=page]{color:var(--accent);background:#ceb0e410}
+html[data-composition] .page.au222-real-page{padding:28px 36px 35px!important;margin:0;max-width:none;min-width:0;animation:none}
+html[data-composition] .au222-hero{display:grid;grid-template-columns:1.15fr .85fr;gap:38px;align-items:center;padding:15px 0 30px}
+html[data-composition] .au222-hero h1{font-size:clamp(30px,4.7vw,48px);font-weight:750;letter-spacing:-1.2px;line-height:1.16;max-width:560px;margin:4px 0 8px}
+html[data-composition] .au222-kicker{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+html[data-composition] .au222-description{color:#bcb3c7;max-width:370px;margin:0 0 14px;font-size:14px;line-height:1.5}
+html[data-composition] .au222-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+html[data-composition] .au222-primary{background:var(--accent);color:#201329;font-weight:650}
+html[data-composition] .au222-secondary{background:#ffffff0a}
+html[data-composition] .au222-text{font-size:12px;color:var(--muted)}
+html[data-composition] .au222-hero-art{display:flex;align-items:center;justify-content:center;padding:20px 10px}
+html[data-composition] .au222-hero-sleeve{width:54%;padding:0;border:0;background:none;transform:rotate(-9deg);border-radius:9px;box-shadow:0 18px 50px #0004;isolation:isolate}
+html[data-composition] .au222-hero-sleeve+.au222-hero-sleeve{margin-left:-15%;transform:rotate(9deg)}
+html[data-composition] .au222-hero-sleeve canvas{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:9px}
+html[data-composition] .au222-volumes-section{margin:30px 0 42px}
+html[data-composition] h2{font-size:19px;letter-spacing:-.5px;margin:0 0 9px;font-weight:700}
+html[data-composition] h3{font-size:15px;margin:0 0 7px}
+html[data-composition] h1{font-size:32px;letter-spacing:-1.2px;line-height:1.16;font-weight:750;margin:4px 0 8px}
+html[data-composition] .au222-muted{font-size:14px;color:var(--muted);line-height:1.5;margin:0 0 14px}
+html[data-composition] :is(.au222-volume-grid,.collection-grid,.xp-volumes){display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;min-width:0}
+html[data-composition] .au222-volume{border:0;background:none;text-align:left;padding:0;color:var(--ink);min-width:0}
+html[data-composition] .au222-volume-art{display:block;width:100%;aspect-ratio:1;isolation:isolate;border-radius:9px;overflow:hidden;clip-path:inset(0 round 9px)}
+html[data-composition] .au222-volume-art :is(canvas,img,video,.au-motion-cover){width:100%;height:100%;display:block;object-fit:cover;border-radius:inherit}
+html[data-composition] .au222-volume strong{display:block;margin-top:10px;font-size:13px;font-weight:650}
+html[data-composition] .au222-volume small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+html[data-composition] .au222-home-links{display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--line);padding-top:18px;margin-top:32px}
+html[data-composition] .xp-home{display:block!important;max-width:none}
+html[data-composition] .au222-page-heading,html[data-composition] .page-heading{margin-bottom:24px;padding:0!important}
+html[data-composition] .page-heading .lede{font-size:14px;color:var(--muted);max-width:650px;line-height:1.5}
+html[data-composition] .page-heading h1{font-size:32px;max-width:none;margin:4px 0 8px}
+html[data-composition] .page-heading .eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+html[data-composition] .au-kofi-banner{display:none!important}
+html[data-composition] :is(.button,.xp-button,.xp-primary,.xp-pill,.chip){font-size:13px;min-height:40px;padding:10px 13px;border-radius:10px;font-weight:500;border:0;box-shadow:none}
+html[data-composition] :is(.button,.xp-primary):not(.secondary){background:var(--accent);color:#201329}
+html[data-composition] :is(.button.secondary,.xp-button,.xp-pill,.chip){background:#ffffff0a;color:var(--ink)}
+html[data-composition] .actions{display:flex;gap:12px;flex-wrap:wrap}
+html[data-composition] .au222-account-row{padding:20px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}
+html[data-composition] .au222-account-row>div{min-width:0;flex:1}
+html[data-composition] .au222-account-row p{margin:0}
+html[data-composition] .au222-private-tools{padding:22px;background:#1c1823;border-left:3px solid #9f78ba;margin-top:25px}
+html[data-composition] #reglages>[data-au-general-settings]{padding:0;display:grid;gap:24px;background:none;border:0}
+html[data-composition] .au221-settings-group{border:0;background:none;padding:0;margin:0}
+html[data-composition] .au221-settings-controls{display:flex;gap:14px;flex-wrap:wrap}
+html[data-composition] #reglages .footer{padding:0;background:none;border:0;display:flex;gap:14px;flex-wrap:wrap}
+html[data-composition] .au222-footer{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding:12px 24px;background:#161319;font-size:11px;color:var(--muted)}
+html[data-composition] .au222-footer .au222-text{padding:4px 7px;font-size:11px;min-height:28px}
+html[data-composition] .au222-visit-count{margin-left:auto;padding:4px;font-size:11px}
+html[data-composition] .xp-mini{left:50%!important;right:auto!important;bottom:0!important;transform:translateX(-50%);width:min(1100px,100%);border-radius:0!important;background:#201b27!important;border:0!important;border-top:1px solid var(--line)!important;box-shadow:none!important;padding:15px 24px!important;min-height:82px;display:flex!important;gap:14px;z-index:40}
+html[data-composition] .xp-mini[hidden]{display:none!important}
+html[data-composition] .xp-mini-info{flex:1;min-width:0;padding:0!important;gap:12px}
+html[data-composition] .xp-mini-cover{width:50px;height:50px;border-radius:6px}
+html[data-composition] .xp-mini-copy strong{font-size:14px}
+html[data-composition] .xp-mini-copy small{font-size:12px;color:var(--muted)}
+html[data-composition] .au222-mini-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+html[data-composition] .au222-mini-controls button{min-height:40px;min-width:38px;font-size:17px;background:none;border:0;color:var(--ink);padding:8px;border-radius:10px}
+html[data-composition] .au222-mini-controls .xp-mini-lyrics{font-size:13px}
+html[data-composition] .au222-mini-volume{display:grid;gap:3px;font-size:11px;color:var(--accent)}
+html[data-composition] .au222-mini-volume input{width:85px;accent-color:var(--accent)}
+html[data-composition] .xp-mini-progress{display:none}
+html[data-composition] :is(input:not([type=range]):not([type=checkbox]):not([type=radio]),textarea,select){background:#211c29;color:var(--ink);border:1px solid #ffffff16;border-radius:10px;padding:12px;font:inherit;max-width:100%;min-width:0}
+html[data-composition] input[type=range]{accent-color:var(--accent)}
+html[data-composition] .au222-real-dialog{background:#17131d;color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:0 28px 80px #0006;padding:26px;max-width:min(760px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto}
+html[data-composition] .au222-real-dialog::backdrop{background:#08060cb0;backdrop-filter:blur(10px)}
+html[data-composition] .xp-full-player{max-width:min(1030px,calc(100vw - 32px))!important;padding:26px!important}
+html[data-composition] .xp-full-player .xp-player-normal{display:grid!important;grid-template-columns:180px minmax(0,1fr);gap:28px;align-items:center;padding:20px 0!important}
+html[data-composition] .xp-full-player .xp-player-art{width:180px!important;max-width:100%;margin:0!important;grid-row:1 / 4;aspect-ratio:1;border-radius:9px}
+html[data-composition] .xp-full-player .xp-player-meta{text-align:left!important;margin:0!important;min-width:0}
+html[data-composition] .xp-full-player .xp-player-meta h2{font-size:32px!important}
+html[data-composition] .xp-full-player .rn-playing-label{display:none}
+html[data-composition] .xp-full-player .player-dock{grid-column:2;width:100%!important;min-width:0;padding:0!important;background:none!important;border:0!important}
+html[data-composition] .xp-full-player .dock-inner{padding:0;display:block}
+html[data-composition] .xp-full-player .dock-center{width:100%}
+html[data-composition] .xp-full-player.xp-show-lyrics{background:radial-gradient(ellipse at 80% 20%,#61336635,transparent 65%),#121116!important}
+html[data-composition] .xp-full-player.xp-show-lyrics .au20-art-column{display:none!important}
+html[data-composition] .xp-full-player.xp-show-lyrics .au20-layout{display:block!important;max-width:760px;margin:auto}
+html[data-composition] .xp-full-player .au-lyrics-viewport{height:58dvh;min-height:220px}
+html[data-composition] .xp-full-player .au-lyric-line{font-size:clamp(21px,3.4vw,34px)!important;font-weight:700!important;line-height:1.3!important;letter-spacing:-.4px!important;padding:12px 0!important;text-align:left!important}
+html[data-composition] .xp-full-player .au-lyric-line.is-current{color:#fff!important}
+html[data-composition] .xp-full-player .au-backing-line{font-size:20px!important;margin-left:25px!important}
+html[data-composition] .xp-community-row{display:flex;align-items:center;gap:14px;padding:18px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;box-shadow:none;color:var(--ink)}
+html[data-composition] .xp-community-row strong{font-size:15px}
+html[data-composition] .xp-community-row small{font-size:12px;color:var(--muted)}
+html[data-composition] :is(.major-card,.download-card){background:#211b2a;border:0;border-radius:15px;padding:23px;box-shadow:none}
+html[data-composition] .tracklist li{border-bottom:1px solid var(--line);background:none;border-radius:0;box-shadow:none;padding:8px 0}
+html[data-composition] .track-title{font-size:14px}
+html[data-composition] .au-blind-answer{background:#201b27!important;border:0!important;border-radius:10px!important;padding:13px!important;box-shadow:none!important}
+html[data-composition] .au-blind-answer strong{font-size:14px}
+html[data-composition] .au-blind-answers{gap:20px}
+html[data-composition] :is(button,a,summary).au222-veil{position:relative;isolation:isolate}
+html[data-composition] .au222-veil::before{content:""!important;display:block!important;position:absolute!important;inset:0!important;border-radius:inherit!important;background:linear-gradient(110deg,transparent 28%,#ffffff12 42%,#ffffff35 50%,#ffffff12 58%,transparent 72%)!important;background-size:280% 100%!important;background-position:100% 0;opacity:0;z-index:-1;pointer-events:none;transform:none!important;transition:opacity .2s}
+html[data-composition] .au222-veil:is(:hover,:focus-visible)::before,html[data-composition][data-au-input=gamepad] .au222-veil:focus::before{opacity:1!important;animation:au222-veil-motion 1.8s linear infinite!important}
+html[data-composition] :is(.text-button,.xp-link,.au222-text,.major-timecode,.au-lyric-line)::before{display:none!important}
+html[data-composition][data-au-input=gamepad] :is(button,a,input,select,textarea,summary):focus{outline:none!important;box-shadow:none!important}
+html[data-composition] .major-timecode{color:var(--accent);text-decoration:underline;text-underline-offset:3px;border:0;background:none;padding:2px 3px;font:inherit}
+html[data-composition] .au222-static-text{max-width:660px;margin:32px auto 45px;user-select:text;-webkit-user-select:text}
+html[data-composition] .au222-static-text .au-lyric-line{color:var(--ink)!important;opacity:1!important;filter:none!important}
+html[data-composition] :is(.xp-full-player,#auImmersionApp) .au-lyric-line .au22-last-word .karaoke-char{text-shadow:none!important}
+@keyframes au222-veil-motion{from{background-position:100% 0}to{background-position:0% 0}}
+@media(max-width:700px){html[data-composition] #main{padding-bottom:100px!important}html[data-composition] .au222-header{padding:18px;gap:15px}html[data-composition] .au222-brand{width:100%;text-align:left}html[data-composition] .au222-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;width:100%}html[data-composition] .au222-nav-button{flex-direction:column;justify-content:center;gap:6px;padding:10px 2px;white-space:nowrap;font-size:11px}html[data-composition] .au222-search{display:none}html[data-composition] .au222-subnav{padding:13px 12px 0;gap:1px}html[data-composition] .au222-subnav-button{padding:8px;font-size:11px}html[data-composition] .page.au222-real-page{padding:24px 18px!important}html[data-composition] .au222-hero{grid-template-columns:1fr;gap:12px;padding-bottom:30px}html[data-composition] .au222-hero h1{font-size:30px}html[data-composition] .au222-hero-art{justify-content:start;padding:10px}html[data-composition] .au222-hero-sleeve{width:34%;max-width:130px}html[data-composition] :is(.au222-volume-grid,.collection-grid,.xp-volumes){gap:12px}html[data-composition] .au222-volume strong{font-size:11px}html[data-composition] .au222-volume small{font-size:11px}html[data-composition] .au222-footer{padding:12px}html[data-composition] .xp-mini{padding:13px 16px!important;gap:10px}html[data-composition] .xp-mini-cover{width:43px;height:43px}html[data-composition] .au222-mini-controls{gap:4px}html[data-composition] .au222-mini-volume{display:none}html[data-composition] .xp-mini-copy small{font-size:10px}html[data-composition] .xp-mini-copy strong{font-size:12px}html[data-composition] .au222-mini-controls button{min-width:30px;padding:7px;font-size:15px}html[data-composition] .au222-mini-controls .xp-mini-lyrics{font-size:12px}html[data-composition] .au222-real-dialog{padding:20px;max-width:calc(100vw - 16px)}html[data-composition] .xp-full-player .xp-player-normal{grid-template-columns:95px minmax(0,1fr);gap:18px}html[data-composition] .xp-full-player .xp-player-art{width:95px!important}html[data-composition] .xp-full-player .xp-player-meta h2{font-size:24px!important}html[data-composition] .xp-full-player .player-dock{grid-column:1 / -1}html[data-composition] .xp-full-player .au-lyric-line{font-size:24px!important}html[data-composition] .au222-account-row{align-items:start}html[data-composition] .au222-account-row h2{font-size:17px}html[data-composition] .au222-account-row p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){html[data-composition] .au222-veil::before{animation:none!important;transition:none!important;background-position:50% 0}}
+
+html[data-composition] .au222-content-block{padding:24px 0;border-bottom:1px solid var(--line)}
+html[data-composition] .au222-content-block .au222-actions{margin-top:16px}
+html[data-composition] .au222-community-extra{display:grid;gap:12px;margin-top:24px}
+
+html[data-composition] [data-au-general-settings][hidden],html[data-composition] .au222-settings-index[hidden]{display:none!important}
+html[data-composition] [data-au222-filter="listening"]>[data-au222-settings-section]:not([data-au222-settings-section="listening"]),
+html[data-composition] [data-au222-filter="appearance"]>[data-au222-settings-section]:not([data-au222-settings-section="appearance"]),
+html[data-composition] [data-au222-filter="controllers"]>[data-au222-settings-section]:not([data-au222-settings-section="controllers"]),
+html[data-composition] [data-au222-filter="updates"]>[data-au222-settings-section]:not([data-au222-settings-section="updates"]){display:none!important}
+html[data-composition] .au222-settings-index{display:grid;gap:0}
+html[data-composition] #reglages>[data-au-general-settings]{margin-top:24px}
+
+html[data-composition] .xp-library-tabs[hidden],html[data-composition] .xp-playlist-chooser[hidden]{display:none!important}
+html[data-composition] .au222-playlist-form{display:grid;gap:16px;max-width:620px;margin-bottom:18px}
+html[data-composition] .au222-playlist-form label{font-size:13px;color:var(--muted)}
+html[data-composition] .au222-playlist-form button{justify-self:start}
+html[data-composition] .au222-playlist-rows{margin-bottom:20px}
+
+html[data-composition] .au222-nav{touch-action:none}
+
+html[data-composition] .au222-private-category{display:flex;gap:12px;flex-wrap:wrap}
+html[data-composition] .au222-private-tools>.au222-actions{display:block}
+
+html[data-composition] dialog.au222-page-surface{box-sizing:border-box;width:min(1100px,100vw)!important;max-width:100vw!important;height:100dvh;max-height:100dvh!important;inset:0;margin:0 auto;padding:36px!important;border:0;border-radius:0;box-shadow:none;background:var(--paper);overflow:auto;scroll-padding-top:24px}
+html[data-composition] .au222-page-surface::backdrop{background:#121116;backdrop-filter:none}
+html[data-composition] .au222-page-chrome{margin:-36px -36px 28px;position:relative}
+html[data-composition] .au222-page-surface :is(.major-dialog-head,.xp-dialog-head){border:0;padding:0;margin:0 0 24px;gap:16px}
+html[data-composition] .au222-page-surface :is(.major-dialog-head,.xp-dialog-head)>h2{font-size:32px;line-height:1.16;letter-spacing:-1.2px}
+html[data-composition] .au222-page-surface :is(.major-dialog-body,.xp-dialog-body){padding:0;min-width:0}
+html[data-composition] .au222-page-surface :is(form,.au22-proposal-fields){display:grid;gap:18px}
+html[data-composition] .au222-page-surface :is(label,.major-field){display:grid;gap:7px;min-width:0}
+html[data-composition] .au222-page-surface label:has(input[type=checkbox]){display:flex;align-items:center;gap:10px}
+html[data-composition] .au222-page-surface .major-card{background:var(--surface-raised);border:0;border-radius:15px;padding:23px;margin:18px 0}
+@media(max-width:700px){html[data-composition] dialog.au222-page-surface{padding:24px 18px!important}html[data-composition] .au222-page-chrome{margin:-24px -18px 24px}html[data-composition] .au222-page-surface :is(.major-dialog-head,.xp-dialog-head)>h2{font-size:27px}}
+
+html[data-composition] .au222-page-surface .annotation-dialog-inner{width:100%;max-width:none;max-height:none;height:auto;overflow:visible;border:0;border-radius:0;box-shadow:none;background:none;padding:0}
+
+html[data-composition] .au-studio-19{display:block;max-width:none;gap:0}
+html[data-composition] .au-studio-19>.studio19-focus{background:var(--surface-raised);border:0;border-radius:15px;padding:23px;margin:24px 0}
+html[data-composition] .au-studio-19 .studio19-phrase{font-size:30px;line-height:1.4;letter-spacing:-.6px}
+html[data-composition] .au222-studio-comfort{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+html[data-composition] .au222-studio-comfort>h2,html[data-composition] .au222-studio-comfort>.studio19-auto-pause{grid-column:1/-1}
+html[data-composition] .au222-studio-comfort>.studio19-sensitivity{padding:0;border:0;margin:0}
+html[data-composition] .au-studio-19 .studio19-navigation{display:flex;gap:12px;flex-wrap:wrap}
+@media(max-width:700px){html[data-composition] .au222-studio-comfort{grid-template-columns:1fr}html[data-composition] .au-studio-19 .studio19-phrase{font-size:25px}}
+
+html[data-composition] .au222-local-library{display:grid;gap:18px;min-width:0}
+html[data-composition] .au222-local-library .local-tabs{display:flex;flex-wrap:wrap;gap:10px}
+html[data-composition] .au222-local-library .local-drop{background:var(--surface-raised);border:1px dashed #bda2d34d;border-radius:15px;padding:23px}
+
+html[data-composition] .au222-all-volumes{margin-top:28px;padding-top:18px;border-top:1px solid var(--line)}
+html[data-composition] .au222-all-volumes>summary{font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:18px}
+
+html[data-composition] .au222-lyric-identity{display:flex;justify-content:space-between;align-items:center;gap:24px;margin:22px 0 30px}
+html[data-composition] .au222-lyric-cover{width:65px;aspect-ratio:1;flex:none;border-radius:9px;overflow:hidden}
+html[data-composition] .au222-lyric-cover :is(canvas,img,video,.au-motion-cover){display:block;width:100%;height:100%;object-fit:cover}
+html[data-composition] .au222-lyric-identity h1{font-size:32px!important;margin:4px 0 8px}
+html[data-composition] .au222-lyric-commands{gap:10px;margin-bottom:22px}
+html[data-composition] .xp-show-lyrics #paroles>.page-heading,html[data-composition] .xp-show-lyrics #paroles>.text-button{display:none!important}
+html[data-composition] .xp-full-player:not(.xp-show-lyrics) .au222-lyric-commands,html[data-composition] .xp-full-player:not(.xp-show-lyrics) .au222-lyric-identity{display:none}
+html[data-composition] .xp-show-lyrics .au222-player-related,html[data-composition] .xp-show-lyrics .au222-player-actions{display:none!important}
+html[data-composition] .au222-player-actions{grid-column:2}
+html[data-composition] .xp-show-lyrics :is(.au222-page-chrome,.au222-lyric-commands){max-height:var(--au221-chrome-height,240px);opacity:1;transition:opacity .35s,max-height .35s,margin .35s,padding .35s}
+html[data-composition] .xp-show-lyrics.xp-listening-idle :is(.au222-page-chrome,.au222-lyric-commands){opacity:0;max-height:0;overflow:hidden;margin-top:0;margin-bottom:0;padding-top:0;padding-bottom:0;pointer-events:none}
+@media(max-width:700px){html[data-composition] .au222-lyric-identity{gap:16px}html[data-composition] .au222-lyric-identity h1{font-size:27px!important}html[data-composition] .au222-player-actions{grid-column:1/-1}}
+
+html[data-composition] #textes-expliques .au221-explore{display:block;width:100%;padding:0;border:0;background:none}
+html[data-composition] #textes-expliques .au221-explore-text{max-height:65dvh;overflow:auto;font-size:25px;font-weight:700;line-height:1.55;letter-spacing:-.3px}
+html[data-composition] .au222-legal-text{max-width:760px;font-size:14px;line-height:1.7}
+html[data-composition] .au222-legal-text h2{margin-top:30px}
+
+html[data-composition] #gestion-createur>.au222-actions{display:block}
+html[data-composition] #gestion-createur .au222-content-block[hidden]{display:none!important}
+
+/* The native viewport includes the notch and home indicator. Reserve them in
+   the shared chrome rather than applying a second inset to the whole page. */
+html[data-composition][data-au-app=ios]{padding:0!important}
+html[data-composition][data-au-app=ios] .au222-header{padding-top:calc(22px + env(safe-area-inset-top))}
+html[data-composition] #main{padding-bottom:calc(100px + env(safe-area-inset-bottom))!important}
+html[data-composition] .page-scroll{scroll-padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+html[data-composition] .xp-mini{padding-bottom:calc(15px + env(safe-area-inset-bottom))!important}
+html[data-composition] dialog.au222-page-surface{animation:none!important;transform:none!important;filter:none!important;background:var(--paper)!important;border:0!important;border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding-bottom:calc(36px + env(safe-area-inset-bottom))!important}
+@media(max-width:700px){html[data-composition][data-au-app=ios] .au222-header{padding-top:calc(18px + env(safe-area-inset-top))}html[data-composition] dialog.au222-page-surface{padding-bottom:calc(24px + env(safe-area-inset-bottom))!important}}
+
+html[data-composition] .album-hero{display:grid;grid-template-columns:180px minmax(0,1fr);gap:28px;align-items:center;margin-bottom:30px;padding:0;background:none;border:0}
+html[data-composition] .album-hero>:is(canvas,.au-motion-cover){width:180px!important;height:180px!important;max-width:100%;aspect-ratio:1;object-fit:cover;border-radius:9px;overflow:hidden}
+html[data-composition] .album-hero .album-copy{padding:0;min-width:0}
+html[data-composition] .album-copy h1{font-size:32px!important;line-height:1.2;letter-spacing:-1px}
+html[data-composition] .album-hero .actions{margin-top:18px;gap:12px;flex-wrap:wrap}
+html[data-composition] .listen-top{display:flex;gap:18px;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap}
+@media(max-width:700px){html[data-composition] .album-hero{grid-template-columns:95px minmax(0,1fr);gap:18px}html[data-composition] .album-hero>:is(canvas,.au-motion-cover){width:95px!important;height:95px!important}html[data-composition] .album-copy h1{font-size:25px!important}}
+
+/* Detailed screens retain their real forms and share the approved spacing. */
+html[data-composition] .au222-page-surface :is(.au-dialog-head,.major-dialog-head,.xp-dialog-head){display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px}
+html[data-composition] .au222-page-surface .au-dialog-head h2{font-size:32px;line-height:1.2;letter-spacing:-1px;margin:0}
+html[data-composition] .au222-page-surface :is(.actions,.filters,.au-inline-form,.au-spaced-controls){gap:12px;flex-wrap:wrap}
+html[data-composition] .au222-page-surface :is(input,select,textarea){max-width:100%;min-width:0;box-sizing:border-box}
+html[data-composition] .au222-page-surface textarea{min-height:110px}
+html[data-composition] .au222-page-surface :is(.au-catalog-volume,.au-promo-item,.au-project-card){background:var(--surface-raised);border:0;border-radius:15px;padding:23px;margin:18px 0}
+html[data-composition] .au222-page-surface[data-preview-page=audio-edit]>.au21-audio-editor{border:0;background:none;padding:0}
+html[data-composition] .au222-page-surface[data-preview-page=audio-edit]>.au21-audio-editor>summary{display:none}
+html[data-composition] .au222-page-surface .au21-audio-body{display:grid;gap:24px;max-width:820px}
+html[data-composition] .au222-page-surface .au21-audio-body>section{border:0;background:var(--surface-raised);padding:23px;border-radius:15px}
+html[data-composition] .au222-page-surface .au21-audio-body audio{width:100%;margin:16px 0}
+html[data-composition] .au222-page-surface .au21-audio-fields{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+html[data-composition] .au222-page-surface .au21-audio-body button{margin:6px 8px 6px 0}
+html[data-composition] .au222-page-surface .au24-workspace{max-width:none;height:auto;min-height:75dvh;background:transparent}
+html[data-composition] .au222-page-surface .au24-top{gap:12px;flex-wrap:wrap;padding:16px 0}
+html[data-composition] .au222-page-surface :is(.au24-profiles,.au24-actions){gap:12px;flex-wrap:wrap}
+html[data-composition] .au222-page-surface .au-promo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:24px}
+@media(max-width:700px){html[data-composition] .au222-page-surface .au-dialog-head h2{font-size:27px}html[data-composition] .au222-page-surface .au21-audio-fields{grid-template-columns:1fr}html[data-composition] .au222-page-surface .au21-audio-body>section{padding:18px}}
