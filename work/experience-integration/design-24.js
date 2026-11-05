@@ -1,0 +1,22 @@
+/* 24.0 — Direction artistique : active la couche design-24 et marque le
+   morceau en cours d'un égaliseur. Aucune donnée n'est modifiée. */
+(()=>{'use strict';
+const root=document.documentElement;root.dataset.design='24';
+const audio=()=>document.getElementById('audio');
+function eq(){const n=document.createElement('span');n.className='au24-eq';n.setAttribute('aria-hidden','true');n.append(document.createElement('i'),document.createElement('i'),document.createElement('i'));return n;}
+function mark(){
+ const api=window.AU_EXPERIENCE,t=api?.track?.(),list=document.getElementById('tracklist');if(!list)return;
+ for(const n of list.querySelectorAll('.au24-eq'))n.remove();
+ for(const n of list.querySelectorAll('[data-au24-playing]')){n.removeAttribute('data-au24-playing');n.removeAttribute('data-playing');}
+ if(!t)return;
+ const rows=[...list.querySelectorAll('[data-track], li')];
+ const row=rows.find(r=>{const s=r.querySelector('strong,h3,.track-title,button');return s&&s.textContent.trim().replace(/^\d+\s*/,'')===String(t.title).trim();});
+ if(!row)return;row.dataset.au24Playing='true';row.dataset.playing='true';
+ const label=row.querySelector('strong,h3,.track-title')||row;const e=eq();if(audio()?.paused)e.classList.add('au24-paused');label.prepend(e);
+}
+let queued=false;const later=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;mark();});};
+for(const ev of ['au:trackchange','au:routechange','au:experience-ready'])window.addEventListener(ev,later);
+document.addEventListener('play',later,true);document.addEventListener('pause',later,true);
+const own=n=>n.nodeType===1&&(n.classList.contains('au24-eq')||n.parentElement?.classList?.contains('au24-eq'));
+new MutationObserver(m=>{if(m.some(r=>(r.target.id==='tracklist'||r.target.closest?.('#tracklist'))&&![...r.addedNodes,...r.removedNodes].every(own)))later();}).observe(document.body,{childList:true,subtree:true});
+})();

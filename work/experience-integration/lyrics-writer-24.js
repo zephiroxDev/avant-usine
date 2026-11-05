@@ -114,6 +114,7 @@ function mount({host,textarea,audio,ensureTrack,isCurrent}){
  // Mobile keyboard: keep the player visible above the keyboard and away from the text.
  const vv=window.visualViewport;const fit=()=>{if(!vv)return;const covered=Math.max(0,innerHeight-vv.height-vv.offsetTop);player.style.setProperty('--au24-kb',covered+'px');player.classList.toggle('au24-wp-keyboard',covered>120);};
  vv?.addEventListener('resize',fit);vv?.addEventListener('scroll',fit);fit();paint();
+ textarea.addEventListener('focus',()=>{setTimeout(()=>player.scrollIntoView({block:'start',behavior:'instant'}),250);});
 
  /* spelling */
  const spell=E('div',null,'au24-spell');const spellButton=E('button','Vérifier l’orthographe','button secondary');spellButton.type='button';

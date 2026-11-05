@@ -1,6 +1,6 @@
 {
   "name": "avant-usine-ios",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "private": true,
   "scripts": {
     "prepare:site": "node scripts/prepare-experience.cjs",
@@ -16,4 +16,4 @@
     "@capacitor/cli": "8.5.3",
     "xcode": "^3.0.1"
   }
-}
+}

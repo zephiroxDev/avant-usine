@@ -1,5 +1,5 @@
 /* 24.0 — Lecteur de l'éditeur de paroles, orthographe, remerciement */
-.au24-writer-player{position:sticky;top:-1px;z-index:3;display:grid;gap:8px;margin:0 0 14px;padding:12px 14px;border:1px solid #a353cf40;border-radius:14px;background:color-mix(in srgb,#120c18 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.au24-writer-player{position:relative;z-index:1;display:grid;gap:8px;margin:0 0 14px;padding:12px 14px;border:1px solid #a353cf40;border-radius:14px;background:color-mix(in srgb,#120c18 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .au24-wp-row{display:flex;align-items:center;gap:10px;min-width:0}
 .au24-wp-play{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:#a64bea;color:#fff;font-size:16px;cursor:pointer;box-shadow:0 0 14px #b560fb55}
 .au24-wp-play:focus-visible,.au24-wp-jump:focus-visible{outline:3px solid #dbadff;outline-offset:2px}
@@ -16,7 +16,7 @@ html .au24-writer-player .au24-wp-speed{min-height:44px;width:78px;border-radius
 /* While the on-screen keyboard is open the player becomes a compact strip. */
 .au24-writer-player.au24-wp-keyboard{padding:8px 10px;gap:6px}
 .au24-writer-player.au24-wp-keyboard .au24-wp-play{width:40px;height:40px}
-.au24-writer-text{min-height:40vh;line-height:1.55}
+.au24-writer-text{box-sizing:border-box;width:100%;height:min(42dvh,440px);min-height:180px;overflow:auto;resize:vertical;line-height:1.55;scroll-padding:12px}
 .au24-spell{display:grid;gap:10px;margin:14px 0}
 .au24-spell>.button{justify-self:start}
 .au24-spell-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
