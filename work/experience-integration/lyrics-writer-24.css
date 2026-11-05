@@ -1,0 +1,67 @@
+/* 24.0 — Lecteur de l'éditeur de paroles, orthographe, remerciement */
+.au24-writer-player{position:sticky;top:-1px;z-index:3;display:grid;gap:8px;margin:0 0 14px;padding:12px 14px;border:1px solid #a353cf40;border-radius:14px;background:color-mix(in srgb,#120c18 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.au24-wp-row{display:flex;align-items:center;gap:10px;min-width:0}
+.au24-wp-play{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:#a64bea;color:#fff;font-size:16px;cursor:pointer;box-shadow:0 0 14px #b560fb55}
+.au24-wp-play:focus-visible,.au24-wp-jump:focus-visible{outline:3px solid #dbadff;outline-offset:2px}
+.au24-wp-seek{flex:1;min-width:0;height:32px;accent-color:#a64bea;cursor:pointer}
+.au24-wp-time{flex:none;font-variant-numeric:tabular-nums;font-size:13px;opacity:.8;min-width:84px;text-align:right}
+.au24-writer-player .au24-wp-row.au24-wp-tools{display:grid!important;grid-template-columns:1fr auto;gap:8px!important;align-items:center}
+html .au24-writer-player .au24-wp-jumps{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px!important;min-width:0;width:auto;margin:0!important}
+html .au24-writer-player .au24-wp-jump{width:auto;min-width:0;min-height:44px;padding:0 4px!important;border-radius:10px;border:1px solid #ffffff1f;background:#1d1526;color:inherit;font:inherit;font-size:13px;font-weight:600;cursor:pointer;font-variant-numeric:tabular-nums;white-space:nowrap}
+.au24-wp-jump:active{background:#2c1f3a}
+html .au24-writer-player .au24-wp-speed{min-height:44px;width:78px;border-radius:10px;border:1px solid #ffffff1f;background:#1d1526;color:inherit;font:inherit;padding:0 8px}
+.au24-wp-note:empty{display:none}
+.au24-wp-note{margin:0}
+@media(max-width:560px){.au24-writer-player .au24-wp-row.au24-wp-tools{grid-template-columns:1fr}html .au24-writer-player .au24-wp-speed{width:100%}html .au24-writer-player .au24-wp-jump{font-size:12px}.au24-wp-time{min-width:74px;font-size:12px}}
+/* While the on-screen keyboard is open the player becomes a compact strip. */
+.au24-writer-player.au24-wp-keyboard{padding:8px 10px;gap:6px}
+.au24-writer-player.au24-wp-keyboard .au24-wp-play{width:40px;height:40px}
+.au24-writer-text{min-height:40vh;line-height:1.55}
+.au24-spell{display:grid;gap:10px;margin:14px 0}
+.au24-spell>.button{justify-self:start}
+.au24-spell-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.au24-spell-head .au-note{margin:0}
+.au24-spell-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.au24-spell-item{padding:12px 14px;border:1px solid #ffffff17;border-radius:12px;background:#ffffff06}
+.au24-spell-item.au24-stale{opacity:.6}
+.au24-spell-word{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 6px}
+.au24-spell-word del{color:#ff8fa3;text-decoration-thickness:2px}
+.au24-spell-choices{display:flex;gap:6px;flex-wrap:wrap}
+.au24-spell-choices .chip{min-height:36px;padding:4px 12px;border-radius:999px;border:1px solid #ffffff26;background:transparent;color:inherit;cursor:pointer;font:inherit}
+.au24-spell-choices .chip[aria-pressed=true]{background:#a64bea;border-color:#a64bea;color:#fff}
+.au24-spell-context{margin:0 0 10px;font-size:13px;opacity:.75;overflow-wrap:anywhere}
+.au24-spell-context mark{background:#a64bea40;color:inherit;border-radius:4px;padding:0 2px}
+.au24-spell-actions{display:flex;gap:8px;flex-wrap:wrap}
+.au24-spell-actions .button{min-height:42px}
+.au24-thanks{width:min(460px,calc(100% - 28px));text-align:center;padding:30px 24px 24px;border:1px solid #a353cf55;border-radius:18px;background:radial-gradient(circle at 50% 0,#a64bea2e,transparent 60%),#120c18;color:inherit}
+.au24-thanks::backdrop{background:#05030899;backdrop-filter:blur(3px)}
+.au24-thanks-mark{font-size:30px;color:#d996ff;text-shadow:0 0 18px #b560fb}
+.au24-thanks h2{margin:6px 0 10px;font-size:24px}
+.au24-thanks p{margin:0 0 10px;line-height:1.5}
+.au24-thanks-actions{justify-content:center;margin-top:16px;gap:10px;flex-wrap:wrap}
+.au24-thanks-actions .button{min-height:46px;padding-inline:20px}
+/* 24.0 — Versions de test */
+.au24-beta-section{margin:26px 0;display:grid;gap:14px}
+.au24-beta-section-head h2{margin:0 0 4px}
+.au24-beta-section-head .au-note{margin:0;max-width:62ch}
+.au24-beta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.au24-beta-card{display:grid;gap:8px;align-content:start;padding:16px;border:1px dashed #d996ff66;border-radius:14px;background:linear-gradient(160deg,#a64bea14,transparent 60%),#120c18}
+.au24-beta-card h3{margin:0;font-size:18px}
+.au24-beta-card .au-note{margin:0}
+.au24-beta-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.au24-beta-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;background:#ffb02e1f;color:#ffc565;border:1px solid #ffb02e55;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.au24-beta-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.au24-beta-platform{font-size:12px;opacity:.7}
+.au24-beta-card .button{justify-self:start;min-height:44px}
+.au24-beta-note:empty{display:none}
+.au24-code-ask,.au24-beta-code{width:min(420px,calc(100% - 28px));padding:24px;border:1px solid #a353cf55;border-radius:18px;background:#120c18;color:inherit}
+.au24-code-ask::backdrop,.au24-beta-code::backdrop{background:#05030899;backdrop-filter:blur(3px)}
+.au24-code-ask h2{margin:0 0 6px}
+.au24-beta-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.au24-beta-head h2{flex:1;margin:0}
+.au24-code-input{box-sizing:border-box;width:100%;min-height:58px;margin:12px 0 4px;padding:0 14px;border-radius:12px;border:1px solid #ffffff26;background:#1d1526;color:inherit;font:inherit;font-size:28px;font-weight:700;letter-spacing:.5em;text-align:center;font-variant-numeric:tabular-nums}
+.au24-code-input:focus{outline:3px solid #a64bea;outline-offset:1px}
+.au24-ask-error{min-height:1.4em;margin:2px 0 6px;color:#ff8fa3;font-size:14px}
+.au24-ask-actions{justify-content:flex-end;gap:10px}
+.au24-ask-actions .button,.au24-code-form .button{min-height:46px;padding-inline:20px}
+.au24-code-form{display:grid;gap:10px}

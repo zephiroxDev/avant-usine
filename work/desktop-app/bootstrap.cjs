@@ -8,7 +8,12 @@ app.setAppUserModelId('dev.zephirox.avantusine');let window;
 if(!app.requestSingleInstanceLock())app.quit();else{
  app.on('second-instance',()=>{if(window){if(window.isMinimized())window.restore();window.focus();}});
  app.whenReady().then(async()=>{
-  const store=createStore(path.join(app.getPath('userData'),'updates'),__dirname,app.getVersion());let state=store.recover();
+  // Launcher 0.9.0: public updates live in updates/publiques, test builds in
+  // updates/tests. Files of earlier launchers are moved once, without loss:
+  // nothing is overwritten and the old copy is only removed after a successful move.
+  const updates=path.join(app.getPath('userData'),'updates'),publicDir=path.join(updates,'publiques');
+  try{fs.mkdirSync(path.join(updates,'tests'),{recursive:true});if(!fs.existsSync(path.join(publicDir,'state.json'))){fs.mkdirSync(publicDir,{recursive:true});for(const name of ['state.json','versions']){const from=path.join(updates,name),to=path.join(publicDir,name);if(fs.existsSync(from)&&!fs.existsSync(to))fs.renameSync(from,to);}for(const name of fs.readdirSync(updates)){if(/^Avant-Usine-.*-test-\d+\.(exe|ipa|zip)$/.test(name))fs.renameSync(path.join(updates,name),path.join(updates,'tests',name));}}}catch{}
+  const store=createStore(fs.existsSync(path.join(publicDir,'state.json'))||!fs.existsSync(path.join(updates,'state.json'))?publicDir:updates,__dirname,app.getVersion());let state=store.recover();
   async function launch(){
    const root=store.root(state.current);
    if(root!==__dirname){const manifest=validateManifest(JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8')),state.current);for(const file of manifest.files){const bytes=fs.readFileSync(path.join(root,file.path));if(bytes.length!==file.bytes||hash(bytes)!==file.sha256)throw Error('Version endommagée');}}

@@ -35,6 +35,7 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
     private var audioPreviews: [String: URL] = [:]
 
     public override func load() {
+        DispatchQueue.global(qos: .utility).async { IOSUpdatesPlugin.organizeUpdates() }
         UNUserNotificationCenter.current().delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(resumed), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(accessibilityChanged), name: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil)
@@ -191,6 +192,28 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
         documentController = nil
     }
 
+    static func isTestBuild(_ name: String) -> Bool {
+        return name.hasPrefix("betatesting-") || name.range(of: "-test-[1-9][0-9]*\\.ipa$", options: .regularExpression) != nil
+    }
+    static func updatesFolder(test: Bool) -> URL {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("MisesAJour", isDirectory: true)
+            .appendingPathComponent(test ? "Tests" : "Publiques", isDirectory: true)
+    }
+    // Files downloaded by 2.2.x sit directly in MisesAJour: move each one once into
+    // its folder. An existing file with the same name is never overwritten.
+    static func organizeUpdates() {
+        let manager = FileManager.default
+        let root = manager.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("MisesAJour", isDirectory: true)
+        guard let items = try? manager.contentsOfDirectory(at: root, includingPropertiesForKeys: [.isRegularFileKey]) else { return }
+        for item in items where item.pathExtension.lowercased() == "ipa" {
+            let folder = updatesFolder(test: isTestBuild(item.lastPathComponent))
+            try? manager.createDirectory(at: folder, withIntermediateDirectories: true)
+            let target = folder.appendingPathComponent(item.lastPathComponent)
+            if !manager.fileExists(atPath: target.path) { try? manager.moveItem(at: item, to: target) }
+        }
+    }
+
     @objc func download(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             guard self.pending == nil else { call.reject("Un téléchargement est déjà en cours."); return }
@@ -201,7 +224,7 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
                   hash.range(of: "^[a-fA-F0-9]{64}$", options: .regularExpression) != nil,
                   let size = call.getInt("size"), size > 0,
                   let name = call.getString("name"),
-                  ((url.host == "github.com" && name.range(of: "^Avant-Usine-iOS-[0-9]+\\.[0-9]+\\.[0-9]+-non-signe\\.ipa$", options: .regularExpression) != nil) || (url.host == "djjfzymrkncwhrocpxjo.supabase.co" && name.range(of: "^betatesting-[0-9]+-[0-9]+-[0-9]+-test-[1-9][0-9]*\\.ipa$", options: .regularExpression) != nil))
+                  ((url.host == "github.com" && name.range(of: "^Avant-Usine-iOS-[0-9]+\\.[0-9]+\\.[0-9]+-non-signe\\.ipa$", options: .regularExpression) != nil) || (url.host == "djjfzymrkncwhrocpxjo.supabase.co" && (name.range(of: "^betatesting-[0-9]+-[0-9]+-[0-9]+-test-[1-9][0-9]*\\.ipa$", options: .regularExpression) != nil || name.range(of: "^Avant-Usine-iOS-[0-9]+\\.[0-9]+\\.[0-9]+-test-[1-9][0-9]*\\.ipa$", options: .regularExpression) != nil)))
             else { call.reject("Informations du paquet invalides."); return }
             self.pending = call
             self.expectedHash = hash.lowercased()
@@ -239,7 +262,8 @@ public class IOSUpdatesPlugin: CAPPlugin, CAPBridgedPlugin, URLSessionDownloadDe
             guard digest == expectedHash else {
                 throw NSError(domain: "AvantUsine", code: 3, userInfo: [NSLocalizedDescriptionKey: "L’empreinte du fichier est incorrecte."])
             }
-            let folder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("MisesAJour", isDirectory: true)
+            // 24.0 (3.5): public updates and test builds are kept in separate folders.
+            let folder = IOSUpdatesPlugin.updatesFolder(test: IOSUpdatesPlugin.isTestBuild(outputName))
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
             let destination = folder.appendingPathComponent(outputName)
             if FileManager.default.fileExists(atPath: destination.path) {

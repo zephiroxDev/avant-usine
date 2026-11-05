@@ -2,6 +2,32 @@
 'use strict';
 const M=window.AU_STUDIO_MODEL_19;
 const E=(tag,text,cls)=>{const n=document.createElement(tag);if(text!=null)n.textContent=text;if(cls)n.className=cls;return n;};
+
+// 24.0: synchronisation rules shown each time the Atelier opens, unless the
+// person chose « Ne plus afficher » (remembered per account on this device).
+const RULES_24=[
+ ['Seulement ce qui est chanté','Supprime les indications non prononcées : [Refrain], [Couplet], (x2), noms d’artistes entre crochets, didascalies.'],
+ ['Les mots tels qu’ils sont dits','Garde l’argot, le verlan et les expressions marseillaises. Écris les répétitions en entier au lieu de « x2 ».'],
+ ['Une ligne chantée = une phrase','Ne fusionne pas deux lignes et ne coupe pas une phrase au milieu d’un mot.'],
+ ['Suis la voix, pas la musique','Fais avancer la barre au rythme exact des mots : ni en avance, ni en retard. Ralentis la vitesse si besoin.'],
+ ['Une voix à la fois','Les chœurs, backs et invités se synchronisent dans une voix séparée avec « Ajouter une voix ».'],
+ ['Les silences restent vides','N’étire pas une phrase sur un passage instrumental. Marque la fin réelle des paroles.'],
+ ['Vérifie avant d’envoyer','Regarde l’Aperçu en entier. Aucun ajout personnel : pas de commentaires, d’émojis ni de liens.']
+];
+function rulesKey(){let id='';try{id=window.AU_PROJECTS_19?.owner?.()||'';}catch{}return 'au-atelier-rules-hidden-24'+(id?':'+id:'');}
+function showRules(force=false){
+ try{if(!force&&localStorage.getItem(rulesKey())==='1')return null;}catch{}
+ const d=E('dialog',null,'au-dialog au24-rules');d.setAttribute('aria-labelledby','au24-rules-title');
+ const head=E('header',null,'au24-rules-head'),title=E('h2','Règles de synchronisation'),close=E('button','×','au-icon au24-rules-close');title.id='au24-rules-title';close.type='button';close.setAttribute('aria-label','Fermer les règles');head.append(title,close);
+ const intro=E('p','Quelques règles pour que chaque synchronisation soit juste et validée plus vite.','au-note'),list=E('ol',null,'au24-rules-list');
+ for(const [h,t] of RULES_24){const li=E('li');li.append(E('strong',h),E('span',t));list.append(li);}
+ const foot=E('footer',null,'au24-rules-foot'),label=E('label',null,'au24-rules-hide'),box=E('input');box.type='checkbox';label.append(box,document.createTextNode(' Ne plus afficher'));
+ const ok=E('button','C’est parti','button');ok.type='button';foot.append(label,ok);
+ d.append(head,intro,list,foot);
+ const done=()=>{try{if(box.checked)localStorage.setItem(rulesKey(),'1');else localStorage.removeItem(rulesKey());}catch{}d.close();};
+ close.onclick=ok.onclick=done;d.addEventListener('cancel',()=>{try{if(box.checked)localStorage.setItem(rulesKey(),'1');}catch{}});d.addEventListener('close',()=>d.remove(),{once:true});
+ document.body.append(d);d.showModal();ok.focus();return d;
+}
 function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],title='',trackKey='',sourceHash='',local=false,onchange=()=>{},preview,parseImport,projectRevision=null}={}){
  window.AU_MAINTENANCE_19?.assert('sync_studio');
  let disposed=false,selected=null,activeTrack='main',captureMode='glide',cursor=0,armed=false,wordIndex=0,loop=null,revision=projectRevision,timer=0,saving=Promise.resolve(),peaks=null,zoom=1,frame=0,epoch=0,previewView=null;const projectOwner=window.AU_PROJECTS_19.owner(),originalRate=audio.playbackRate||1,originalPitch=audio.preservesPitch;audio.playbackRate=[.5,.75,1,2].includes(initial?.rate)?initial.rate:originalRate;
@@ -77,7 +103,7 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
   const comfort=block('Confort de travail',speedLabel,glide.element.querySelector('.studio19-sensitivity'),autoPauseLabel);
   comfort.classList.add('au222-studio-comfort');
   const controls=block('Contrôles de synchronisation',navigation),finish=block('Terminer ou reprendre');
-  const finishActions=E('div',null,'actions');finish.append(finishActions,saveState);button('Enregistrer le travail',()=>flush(),finishActions);
+  const finishActions=E('div',null,'actions');finish.append(finishActions,saveState);button('Enregistrer le travail',()=>flush(),finishActions);button('Revoir les règles',()=>showRules(true),finishActions);
   for(const label of ['Importer une synchronisation','Mes projets en cours']){const existing=[...tools.querySelectorAll('button')].find(b=>b.textContent===label);if(existing)finishActions.append(existing);}
   const top=block('Voix à synchroniser',toolbar);focus.prepend(E('h2','La phrase en cours'));
   root.replaceChildren(top,focus,controls,comfort,finish,advanced,status);
@@ -131,7 +157,7 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
  function tick(){if(disposed)return;listen.textContent=audio.paused?'Écouter':'Pause';if(loop&&audio.currentTime>=loop.end){audio.currentTime=loop.start;}if(!previewHost.hidden)previewView?.paint?.(audio.currentTime);if(!audio.paused&&!document.hidden)frame=requestAnimationFrame(tick);}
  const wake=()=>{cancelAnimationFrame(frame);tick();};audio.addEventListener('play',wake);audio.addEventListener('pause',wake);audio.addEventListener('seeked',wake);let resumePosition=Number.isFinite(initial?.position)?initial.position:null;const restorePosition=()=>{if(resumePosition!==null&&Number.isFinite(audio.duration)){audio.currentTime=Math.min(Math.max(0,resumePosition),audio.duration);resumePosition=null;}};restorePosition();const metadata=()=>{model.session({duration:audio.duration});restorePosition();};audio.addEventListener('loadedmetadata',metadata);
  function session(){if(disposed)return;glide?.flush();model.session({captureMode,position:audio.currentTime,rate:audio.playbackRate});flush();}window.addEventListener('pagehide',session);
- render();flush();return {model,get project(){return model.project;},get curves(){return model.project.phrases.map(l=>l.points);},get times(){return model.project.phrases.map(l=>l.start);},get lines(){return model.project.phrases.map(l=>l.text);},get groups(){return model.project.phrases.map((_,i)=>i);},get endTime(){return Math.max(0,...model.project.phrases.map(l=>l.end||0));},get syncMode(){return 'highlight';},export:()=>model.export('highlight'),flush,select(i){const l=model.project.phrases[i];if(l){activeTrack=l.track;selected=l.id;cursor=trackLines().findIndex(x=>x.id===l.id);wordIndex=0;armed=false;render();}},dispose(){if(disposed)return;session();disposed=true;autoPause.onchange=null;glide.dispose();audio.playbackRate=originalRate;if('preservesPitch'in audio)audio.preservesPitch=originalPitch;previewView?.dispose?.();previewView=null;epoch++;clearTimeout(timer);cancelAnimationFrame(frame);audio.removeEventListener('play',wake);audio.removeEventListener('pause',wake);audio.removeEventListener('seeked',wake);audio.removeEventListener('loadedmetadata',metadata);window.removeEventListener('pagehide',session);root.removeEventListener('keydown',key);}};
+ render();flush();queueMicrotask(()=>{if(!disposed&&host.isConnected)showRules();});return {model,get project(){return model.project;},get curves(){return model.project.phrases.map(l=>l.points);},get times(){return model.project.phrases.map(l=>l.start);},get lines(){return model.project.phrases.map(l=>l.text);},get groups(){return model.project.phrases.map((_,i)=>i);},get endTime(){return Math.max(0,...model.project.phrases.map(l=>l.end||0));},get syncMode(){return 'highlight';},export:()=>model.export('highlight'),flush,select(i){const l=model.project.phrases[i];if(l){activeTrack=l.track;selected=l.id;cursor=trackLines().findIndex(x=>x.id===l.id);wordIndex=0;armed=false;render();}},dispose(){if(disposed)return;session();disposed=true;autoPause.onchange=null;glide.dispose();audio.playbackRate=originalRate;if('preservesPitch'in audio)audio.preservesPitch=originalPitch;previewView?.dispose?.();previewView=null;epoch++;clearTimeout(timer);cancelAnimationFrame(frame);audio.removeEventListener('play',wake);audio.removeEventListener('pause',wake);audio.removeEventListener('seeked',wake);audio.removeEventListener('loadedmetadata',metadata);window.removeEventListener('pagehide',session);root.removeEventListener('keydown',key);}};
 }
-window.AU_STUDIO_19={create};
+window.AU_STUDIO_19={rules:showRules,create};
 })();

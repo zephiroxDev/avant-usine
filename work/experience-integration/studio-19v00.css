@@ -37,3 +37,19 @@
 .studio19-sensitivity{display:flex;align-items:center;gap:10px;margin:12px 0 0;font-size:13px;flex-wrap:wrap}.studio19-sensitivity input{flex:1;min-width:90px;max-width:340px;accent-color:#c87bff}.studio19-sensitivity output{min-width:48px;text-align:right;font-variant-numeric:tabular-nums}
 
 .studio19-auto-pause{display:flex;gap:8px;align-items:center;font-size:13px;max-width:100%;white-space:normal}.studio19-auto-pause input{flex:none;accent-color:#c87bff}
+
+/* 24.0 — Règles de synchronisation */
+.au24-rules{width:min(560px,calc(100% - 28px));padding:0;border:1px solid #a353cf55;border-radius:16px;background:#120c18;color:inherit}
+.au24-rules::backdrop{background:#05030899;backdrop-filter:blur(3px)}
+.au24-rules-head{display:flex;align-items:center;gap:12px;padding:20px 22px 6px}
+.au24-rules-head h2{flex:1;margin:0;font-size:22px}
+.au24-rules>.au-note{margin:0 22px 8px}
+.au24-rules-list{margin:0;padding:6px 22px 4px 44px;display:grid;gap:12px;max-height:min(52vh,460px);overflow:auto}
+.au24-rules-list li{padding-left:4px}
+.au24-rules-list strong{display:block;margin-bottom:2px}
+.au24-rules-list span{opacity:.82;line-height:1.45}
+.au24-rules-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px 20px;border-top:1px solid #ffffff14;margin-top:10px}
+.au24-rules-hide{display:flex;align-items:center;gap:8px;font-size:13px;opacity:.85;cursor:pointer;min-height:44px}
+.au24-rules-hide input{width:18px;height:18px;accent-color:#a64bea}
+.au24-rules-foot .button{min-height:44px;padding-inline:20px}
+.au24-rules .au24-rules-close{flex:none;width:44px;height:44px;min-width:44px;padding:0!important;font-size:22px;line-height:1;display:grid;place-items:center}
