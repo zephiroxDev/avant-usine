@@ -60,3 +60,10 @@ Commit de fermeture63bd5b1411c4c87fb8b39846ce92ce6cea650bee ; workflow3961247426
 Migration pause_windows_android_ps4_preserve_web_ios : contrôles DataAPI par origines/agent connus, maintenance explicative. Tests HTTP réels : Windows/Android/PS4 catalogue503, web+iOS200. Cela ne désactive pas un exécutable hors ligne, un accès Archive.org direct ou tous les autres produits Supabase. Ne pas prétendre avoir éteint à distance les applications installées. Les données et comptes sont conservés.
 
 Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essai3/build34 en CI39609681732. Voir ETAT-20.0.4.md. Diagnostics centralisés et dépôt privé Créateur demandés pour un prochain patch des sites+iPhone seulement.
+
+## Livraison 24.0 (5 novembre 2026)
+- Site 24.0 en ligne (commits bfcc4f1, 7fdd78e). `_config.yml` exclut `sauvegarde-pc-2026-11-05`, `work`, `outputs` de Pages (UTF-8 invalide dans la sauvegarde).
+- Compilation : run 42102017774 (release/v24-0, d8db165). Publication : run 42103817985 → releases `v0.9.0` (Windows) et `ios-v2.3.0` (iPhone/iPad, non signé, non vérifié sur appareil physique).
+- Serveur : migration `patch_24_0_sync_pending_and_beta_code` (repli au_sync_source sur paroles en attente, tables au_beta_access_24 / au_beta_attempts_24) ; fonction `beta-builds` v10 (code à 6 chiffres côté serveur, limites d'essais).
+- Le code des versions de test se règle dans Compte › Versions de test (aucun code défini à la livraison).
+- Séparation Windows MisesAJour publiques/tests : complète seulement après une réinstallation (lanceur bootstrap.cjs figé).
