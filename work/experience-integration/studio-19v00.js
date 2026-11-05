@@ -6,11 +6,11 @@ const E=(tag,text,cls)=>{const n=document.createElement(tag);if(text!=null)n.tex
 // 24.0: synchronisation rules shown each time the Atelier opens, unless the
 // person chose « Ne plus afficher » (remembered per account on this device).
 const RULES_24=[
- ['Seulement ce qui est chanté','Supprime les indications non prononcées : [Refrain], [Couplet], (x2), noms d’artistes entre crochets, didascalies.'],
+ ['Seulement ce qui est chanté','Supprime les indications non prononcées : [Refrain], [Couplet], (x2), noms d’artistes entre crochets, didascalies. Les backs chantés entre parenthèses, eux, restent dans la ligne.'],
  ['Les mots tels qu’ils sont dits','Garde l’argot, le verlan et les expressions marseillaises. Écris les répétitions en entier au lieu de « x2 ».'],
  ['Une ligne chantée = une phrase','Ne fusionne pas deux lignes et ne coupe pas une phrase au milieu d’un mot.'],
  ['Suis la voix, pas la musique','Fais avancer la barre au rythme exact des mots : ni en avance, ni en retard. Ralentis la vitesse si besoin.'],
- ['Une voix à la fois','Les chœurs, backs et invités se synchronisent dans une voix séparée avec « Ajouter une voix ».'],
+ ['Les backs suivent la ligne','Un back entre parenthèses au milieu d’une ligne, comme « je suis bien là (ici) et… », se synchronise à sa place, en même temps que la phrase, puis s’affiche sous elle. Les chœurs ou invités sur des lignes à part vont dans une voix séparée avec « Ajouter une voix ».'],
  ['Les silences restent vides','N’étire pas une phrase sur un passage instrumental. Marque la fin réelle des paroles.'],
  ['Vérifie avant d’envoyer','Regarde l’Aperçu en entier. Aucun ajout personnel : pas de commentaires, d’émojis ni de liens.']
 ];
