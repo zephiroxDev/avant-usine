@@ -1,0 +1,7 @@
+from pathlib import Path
+p=Path(__file__).parent/'projet/work/mine-sync/test-sync-19v03.cjs';s=p.read_text(encoding='utf-8')
+s=s.replace("window.editor=AU_STUDIO_19.create({host:","const initial=new URLSearchParams(location.search).has('classic')?{...AU_STUDIO_MODEL_19.create({lines:['Bonjour le monde','Une autre phrase'],duration:30}),syncMode:'blocks'}:undefined;window.editor=AU_STUDIO_19.create({initial,preview:(host,data)=>createPublicLyricsView(host,data,{endActions:false}),host:")
+s=s.replace("if(req.url==='/')","if(req.url==='/'||req.url.startsWith('/?'))")
+a="await context.close();}assert.deepEqual(errors,[]);"
+b="""await page.goto('http://localhost:'+server.address().port+'/?classic=1');await page.waitForFunction(()=>window.editor);assert.equal(await page.getByLabel('Passage de synchronisation').inputValue(),'phrases');assert.equal(await page.evaluate(()=>editor.syncMode),'blocks');await page.getByRole('button',{name:'Écouter',exact:true}).click();for(const time of [2,4]){await page.evaluate(t=>audio.currentTime=t,time);await page.locator('.studio19-touch').click();}await page.evaluate(()=>audio.currentTime=6);await page.getByRole('button',{name:'Fin de cette phrase',exact:true}).click();assert.equal(await page.evaluate(()=>editor.export().sync_mode),'blocks');await page.getByRole('button',{name:'Aperçu',exact:true}).click();assert.equal(await page.locator('.studio19-preview [data-reveal-mode=classic]').count(),2);await context.close();}assert.deepEqual(errors,[]);"""
+assert a in s;s=s.replace(a,b);p.write_text(s,encoding='utf-8')

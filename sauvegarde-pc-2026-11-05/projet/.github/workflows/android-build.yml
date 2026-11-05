@@ -1,0 +1,56 @@
+name: Android build
+on:
+  push:
+    branches: [main]
+    paths: ['work/android-app/release.json', '.github/workflows/android-build.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Prepare and test mobile sources
+        working-directory: work/android-app
+        run: |
+          npm ci --no-audit --no-fund
+          python -m pip install Pillow
+          python scripts/make-icons.py
+          npm run prepare:site
+          npm test
+          npx cap add android
+          npx cap sync android
+          python scripts/configure-native.py
+      - name: Build unsigned APK
+        working-directory: work/android-app/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --max-workers=2
+      - name: Describe compiled APK
+        run: |
+          python - <<'PY'
+          import json,pathlib,hashlib,os
+          p=pathlib.Path('work/android-app/android/app/build/outputs/apk/release/app-release-unsigned.apk')
+          pathlib.Path('work/android-app/android/app/build/outputs/apk/release/build.json').write_text(json.dumps({'sourceCommit':os.environ['GITHUB_SHA'],'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'unsigned':True}))
+          PY
+      - name: Transfer compiled APK as a build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-unsigned
+          path: |
+            work/android-app/android/app/build/outputs/apk/release/app-release-unsigned.apk
+            work/android-app/android/app/build/outputs/apk/release/build.json
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,125 @@
+AVANT L’USINE — GUIDE DE TRANSFERT DE CONVERSATION
+État de référence : 12 octobre 2026. Lire ce document, REPRISE.md et AGENTS.md avant de travailler.
+
+1. POURQUOI CETTE CONVERSATION EST TRANSFÉRÉE
+
+Le transfert est demandé parce que le contrôle du navigateur intégré ne fonctionne pas correctement dans l’ancienne conversation. Ce n’est pas une demande de reconstruire le produit ni de changer son identité.
+Plusieurs symptômes se sont succédé : refus explicite de permission, délai d’attente dépassé à l’ouverture d’une page, puis délai dépassé même pour obtenir les onglets. Après modification des autorisations et redémarrage, l’outil a finalement répondu, mais la liste contenait zéro onglet alors que l’utilisateur voyait l’aperçu local http://127.0.0.1:8796/.
+Une tentative d’obtenir cet onglet a renvoyé « Tab not found in browser 2 ». cua.getState() a retourné un navigateur intégré et des tabs: []. Un nouvel essai TikTok a retourné un blocage par préférence utilisateur enregistrée pour https://www.tiktok.com. Il faut distinguer ces deux problèmes : incohérence des onglets et permission propre à TikTok.
+L’utilisateur a montré une capture avec l’origine https://zephiroxdev.github.io et les options Toujours autoriser. Il indique avoir déjà enregistré ces réglages avant de redémarrer. Ne pas lui redemander indéfiniment la même manipulation. Une origine de permission est seulement schéma+domaine ; /avant-usine/ sert à visiter le site, pas à définir une origine.
+La cause technique exacte n’a pas été confirmée. Ne pas affirmer que le site, son poids, un refus de GitHub Pages ou ses permissions sont responsables sans preuve. Le défaut se produit aussi avant la lecture du site. L’autorisation dans le texte du chat ne remplace pas une autorisation enregistrée par le navigateur. Ne pas contourner un refus par CDP brut, un autre navigateur, un script HTTP ou une autre surface.
+Les outils GitHub ont continué à fonctionner pour publier. Les tests de sources, compilations et téléchargements de livraisons sont distincts d’une inspection visuelle du site. Ne pas prétendre avoir vu le site public quand seuls la CI et les fichiers ont été contrôlés.
+Le changement de conversation est une piste de diagnostic, pas une garantie de réparation. Le ZIP transporte les fichiers et ce guide, pas l’historique intégral des messages, les autorisations du navigateur ou les connexions de comptes.
+
+2. IDENTITÉ ET STRUCTURE
+
+Nom public : Avant l’usine, avec u minuscule à usine. Dépôt : zephiroxDev/avant-usine. Site : https://zephiroxdev.github.io/avant-usine/. Les chemins Web doivent fonctionner sous /avant-usine/, pas seulement à la racine d’un domaine.
+Répertoire original : C:/Users/User/Documents/Codex/2026-10-01/j.
+work/github-sync-import : sources Web de référence.
+work/desktop-app : application Windows et mise à jour des fichiers du produit.
+work/android-app : application Android, scripts de préparation, compilation, signature et publication.
+work/ios-app : application iPhone/iPad et scripts de publication IPA.
+work/mine-sync : outils de préparation, synchronisation, essais, génération et contrôle des médias, scripts historiques.
+outputs : paquets, rapports, captures, résultats et anciennes livraisons. Ne pas confondre un ancien résultat avec l’état courant.
+Les applications embarquent des sources préparées à partir du Web commun, avec comportements et notes propres aux plateformes. Préserver les variantes applicatives. Les sources préparées et les rapports sont les preuves à consulter pour la dernière livraison.
+
+3. DERNIÈRE LIVRAISON EFFECTIVEMENT PUBLIÉE
+
+Patch produit 19V02. Site 19V02 ; Windows 0.5.3 ; Android 0.2.2, code 13 ; iOS 1.1.3, build 16.
+Dernier commit distant confirmé : 109953fd7f36c8ed89efc167510c48dc16bb2f1a.
+Commit des sources communes 19V02 : c94e2cd49d4aef891a475f0dc2e4cd07f1bebaf1.
+Commit de fiabilisation des transferts CI mobiles : e78b95032e0e20caf2a38a1d34abf699e35a249d.
+Commit de l’affiche avec textes animés : 959796484cc3b86e7b8dcc31d682b71f53ad3f59.
+Rapport principal : outputs/19v02/delivery-complete.json. Rapports windows-delivery.json, android-delivery.json, ios-delivery.json, web-delivery.json, source-validation.json et text-animation.json.
+Les trois nouveautés PUBLIQUES annoncées sont : direction artistique Néon industriel ; boutons/commandes mieux espacés ; annonces fermables et réaffichables en bas de page.
+La modification privée de l’Atelier Créateur fait partie des sources, mais pas des notes publiques ni de l’affiche.
+Les workflows Pages, Windows, Android release et iOS sont terminés avec succès. Android a été téléchargé puis comparé au paquet signé local : taille, SHA256 et sources validés. Windows manifeste et assets contrôlés ; IPA et sources embarquées contrôlés. Une différence CRLF/LF des fichiers texte Android a d’abord fait échouer une assertion trop stricte : le contrôle a été corrigé pour normaliser les fins de ligne, le contenu était identique.
+Android SHA256 du paquet : a4f14f1ae542cf50c20708e463e54def5d1067b8b0e5252a17722926f5633619 ; taille 45556922 octets.
+Certificat Android SHA256 : c56f1a5c2043a653b57729f8ad8cb7346c95fae2917c79307c4c699398a751b3.
+L’utilisateur n’a demandé aucune fonctionnalité suivante au moment du transfert. Ne pas lancer spontanément un nouveau patch.
+
+4. FAÇON DE TRAVAILLER AVEC L’UTILISATEUR
+
+Parler français clairement, sans jargon inutile. L’utilisateur tient énormément aux nouvelles fréquentes et aux explications précises. Expliquer les progrès mineurs et majeurs sans inventer des résultats. Ne pas le laisser longtemps sans information, mais ne pas transformer les mises à jour en répétitions vides.
+Un nouveau message durant le travail précise la tâche : répondre brièvement, intégrer la demande et reprendre automatiquement dans le même tour. Ne pas terminer après la seule réponse et oublier le travail en cours. Arrêter seulement sur demande explicite ou blocage réel.
+L’utilisateur a autorisé les publications autonomes, y compris en son absence. Annoncer avant publication. Ne pas réclamer la même autorisation à chaque livraison.
+Les plateformes publient dès qu’elles sont prêtes ; attendre une autre compilation n’est plus requis. Les Patch Notes sont indépendantes. Les versions techniques Windows/Android/iOS ne sont pas le numéro du patch produit.
+Un petit correctif conserve le patch et ajoute .2 (exemple 18V08.2). Pour les suites de correctifs au-delà, vérifier la nomenclature attendue au lieu de deviner.
+Une nouveauté doit être réelle, fonctionnelle et vérifiée ; ne pas réduire une tâche à un simple aperçu quand l’utilisateur demande une intégration. Ne pas supprimer des fonctions pour simplifier artificiellement l’interface.
+
+5. NOTES, ASTUCES ET PROMOTION
+
+Actualiser les notes des plateformes concernées et les versions/release.json/package. Les notes publiques ne contiennent jamais les outils Créateur privés. Rédiger pour le public, pas comme un message personnel : une ancienne formule « Ton image devient l’icône… » avait déplu à l’utilisateur.
+À chaque patch, revoir « Infos, fonctionnalités & astuces ». Les nouveaux ajouts vont dans Lire le reste. Préserver l’indice initial et l’Easter egg sur la première page, sans le déplacer dans Lire le reste. Ne pas révéler publiquement la phrase secrète.
+Une SEULE affiche réunit toutes les notes publiques et les plateformes/versions concernées pour un patch. Varier la composition à chaque fois en gardant l’identité Avant l’usine. Ajouter l’original au catalogue Gestion promo et vérifier sa présence. Ne pas montrer les affiches nouvelles dans le chat : annoncer leur disponibilité dans Gestion promo.
+Gestion promo est un accès Créateur privé. Une nouvelle affiche doit clignoter tant qu’elle n’est pas ouverte. L’ouverture et le marquage Publiée sont deux états distincts ; une case Publiée empêche les doubles publications involontaires. Préserver ce fonctionnement et les états serveur.
+L’utilisateur veut des animations de lumière nettement visibles dans l’image, pas seulement un halo autour du cadre. Les textes doivent aussi avoir un léger mouvement et une variation douce de couleur tout en restant parfaitement lisibles. L’original statique doit être préservé. Les animations doivent être perceptibles immédiatement.
+Téléchargements nommés « ??V?? image » et « ??V?? video ». La vidéo courante est « 19V02 video.mp4 ». Un MP4 animé est un fichier distinct de l’image originale.
+Actuel : promo-19v02.png original ; promo-19v02-texte.png aperçu animé ; promo-19v02-texte.mp4 vidéo finale de 8 s, 30 images/s, 1080x1920. Aperçu 16 images à 540x960. Texte déplacé d’environ 2 pixels, variation douce de couleur. text-animation.json confirme le décodage et l’original intact.
+Catalogue : promo-manifest.json, élément unique id 19v02-all. Le module promo-18v08.js consulte la base Web distante : mettre à jour les médias/catalogue n’impose pas une nouvelle compilation native. Ne pas republier les applications juste pour changer une affiche.
+Compte TikTok fourni : https://www.tiktok.com/@avant.l.usine. Son contenu n’a pas été consulté à cause des blocages. Ne pas prétendre avoir jugé ses vidéos.
+
+6. SOURCES COMMUNES, DA ET DISPOSITION
+
+DA actuelle choisie : Néon industriel. neon-industrial.css et interface-layout.js sont communs aux plateformes et doivent figurer dans les listes de fichiers de préparation native et le cache Web.
+19V02 : palette sombre rose industriel, thème clair pris en charge, espacement des contrôles, corrections des boutons de compte Créateur sur petits écrans, en-têtes modaux collants, œil mot de passe correctement espacé, menus mobiles. La règle globale [hidden] protège les éléments masqués selon les rôles.
+Le lecteur consomme un espace dans la mise en page pour éviter d’empêcher l’accès au pied de page. Les annonces applications et soutien se ferment, leurs états sont conservés, et un bouton de pied de page permet de les réafficher. Les erreurs et alertes importantes de mise à jour ne doivent pas être rendues fermables par accident via la même règle.
+Dimensions déjà testées : 320, 393, 768, 1024 et 1440 pixels, plusieurs routes publiques et Créateur. Des tests locaux de disposition et de contrôles sont sous outputs/neon-draft et work/mine-sync. Réutiliser les tests utiles sans prétendre que tous les appareils physiques ont été testés.
+Ancienne décision pochettes : format carré, coins légèrement arrondis cohérents. Animations lumineuses fortes, contraste et qualité préservés. Éviter de remplacer une animation d’image par une simple animation de bordure quand ce n’est pas demandé. Les options de réduction d’effets/performance doivent rester respectées.
+
+7. ATELIER ET PAROLES
+
+L’utilisateur jugeait la synchronisation trop difficile à cause des sélections/désélections et passages de phrases manuels. Il voulait un enchaînement automatique et une interface simple malgré des fonctions nombreuses.
+Il a choisi l’approche « Paroles à toucher ». Les paroles peuvent se chevaucher naturellement : ce n’est pas une erreur à interdire. Les backs peuvent commencer avant la phrase principale. Plusieurs voix et phrases actives doivent pouvoir être prises en charge.
+19V02 : phrase entière ou boutons mots, phrase suivante visible, passage automatique, précédent/suivant, Supprimer cette phrase avec annulation. Options avancées repliées : voix, liste complète, timing, ondes, boucles, export/projets, etc.
+Case « Les phrases se chevauchent » : sans chevauchement, la fin précédente se règle à la phrase suivante ; activée, les fins sont indépendantes et les phrases actives restent contrôlables, même en changeant de voix. La position de chaque voix est conservée (curseur, mot, état).
+Vitesses .50/.75/1/2 disponibles, minutages fondés sur audio.currentTime réel, pas sur la durée de clic ni sur la vitesse apparente. Préserver/restaurer vitesse et hauteur à la fermeture.
+studio-19v00.js/.css portent l’Atelier actuel ; app-17v01.js et local-18v00.js l’intègrent. Les anciens contrôles dupliqués ont été retirés, les commandes clavier utiles sont conservées et leur écouteur retiré à la fermeture.
+Fermeture publique de l’Atelier depuis 19V01 : message de réparation, accès Créateur conservé. Ne pas le rouvrir sans consigne. Le système de fermetures de fonctions du Créateur existe dans les sources : vérifier les protections serveur et rôles avant modification.
+Import : distinguer synchronisation simple et highlight progressif. Un LRC à timestamps de lignes n’offre pas le timing mot/lettre d’un JSON détaillé. Vérifier ce qui est réellement supporté ; ne pas fabriquer des temps précis sans audio ou prétendre à une synchronisation parfaite automatique.
+L’utilisateur avait demandé prévisualisation complète d’une proposition avant approbation, bouton Approuver disponible à la fin, suppression des propositions déjà vues. Voir implémentation existante et protections.
+Le morceau « Miné » a fait l’objet de travaux historiques de synchronisation ; retrouver les fichiers et scripts avant d’affirmer qu’un résultat est parfait. Les discussions seules ne prouvent pas l’existence d’un fichier final validé.
+
+8. AUTRES DÉCISIONS PRODUIT À PRÉSERVER
+
+Immersion : réservée aux applications ; les versions Web doivent annoncer cette exclusivité. Une alternative Scène a été appréciée. Fond sans textes visibles ou flouté selon aperçu validé. Consulter l’implémentation actuelle avant toute refonte.
+Local : réservé aux applications après désactivation Web demandée. Ne pas réactiver automatiquement. Imports doivent réellement persister après fermeture, lecture, métadonnées, paroles, pochettes et exports ZIP doivent retrouver les données audio, sans références temporaires.
+Imports numérotés : trier selon numéros initiaux, enlever la numérotation/tiret des titres, utiliser l’ordre de la bibliothèque. Déplacement par maintien/glisser, application groupée des métadonnées et sélection multiple/suppression ont été demandés historiquement : contrôler les sources.
+Lecteur masquable : uniquement mobile Web et applications mobiles selon décision initiale ; croix demande durée de 1 à 60 minutes ou jusqu’à prochaine ouverture, réapparition automatique, pas suppression permanente ni arrêt audio implicite.
+Blind Test : QCM de quatre titres/pochettes, une bonne réponse et trois distracteurs, mesures de temps/statistiques conservées. Skipper dû à un bug ne doit pas compter comme mauvaise réponse ; conserver une statistique technique distincte.
+Effet de voile blanc animé : conserver sur vrais boutons/conteneurs encadrés, retirer des textes cliquables seuls.
+Vérifications Archive.org et doublons : interfaces cohérentes, progression, totalité de collection, résultats correct/incorrect/inaccessible/à corriger. Ne pas déclarer vérifié uniquement pour tenir dix secondes. L’association de noms seule ne prouve pas l’identité acoustique d’un audio.
+Partage de morceau : lien précis, utilisateur émetteur si connecté, accès profil et date de première création ; anonyme indiqué ; partage natif quand possible.
+Fonctions publiques connues : playlists, paroles synchronisées, annotations des textes, commentaires par morceau, répertoire communautaire/dates, messagerie privée, personnalisation profils, résumés annuels, trophées et sauvegardes. Leur code est la référence, ne pas inventer leurs limites.
+
+9. COMPTES, SAUVEGARDES ET ANNÉES
+
+Rôles Public, Modérateur, Créateur ; l’aperçu de niveau Public doit masquer les outils privilégiés, pas seulement la vieille liste de boutons. Garder les contrôles de permission réels, pas uniquement CSS.
+L’utilisateur a demandé une sauvegarde sans compte ni identifiants d’authentification. Export inclure le rôle facultatif ; import proposer un transfert du rôle sur le compte actuellement connecté seulement si le fichier le contient. Un compte sans rôle privilégié ne doit pas pouvoir cocher inutilement l’inclusion de rôle, avec explication respectueuse. Les anciens ZIP peuvent ne plus être importables selon décision utilisateur.
+Il a finalement souhaité ne pas imposer de validation supplémentaire du Créateur pour transférer un rôle. Cette intention ne dispense jamais de vérifier l’authenticité et la protection anti-falsification du mécanisme : ne pas transformer un champ JSON éditable en preuve de rôle. Lire les protections existantes avant tout changement.
+Résumés annuels : compte Créateur aussi concerné comme les autres. 2026 : résumé visible comme entrée du profil mais contenu privé, demande d’accès au propriétaire ; option de publication publique non disponible pour cette année. Trophées 2026 non exposables. À partir de 2027, publication/trophées exposables selon système prévu. Révélation au 1er janvier dès la première seconde, automatisée ; message à la fin du résumé indiquant le redémarrage annuel des statistiques. Une durée d’autorisation ne devait pas dépasser six mois selon échange historique : identifier précisément son champ dans le code plutôt que deviner.
+Vote IA : en cas d’égalité ou sans votes, conserver le morceau. Un vote par compte connecté avait été prévu. Préserver la décision acceptée.
+
+10. PUBLICATION ET MISES À JOUR
+
+Ne pas remplacer manuellement un lien versionné du site à chaque version. Le bouton consulte les releases pour obtenir le téléchargement courant. Les releases doivent contenir tous les assets, manifests et empreintes avant d’être publiques.
+Windows : à partir de base 0.2.0, mise à jour de fichiers via manifeste GitHub et acceptation Installer, paramètres conservés, vérification et restauration en cas d’échec. Versions 0.1.x nécessitent migration initiale ; moteur Electron distinct des fichiers produit. Utiliser les scripts de release, pas bricoler une réinstallation obligatoire pour chaque micro-patch.
+Choix de popup demandés : Plus tard ; sauter la version avec numéro dynamique et rappeler lorsqu’une version ultérieure sort réellement ; Installer. Exemple 1.4 était seulement un exemple, pas une valeur fixe.
+Android : l’utilisateur a confirmé recevoir les mises à jour automatiques. Préserver la signature et le service natif, ne pas confondre compilation réussie avec APK installable signé.
+iOS : IPA distribuée hors store, utilisateur signe avec l’outil de son choix. Ne pas forcer ESign. Téléchargement dans l’application et proposition d’ouverture adaptée ; le système iOS impose des limites de signature/installation, ne pas promettre une installation silencieuse universelle. Un problème ancien « service de mise à jour iOS indisponible » a été corrigé ; le service a été testé dans un simulateur pour 1.1.3. L’utilisateur avait confirmé avoir reçu une mise à jour iPhone précédemment.
+Les plateformes mobiles ont un bouton de recherche/forcer mise à jour dans le compte ; préserver son comportement habituel. Site annonce les trois plateformes dans un panneau commun pour économiser l’espace.
+Dernière difficulté CI : upload direct du gros APK via Git API trop volumineux ; essais de parties binaires ont échoué. Solution : artifact Actions, récupération via connecteur, signature privée locale, transfert de parties base64 vérifiées, reconstitution dans CI et release normale. Les parties restent des fichiers de livraison, pas des sources produit.
+iOS : publication de tag ciblant un commit antérieur avait renvoyé 403. Le publisher possède un repli limité à main seulement si les différences sont des fichiers d’infrastructure autorisés. Ne pas élargir cette liste aux changements produit sans réflexion. Artifact IPA préservé avant publication pour permettre une récupération si publication échoue.
+Ne pas envoyer de secrets via outil, afficher les mots de passe, copier des sessions ou authentifications dans les archives. Les clés de signature privées sont exclues du ZIP volontairement.
+
+11. OUTILS ET TRANSFERT PRATIQUE
+
+Ce guide est une synthèse des décisions utiles, pas un journal mot à mot. Les demandes contradictoires ont été résumées selon les dernières consignes connues. Toute prochaine consigne utilisateur prime.
+Décompresser dans un répertoire de travail. Demander au nouvel assistant de lire AGENTS.md, REPRISE.md et ce guide, de vérifier les sources et de ne pas republier des versions déjà publiées.
+Les fichiers permettent de continuer le développement. La génération des images/vidéos et la publication automatique nécessitent que les outils requis soient disponibles dans la nouvelle conversation et que les connexions GitHub/Supabase soient actives. Le ZIP ne transfère ni les permissions ni les tokens. Les dépendances et caches exclus se réinstallent depuis les versions du projet.
+Le dossier de modèles ASR et ses outils téléchargés sont exclus comme ressources réinstallables volumineuses ; les scripts d’alignement et les résultats locaux sont conservés. Les affiches, scripts d’animation et médias présents dans le projet sont inclus. Les fichiers originaux hors du dossier projet ne sont pas implicitement ajoutés.
+Le contrôle intégral CRC de l’archive doit réussir ; une empreinte SHA256 est fournie à côté. INVENTAIRE-TRANSFERT.json donne les exclusions techniques. Ne pas annoncer archive prête avant fin de vérification.
+
+MESSAGE CONSEILLÉ À LA NOUVELLE CONVERSATION
+
+« Voici le projet Avant l’usine. Décompresse le ZIP, lis entièrement AGENTS.md, REPRISE.md et GUIDE-TRANSFERT-COMPLET.txt. Respecte les règles de publication indépendante et de Gestion promo. La livraison 19V02 est déjà terminée ; ne la republie pas. Vérifie ce qui est accessible dans cette conversation, notamment le navigateur qui ne voyait plus les onglets dans l’ancien chat. Tiens-moi fréquemment au courant et poursuis automatiquement le travail après mes précisions. »

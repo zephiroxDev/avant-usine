@@ -1,0 +1,52 @@
+{
+  "name": "Avant l’usine",
+  "approved": "2026-10-26",
+  "master": "1cf755b1721d5d8aba3796f085d1d063f5d92e53f33692d4b8fb928836ee2a0d",
+  "files": [
+    {
+      "path": "work/experience-integration/brand-portrait-21.png",
+      "size": 192,
+      "sha256": "f9f90dc77ab36915162f6557bbf900cbf15ea23d8be3750be48420d8c3a3a5ea"
+    },
+    {
+      "path": "work/experience-integration/icon-512.png",
+      "size": 512,
+      "sha256": "87f5f13e11658674c978de6fad0ad80597b2d75533af4a8d11e2189d00ab2a04"
+    },
+    {
+      "path": "work/experience-integration/icon-192.png",
+      "size": 192,
+      "sha256": "f9f90dc77ab36915162f6557bbf900cbf15ea23d8be3750be48420d8c3a3a5ea"
+    },
+    {
+      "path": "work/experience-integration/apple-touch-icon.png",
+      "size": 180,
+      "sha256": "853f6b804a2989ac3cb29579e26c454069d2a57c62f3b6db8df7fb32a5d54c84"
+    },
+    {
+      "path": "work/experience-integration/favicon-32.png",
+      "size": 32,
+      "sha256": "9d7ca415ffbbbfedc165df9ec1960fbfc9c6efd296e9cf1522bf6861651346e3"
+    },
+    {
+      "path": "work/desktop-app/build/logo-source.png",
+      "size": 1024,
+      "sha256": "9438b0307b1aa49e593d99684a640ca628fe2b700971d54ca1f1bd61820664d9"
+    },
+    {
+      "path": "work/experience-ios/assets/logo-source.png",
+      "size": 1024,
+      "sha256": "9438b0307b1aa49e593d99684a640ca628fe2b700971d54ca1f1bd61820664d9"
+    },
+    {
+      "path": "work/android-app/assets/logo.png",
+      "size": 1024,
+      "sha256": "9438b0307b1aa49e593d99684a640ca628fe2b700971d54ca1f1bd61820664d9"
+    },
+    {
+      "path": "work/ps4-app/sce_sys/icon0.png",
+      "size": 512,
+      "sha256": "87f5f13e11658674c978de6fad0ad80597b2d75533af4a8d11e2189d00ab2a04"
+    }
+  ]
+}

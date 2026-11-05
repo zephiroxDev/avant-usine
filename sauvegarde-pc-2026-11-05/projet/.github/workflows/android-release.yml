@@ -1,0 +1,62 @@
+name: Android release
+on:
+  push:
+    branches: [main]
+    paths: ['work/android-app/releases/livraison.json', '.github/workflows/android-release.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /work/android-app/releases/
+            /work/android-app/NOTES-*.md
+      - name: Verify signed APK
+        run: |
+          python - <<'PY'
+          import pathlib,json,hashlib,base64,urllib.request
+          r=pathlib.Path('work/android-app/releases');m=json.loads((r/'livraison.json').read_text());p=r/m['file']
+          if m.get('parts'):
+              chunks=[]
+              for part in m['parts']:
+                  assert pathlib.Path(part['file']).name==part['file']
+                  if part.get('url'):
+                      assert part['url']=='https://djjfzymrkncwhrocpxjo.supabase.co/storage/v1/object/public/au-release-stage/android-'+m['version']+'/'+part['file']
+                      with urllib.request.urlopen(part['url'],timeout=120) as response: encoded=response.read()
+                  else: encoded=(r/part['file']).read_bytes()
+                  chunk=base64.b64decode(encoded,validate=True)
+                  assert len(chunk)==part['bytes'] and hashlib.sha256(chunk).hexdigest()==part['sha256']
+                  chunks.append(chunk)
+              p.write_bytes(b''.join(chunks))
+          assert p.stat().st_size==m['bytes'] and hashlib.sha256(p.read_bytes()).hexdigest()==m['sha256']
+          PY
+          file="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['file'])")"
+          signer="$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -1)"
+          "$signer" verify --verbose --print-certs "work/android-app/releases/$file"
+      - name: Publish Android beta independently
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          version="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['version'])")"
+          file="$(python -c "import json;print(json.load(open('work/android-app/releases/livraison.json'))['file'])")"
+          tag="android-v$version"
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --draft --prerelease --target "$GITHUB_SHA" --title "Avant l’usine — Android $version · Bêta" --notes-file "work/android-app/NOTES-$version.md"
+          gh release upload "$tag" "work/android-app/releases/$file" work/android-app/releases/livraison.json --clobber
+          python - <<'PY'
+          import json,subprocess,pathlib
+          m=json.loads(pathlib.Path('work/android-app/releases/livraison.json').read_text());r=json.loads(subprocess.check_output(['gh','api','repos/'+__import__('os').environ['GH_REPO']+'/releases?per_page=100']))
+          r=next(x for x in r if x['tag_name']=='android-v'+m['version'])
+          assert r['draft']
+          a=next(a for a in r['assets'] if a['name']==m['file']);assert a['size']==m['bytes'] and a['digest']=='sha256:'+m['sha256']
+          PY
+          gh release edit "$tag" --draft=false --prerelease --latest=false
+
+

@@ -1,0 +1,10 @@
+Avant l’usine — native PS4 prototype
+
+This prototype, including its original C++ application sources, is distributed
+under the GNU General Public License version 3, to comply with the license of
+the linked OpenOrbis sample graphics code. The full license text is included
+in vendor/OpenOrbis-LICENSE. This license does not grant rights to the music,
+cover artwork, trademarks, or third-party media referenced by the catalog.
+
+The bundled dr_mp3 and stb_easy_font dependencies retain their respective
+license notices embedded in their source files.

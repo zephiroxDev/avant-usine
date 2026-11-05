@@ -1,0 +1,24 @@
+{
+  "sourceRoot": "C:\\Users\\User\\Documents\\Codex\\2026-10-01\\j",
+  "files": 2420,
+  "sourceBytes": 7811474275,
+  "excluded": [
+    "outputs\\windows-update-smoke/",
+    "outputs\\windows-update-smoke-packaged/",
+    "outputs\\windows-update-smoke-profile/",
+    "outputs\\windows-update-smoke-project/",
+    "outputs\\promo-user\\__pycache__/",
+    "work\\android-app\\node_modules/",
+    "work\\android-app\\android\\.gradle/",
+    "work\\android-app\\android\\app\\build/",
+    "work\\android-app\\android\\capacitor-cordova-android-plugins\\build/",
+    "work\\android-app\\scripts\\__pycache__/",
+    "work\\desktop-app\\node_modules/",
+    "work\\github-sync-import\\.git/",
+    "work\\ios-app\\node_modules/",
+    "work\\ios-app\\scripts\\__pycache__/",
+    "work\\mine-sync\\.export-runtime/",
+    "work\\mine-sync\\asr-models/",
+    "work\\mine-sync\\asr-tools/"
+  ]
+}

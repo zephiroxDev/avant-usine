@@ -1,0 +1,29 @@
+HABITUDES ET CONSIGNES DE COLLABORATION — AVANT L’USINE
+Confirmées par l’utilisateur le 12 octobre 2026.
+
+1. Tenir l’utilisateur très souvent au courant, avec des avancées précises, petites comme grandes.
+2. Quand il intervient pendant un travail : répondre, intégrer sa précision, puis reprendre automatiquement sans attendre un nouveau « continue ».
+3. Terminer le travail autorisé et réaliser les vérifications nécessaires. Ne pas prétendre avoir vérifié ce qui n’a pas pu l’être.
+4. Annoncer avant publication ; publier de façon autonome même en son absence, selon son autorisation.
+5. Publier chaque plateforme dès qu’elle est prête, sans attendre les autres.
+6. Conserver des versions techniques et des historiques indépendants pour site, Windows, Android et iPhone.
+7. Pour un petit correctif : conserver le numéro du patch et ajouter .2.
+8. Compléter les Patch Notes à chaque livraison, avec des descriptions précises.
+9. Les notes publiques et les affiches ne présentent que les fonctionnalités publiques, jamais les outils privés du Créateur.
+10. Rédiger pour les utilisateurs, sans phrases personnelles adressées au propriétaire comme « ton image devient… ».
+11. Actualiser « Infos, fonctionnalités & astuces » ; nouveautés dans « Lire le reste ».
+12. Préserver l’Easter egg et l’indice sur la première page ; ne pas déplacer la phrase cachée dans « Lire le reste ».
+13. Une seule affiche par patch, avec tous les changements publics et les plateformes/versions concernées.
+14. Varier la composition des affiches en gardant l’identité Avant l’usine.
+15. Mettre les affiches dans Gestion promo, vérifier leur présence, ne pas montrer les nouvelles affiches dans le chat.
+16. Conserver l’original statique et proposer la version animée.
+17. Animations immédiatement perceptibles : lumières fortes dans l’image, pas seulement un halo de bordure ; léger mouvement et variation douce de couleur du texte, netteté et lisibilité conservées.
+18. Noms des téléchargements : « ??V?? image » et « ??V?? video ».
+19. Nouvelle affiche : clignote jusqu’à ouverture ; possibilité indépendante de la cocher Publiée pour éviter les doubles publications.
+20. Interface extrêmement simple malgré les nombreuses fonctions ; ne pas supprimer une fonctionnalité pour simuler cette simplicité.
+21. Vérifier les petits écrans, les espacements et chevauchements, particulièrement dans le compte Créateur.
+22. Respecter les différences de plateformes, notamment Local et immersion réservés aux applications selon les décisions en vigueur.
+23. Nom : Avant l’usine, u minuscule.
+24. Arrêter sur demande explicite. Après livraison terminée, éviter les opérations inutiles pour préserver le quota.
+
+Lire aussi AGENTS.md, REPRISE.md et GUIDE-TRANSFERT-COMPLET.txt. Les nouvelles consignes de l’utilisateur priment. Ce fichier transporte les préférences, pas les autorisations techniques, comptes connectés ou clés privées.

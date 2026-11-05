@@ -1,0 +1,40 @@
+name: V23.1 — publication des paquets vérifiés
+on:
+  push:
+    branches: [main]
+    paths: ['.github/v23-1-release.json']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: v23-1-promotion
+  cancel-in-progress: false
+jobs:
+  iphone:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Publish exact verified IPA
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: python .github/scripts/promote-v23-1.py ios
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Publish exact verified Windows packages and update assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: python .github/scripts/promote-v23-1.py windows

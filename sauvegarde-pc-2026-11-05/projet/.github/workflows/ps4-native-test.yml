@@ -1,0 +1,134 @@
+name: PS4 native prototype validation
+on:
+  push:
+    branches: [console/ps4-test]
+    paths: ['work/ps4-app/**', '.github/workflows/ps4-native-test.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: work/ps4-app
+      - name: Test durable storage and audio conversion
+        run: |
+          mkdir -p "$RUNNER_TEMP/core"
+          g++ -std=c++17 -Wall -Wextra -Werror -Wno-misleading-indentation -fsanitize=address,undefined -g -Iwork/ps4-app/src work/ps4-app/tests/core.cpp work/ps4-app/src/settings.cpp work/ps4-app/src/local_store.cpp work/ps4-app/src/pcm.cpp -o "$RUNNER_TEMP/core-test"
+          "$RUNNER_TEMP/core-test" "$RUNNER_TEMP/core"
+          g++ -std=c++17 -DALUS_OPENORBIS_RUNTIME=1 -Wall -Wextra -Werror -Wno-misleading-indentation -fsanitize=address,undefined -g -Iwork/ps4-app/tests/fake-orbis -Iwork/ps4-app/src work/ps4-app/tests/native_thread.cpp work/ps4-app/src/native_thread.cpp -o "$RUNNER_TEMP/thread-test"
+          "$RUNNER_TEMP/thread-test"
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=address,undefined -g -Iwork/ps4-app/ui work/ps4-app/tests/frame_copy.cpp -o "$RUNNER_TEMP/frame-test"
+          "$RUNNER_TEMP/frame-test"
+          g++ -std=c++17 -Wall -Wextra -Werror -Iwork/ps4-app/src -Iwork/ps4-app/vendor -fsanitize=address,undefined -g work/ps4-app/tests/lyrics_model.cpp work/ps4-app/src/lyrics_model.cpp -o "$RUNNER_TEMP/lyrics-test"
+          "$RUNNER_TEMP/lyrics-test"
+          g++ -std=c++17 -Wall -Wextra -Werror -Iwork/ps4-app/src -Iwork/ps4-app/vendor -fsanitize=address,undefined -g work/ps4-app/tests/account_model.cpp work/ps4-app/src/account_model.cpp -o "$RUNNER_TEMP/account-test"
+          "$RUNNER_TEMP/account-test" "$RUNNER_TEMP/core"
+      - name: Install native compiler
+        run: sudo apt-get update -qq && sudo apt-get install -y clang-18 lld-18
+      - name: Download and verify OpenOrbis
+        run: |
+          curl --fail --location --retry 3 https://github.com/OpenOrbis/OpenOrbis-PS4-Toolchain/releases/download/v0.5.4/toolchain-llvm-18.tar.gz -o "$RUNNER_TEMP/sdk.tar.gz"
+          echo "3c7cd5bb593ca74fa1c13fd59f3938dc0fc07985167f7275063019e63abe4526  $RUNNER_TEMP/sdk.tar.gz" | sha256sum -c -
+          mkdir "$RUNNER_TEMP/oo"
+          tar -xzf "$RUNNER_TEMP/sdk.tar.gz" -C "$RUNNER_TEMP/oo"
+          SDK_BIN=$(find "$RUNNER_TEMP/oo" -type f -path '*/bin/linux/create-fself' -print -quit)
+          test -n "$SDK_BIN"
+          echo "OO_PS4_TOOLCHAIN=${SDK_BIN%/bin/linux/create-fself}" >> "$GITHUB_ENV"
+      - name: Check pinned sources
+        run: |
+          python3 - <<'PY'
+          import json,hashlib,pathlib
+          root=pathlib.Path('work/ps4-app')
+          for d in json.loads((root/'dependencies.json').read_text()):
+            assert hashlib.sha256((root/d['path']).read_bytes()).hexdigest()==d['sha256'], d['path']
+          PY
+      - name: Use legacy SELF converter for launch compatibility test
+        run: |
+          curl --fail --location --retry 3 https://github.com/OpenOrbis/OpenOrbis-PS4-Toolchain/releases/download/v0.5.2/v0.5.2.tar.gz -o "$RUNNER_TEMP/oo052.tar.gz"
+          echo "92457ea5cb4b5fe80ca45a578f7899458fec5634143c7091a605cde823941334  $RUNNER_TEMP/oo052.tar.gz" | sha256sum -c -
+          python3 - <<'PY'
+          import os,tarfile,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])
+          with tarfile.open(root/'oo052.tar.gz') as archive:
+            matches=[m for m in archive.getmembers() if m.isfile() and m.name.endswith('/bin/linux/create-fself')]
+            assert len(matches)==1
+            target=root/'create-fself-052';target.write_bytes(archive.extractfile(matches[0]).read());target.chmod(0o755)
+          with open(os.environ['GITHUB_ENV'],'a') as f:f.write('PS4_FSELF='+str(target)+'\n')
+          PY
+      - name: Build native PS4 executable
+        working-directory: work/ps4-app
+        run: |
+          make -j2 PS4_FSELF="$PS4_FSELF"
+          python3 scripts/validate_executable.py
+      - name: Link isolated native interface development executable
+        working-directory: work/ps4-app
+        run: |
+          make ui-development -j2 PS4_FSELF="$PS4_FSELF"
+          python3 scripts/check_stack_usage.py
+      - name: Check native interface memory before packaging
+        working-directory: work/ps4-app
+        run: |
+          cmake -S ui -B build/ui-host -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer" -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer" -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"
+          cmake --build build/ui-host -j2
+          mkdir -p build/ui-host-captures
+          timeout 180s build/ui-host/ui-preview "$PWD/ui/assets" "$PWD/build/ui-host-captures"
+      - name: Build test PKG
+        working-directory: work/ps4-app
+        env:
+          DOTNET_ROLL_FORWARD: Major
+          DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: '1'
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" \
+            -v "$OO_PS4_TOOLCHAIN:$OO_PS4_TOOLCHAIN:ro" \
+            -w "$PWD" -e OO_PS4_TOOLCHAIN \
+            -e DOTNET_ROLL_FORWARD -e DOTNET_SYSTEM_GLOBALIZATION_INVARIANT \
+            ubuntu:20.04 bash -ec 'apt-get update -qq; DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3 libssl1.1 libicu66; python3 scripts/package.py'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ps4-native-test
+          path: |
+            work/ps4-app/*.pkg
+            work/ps4-app/SHA256SUMS.txt
+            work/ps4-app/ps4-update.json
+            work/ps4-app/build/*.elf
+            work/ps4-app/build/*.oelf
+            work/ps4-app/build/ui-development.bin
+            work/ps4-app/build/executable-validation.json
+            work/ps4-app/build/package-files.json
+            work/ps4-app/build/stack-validation.json
+            work/ps4-app/build/allocator-validation.json
+            work/ps4-app/build/ui-host-captures/*.bgra
+            work/ps4-app/build/src/*.su
+            work/ps4-app/eboot.bin
+            work/ps4-app/README.md
+  publish-test:
+    needs: native
+    if: contains(github.event.head_commit.message, '[publish-ps4-test]')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: work/ps4-app
+      - uses: actions/download-artifact@v4
+        with:
+          name: ps4-native-test
+          path: ps4-package
+      - name: Publish independent PS4 experimental package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(python3 -c "import json; print(json.load(open('work/ps4-app/release.json'))['version'])")
+          cd ps4-package
+          sha256sum -c SHA256SUMS.txt
+          gh release create "ps4-v$VERSION" "Avant-l-usine-$VERSION.pkg" ps4-update.json SHA256SUMS.txt README.md \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Avant l'usine $VERSION" --prerelease --latest=false \
+            --notes-file "$GITHUB_WORKSPACE/work/ps4-app/RELEASE-NOTES.md"

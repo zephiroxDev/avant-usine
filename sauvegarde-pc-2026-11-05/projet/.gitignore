@@ -1,0 +1,4 @@
+# Publication credentials must never be committed.
+buffer-api-key.txt
+**/buffer-api-key.txt
+**/__pycache__/

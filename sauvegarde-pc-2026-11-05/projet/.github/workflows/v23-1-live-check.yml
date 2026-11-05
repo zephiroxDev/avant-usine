@@ -1,0 +1,49 @@
+name: V23.1 — live website verification
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/v23-1-live-check.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify deployed source bytes and linked resources
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,hashlib,re,urllib.request,concurrent.futures
+          base='https://zephiroxdev.github.io/avant-usine/'
+          expected=json.loads("{\"album-audio-21.mjs\":\"617adc80ef45a8aa6c2fec732b3d64419fd4c55c\",\"album-download-21.mjs\":\"071f0574d33810847a72b79c3fb908b474e79004\",\"app-17v01.js\":\"5363495937b273a5322019e96493f6e4e04a6066\",\"histories-17v01.js\":\"8e0f30885484e4c60b52161d2426b09f87df76c2\",\"index.html\":\"1a5eb6029e401a232a50dd3d155a0f87596b561a\",\"interface-23-1.css\":\"7c98ddc5e92640f7124231bf226fc7febd2fcd39\",\"interface-23-1.js\":\"fb46f7dbd43418c333e40df535f99665c822270e\",\"listening-beta.js\":\"51b70aea79227bd62760120c81081e11e1b02765\",\"local-export-23-1.mjs\":\"b61d43e4ad0b422edff4ee7b0c85b337b74f210f\",\"local-palette-23-1.js\":\"677ea36961562beb1afbfd88fd54a2b2bc4f0b32\",\"mediabunny-mp3-encoder-1.63.0.mjs\":\"9f8bf5c6ed4379ad1caf328a170c422fb2b1d583\",\"mediabunny-mp3-encoder-LICENSE.txt\":\"d0a1fa1482eea82e19510e7920cbe3a03e41f691\",\"promo-23v01-public.mp4\":\"c14f8d5a381b49163be2d2d9a8b73bb482e79170\",\"promo-23v01-public.png\":\"bfd4ca003d2188c93794519ccbd72973399f238b\",\"promo-manifest.json\":\"655e0dbab15de11976efab85622d2783aea31632\",\"release-22.js\":\"bfddd7d75f05a58e7058123b0e04b69bd7164392\",\"studio-19v00.js\":\"a2aeea3f32141b84a3a9e366e9d7ac96b63f2f5a\",\"sw.js\":\"ea2f1f06d1617a5e5de5da77bdd64ac8f981f2aa\"}")
+          def get(name):
+              request=urllib.request.Request(base+name+'?verify=23.1',headers={'User-Agent':'Avant-usine-release-verification'})
+              with urllib.request.urlopen(request,timeout=60) as response:
+                  data=response.read(); status=response.status
+              assert status==200,(name,status)
+              sha=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+              assert sha==expected[name],(name,sha,expected[name])
+              return dict(name=name,status=status,bytes=len(data),sha=sha),data
+          with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+              verified=list(pool.map(get,expected))
+          index=next(data.decode() for result,data in verified if result['name']=='index.html')
+          refs=sorted(set(x[2:].split('?')[0] for x in re.findall(r'(?:src|href)="(\./[^"#]+)"',index)))
+          def head(name):
+              request=urllib.request.Request(base+name+'?verify=23.1',method='HEAD')
+              with urllib.request.urlopen(request,timeout=60) as response: status=response.status
+              assert status==200,(name,status)
+              return dict(name=name,status=status)
+          with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+              resources=list(pool.map(head,refs))
+          report=dict(version='23.1',verifiedFiles=[r for r,d in verified],referencedResources=resources,physicalIOSVerified=False)
+          open('live-report.json','w').write(json.dumps(report,indent=2))
+          print(json.dumps(dict(files=len(verified),references=len(resources),indexBytes=len(index.encode()))))
+          PY
+      - uses: actions/upload-artifact@v7
+        if: success()
+        with:
+          name: website-23-1-live-proof
+          path: live-report.json
+          if-no-files-found: error
