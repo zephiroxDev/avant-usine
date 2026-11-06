@@ -1,0 +1,12 @@
+{
+  "version": "25.0",
+  "sourceCommit": "4f80b70bc3961b2fb6cd7935b88b026307e2a328",
+  "runId": 42271382127,
+  "physicalIOSVerified": false,
+  "platforms": [
+    "web-pc",
+    "web-mobile",
+    "desktop",
+    "ios"
+  ]
+}
