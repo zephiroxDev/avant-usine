@@ -67,3 +67,11 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - Serveur : migration `patch_24_0_sync_pending_and_beta_code` (repli au_sync_source sur paroles en attente, tables au_beta_access_24 / au_beta_attempts_24) ; fonction `beta-builds` v10 (code à 6 chiffres côté serveur, limites d'essais).
 - Le code des versions de test se règle dans Compte › Versions de test (aucun code défini à la livraison).
 - Séparation Windows MisesAJour publiques/tests : complète seulement après une réinstallation (lanceur bootstrap.cjs figé).
+
+## Livraison 25.0 (6 novembre 2026) — « Lumière sodium »
+- Site 25.0 en ligne (b13c8e9). Nouvelle couche `design-25.css`/`design-25.js` (data-design="25") + `fonts-25.css` (Big Shoulders, Bricolage Grotesque, JetBrains Mono, OFL, intégrées en base64). `design-24.css` n'est plus chargé. Palette violet→ambre appliquée aux anciennes feuilles par `work/tools/repalette-25.py`.
+- Téléphone : la nav `.au222-nav` devient barre d'onglets fixe en bas ; ne jamais remettre de backdrop-filter/transform sur `.au222-header` en mobile (bloque le position:fixed).
+- Atelier refait (studio-19v00.js, bloc composition 22.2) : barre `.studio25-bar`, zone `.studio19-focus`, réglages en `<details class=studio25-fold>`, Mode concentré (`.studio25-zen`, clé `au-atelier-zen-25`).
+- Correctifs : mini-lecteur mobile (transform hérité), barre Atelier iOS (relais audio natif : réveil au toucher dans lyrics-audio.js + horloge réelle dans sync-slider), « Synchroniser maintenant » (retour dans #accountStatus), icône Windows (setAppDetails, raccourcis épinglés, ie4uinit).
+- Compilation run 42271382127 (release/v25-0, 4f80b70) ; publication run 42272022016 → `v0.10.0` et `ios-v2.4.0` (non signée, non vérifiée sur appareil physique). Affiche 25.0 dans Gestion promo.
+- Préférence utilisateur : à la fin de chaque livraison, afficher un panneau récapitulatif qui coche tout ce qui a été fait.
