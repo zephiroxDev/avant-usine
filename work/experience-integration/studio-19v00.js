@@ -105,8 +105,31 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
   const controls=block('Contrôles de synchronisation',navigation),finish=block('Terminer ou reprendre');
   const finishActions=E('div',null,'actions');finish.append(finishActions,saveState);button('Enregistrer le travail',()=>flush(),finishActions);button('Revoir les règles',()=>showRules(true),finishActions);
   for(const label of ['Importer une synchronisation','Mes projets en cours']){const existing=[...tools.querySelectorAll('button')].find(b=>b.textContent===label);if(existing)finishActions.append(existing);}
-  const top=block('Voix à synchroniser',toolbar);focus.prepend(E('h2','La phrase en cours'));
-  root.replaceChildren(top,focus,controls,comfort,finish,advanced,status);
+  // 25.0 : un poste de travail. Barre d'outils fine, grande zone de travail
+  // (phrase, barre, navigation), réglages repliés, et un Mode concentré qui
+  // ne laisse que les paroles et la barre.
+  const bar=E('div',null,'studio25-bar'),barMain=E('div',null,'studio25-bar-main'),barSide=E('div',null,'studio25-bar-side');
+  const zen=E('button','Mode concentré','button secondary studio25-zen-toggle');zen.type='button';zen.setAttribute('aria-pressed','false');
+  const zenExit=E('button','✕ Quitter','button secondary studio25-zen-exit');zenExit.setAttribute('aria-label','Quitter le mode concentré');zenExit.type='button';
+  const zenPlay=E('button','Écouter','button studio25-zen-play');zenPlay.type='button';
+  const zenDock=E('div',null,'studio25-zen-dock');zenDock.append(zenPlay,zenExit);
+  barMain.append(trackSelect);for(const b of [...toolbar.querySelectorAll(':scope > button')])barMain.append(b);
+  barSide.append(zen);bar.append(barMain,barSide);
+  listen.classList.remove('secondary');listen.classList.add('studio25-listen');
+  focus.prepend(E('p','Phrase en cours','studio25-label'));
+  focus.append(navigation);controls.remove();
+  const fold=(title,node)=>{const d=E('details',null,'studio25-fold');const sm=E('summary',title);node.querySelector(':scope > h2')?.remove();d.append(sm,...node.childNodes);return d;};
+  const comfortFold=fold('Réglages de confort · vitesse, sensibilité, pause',comfort),finishFold=fold('Enregistrer, règles et projets',finish);
+  comfortFold.classList.add('au222-studio-comfort');
+  root.replaceChildren(bar,focus,zenDock,comfortFold,finishFold,advanced,status);
+  const dlg=()=>root.closest('dialog');
+  const setZen=on=>{root.classList.toggle('studio25-zen',on);dlg()?.classList.toggle('studio25-zen-dialog',on);zen.setAttribute('aria-pressed',String(on));try{localStorage.setItem('au-atelier-zen-25',on?'1':'0');}catch{}if(on)requestAnimationFrame(()=>focus.scrollIntoView({block:'center'}));};
+  zen.onclick=()=>setZen(true);zenExit.onclick=()=>setZen(false);zenPlay.onclick=()=>listen.click();
+  const playLabel=()=>{const t=audio.paused?'Écouter':'Pause';zenPlay.textContent=t;listen.textContent=t;};
+  audio.addEventListener('play',playLabel);audio.addEventListener('pause',playLabel);playLabel();
+  root.addEventListener('keydown',e=>{if(e.key==='Escape'&&root.classList.contains('studio25-zen')){e.preventDefault();e.stopPropagation();setZen(false);}},true);
+  root.au25Dispose=()=>{audio.removeEventListener('play',playLabel);audio.removeEventListener('pause',playLabel);dlg()?.classList.remove('studio25-zen-dialog');};
+  queueMicrotask(()=>{let z=false;try{z=localStorage.getItem('au-atelier-zen-25')==='1';}catch{}if(z&&root.isConnected)setZen(true);});
  }
  const voicePositions=new Map();
  function trackLines(){return model.project.phrases.filter(l=>l.track===activeTrack);}
@@ -157,7 +180,7 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
  function tick(){if(disposed)return;listen.textContent=audio.paused?'Écouter':'Pause';if(loop&&audio.currentTime>=loop.end){audio.currentTime=loop.start;}if(!previewHost.hidden)previewView?.paint?.(audio.currentTime);if(!audio.paused&&!document.hidden)frame=requestAnimationFrame(tick);}
  const wake=()=>{cancelAnimationFrame(frame);tick();};audio.addEventListener('play',wake);audio.addEventListener('pause',wake);audio.addEventListener('seeked',wake);let resumePosition=Number.isFinite(initial?.position)?initial.position:null;const restorePosition=()=>{if(resumePosition!==null&&Number.isFinite(audio.duration)){audio.currentTime=Math.min(Math.max(0,resumePosition),audio.duration);resumePosition=null;}};restorePosition();const metadata=()=>{model.session({duration:audio.duration});restorePosition();};audio.addEventListener('loadedmetadata',metadata);
  function session(){if(disposed)return;glide?.flush();model.session({captureMode,position:audio.currentTime,rate:audio.playbackRate});flush();}window.addEventListener('pagehide',session);
- render();flush();queueMicrotask(()=>{if(!disposed&&host.isConnected)showRules();});return {model,get project(){return model.project;},get curves(){return model.project.phrases.map(l=>l.points);},get times(){return model.project.phrases.map(l=>l.start);},get lines(){return model.project.phrases.map(l=>l.text);},get groups(){return model.project.phrases.map((_,i)=>i);},get endTime(){return Math.max(0,...model.project.phrases.map(l=>l.end||0));},get syncMode(){return 'highlight';},export:()=>model.export('highlight'),flush,select(i){const l=model.project.phrases[i];if(l){activeTrack=l.track;selected=l.id;cursor=trackLines().findIndex(x=>x.id===l.id);wordIndex=0;armed=false;render();}},dispose(){if(disposed)return;session();disposed=true;autoPause.onchange=null;glide.dispose();audio.playbackRate=originalRate;if('preservesPitch'in audio)audio.preservesPitch=originalPitch;previewView?.dispose?.();previewView=null;epoch++;clearTimeout(timer);cancelAnimationFrame(frame);audio.removeEventListener('play',wake);audio.removeEventListener('pause',wake);audio.removeEventListener('seeked',wake);audio.removeEventListener('loadedmetadata',metadata);window.removeEventListener('pagehide',session);root.removeEventListener('keydown',key);}};
+ render();flush();queueMicrotask(()=>{if(!disposed&&host.isConnected)showRules();});return {model,get project(){return model.project;},get curves(){return model.project.phrases.map(l=>l.points);},get times(){return model.project.phrases.map(l=>l.start);},get lines(){return model.project.phrases.map(l=>l.text);},get groups(){return model.project.phrases.map((_,i)=>i);},get endTime(){return Math.max(0,...model.project.phrases.map(l=>l.end||0));},get syncMode(){return 'highlight';},export:()=>model.export('highlight'),flush,select(i){const l=model.project.phrases[i];if(l){activeTrack=l.track;selected=l.id;cursor=trackLines().findIndex(x=>x.id===l.id);wordIndex=0;armed=false;render();}},dispose(){if(disposed)return;session();disposed=true;root.au25Dispose?.();autoPause.onchange=null;glide.dispose();audio.playbackRate=originalRate;if('preservesPitch'in audio)audio.preservesPitch=originalPitch;previewView?.dispose?.();previewView=null;epoch++;clearTimeout(timer);cancelAnimationFrame(frame);audio.removeEventListener('play',wake);audio.removeEventListener('pause',wake);audio.removeEventListener('seeked',wake);audio.removeEventListener('loadedmetadata',metadata);window.removeEventListener('pagehide',session);root.removeEventListener('keydown',key);}};
 }
 window.AU_STUDIO_19={rules:showRules,create};
 })();
