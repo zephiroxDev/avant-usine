@@ -1,0 +1,235 @@
+/* ==========================================================================
+   Avant l'usine — Direction artistique 25.0 « Lumière sodium »
+   Marseille la nuit : lampadaires au sodium, béton, étiquettes de cassette.
+   Titres condensés (Big Shoulders), texte en Bricolage Grotesque, chiffres et
+   repères en JetBrains Mono. Navigation en barre basse sur téléphone.
+   Chargée en dernier ; respecte la réduction des animations et le thème clair.
+   ========================================================================== */
+html[data-composition][data-design="25"]{
+ --paper:#0e0c0a;--ink:#f3eadb;--muted:#a59a88;--accent:#ffb347;--accent-strong:#ff9a1f;--flare:#ff5a36;
+ --surface:#171411;--surface-raised:#1e1a16;--line:#f3eadb17;--line-strong:#f3eadb2b;
+ --au25-glow:var(--au20-cover-accent,#ff9a1f);
+ --au25-r:8px;--au25-r-sm:5px;--au25-ease:cubic-bezier(.2,.8,.2,1);
+ --au25-display:'AU Display','Arial Narrow',Impact,sans-serif;
+ --au25-text:'AU Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+ --au25-mono:'AU Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+ --au25-tab:calc(66px + env(safe-area-inset-bottom));
+ background:var(--paper);color:var(--ink);font-family:var(--au25-text);-webkit-font-smoothing:antialiased;
+}
+html[data-composition][data-design="25"][data-theme=light]{
+ --paper:#f2ebde;--ink:#1c1712;--muted:#6f6455;--accent:#b8640a;--accent-strong:#a35400;--flare:#c2410c;
+ --surface:#fbf6ec;--surface-raised:#fffaf1;--line:#1c171214;--line-strong:#1c171226;
+}
+html[data-composition][data-design="25"] body{font-family:var(--au25-text)!important;background:var(--paper)!important}
+html[data-composition][data-design="25"] :is(button,input,select,textarea){font-family:inherit}
+
+/* ---------- Lumière : un halo de lampadaire, teinté par la pochette -------- */
+html[data-composition][data-design="25"] body::before{
+ content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+ background:
+  radial-gradient(60vmax 38vmax at 85% -12%,color-mix(in srgb,var(--accent-strong) 22%,transparent),transparent 70%),
+  radial-gradient(48vmax 36vmax at -5% 30%,color-mix(in srgb,var(--au25-glow) 20%,transparent),transparent 72%),
+  linear-gradient(180deg,transparent 60%,#00000066);
+ transition:background 1.2s var(--au25-ease);
+}
+html[data-composition][data-design="25"][data-theme=light] body::before{opacity:.45}
+html[data-composition][data-design="25"] body::after{
+ content:"";position:fixed;inset:0;z-index:2147483000;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+html[data-composition][data-design="25"][data-effects="off"] body::after{display:none}
+
+/* ---------- Typographie -------------------------------------------------- */
+html[data-composition][data-design="25"] :is(h1,h2,.au222-page-heading h1,.xp-now-title,.au222-volume :is(h2,h3)){
+ font-family:var(--au25-display)!important;text-transform:uppercase;font-weight:700!important;letter-spacing:.005em!important;line-height:1!important;text-wrap:balance;padding-top:.06em;
+}
+html[data-composition][data-design="25"] h1{font-size:clamp(46px,8.4vw,112px)!important;color:var(--ink)!important;-webkit-text-fill-color:currentColor!important;background:none!important}
+html[data-composition][data-design="25"] .au222-page-heading h1{font-size:clamp(44px,7vw,96px)!important}
+html[data-composition][data-design="25"] h2{font-size:clamp(28px,3.6vw,46px)}
+html[data-composition][data-design="25"] h3{font-family:var(--au25-text);font-weight:700;letter-spacing:-.01em}
+html[data-composition][data-design="25"] dialog h2{font-size:clamp(26px,4vw,38px)!important}
+html[data-composition][data-design="25"] :is(.au222-kicker,.eyebrow,.xp-now-label,.au222-visit-count,time,.timeline span,.track-number,.au-badge){
+ font-family:var(--au25-mono)!important;text-transform:uppercase;letter-spacing:.14em!important;font-size:11px!important;font-weight:400!important;
+}
+html[data-composition][data-design="25"] .au222-kicker{display:inline-flex;align-items:center;gap:10px;color:var(--accent)!important;background:none!important;-webkit-text-fill-color:currentColor}
+html[data-composition][data-design="25"] .au222-kicker::before{content:"●";font-size:9px;color:var(--flare);animation:au25-blink 2.4s steps(1) infinite}
+@keyframes au25-blink{0%,70%{opacity:1}71%,100%{opacity:.25}}
+html[data-composition][data-design="25"] :is(.au222-muted,.au-note,.au222-description,.lede){color:var(--muted)}
+html[data-composition][data-design="25"] ::selection{background:var(--accent);color:#120e0a}
+
+/* ---------- En-tête : tampon de marque et index numérotés ---------------- */
+html[data-composition][data-design="25"] .au222-header{
+ position:sticky;top:0;z-index:30;border-bottom:1px solid var(--line)!important;
+ background:color-mix(in srgb,var(--paper) 80%,transparent)!important;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+html[data-composition][data-design="25"] .au222-brand{
+ font-family:var(--au25-display)!important;text-transform:uppercase;font-size:28px!important;font-weight:700!important;letter-spacing:.02em!important;line-height:1;color:var(--ink)!important;
+}
+html[data-composition][data-design="25"] .au222-brand *{color:inherit!important;background:none!important;-webkit-text-fill-color:currentColor!important}
+html[data-composition][data-design="25"] .au222-brand::after{content:"13";display:inline-block;margin-left:8px;padding:2px 5px 1px;border:1.5px solid var(--accent);border-radius:3px;color:var(--accent);font-family:var(--au25-mono);font-size:11px;letter-spacing:.1em;vertical-align:4px;box-shadow:none;width:auto;height:auto;background:none}
+html[data-composition][data-design="25"] .au222-nav{counter-reset:au25nav}
+html[data-composition][data-design="25"] .au222-nav-button{
+ counter-increment:au25nav;font-family:var(--au25-mono)!important;text-transform:uppercase;letter-spacing:.12em;font-size:12px!important;
+ background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;color:var(--muted)!important;position:relative;
+}
+html[data-composition][data-design="25"] .au222-nav-button::before{content:counter(au25nav,decimal-leading-zero);margin-right:8px;color:var(--accent);opacity:.75}
+html[data-composition][data-design="25"] .au222-nav-button svg{display:none}
+html[data-composition][data-design="25"] :is(.au222-nav-button,.au222-subnav-button):is(:hover,[aria-current=page],[aria-selected=true],.active,[data-active=true]){color:var(--ink)!important;background:none!important;box-shadow:none!important}
+html[data-composition][data-design="25"] .au222-nav-button:is([aria-current=page],[aria-selected=true],.active,[data-active=true])::after{
+ content:"";position:absolute;left:12px;right:12px;bottom:-2px;height:3px;background:var(--accent);border-radius:0;
+}
+html[data-composition][data-design="25"] .au222-search{font-family:var(--au25-mono)!important;text-transform:uppercase;letter-spacing:.1em;font-size:12px!important;border:1px solid var(--line-strong)!important;border-radius:var(--au25-r-sm)!important;background:transparent!important}
+html[data-composition][data-design="25"] .au222-subnav{border-bottom:1px solid var(--line);gap:4px!important}
+html[data-composition][data-design="25"] .au222-subnav-button{
+ font-family:var(--au25-mono)!important;text-transform:uppercase;letter-spacing:.12em;font-size:11.5px!important;
+ border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:var(--muted)!important;position:relative;padding-inline:14px!important;
+}
+html[data-composition][data-design="25"] .au222-subnav-button::after{content:none!important}
+html[data-composition][data-design="25"] .au222-subnav-button:is([aria-current=page],[aria-selected=true],.active,[data-active=true]){color:#120e0a!important;background:var(--accent)!important}
+html[data-composition][data-design="25"][data-theme=light] .au222-subnav-button:is([aria-current=page],[aria-selected=true],.active,[data-active=true]){color:#fffaf1!important}
+
+/* ---------- Boutons ------------------------------------------------------ */
+html[data-composition][data-design="25"] :is(.au222-primary,.xp-primary,.button:not(.secondary):not(.text-button):not(.au-icon),.au24-wp-play){
+ background:var(--accent)!important;color:#120e0a!important;border:0!important;border-radius:var(--au25-r-sm)!important;
+ font-family:var(--au25-display)!important;text-transform:uppercase;font-weight:700!important;letter-spacing:.06em!important;font-size:18px!important;
+ box-shadow:0 0 0 1px #00000022 inset,0 10px 28px -14px var(--accent-strong)!important;transition:transform .18s var(--au25-ease),background .2s,box-shadow .2s;
+}
+html[data-composition][data-design="25"][data-theme=light] :is(.au222-primary,.xp-primary,.button:not(.secondary):not(.text-button):not(.au-icon)){color:#fffaf1!important}
+html[data-composition][data-design="25"] :is(.au222-primary,.xp-primary,.button:not(.secondary):not(.text-button):not(.au-icon)):hover{background:color-mix(in srgb,var(--accent) 85%,#fff)!important;box-shadow:0 0 0 1px #00000022 inset,0 14px 34px -12px var(--accent-strong)!important}
+html[data-composition][data-design="25"] :is(.au222-primary,.xp-primary,.button):active{transform:scale(.98)}
+html[data-composition][data-design="25"] :is(.au222-secondary,.button.secondary,.au24-wp-jump,.au24-wp-speed){
+ background:transparent!important;border:1px solid var(--line-strong)!important;color:var(--ink)!important;border-radius:var(--au25-r-sm)!important;box-shadow:none!important;
+ transition:border-color .2s,color .2s,background .2s;
+}
+html[data-composition][data-design="25"] :is(.au222-secondary,.button.secondary,.au24-wp-jump):hover{border-color:var(--accent)!important;color:var(--accent)!important;background:color-mix(in srgb,var(--accent) 7%,transparent)!important}
+html[data-composition][data-design="25"] :is(.au222-text,.text-button){color:var(--muted)!important;text-decoration-color:var(--accent)!important}
+html[data-composition][data-design="25"] :is(.au222-text,.text-button):hover{color:var(--accent)!important}
+html[data-composition][data-design="25"] :is(button,a,input,select,textarea,summary,[tabindex]:not([tabindex="-1"])):focus-visible{outline:2px solid var(--accent)!important;outline-offset:3px!important;box-shadow:none!important}
+html[data-composition][data-design="25"] :is(.au222-nav-button,.au222-subnav-button,.au222-search).au222-veil::before,html[data-composition][data-design="25"] :is(.au222-nav-button,.au222-subnav-button,.au222-search).au222-veil::after{content:none!important;display:none!important}
+
+/* ---------- Surfaces ----------------------------------------------------- */
+html[data-composition][data-design="25"] :is(.major-card,.au-panel,.au-card,.local-card,.local-album,.local-panel,.download-card,.au222-content-block,.au24-beta-card,.studio19-focus,.au24-spell-item){
+ position:relative;border-radius:var(--au25-r)!important;background:var(--surface)!important;border:1px solid var(--line)!important;box-shadow:none!important;
+}
+html[data-composition][data-design="25"] :is(.major-card,.local-album,.download-card,.au24-beta-card,.au222-content-block)::before{
+ content:"";position:absolute;left:-1px;top:-1px;width:28px;height:3px;background:var(--accent);border-radius:var(--au25-r) 0 0 0;pointer-events:none;
+}
+html[data-composition][data-design="25"] :is(.major-card,.local-album,.download-card):hover{border-color:var(--line-strong)!important}
+html[data-composition][data-design="25"] .au24-beta-card{border-style:dashed!important}
+
+html[data-composition][data-design="25"] dialog:is(.au231-dialog,.au-dialog,.xp-dialog,.major-dialog):not(.au222-page-surface):not(.xp-full-player){
+ border-radius:var(--au25-r)!important;border:1px solid var(--line-strong)!important;border-top:3px solid var(--accent)!important;
+ background:var(--surface-raised)!important;box-shadow:0 40px 90px -30px #000!important;
+}
+html[data-composition][data-design="25"] dialog.au222-page-surface{background:var(--paper)!important}
+html[data-composition][data-design="25"] dialog::backdrop{background:#0a0806cc!important;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+html[data-composition][data-design="25"] dialog[open]:not(.au222-page-surface){animation:au25-rise .28s var(--au25-ease)!important}
+@keyframes au25-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- Accueil ------------------------------------------------------ */
+html[data-composition][data-design="25"] .au222-hero h1{font-size:clamp(52px,6.6vw,104px)!important;line-height:.9!important}
+html[data-composition][data-design="25"] .au222-hero h1::first-line{color:var(--accent)}
+html[data-composition][data-design="25"] .au222-hero-art{filter:drop-shadow(0 30px 40px #000a) saturate(1.05)}
+html[data-composition][data-design="25"] .au222-hero-art :is(img,canvas,video){border-radius:var(--au25-r-sm)!important}
+
+/* ---------- Volumes : étiquettes de cassette ----------------------------- */
+html[data-composition][data-design="25"] .au222-volume{transition:transform .3s var(--au25-ease)}
+html[data-composition][data-design="25"] .au222-volume-art{border-radius:var(--au25-r)!important;overflow:hidden;box-shadow:0 26px 50px -30px #000,0 0 0 1px var(--line)!important;transition:box-shadow .3s,transform .3s var(--au25-ease)}
+html[data-composition][data-design="25"] .au222-volume:hover .au222-volume-art{transform:translateY(-3px);box-shadow:0 34px 60px -28px #000,0 0 0 2px var(--accent)!important}
+html[data-composition][data-design="25"] .au222-volume :is(h2,h3){margin-top:14px;font-size:clamp(26px,3vw,38px)!important}
+
+/* ---------- Listes de morceaux ------------------------------------------- */
+html[data-composition][data-design="25"] #tracklist :is(li,.track,[data-track]){border-radius:0!important;border-bottom:1px solid var(--line);transition:background .2s}
+html[data-composition][data-design="25"] #tracklist :is(li,.track,[data-track]):hover{background:color-mix(in srgb,var(--accent) 6%,transparent)}
+html[data-composition][data-design="25"] #tracklist .track-number{color:var(--accent)!important;padding-left:10px}
+html[data-composition][data-design="25"] #tracklist :is([aria-current=true],.playing,.active,[data-playing=true]){background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 16%,transparent),transparent 75%)!important;box-shadow:inset 3px 0 0 var(--accent)}
+html[data-composition][data-design="25"] #tracklist :is([aria-current=true],.playing,.active,[data-playing=true]) :is(strong,.track-title,h3){color:var(--ink)!important}
+.au24-eq{display:inline-flex;align-items:flex-end;gap:2px;width:14px;height:12px;margin-right:8px;vertical-align:-1px}
+.au24-eq i{flex:1;background:var(--accent,#ffb347);height:40%;animation:au24-eq 1s ease-in-out infinite!important}
+.au24-eq i:nth-child(2){animation-delay:-.35s!important}.au24-eq i:nth-child(3){animation-delay:-.7s!important}
+@keyframes au24-eq{0%,100%{height:30%}50%{height:100%}}
+html[data-motion="off"] .au24-eq i,.au24-eq.au24-paused i{animation:none!important;height:35%}
+
+/* ---------- Curseurs : taille garantie sur Safari ------------------------ */
+html[data-composition][data-design="25"] input[type=range]{accent-color:var(--accent);max-width:100%;min-width:0;box-sizing:border-box}
+html[data-composition][data-design="25"] .timeline{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;max-width:100%;box-sizing:border-box}
+html[data-composition][data-design="25"] .timeline input[type=range]{width:100%!important;flex:none!important;margin:0!important;-webkit-appearance:none;appearance:none;height:18px!important;background:transparent!important}
+html[data-composition][data-design="25"] .timeline input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:0;background:linear-gradient(90deg,var(--accent) var(--au25-p,0%),var(--line-strong) var(--au25-p,0%))}
+html[data-composition][data-design="25"] .timeline input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;margin-top:-5px;border-radius:2px;background:var(--ink);border:0;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 35%,transparent)}
+html[data-composition][data-design="25"] .timeline input[type=range]::-moz-range-track{height:4px;background:var(--line-strong)}
+html[data-composition][data-design="25"] .timeline input[type=range]::-moz-range-progress{height:4px;background:var(--accent)}
+html[data-composition][data-design="25"] .timeline input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:2px;background:var(--ink);border:0}
+
+/* ---------- Mini-lecteur ------------------------------------------------- */
+html[data-composition][data-design="25"] .xp-mini{
+ left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:min(1080px,calc(100% - 24px))!important;max-width:none!important;
+ bottom:12px!important;border-radius:var(--au25-r)!important;border:1px solid var(--line-strong)!important;
+ background:color-mix(in srgb,var(--surface-raised) 90%,transparent)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+ box-shadow:0 24px 60px -24px #000!important;padding-bottom:13px!important;overflow:hidden;
+}
+html[data-composition][data-design="25"] .xp-mini-progress{background:var(--accent)!important;height:3px!important}
+html[data-composition][data-design="25"] .xp-mini-cover{border-radius:var(--au25-r-sm)!important;overflow:hidden}
+html[data-composition][data-design="25"] .xp-mini :is(strong,.xp-mini-title){font-family:var(--au25-text);font-weight:700}
+
+/* ---------- Lecteur complet & paroles ------------------------------------ */
+html[data-composition][data-design="25"] .xp-full-player{background:radial-gradient(110% 70% at 50% -10%,color-mix(in srgb,var(--au25-glow) 26%,#15110d),var(--paper) 70%)!important}
+html[data-composition][data-design="25"] .xp-full-player :is(.au-lyrics-viewport,.au222-static-text){-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 86%,transparent 100%)}
+html[data-composition][data-design="25"] .xp-full-player .control{border-radius:var(--au25-r-sm)!important}
+
+/* ---------- Champs ------------------------------------------------------- */
+html[data-composition][data-design="25"] :is(input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea){
+ border-radius:var(--au25-r-sm)!important;border:1px solid var(--line-strong)!important;background:color-mix(in srgb,var(--paper) 70%,var(--surface))!important;color:var(--ink)!important;
+}
+html[data-composition][data-design="25"] :is(input,select,textarea):focus{border-color:var(--accent)!important}
+html[data-composition][data-design="25"] :is(input[type=checkbox],input[type=radio]){accent-color:var(--accent)}
+html[data-composition][data-design="25"] .au24-code-input{letter-spacing:.5em!important;font-size:28px!important;text-align:center;font-family:var(--au25-mono)!important}
+
+/* ---------- Atelier ------------------------------------------------------ */
+html[data-composition][data-design="25"] .studio19-slider{border-radius:var(--au25-r)!important;background:repeating-linear-gradient(90deg,transparent 0 23px,var(--line) 23px 24px),var(--paper)!important;border:1px solid var(--line-strong)!important;box-shadow:none!important}
+html[data-composition][data-design="25"] .studio19-slider-thumb{background:var(--accent)!important;border-radius:3px!important;box-shadow:0 0 18px color-mix(in srgb,var(--accent) 70%,transparent)!important}
+html[data-composition][data-design="25"] .studio19-slider-dot{background:var(--accent)!important;border-radius:0!important}
+html[data-composition][data-design="25"] .studio19-slider[data-recording=true]{border-color:var(--accent)!important;box-shadow:0 0 0 1px var(--accent),inset 0 0 40px -14px var(--accent)!important}
+html[data-composition][data-design="25"] .studio19-slider-hint{background:color-mix(in srgb,var(--flare) 22%,var(--surface))!important;color:var(--ink)!important;border-radius:var(--au25-r-sm)!important}
+html[data-composition][data-design="25"] .studio19-focus:has(.studio19-glide-phrase){background:var(--surface)!important}
+
+/* ---------- Pied de page ------------------------------------------------- */
+html[data-composition][data-design="25"] .au222-footer{border-top:1px solid var(--line)}
+html[data-composition][data-design="25"] .au222-footer :is(button,a){font-family:var(--au25-mono)!important;text-transform:uppercase;letter-spacing:.1em;font-size:11px!important}
+
+/* ---------- Téléphone : barre d'onglets en bas --------------------------- */
+@media (max-width:700px){
+ html[data-composition][data-design="25"] .au222-header{padding-block:12px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transform:none!important;filter:none!important;contain:none!important;background:var(--paper)!important}
+ html[data-composition][data-design="25"] .au222-brand{font-size:24px!important}
+ html[data-composition][data-design="25"] .au222-nav{
+  position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;z-index:60;margin:0!important;
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:0!important;width:100%!important;max-width:none!important;
+  height:var(--au25-tab);padding:0 0 env(safe-area-inset-bottom)!important;box-sizing:border-box;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line-strong);
+ }
+ html[data-composition][data-design="25"] .au222-nav-button{
+  display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:0!important;height:66px;width:auto!important;padding:6px 2px!important;margin:0!important;
+  font-size:10px!important;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+ }
+ html[data-composition][data-design="25"] .au222-nav-button::before{content:none}
+ html[data-composition][data-design="25"] .au222-nav-button .au222-symbol{display:flex!important;width:22px;height:22px;margin:0!important;opacity:1!important}
+ html[data-composition][data-design="25"] .au222-nav-button svg{display:block!important;width:22px;height:22px;color:currentColor}
+ html[data-composition][data-design="25"] .au222-nav-button:is([aria-current=page],[aria-selected=true],.active,[data-active=true]){color:var(--accent)!important}
+ html[data-composition][data-design="25"] .au222-nav-button:is([aria-current=page],[aria-selected=true],.active,[data-active=true])::after{left:28%;right:28%;top:0;bottom:auto;height:3px}
+ html[data-composition][data-design="25"] .au222-subnav{overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap!important}
+ html[data-composition][data-design="25"] .au222-subnav::-webkit-scrollbar{display:none}
+ html[data-composition][data-design="25"] .au222-subnav-button{flex:none}
+ html[data-composition][data-design="25"] :is(#main,dialog.au222-page-surface){padding-bottom:calc(var(--au25-tab) + 110px)!important}
+ html[data-composition][data-design="25"] .xp-mini{left:8px!important;right:8px!important;transform:none!important;width:auto!important;bottom:calc(var(--au25-tab) + 8px)!important;border-radius:var(--au25-r)!important;padding-bottom:10px!important;min-height:64px}
+ html[data-composition][data-design="25"] .au222-hero h1{font-size:clamp(52px,15vw,84px)!important}
+ html[data-composition][data-design="25"] :is(.au222-primary,.au222-secondary,dialog .button){min-height:48px}
+ html[data-composition][data-design="25"] .au222-content-block{padding:18px!important}
+}
+/* Le lecteur complet et l'Atelier occupent tout l'écran : pas de barre basse par-dessus. */
+html[data-composition][data-design="25"] dialog.xp-full-player .au222-nav{display:none!important}
+
+@media (prefers-reduced-motion:reduce){
+ html[data-composition][data-design="25"] *{transition-duration:.01ms!important}
+ html[data-composition][data-design="25"] dialog[open]{animation:none!important}
+ html[data-composition][data-design="25"] .au222-kicker::before{animation:none}
+}
+html[data-composition][data-design="25"][data-motion="off"] .au222-kicker::before{animation:none}

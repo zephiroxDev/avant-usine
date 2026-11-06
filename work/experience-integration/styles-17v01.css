@@ -5,7 +5,7 @@
 .au-blind-choice[hidden]{display:none}
 #blindtest output{display:block;font-variant-numeric:tabular-nums;font-size:clamp(28px,5vw,48px);margin:20px 0}
 #blindtest form{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
-#blindtest input[type=search],#blindtest input:not([type]),#statistiques select,#statistiques input{max-width:100%;padding:10px;border:1px solid #ffffff40;border-radius:6px;background:#101b2b;color:inherit}
+#blindtest input[type=search],#blindtest input:not([type]),#statistiques select,#statistiques input{max-width:100%;padding:10px;border:1px solid #ffffff40;border-radius:6px;background:#251d16;color:inherit}
 #blindtest table{width:100%;border-collapse:collapse;margin:20px 0}
 #blindtest td,#blindtest th{padding:10px;text-align:left;border-bottom:1px solid #ffffff20;overflow-wrap:anywhere}
 .au-summary-categories{display:grid;gap:16px;margin:24px 0}
@@ -17,7 +17,7 @@
 #statistiques form label{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:14px 0}
 #statistiques>.actions{flex-wrap:wrap}
 .au-trophy{border:1px solid #ffffff25;position:relative;padding-left:60px}
-.au-trophy:before{content:'✦';position:absolute;left:18px;top:20px;font-size:30px;color:#5cecff;text-shadow:0 0 16px #5cecff80}
+.au-trophy:before{content:'✦';position:absolute;left:18px;top:20px;font-size:30px;color:#ffce5c;text-shadow:0 0 16px #ffce5c80}
 .au-trophy[data-level='10']:before,.au-trophy[data-level='11']:before,.au-trophy[data-level='12']:before{color:#f2cb67;text-shadow:0 0 20px #f2cb6780}
 @media(max-width:600px){.au-blind-selection{grid-template-columns:1fr}.au-stat-metric dl{grid-template-columns:1fr}.au-stat-metric dd{padding-left:12px}#blindtest td,#blindtest th{padding:6px;font-size:13px}}
 
@@ -33,11 +33,11 @@
 .au-app-announcement .au-app-intro h2{font-size:clamp(21px,2.6vw,30px);margin:0 0 8px}
 .au-app-announcement .au-app-intro p{max-width:none;font-size:13px}
 .au-app-platforms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
-.au-app-platform{display:flex;flex-direction:column;gap:9px;padding:14px;border:1px solid #53769166;border-radius:8px;background:#10203388;min-width:0}
-.au-app-platform h3{margin:0;font-size:17px;color:#eefaff}
+.au-app-platform{display:flex;flex-direction:column;gap:9px;padding:14px;border:1px solid #917e5366;border-radius:8px;background:#2b211888;min-width:0}
+.au-app-platform h3{margin:0;font-size:17px;color:#fcf8f1}
 .au-app-announcement .au-app-platform p{font-size:12px;line-height:1.5;flex:1}
 .au-app-platform .button{width:100%;font-size:12px;padding:11px 9px;text-align:center}
-.au-app-platform .text-button{font-size:11px;color:#c8dceb;text-align:center;line-height:1.5}
+.au-app-platform .text-button{font-size:11px;color:#ebe0c8;text-align:center;line-height:1.5}
 @media(max-width:680px){.au-app-platforms{grid-template-columns:1fr;gap:10px}.au-app-platform{padding:12px}.au-app-announcement{padding:18px}}
 
 .au-current-lyrics-only .au-lyric-line[hidden]{display:none!important}

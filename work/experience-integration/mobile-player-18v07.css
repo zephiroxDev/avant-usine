@@ -3,6 +3,6 @@
 html.au-mobile-player-hidden .player-dock{display:none!important}
 html.au-mobile-player-hidden .page-scroll{padding-bottom:max(24px,env(safe-area-inset-bottom))!important}
 .au-mobile-player-dialog label:has(input[type=number]){display:grid;gap:8px;margin:16px 0}
-.au-mobile-player-dialog input[type=number]{width:100%;max-width:180px;padding:12px;color:inherit;background:var(--surface,#17202f);border:1px solid var(--line,#668);border-radius:8px}
+.au-mobile-player-dialog input[type=number]{width:100%;max-width:180px;padding:12px;color:inherit;background:var(--surface,#2a231c);border:1px solid var(--line,#887966);border-radius:8px}
 
 html.au-mobile-player-hidden .shell{padding-bottom:max(24px,env(safe-area-inset-bottom))!important}
