@@ -1,6 +1,6 @@
 /* 20.0 — shared product typography, spacing and listening composition. */
-:root{--paper:#151316;--ink:#f5eff3;--muted:#b6a9b3;--purple:#e4a5d1;--pink:#e4a5d1;--accent:#e4a5d1;--line:#ffffff13;--surface:#211c23;--surface-raised:#2c252f;--ui-border:#ffffff1d;--bg:var(--paper);--panel:var(--surface);--text-main:var(--ink);--text-soft:var(--muted);--au20-cover-accent:#be82b5}
-:root[data-theme=light]{--paper:#f5f1f3;--ink:#30262f;--muted:#776875;--purple:#934e85;--pink:#934e85;--accent:#934e85;--line:#30262f15;--surface:#fffafd;--surface-raised:#ece4eb;--ui-border:#30262f24}
+:root{--paper:#151316;--ink:#f4f3f0;--muted:#b6a9b3;--purple:#e4c8a5;--pink:#e4c8a5;--accent:#e4c8a5;--line:#ffffff13;--surface:#211c23;--surface-raised:#2c252f;--ui-border:#ffffff1d;--bg:var(--paper);--panel:var(--surface);--text-main:var(--ink);--text-soft:var(--muted);--au20-cover-accent:#bea382}
+:root[data-theme=light]{--paper:#f4f3f2;--ink:#30262f;--muted:#776875;--purple:#93744e;--pink:#93744e;--accent:#93744e;--line:#30262f15;--surface:#fefdfb;--surface-raised:#ebe9e5;--ui-border:#30262f24}
 html body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--paper);font-weight:400;-webkit-font-smoothing:antialiased}
 html :is(button,input,select,textarea){font-family:inherit}
 html :is(h1,h2,h3,h4){font-family:inherit;letter-spacing:-.035em;text-wrap:balance}
@@ -17,7 +17,7 @@ html .topbar:after,html .player-dock:before,html .au-desktop-announcement:before
 html #main{max-width:1360px;padding-inline:32px}
 html .page{animation:au20-arrive .28s ease-out}
 @keyframes au20-arrive{from{opacity:.4;transform:translateY(8px)}to{opacity:1;transform:none}}
-html .button,html .button.pink{padding:12px 18px;min-height:44px;border-radius:11px;border:1px solid transparent!important;box-shadow:none!important;background:var(--accent)!important;color:#271c26!important;font-size:13px;font-weight:650;letter-spacing:0;line-height:1.4}
+html .button,html .button.pink{padding:12px 18px;min-height:44px;border-radius:11px;border:1px solid transparent!important;box-shadow:none!important;background:var(--accent)!important;color:#25211e!important;font-size:13px;font-weight:650;letter-spacing:0;line-height:1.4}
 html .button.secondary{background:var(--surface-raised)!important;color:var(--ink)!important;border-color:transparent!important}
 html[data-theme=light] .button:not(.secondary){color:#fff!important}
 html :is(.text-button,.lyrics-button){font-size:13px;line-height:1.5;font-weight:550;min-height:38px;white-space:normal}
@@ -34,7 +34,7 @@ html :is(.track-title,.au-song-title){font-size:15px;line-height:1.45;font-weigh
 html :is(.section-head,.page-heading){margin-block:30px 24px}
 html :is(.au-desktop-announcement,.au-kofi-banner){border:1px solid var(--line)!important;border-radius:16px;box-shadow:none;padding:24px}
 html dialog{border:1px solid var(--ui-border)!important;border-radius:20px!important;padding:24px;box-shadow:0 24px 100px #0005}
-html dialog::backdrop{background:#0c080fb3;backdrop-filter:blur(8px)}
+html dialog::backdrop{background:#0d0b0ab3;backdrop-filter:blur(8px)}
 html :is(.au-dialog-head,.major-dialog-head,.annotation-dialog-head,.au-art-header){gap:20px;padding-block:12px 20px;margin-bottom:10px}
 html :is(.au-dialog-head,.major-dialog-head,.annotation-dialog-head,.au-art-header)>:is(h2,div){min-width:0}
 html #accountMember{display:flex;flex-wrap:wrap;gap:12px;padding-top:20px}
@@ -66,14 +66,14 @@ html .shell:has(#paroles:not([hidden])) :is(#desktopAnnouncement,.au-development
 html .page-heading:before{display:none}
 html .page-heading h1{font-size:clamp(34px,4vw,52px);font-weight:700;letter-spacing:-.05em}
 html #paroles>.page-heading .lede{display:none}
-html .lyrics-card.au20-listening{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(210px,.78fr) minmax(0,1.22fr);gap:clamp(28px,5vw,72px);padding:44px!important;border-radius:20px!important;overflow:hidden;min-height:650px;background:#291d27!important;color:#fff5fa!important;border:0!important;box-shadow:none!important}
-.au20-listening:after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,#2d172bab,#1d1b22d9);pointer-events:none}
+html .lyrics-card.au20-listening{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(210px,.78fr) minmax(0,1.22fr);gap:clamp(28px,5vw,72px);padding:44px!important;border-radius:20px!important;overflow:hidden;min-height:650px;background:#262320!important;color:#fefbf7!important;border:0!important;box-shadow:none!important}
+.au20-listening:after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,#28221cab,#1d1b22d9);pointer-events:none}
 .au20-listening>.au-cover-atmosphere{z-index:-2;filter:blur(65px) saturate(.6) brightness(.8);opacity:.5}
-.au20-art-column{min-width:0;align-self:center}.au20-player-art{width:100%;aspect-ratio:1;display:block;border-radius:7px;overflow:hidden;box-shadow:0 24px 65px #0905084d}
+.au20-art-column{min-width:0;align-self:center}.au20-player-art{width:100%;aspect-ratio:1;display:block;border-radius:7px;overflow:hidden;box-shadow:0 24px 65px #0807064d}
 .au20-player-art>:is(canvas,img,video,.au-motion-cover){width:100%!important;height:100%!important;object-fit:cover;aspect-ratio:1}
-.au20-art-column #lyricsTitle{font-size:25px;font-weight:700;line-height:1.3;letter-spacing:-.04em;margin:24px 0 6px;color:#fff5fa!important}
-.au20-track-artist{font-size:14px;color:#fff5fa88!important;margin:0}.au20-text-column{min-width:0;align-self:center}
-.au20-lyric-options{padding-top:15px;margin-top:15px;border-top:1px solid #ffffff15;color:#fff5fa88;font-size:12px}
+.au20-art-column #lyricsTitle{font-size:25px;font-weight:700;line-height:1.3;letter-spacing:-.04em;margin:24px 0 6px;color:#fefbf7!important}
+.au20-track-artist{font-size:14px;color:#fefbf788!important;margin:0}.au20-text-column{min-width:0;align-self:center}
+.au20-lyric-options{padding-top:15px;margin-top:15px;border-top:1px solid #ffffff15;color:#fefbf788;font-size:12px}
 .au20-lyric-options>summary{font-weight:550;min-height:32px;padding:8px 0}
 .au20-lyric-options[open]{display:flex;flex-wrap:wrap;gap:10px;align-items:start}.au20-lyric-options>summary{width:100%}
 .au20-lyric-options>.au-lyrics-toolbar,.au20-lyric-options>.sync-toolbar{flex-basis:100%}
@@ -82,17 +82,17 @@ html .lyrics-card.au20-listening{position:relative;isolation:isolate;display:gri
 .au20-listening .sync-player>.au-cover-atmosphere{display:none}
 .au20-listening .sync-player>.au-note{display:none}
 .au20-listening .sync-player-lines{height:480px;max-height:none;min-height:240px}
-.au20-listening .lyrics-selection-help{font-size:11px;color:#fff5fa66;margin:0 0 15px;line-height:1.5}
+.au20-listening .lyrics-selection-help{font-size:11px;color:#fefbf766;margin:0 0 15px;line-height:1.5}
 .au20-listening .sync-toolbar{gap:8px!important}.au20-listening .sync-toolbar button{font-size:11px;min-height:34px;padding:7px 10px}
-.au20-listening .au-note,.au20-listening .lyrics-note{color:#fff5fa88!important;font-size:12px}
-.au20-listening .button.secondary{background:#ffffff12!important;color:#fff5fa!important;border:0!important}
+.au20-listening .au-note,.au20-listening .lyrics-note{color:#fefbf788!important;font-size:12px}
+.au20-listening .button.secondary{background:#ffffff12!important;color:#fefbf7!important;border:0!important}
 html #communityPanel{margin-top:28px}
 html .au-lyrics-viewport{scrollbar-width:thin;scrollbar-color:#ffffff25 transparent;scroll-padding-block:24px;mask-image:linear-gradient(transparent,#000 9%,#000 86%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 9%,#000 86%,transparent)}
 html .au-lyrics-content{padding:calc(25px + 7vh) 0 32vh}
-html .au-lyrics-viewport .au-lyric-line{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:clamp(27px,3.35vw,44px);font-weight:750;letter-spacing:-.045em;line-height:1.24;text-align:left;padding:20px 4px;white-space:pre-wrap;text-shadow:none;transition:opacity .6s ease,filter .6s ease,transform .7s cubic-bezier(.2,.8,.2,1);transform:scale(.985);transform-origin:left center;--karaoke-ink:#fff7fa;--karaoke-dim:#fff7fa50}
-html .au-lyrics-viewport .au-lyric-line.is-current{filter:none;opacity:1;transform:scale(1);text-shadow:none;--karaoke-ink:#fff7fa}
+html .au-lyrics-viewport .au-lyric-line{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:clamp(27px,3.35vw,44px);font-weight:750;letter-spacing:-.045em;line-height:1.24;text-align:left;padding:20px 4px;white-space:pre-wrap;text-shadow:none;transition:opacity .6s ease,filter .6s ease,transform .7s cubic-bezier(.2,.8,.2,1);transform:scale(.985);transform-origin:left center;--karaoke-ink:#fefcf8;--karaoke-dim:#fefcf850}
+html .au-lyrics-viewport .au-lyric-line.is-current{filter:none;opacity:1;transform:scale(1);text-shadow:none;--karaoke-ink:#fefcf8}
 html .au-adjustable-lyrics .au-lyric-line:not(.is-current):not(.is-exiting){opacity:var(--lyrics-background,0);filter:blur(calc((1 - var(--lyrics-background,0)) * 1.8px));text-shadow:none}
-html .au-adjustable-lyrics[data-lyrics-context=true] .au-lyric-line.is-current{--karaoke-dim:#fff7fa4a}
+html .au-adjustable-lyrics[data-lyrics-context=true] .au-lyric-line.is-current{--karaoke-dim:#fefcf84a}
 html .au-lyric-line[data-reveal-mode=letters] .karaoke-char{clip-path:none!important;background-image:linear-gradient(90deg,var(--karaoke-ink) calc(var(--fill,0%) - 14%),var(--karaoke-dim) calc(var(--fill,0%) + 14%));background-clip:text;-webkit-background-clip:text;color:transparent;display:inline-block;vertical-align:baseline}
 html .au-current-lyrics-only .au-lyric-line[data-reveal-mode=letters] .karaoke-char{--karaoke-dim:transparent}
 html .au-lyric-line[data-reveal-mode=classic] :is(.karaoke-main,.karaoke-backs){mask-image:none!important;-webkit-mask-image:none!important}
@@ -101,7 +101,7 @@ html .au-lyric-line:not(.is-current):not(.is-exiting) .karaoke-char{background:n
 html .au-lyric-line .karaoke-backs{font-size:.52em;font-weight:550;line-height:1.5;letter-spacing:-.01em;margin-top:.5em;opacity:.8}
 html .au-lyrics-toolbar{gap:8px;padding-bottom:12px}html .au-lyrics-controls{position:static;background:#ffffff0b;border-radius:10px;font-family:inherit;font-size:12px;padding:8px 10px;color:inherit}
 html .au-lyrics-ending{padding:16px;border-radius:12px;background:#ffffff0c}
-html #auImmersionApp.au-new-immersion{background:var(--au-immersion-solid,#101c31)!important;background-image:none!important;isolation:isolate}
+html #auImmersionApp.au-new-immersion{background:var(--au-immersion-solid,#2a2017)!important;background-image:none!important;isolation:isolate}
 html #auImmersionApp .au-im-body{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.2fr);gap:clamp(30px,6vw,90px);padding:28px 6%;position:relative}
 html #auImmersionApp .au-im-art{position:relative;inset:auto;z-index:1;filter:none;opacity:1;align-self:center;overflow:visible}
 html #auImmersionApp .au-im-picture{aspect-ratio:1;width:100%!important;height:auto!important;max-height:65dvh}
@@ -164,10 +164,10 @@ html[data-motion=off] .page{animation:none}html[data-motion=off] .au-lyric-line{
 html .au-lyrics-viewport .au-lyric-line{transition-property:filter,transform}
 .au20-audio-timebar{display:flex;justify-content:space-between;gap:16px;align-items:center;font-size:14px;font-weight:650;font-variant-numeric:tabular-nums;margin:12px 0;color:var(--ink)}
 .au20-audio-zoom{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0 20px}
-html .au20-wave .au20-cut-handle{width:42px;min-width:42px;min-height:44px;border:0;border-radius:7px;background:#f1e9f3;color:#261e2a;font-size:24px;box-shadow:0 0 0 1px #1d142855;touch-action:none}
+html .au20-wave .au20-cut-handle{width:42px;min-width:42px;min-height:44px;border:0;border-radius:7px;background:#f2efeb;color:#272421;font-size:24px;box-shadow:0 0 0 1px #241e1855;touch-action:none}
 .au20-audio-precise{margin:16px 0;border-top:1px solid var(--ui-border);padding-top:12px}.au20-audio-precise>summary{padding:10px 0;font-size:13px;color:var(--muted)}
-.au20-fade-fields output{color:#dab3ea;font-variant-numeric:tabular-nums;font-weight:650}
-.au20-fade-fields input[type=range]{accent-color:#b58bcc;min-height:44px}
+.au20-fade-fields output{color:#ead1b3;font-variant-numeric:tabular-nums;font-weight:650}
+.au20-fade-fields input[type=range]{accent-color:#ccaf8b;min-height:44px}
 @media(max-width:680px){
  html .player-dock{padding-bottom:env(safe-area-inset-bottom,0px)}
  html .dock-status{justify-content:center;column-gap:12px;padding-left:max(24px,calc(env(safe-area-inset-left,0px) + 16px));padding-right:max(24px,calc(env(safe-area-inset-right,0px) + 16px));padding-bottom:12px}

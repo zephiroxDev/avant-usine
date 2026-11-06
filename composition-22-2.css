@@ -1,6 +1,6 @@
 /* Same geometry, typography and palette as the approved full-site preview. */
-html[data-composition="22.2"]{--paper:#121116;--ink:#f5f1f8;--muted:#a9a1b2;--accent:#d2b5ef;--surface:#1c1922;--surface-raised:#211c29;--line:#ffffff12;--au222-radius:10px;color-scheme:dark}
-html[data-composition] body{background:#121116!important;color:#f5f1f8;font:14px/1.5 Inter,ui-sans-serif,system-ui,sans-serif}
+html[data-composition="22.2"]{--paper:#151312;--ink:#f7f5f2;--muted:#a9a1b2;--accent:#efd5b5;--surface:#201d1b;--surface-raised:#26221f;--line:#ffffff12;--au222-radius:10px;color-scheme:dark}
+html[data-composition] body{background:#151312!important;color:#f7f5f2;font:14px/1.5 Inter,ui-sans-serif,system-ui,sans-serif}
 html[data-composition] .shell{padding:0!important;display:block;height:100dvh;overflow:hidden}
 html[data-composition] .page-scroll{height:100%;padding:0!important;overflow:auto;scroll-padding-bottom:110px}
 html[data-composition] #main{max-width:1100px;margin:0 auto;padding:0 0 100px!important;min-height:100%}
@@ -17,14 +17,14 @@ html[data-composition] .au222-nav-button[aria-current=page]{background:#ffffff0b
 html[data-composition] .au222-search{font-size:12px;color:var(--muted);margin-left:auto}
 html[data-composition] .au222-subnav{display:flex;gap:4px;flex-wrap:wrap;padding:13px 28px 0}
 html[data-composition] .au222-subnav-button{font-size:12px;color:var(--muted);padding:8px 12px;min-height:35px}
-html[data-composition] .au222-subnav-button[aria-current=page]{color:var(--accent);background:#ceb0e410}
+html[data-composition] .au222-subnav-button[aria-current=page]{color:var(--accent);background:#e4cdb010}
 html[data-composition] .page.au222-real-page{padding:28px 36px 35px!important;margin:0;max-width:none;min-width:0;animation:none}
 html[data-composition] .au222-hero{display:grid;grid-template-columns:1.15fr .85fr;gap:38px;align-items:center;padding:15px 0 30px}
 html[data-composition] .au222-hero h1{font-size:clamp(30px,4.7vw,48px);font-weight:750;letter-spacing:-1.2px;line-height:1.16;max-width:560px;margin:4px 0 8px}
 html[data-composition] .au222-kicker{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
-html[data-composition] .au222-description{color:#bcb3c7;max-width:370px;margin:0 0 14px;font-size:14px;line-height:1.5}
+html[data-composition] .au222-description{color:#c7beb3;max-width:370px;margin:0 0 14px;font-size:14px;line-height:1.5}
 html[data-composition] .au222-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-html[data-composition] .au222-primary{background:var(--accent);color:#201329;font-weight:650}
+html[data-composition] .au222-primary{background:var(--accent);color:#241e18;font-weight:650}
 html[data-composition] .au222-secondary{background:#ffffff0a}
 html[data-composition] .au222-text{font-size:12px;color:var(--muted)}
 html[data-composition] .au222-hero-art{display:flex;align-items:center;justify-content:center;padding:20px 10px}
@@ -51,21 +51,21 @@ html[data-composition] .page-heading h1{font-size:32px;max-width:none;margin:4px
 html[data-composition] .page-heading .eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
 html[data-composition] .au-kofi-banner{display:none!important}
 html[data-composition] :is(.button,.xp-button,.xp-primary,.xp-pill,.chip){font-size:13px;min-height:40px;padding:10px 13px;border-radius:10px;font-weight:500;border:0;box-shadow:none}
-html[data-composition] :is(.button,.xp-primary):not(.secondary){background:var(--accent);color:#201329}
+html[data-composition] :is(.button,.xp-primary):not(.secondary){background:var(--accent);color:#241e18}
 html[data-composition] :is(.button.secondary,.xp-button,.xp-pill,.chip){background:#ffffff0a;color:var(--ink)}
 html[data-composition] .actions{display:flex;gap:12px;flex-wrap:wrap}
 html[data-composition] .au222-account-row{padding:20px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}
 html[data-composition] .au222-account-row>div{min-width:0;flex:1}
 html[data-composition] .au222-account-row p{margin:0}
-html[data-composition] .au222-private-tools{padding:22px;background:#1c1823;border-left:3px solid #9f78ba;margin-top:25px}
+html[data-composition] .au222-private-tools{padding:22px;background:#211d1a;border-left:3px solid #ba9c78;margin-top:25px}
 html[data-composition] #reglages>[data-au-general-settings]{padding:0;display:grid;gap:24px;background:none;border:0}
 html[data-composition] .au221-settings-group{border:0;background:none;padding:0;margin:0}
 html[data-composition] .au221-settings-controls{display:flex;gap:14px;flex-wrap:wrap}
 html[data-composition] #reglages .footer{padding:0;background:none;border:0;display:flex;gap:14px;flex-wrap:wrap}
-html[data-composition] .au222-footer{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding:12px 24px;background:#161319;font-size:11px;color:var(--muted)}
+html[data-composition] .au222-footer{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding:12px 24px;background:#181614;font-size:11px;color:var(--muted)}
 html[data-composition] .au222-footer .au222-text{padding:4px 7px;font-size:11px;min-height:28px}
 html[data-composition] .au222-visit-count{margin-left:auto;padding:4px;font-size:11px}
-html[data-composition] .xp-mini{left:50%!important;right:auto!important;bottom:0!important;transform:translateX(-50%);width:min(1100px,100%);border-radius:0!important;background:#201b27!important;border:0!important;border-top:1px solid var(--line)!important;box-shadow:none!important;padding:15px 24px!important;min-height:82px;display:flex!important;gap:14px;z-index:40}
+html[data-composition] .xp-mini{left:50%!important;right:auto!important;bottom:0!important;transform:translateX(-50%);width:min(1100px,100%);border-radius:0!important;background:#24211e!important;border:0!important;border-top:1px solid var(--line)!important;box-shadow:none!important;padding:15px 24px!important;min-height:82px;display:flex!important;gap:14px;z-index:40}
 html[data-composition] .xp-mini[hidden]{display:none!important}
 html[data-composition] .xp-mini-info{flex:1;min-width:0;padding:0!important;gap:12px}
 html[data-composition] .xp-mini-cover{width:50px;height:50px;border-radius:6px}
@@ -77,10 +77,10 @@ html[data-composition] .au222-mini-controls .xp-mini-lyrics{font-size:13px}
 html[data-composition] .au222-mini-volume{display:grid;gap:3px;font-size:11px;color:var(--accent)}
 html[data-composition] .au222-mini-volume input{width:85px;accent-color:var(--accent)}
 html[data-composition] .xp-mini-progress{display:none}
-html[data-composition] :is(input:not([type=range]):not([type=checkbox]):not([type=radio]),textarea,select){background:#211c29;color:var(--ink);border:1px solid #ffffff16;border-radius:10px;padding:12px;font:inherit;max-width:100%;min-width:0}
+html[data-composition] :is(input:not([type=range]):not([type=checkbox]):not([type=radio]),textarea,select){background:#26221f;color:var(--ink);border:1px solid #ffffff16;border-radius:10px;padding:12px;font:inherit;max-width:100%;min-width:0}
 html[data-composition] input[type=range]{accent-color:var(--accent)}
-html[data-composition] .au222-real-dialog{background:#17131d;color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:0 28px 80px #0006;padding:26px;max-width:min(760px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto}
-html[data-composition] .au222-real-dialog::backdrop{background:#08060cb0;backdrop-filter:blur(10px)}
+html[data-composition] .au222-real-dialog{background:#1b1815;color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:0 28px 80px #0006;padding:26px;max-width:min(760px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto}
+html[data-composition] .au222-real-dialog::backdrop{background:#0b0907b0;backdrop-filter:blur(10px)}
 html[data-composition] .xp-full-player{max-width:min(1030px,calc(100vw - 32px))!important;padding:26px!important}
 html[data-composition] .xp-full-player .xp-player-normal{display:grid!important;grid-template-columns:180px minmax(0,1fr);gap:28px;align-items:center;padding:20px 0!important}
 html[data-composition] .xp-full-player .xp-player-art{width:180px!important;max-width:100%;margin:0!important;grid-row:1 / 4;aspect-ratio:1;border-radius:9px}
@@ -90,7 +90,7 @@ html[data-composition] .xp-full-player .rn-playing-label{display:none}
 html[data-composition] .xp-full-player .player-dock{grid-column:2;width:100%!important;min-width:0;padding:0!important;background:none!important;border:0!important}
 html[data-composition] .xp-full-player .dock-inner{padding:0;display:block}
 html[data-composition] .xp-full-player .dock-center{width:100%}
-html[data-composition] .xp-full-player.xp-show-lyrics{background:radial-gradient(ellipse at 80% 20%,#61336635,transparent 65%),#121116!important}
+html[data-composition] .xp-full-player.xp-show-lyrics{background:radial-gradient(ellipse at 80% 20%,#664f3335,transparent 65%),#151312!important}
 html[data-composition] .xp-full-player.xp-show-lyrics .au20-art-column{display:none!important}
 html[data-composition] .xp-full-player.xp-show-lyrics .au20-layout{display:block!important;max-width:760px;margin:auto}
 html[data-composition] .xp-full-player .au-lyrics-viewport{height:58dvh;min-height:220px}
@@ -100,10 +100,10 @@ html[data-composition] .xp-full-player .au-backing-line{font-size:20px!important
 html[data-composition] .xp-community-row{display:flex;align-items:center;gap:14px;padding:18px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;box-shadow:none;color:var(--ink)}
 html[data-composition] .xp-community-row strong{font-size:15px}
 html[data-composition] .xp-community-row small{font-size:12px;color:var(--muted)}
-html[data-composition] :is(.major-card,.download-card){background:#211b2a;border:0;border-radius:15px;padding:23px;box-shadow:none}
+html[data-composition] :is(.major-card,.download-card){background:#27221e;border:0;border-radius:15px;padding:23px;box-shadow:none}
 html[data-composition] .tracklist li{border-bottom:1px solid var(--line);background:none;border-radius:0;box-shadow:none;padding:8px 0}
 html[data-composition] .track-title{font-size:14px}
-html[data-composition] .au-blind-answer{background:#201b27!important;border:0!important;border-radius:10px!important;padding:13px!important;box-shadow:none!important}
+html[data-composition] .au-blind-answer{background:#24211e!important;border:0!important;border-radius:10px!important;padding:13px!important;box-shadow:none!important}
 html[data-composition] .au-blind-answer strong{font-size:14px}
 html[data-composition] .au-blind-answers{gap:20px}
 html[data-composition] :is(button,a,summary).au222-veil{position:relative;isolation:isolate}
@@ -143,7 +143,7 @@ html[data-composition] .au222-private-category{display:flex;gap:12px;flex-wrap:w
 html[data-composition] .au222-private-tools>.au222-actions{display:block}
 
 html[data-composition] dialog.au222-page-surface{box-sizing:border-box;width:min(1100px,100vw)!important;max-width:100vw!important;height:100dvh;max-height:100dvh!important;inset:0;margin:0 auto;padding:36px!important;border:0;border-radius:0;box-shadow:none;background:var(--paper);overflow:auto;scroll-padding-top:24px}
-html[data-composition] .au222-page-surface::backdrop{background:#121116;backdrop-filter:none}
+html[data-composition] .au222-page-surface::backdrop{background:#151312;backdrop-filter:none}
 html[data-composition] .au222-page-chrome{margin:-36px -36px 28px;position:relative}
 html[data-composition] .au222-page-surface :is(.major-dialog-head,.xp-dialog-head){border:0;padding:0;margin:0 0 24px;gap:16px}
 html[data-composition] .au222-page-surface :is(.major-dialog-head,.xp-dialog-head)>h2{font-size:32px;line-height:1.16;letter-spacing:-1.2px}
@@ -167,7 +167,7 @@ html[data-composition] .au-studio-19 .studio19-navigation{display:flex;gap:12px;
 
 html[data-composition] .au222-local-library{display:grid;gap:18px;min-width:0}
 html[data-composition] .au222-local-library .local-tabs{display:flex;flex-wrap:wrap;gap:10px}
-html[data-composition] .au222-local-library .local-drop{background:var(--surface-raised);border:1px dashed #bda2d34d;border-radius:15px;padding:23px}
+html[data-composition] .au222-local-library .local-drop{background:var(--surface-raised);border:1px dashed #d3bda24d;border-radius:15px;padding:23px}
 
 html[data-composition] .au222-all-volumes{margin-top:28px;padding-top:18px;border-top:1px solid var(--line)}
 html[data-composition] .au222-all-volumes>summary{font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:18px}
