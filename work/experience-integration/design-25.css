@@ -277,6 +277,60 @@ html[data-composition][data-design="25"] .studio25-zen-dock button{min-height:46
  html[data-composition][data-design="25"] dialog:has(.au-studio-19){padding-bottom:40px!important}
 }
 
+/* ---------- Finitions 25.1 : de l'air partout, une seule forme de fermeture */
+html[data-composition][data-design="25"] :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.annotation-dialog-head,.au-art-header,.au-im-head,.au-dismiss-head){
+ background:transparent!important;box-shadow:none!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;
+ margin:0 0 18px!important;padding:4px 0 16px!important;display:flex!important;align-items:flex-start!important;justify-content:space-between;gap:16px!important;
+}
+html[data-composition][data-design="25"] :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.annotation-dialog-head,.au-art-header,.au-im-head) h2{margin:0!important;min-width:0;flex:1}
+html[data-composition][data-design="25"] :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.annotation-dialog-head,.au-art-header,.au-im-head,.au-dismiss-head) > button:last-child,
+html[data-composition][data-design="25"] :is(.xp-close,.au-art-close,.annotation-close,.au-announcement-close){
+ flex:none;min-width:44px!important;height:44px!important;min-height:44px!important;padding:0 14px!important;margin:0!important;border-radius:var(--au25-r-sm)!important;
+ background:transparent!important;border:1px solid var(--line-strong)!important;color:var(--ink)!important;box-shadow:none!important;outline-offset:2px!important;
+ font-family:var(--au25-text)!important;font-size:14px!important;font-weight:600!important;text-transform:none!important;letter-spacing:0!important;
+}
+html[data-composition][data-design="25"] :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.annotation-dialog-head,.au-art-header,.au-im-head,.au-dismiss-head) > button:last-child:hover{border-color:var(--accent)!important;color:var(--accent)!important}
+html[data-composition][data-design="25"] dialog :is(.major-dialog-head,.au-dialog-head,.xp-dialog-head,.au-art-header,.au231-dialog-head,.au-im-head) > button:focus:not(:focus-visible){outline:none!important}
+html[data-composition][data-design="25"] dialog:not(.au222-page-surface):not(.xp-full-player):not(#auImmersionApp){padding:clamp(18px,4vw,30px)!important}
+@media (max-width:700px){html[data-composition][data-design="25"] dialog:not(.au222-page-surface):not(.xp-full-player):not(#auImmersionApp):not(:has(.au-studio-19)){width:calc(100% - 24px)!important;max-width:calc(100% - 24px)!important;margin-inline:auto!important}}
+html[data-composition][data-design="25"] dialog button:not([class]){
+ min-height:44px;padding:0 18px;border-radius:var(--au25-r-sm);border:1px solid var(--line-strong);background:transparent;color:var(--ink);font:600 14px var(--au25-text);cursor:pointer;margin:6px 0;
+}
+html[data-composition][data-design="25"] dialog button:not([class]):hover{border-color:var(--accent);color:var(--accent)}
+html[data-composition][data-design="25"] :is(.au-actions,.major-actions,.au-dialog-actions,.button-row,.au222-actions,.local-actions){display:flex;flex-wrap:wrap;gap:12px!important}
+html[data-composition][data-design="25"] :is(.button,.au222-primary,.au222-secondary){min-height:46px;padding-inline:20px}
+html[data-composition][data-design="25"] .au222-text{min-height:44px;padding-inline:12px!important}
+html[data-composition][data-design="25"] .au222-footer{padding-block:28px!important}
+html[data-composition][data-design="25"] .au222-footer :is(button,a){min-height:44px;display:inline-flex;align-items:center}
+html[data-composition][data-design="25"] .au222-footer :is(nav,div){gap:6px 14px!important}
+html[data-composition][data-design="25"] .xp-mini :is(.au222-mini-previous,.xp-mini-play,.xp-mini-next){min-width:44px!important;width:44px!important;height:44px!important;display:inline-flex;align-items:center;justify-content:center}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls{gap:12px!important;padding:14px 4px 6px!important;border-top-color:var(--line-strong)!important;justify-content:center}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls button{min-width:48px!important;min-height:48px!important;padding:0 16px!important;font-size:14px!important;border-radius:var(--au25-r-sm)!important}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls input[type=range]{min-width:100%!important;margin:6px 0}
+html[data-composition][data-design="25"] #communityRefresh{min-width:44px!important;min-height:44px!important;display:inline-flex;align-items:center;justify-content:center}
+html[data-composition][data-design="25"] .lyrics-button{white-space:nowrap!important;min-width:max-content!important;min-height:44px;padding-inline:14px!important}
+html[data-composition][data-design="25"] .xp-dialog .lyrics-button{writing-mode:horizontal-tb!important}
+
+html[data-composition][data-design="25"] .listen-top{display:flex!important;flex-wrap:wrap;align-items:flex-end!important;justify-content:space-between;gap:14px 20px!important;padding-bottom:20px!important}
+html[data-composition][data-design="25"] .listen-top .text-button{order:0;min-height:44px;padding:0 14px 0 0!important;font-family:var(--au25-mono)!important;text-transform:uppercase;letter-spacing:.1em;font-size:12px!important}
+html[data-composition][data-design="25"] .listen-top .select-label{display:grid!important;gap:8px;text-align:left!important;font-family:var(--au25-mono);text-transform:uppercase;letter-spacing:.12em;font-size:11px!important;color:var(--muted)!important;min-width:min(280px,100%)}
+html[data-composition][data-design="25"] .listen-top select{min-height:46px;font:600 16px var(--au25-text)!important;text-transform:none;letter-spacing:0}
+@media (max-width:700px){html[data-composition][data-design="25"] .listen-top .select-label{flex:1 1 100%}}
+
+html[data-composition][data-design="25"] :is(.major-dialog-head,.au-dialog-head,.xp-dialog-head,.au-art-header) > button.au-icon,html[data-composition][data-design="25"] :is(.xp-close,.au-art-close){font-size:20px!important;line-height:1!important}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-head{padding:calc(16px + env(safe-area-inset-top)) 16px 14px!important}
+
+html[data-composition][data-design="25"] main:has(> .au222-footer){display:flex!important;flex-direction:column}
+html[data-composition][data-design="25"] main > .au222-footer{order:99}
+html[data-composition][data-design="25"] main > :is(.au222-header,.au222-subnav){order:-1}
+html[data-composition][data-design="25"] dialog:not(.au222-page-surface) :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.au-art-header){background:var(--surface-raised)!important}
+html[data-composition][data-design="25"] dialog:is(.au222-page-surface,:has(.au-studio-19)) :is(.major-dialog-head,.au-dialog-head){background:var(--paper)!important}
+html[data-composition][data-design="25"] dialog:has(.au-studio-19) .major-dialog-head{position:sticky;top:0;z-index:6;padding-top:10px!important}
+html[data-composition][data-design="25"] .au24-writer-player{gap:12px!important}
+html[data-composition][data-design="25"] .au24-writer-player :is(.au24-wp-jump,.au24-wp-speed,.au24-wp-play){min-height:44px!important;min-width:56px!important;padding:0 12px!important}
+html[data-composition][data-design="25"] .au24-writer-player .au24-wp-jumps,html[data-composition][data-design="25"] .au24-writer-player > div:has(> .au24-wp-jump){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important}
+html[data-composition][data-design="25"] .au24-rules :is(.au24-rules-close,header > button){font-size:20px!important;min-width:44px!important;min-height:44px!important}
+
 /* ---------- Pied de page ------------------------------------------------- */
 html[data-composition][data-design="25"] .au222-footer{border-top:1px solid var(--line)}
 html[data-composition][data-design="25"] .au222-footer :is(button,a){font-family:var(--au25-mono)!important;text-transform:uppercase;letter-spacing:.1em;font-size:11px!important}
