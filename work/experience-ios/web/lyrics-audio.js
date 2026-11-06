@@ -47,7 +47,11 @@ async function foreground(resumeAfterError=false,allowResume=true){
   if(result.owned&&s&&result.key===s.key&&(raw?.key===s.key||s.local&&document.getElementById('audio')?.paused)){window.dispatchEvent(new CustomEvent('au:native-listening',{detail:{key:s.key,duration:s.audio.duration,segments:result.segments||[]}}));s.audio.currentTime=result.position;phase='';owner=null;if(allowResume&&(result.playing||resumeAfterError))await s.audio.play();else s.audio.dispatchEvent(new Event('pause'));}
  }finally{phase='';owner=null;window.dispatchEvent(new Event('au:island-relay-restored'));}
 }
-window.AU_ISLAND_AUDIO_19={prepare:s=>queue(()=>prepare(s)),get active(){return !!phase;},get phase(){return phase;}};
+window.AU_ISLAND_AUDIO_19={prepare:s=>queue(()=>prepare(s)),restore:()=>queue(()=>foreground()),get active(){return !!phase;},get phase(){return phase;}};
+// A touch on the page proves the app is active and visible: a missed
+// "active" notification must never leave the WebView clock frozen.
+const awake=()=>{if(document.hidden)return;if(inactive||phase==='native'){inactive=false;queue(()=>foreground());}};
+document.addEventListener('touchstart',awake,{capture:true,passive:true});document.addEventListener('pointerdown',awake,{capture:true,passive:true});
 document.addEventListener('play',()=>{const s=window.AU_PLAYBACK_SOURCE_19?.();if(s?.audio&&!document.hidden)queue(()=>prepare(s));},true);
 document.addEventListener('visibilitychange',()=>queue(()=>document.hidden||inactive?background():foreground()));
 native.addListener('applicationState',event=>{inactive=!event.active;queue(()=>event.active?foreground():background());});

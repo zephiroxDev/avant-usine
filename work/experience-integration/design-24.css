@@ -152,7 +152,7 @@ html[data-composition][data-design="24"] .au222-footer{border-top:1px solid var(
 /* ---------- Mobile ------------------------------------------------------- */
 @media (max-width:700px){
  html[data-composition][data-design="24"] .au222-page-heading h1{font-size:clamp(30px,9vw,42px)}
- html[data-composition][data-design="24"] .xp-mini{left:10px!important;right:10px!important;border-radius:18px!important}
+ html[data-composition][data-design="24"] .xp-mini{left:10px!important;right:10px!important;width:auto!important;max-width:none!important;transform:none!important;border-radius:18px!important}
  html[data-composition][data-design="24"] :is(.au222-primary,.au222-secondary,dialog .button){min-height:46px}
  html[data-composition][data-design="24"] body::before{inset:-40vmax}
 }

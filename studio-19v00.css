@@ -53,3 +53,5 @@
 .au24-rules-hide input{width:18px;height:18px;accent-color:#a64bea}
 .au24-rules-foot .button{min-height:44px;padding-inline:20px}
 .au24-rules .au24-rules-close{flex:none;width:44px;height:44px;min-width:44px;padding:0!important;font-size:22px;line-height:1;display:grid;place-items:center}
+
+.studio19-slider-hint{margin:10px 4px 0;padding:10px 14px;border-radius:12px;background:#2a1240;color:#f3e3ff;font-weight:650;text-align:center}
