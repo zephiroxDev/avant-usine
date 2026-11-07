@@ -6,7 +6,7 @@
  const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch{return [];}};
  const save=list=>{try{localStorage.setItem(KEY,JSON.stringify(list));}catch{}};
  const css=`
- .au-fb-root{all:initial;font-family:'AU Text',-apple-system,system-ui,sans-serif}
+ .au-fb-root{all:initial;display:contents;font-family:'AU Text',-apple-system,system-ui,sans-serif}
  .au-fb-fab{position:fixed;z-index:2147483600;right:14px;bottom:calc(150px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;align-items:flex-end}
  .au-fb-btn{appearance:none;border:0;border-radius:8px;min-height:46px;padding:0 16px;font:700 15px/1 'AU Text',system-ui,sans-serif;cursor:pointer;box-shadow:0 10px 30px -10px #000}
  .au-fb-main{background:#ff5a36;color:#fff}
@@ -66,5 +66,11 @@
   load().forEach((r,i)=>{const it=document.createElement('div');it.className='au-fb-item';it.textContent=r.n+'. '+r.note;const sm=document.createElement('small');sm.textContent=r.page+(r.el?' · « '+r.el.slice(0,60)+' »':'');it.append(sm);const del=document.createElement('button');del.type='button';del.textContent='Supprimer';del.onclick=()=>{const l=load();l.splice(i,1);l.forEach((q,k)=>q.n=k+1);save(l);refresh();showList();};it.append(del);s.append(it);});
   root.append(s);};
  main.onclick=startPick;list.onclick=showList;
+ // Les fenêtres ouvertes en modal passent au-dessus de tout et rendent le reste
+ // inerte : l'outil suit donc toujours la fenêtre la plus haute.
+ const host=()=>[...document.querySelectorAll('dialog[open]')].filter(d=>d.matches(':modal')||d.getClientRects().length).at(-1)||document.body;
+ const follow=()=>{const h=host();if(root.parentElement!==h)h.append(root);};
+ new MutationObserver(follow).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open'],childList:true});
+ setInterval(follow,800);follow();
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&picking)stopPick();},true);
 })();
