@@ -75,3 +75,12 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - Correctifs : mini-lecteur mobile (transform hérité), barre Atelier iOS (relais audio natif : réveil au toucher dans lyrics-audio.js + horloge réelle dans sync-slider), « Synchroniser maintenant » (retour dans #accountStatus), icône Windows (setAppDetails, raccourcis épinglés, ie4uinit).
 - Compilation run 42271382127 (release/v25-0, 4f80b70) ; publication run 42272022016 → `v0.10.0` et `ios-v2.4.0` (non signée, non vérifiée sur appareil physique). Affiche 25.0 dans Gestion promo.
 - Préférence utilisateur : à la fin de chaque livraison, afficher un panneau récapitulatif qui coche tout ce qui a été fait.
+
+## Livraison 25.1 (8 novembre 2026) — finitions issues de la version de test
+- Site 25.1 en ligne (84c234d). Corrige les remarques 2 à 42 envoyées depuis /test/ (table `au_test_feedback_25`, toutes marquées traitées). Vérifié site PC (1068×595), appli iPhone, site mobile, appli PC.
+- Lecteur : plus de bouton « Plus » ni de menu « ⋯ » ; Favori et Signaler une erreur dans « Autour du morceau » ; fermeture « ✕ ». En mode paroles, `#paroles` passe en grille (desktop) pour donner la hauteur aux paroles ; sur téléphone le lecteur plein écran ne réserve plus la place de la barre d'onglets.
+- design-25.css : plus de bandes jaunes `::before` sur les cadres, plus de reflet `.au222-veil`, `select` sans flèche, `textarea` sans poignée ; textes des outils réservés sans fond (règle staff de styles-17v00.css neutralisée).
+- design-25.js : classe `au25-glyph` pour les boutons d'une seule icône (seuls ceux-là sont agrandis), « Actualiser » de Communauté en ↻, bouton manette stylé.
+- Éditeur du site (site-editor.js) : barre principale `.au25-ed-brand`/`.au25-ed-actions`, ligne `.au25-ed-draft`, ligne `.au25-ed-view`, options rares dans `details.au25-ed-more`, inspecteur replié (`au25Group`).
+- Compilation run 42425910916 (release/v25-1, 84c234d), publication via .github/v25-1-release.json.
+- Workflows : un nouveau branchement poussé ne déclenche pas la validation (filtre de chemins) → lancer `gh workflow run v25-1-validation.yml --ref release/v25-1`.
