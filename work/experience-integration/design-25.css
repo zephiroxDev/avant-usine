@@ -443,3 +443,22 @@ html[data-composition][data-design="25"] .xp-track-options-body{gap:10px!importa
 html[data-composition][data-design="25"] .xp-track-options-body .au-track-actions{gap:10px!important}
 html[data-composition][data-design="25"] .xp-track-options:not([open]){background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;min-width:0!important;min-height:0!important;width:auto!important;height:auto!important}
 html[data-composition][data-design="25"] #tracklist .au-track-row{padding-block:4px}
+
+/* ---------- 25.1 · audit d'espacement de l'appli iPhone ----------------- */
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls{padding:16px 18px calc(16px + env(safe-area-inset-bottom))!important;border-radius:var(--au25-r)!important;background:var(--surface-raised)!important;margin:0 10px 10px!important}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls label{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;width:100%}
+html[data-composition][data-design="25"] dialog :is(select,input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea){box-sizing:border-box;max-width:100%}
+html[data-composition][data-design="25"] .au-gamepad-settings select,html[data-composition][data-design="25"] .au22-settings > select{width:100%!important}
+html[data-composition][data-design="25"] dialog > select,html[data-composition][data-design="25"] .au-gamepad-settings select{margin-left:0!important;margin-right:0!important}
+html[data-composition][data-design="25"] main > .au222-footer{margin-top:40px!important}
+html[data-composition][data-design="25"] dialog select{margin-inline:0!important}
+html[data-composition][data-design="25"] dialog .au-spaced-controls:has(> select){gap:12px!important}
+html[data-composition][data-design="25"] .au222-brand.au222-brand.au222-brand:is(:focus,:focus-visible){outline:none!important;box-shadow:none!important}
+html[data-composition][data-design="25"] dialog.au222-page-surface > .au222-page-chrome{background:var(--paper)!important;box-shadow:none!important;border:0!important;border-bottom:1px solid var(--line)!important;margin-bottom:18px!important}
+html[data-composition][data-design="25"] dialog.au222-page-surface > .au222-page-chrome .au222-brand{background:transparent!important;box-shadow:none!important;border:0!important}
+html[data-composition][data-design="25"] .au24-code-form{display:grid;gap:12px;margin-bottom:16px}
+html[data-composition][data-design="25"] .au25-notes-bar{margin-top:6px}
+@media (max-width:700px){
+ html[data-composition][data-design="25"] .au24-top > input{flex:1 1 100%!important;width:100%!important;min-width:0}
+ html[data-composition][data-design="25"] .au24-top > :is(button,select){flex:1 1 auto}
+}
