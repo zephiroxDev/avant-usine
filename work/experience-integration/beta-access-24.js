@@ -27,10 +27,16 @@ function openCreator(){
   const help=E('p','Toute personne qui possède ce code peut télécharger les versions de test. Changer le code désactive immédiatement l’ancien. Pour ta sécurité, le code n’est jamais réaffiché.','au-note');
   form.onsubmit=async e=>{e.preventDefault();const code=input.value.trim();if(!/^[0-9]{6}$/.test(code)){state.textContent='Le code doit contenir exactement 6 chiffres.';return;}save.disabled=true;try{const r=await call({action:'set_code',code},await session());input.value='';state.textContent='Code enregistré le '+new Date(r.updated_at).toLocaleString('fr-FR')+'. L’ancien code ne fonctionne plus.';}catch(err){state.textContent=err.message;}finally{save.disabled=false;}};
   input.addEventListener('input',()=>{input.value=input.value.replace(/\D/g,'').slice(0,6);});
-  creatorDialog.append(head,state,form,help);document.body.append(creatorDialog);creatorDialog._state=state;
+  // 25.1 : remarques envoyées depuis la version de test (bouton « Remarque »).
+  const notes=E('section',null,'au25-test-notes'),nh=E('h3','Remarques de la version de test'),nbar=E('div',null,'au25-notes-bar'),nshow=E('label',null,'au25-notes-toggle'),ncheck=E('input'),nrefresh=E('button','Actualiser','button secondary'),nlist=E('div',null,'au25-notes-list'),nstate=E('p','','au-note');
+  ncheck.type='checkbox';nshow.append(ncheck,document.createTextNode(' Afficher aussi les remarques traitées'));nrefresh.type='button';nbar.append(nrefresh,nshow);nstate.setAttribute('role','status');notes.append(nh,nbar,nstate,nlist);
+  const loadNotes=async()=>{nstate.textContent='Chargement des remarques…';nlist.replaceChildren();try{const c=adapter?.getClient?.();let q=c.from('au_test_feedback_25').select('id,created_at,page,snippet,note,viewport,ua,done').order('created_at',{ascending:false}).limit(300);if(!ncheck.checked)q=q.eq('done',false);const {data,error}=await q;if(error)throw error;nstate.textContent=data.length?data.length+' remarque'+(data.length>1?'s':'')+(ncheck.checked?'':' à traiter')+'.':'Aucune remarque '+(ncheck.checked?'':'à traiter ')+'pour le moment.';
+   for(const r of data){const it=E('article',null,'au25-note'+(r.done?' is-done':''));const t=E('p',r.note,'au25-note-text');const meta=E('p',[new Date(r.created_at).toLocaleString('fr-FR'),r.page,r.snippet?'« '+r.snippet.slice(0,80)+' »':'',/iPhone|iPad/.test(r.ua||'')?'iPhone/iPad':/Android/.test(r.ua||'')?'Android':'Ordinateur',r.viewport].filter(Boolean).join(' · '),'au-note');const b=E('button',r.done?'Remettre à traiter':'Marquer comme traitée','button secondary');b.type='button';b.onclick=async()=>{b.disabled=true;const {error:e}=await c.from('au_test_feedback_25').update({done:!r.done}).eq('id',r.id);if(e){nstate.textContent=e.message;b.disabled=false;return;}loadNotes();};it.append(t,meta,b);nlist.append(it);}}catch(e){nstate.textContent='Impossible de charger les remarques : '+(e.message||e);}};
+  nrefresh.onclick=loadNotes;ncheck.onchange=loadNotes;creatorDialog._notes=loadNotes;
+  creatorDialog.append(head,state,form,help,notes);document.body.append(creatorDialog);creatorDialog._state=state;
  }
  document.getElementById('accountDialog')?.close();creatorDialog.showModal();
- const state=creatorDialog._state;state.textContent='Chargement…';
+ const state=creatorDialog._state;state.textContent='Chargement…';creatorDialog._notes?.();
  session().then(t=>call({action:'code_status'},t)).then(r=>{state.textContent=r.configured?'Un code est actif depuis le '+new Date(r.updated_at).toLocaleString('fr-FR')+'.':'Aucun code défini : personne ne peut télécharger les versions de test.';}).catch(e=>{state.textContent=e.message;});
 }
 

@@ -52,18 +52,22 @@
   const ok=document.createElement('button');ok.className='au-fb-btn au-fb-ok';ok.type='button';ok.textContent='Enregistrer';
   const gen=document.createElement('button');gen.className='au-fb-btn au-fb-ghost';gen.type='button';gen.textContent=el?'Remarque générale':'Toucher un élément';
   const no=document.createElement('button');no.className='au-fb-btn au-fb-ghost';no.type='button';no.textContent='Annuler';
-  ok.onclick=()=>{const note=ta.value.trim();if(!note){ta.focus();ta.placeholder='Écris ta remarque avant d’enregistrer.';return;}const l=load();l.push({n:l.length+1,note,page:pageName(),el:what,path:el?describe(el):'',vp:innerWidth+'×'+innerHeight,at:new Date().toLocaleString('fr-FR')});save(l);close();refresh();toast('Remarque n°'+l.length+' enregistrée');};
+  ok.onclick=()=>{const note=ta.value.trim();if(!note){ta.focus();ta.placeholder='Écris ta remarque avant d’enregistrer.';return;}const l=load();l.push({n:l.length+1,note,page:pageName(),el:what,path:el?describe(el):'',vp:innerWidth+'×'+innerHeight,at:new Date().toLocaleString('fr-FR')});const rec=l[l.length-1];save(l);close();refresh();send(rec).then(ok=>{rec.sent=ok;const all=load();if(all[rec.n-1])all[rec.n-1].sent=ok;save(all);toast(ok?'Remarque n°'+rec.n+' envoyée à Claude ✓':'Remarque n°'+rec.n+' gardée sur ce téléphone (envoi impossible pour le moment)');});};
   gen.onclick=()=>{close();if(el)sheet(null);else startPick();};no.onclick=close;
   row.append(ok,gen,no);s.append(row);root.append(s);setTimeout(()=>ta.focus(),50);};
+ const SB='https://djjfzymrkncwhrocpxjo.supabase.co',KEYPUB='sb_publishable_hR4vWksXYg3TUofHVQMtLQ_q5JIHXdX';
+ const send=async r=>{try{const res=await fetch(SB+'/rest/v1/au_test_feedback_25',{method:'POST',headers:{apikey:KEYPUB,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({note:r.note.slice(0,2000),page:(r.page||'').slice(0,200),snippet:(r.el||'').slice(0,600),target:(r.path||'').slice(0,600),viewport:(r.vp||'').slice(0,60),ua:navigator.userAgent.slice(0,300),version:'25.1-test'})});return res.ok;}catch{return false;}};
+ const resend=async()=>{const l=load();let changed=false;for(const r of l){if(r.sent)continue;if(await send(r)){r.sent=true;changed=true;}}if(changed)save(l);};
+ setTimeout(resend,2500);
  const toast=t=>{const d=document.createElement('div');d.className='au-fb-banner';d.style.background='#1e1a16';d.style.border='1px solid #ffb347';d.textContent=t;root.append(d);setTimeout(()=>d.remove(),1800);};
  const exportText=()=>{const l=load();return 'Remarques version de test 25.1 ('+l.length+')\n\n'+l.map(r=>r.n+'. '+r.note+'\n   Page : '+r.page+(r.el?'\n   Élément : '+r.el:'')+(r.path?'\n   Repère : '+r.path:'')+'\n   Écran : '+r.vp+' · '+r.at).join('\n\n');};
- const showList=()=>{close();const s=document.createElement('div');s.className='au-fb-sheet';s.innerHTML='<h3>Mes remarques</h3><p>Quand tu as fini : « Tout copier », puis colle le texte dans la conversation avec Claude.</p>';
+ const showList=()=>{close();const s=document.createElement('div');s.className='au-fb-sheet';s.innerHTML='<h3>Mes remarques</h3><p>Les remarques marquées ✓ sont déjà arrivées chez Claude. « Tout copier » reste disponible en secours.</p>';
   const row=document.createElement('div');row.className='au-fb-row';
   const cp=document.createElement('button');cp.className='au-fb-btn au-fb-ok';cp.type='button';cp.textContent='Tout copier';
   const x=document.createElement('button');x.className='au-fb-btn au-fb-ghost';x.type='button';x.textContent='Fermer';x.onclick=close;
   cp.onclick=async()=>{const t=exportText();try{await navigator.clipboard.writeText(t);cp.textContent='Copié ✓';}catch{const ta=document.createElement('textarea');ta.value=t;ta.style.minHeight='200px';s.append(ta);ta.focus();ta.select();cp.textContent='Sélectionne et copie le texte ci-dessous';}};
   row.append(cp,x);s.append(row);
-  load().forEach((r,i)=>{const it=document.createElement('div');it.className='au-fb-item';it.textContent=r.n+'. '+r.note;const sm=document.createElement('small');sm.textContent=r.page+(r.el?' · « '+r.el.slice(0,60)+' »':'');it.append(sm);const del=document.createElement('button');del.type='button';del.textContent='Supprimer';del.onclick=()=>{const l=load();l.splice(i,1);l.forEach((q,k)=>q.n=k+1);save(l);refresh();showList();};it.append(del);s.append(it);});
+  load().forEach((r,i)=>{const it=document.createElement('div');it.className='au-fb-item';it.textContent=r.n+'. '+r.note+(r.sent?'  ✓ envoyée':'  · pas encore envoyée');const sm=document.createElement('small');sm.textContent=r.page+(r.el?' · « '+r.el.slice(0,60)+' »':'');it.append(sm);const del=document.createElement('button');del.type='button';del.textContent='Supprimer';del.onclick=()=>{const l=load();l.splice(i,1);l.forEach((q,k)=>q.n=k+1);save(l);refresh();showList();};it.append(del);s.append(it);});
   root.append(s);};
  main.onclick=startPick;list.onclick=showList;
  // Les fenêtres ouvertes en modal passent au-dessus de tout et rendent le reste

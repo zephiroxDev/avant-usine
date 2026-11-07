@@ -372,3 +372,12 @@ html[data-composition][data-design="25"] dialog.xp-full-player .au222-nav{displa
  html[data-composition][data-design="25"] .au222-kicker::before{animation:none}
 }
 html[data-composition][data-design="25"][data-motion="off"] .au222-kicker::before{animation:none}
+html[data-composition][data-design="25"] .au25-test-notes{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+html[data-composition][data-design="25"] .au25-test-notes h3{margin:0 0 12px;font-size:18px}
+html[data-composition][data-design="25"] .au25-notes-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:10px}
+html[data-composition][data-design="25"] .au25-notes-toggle{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+html[data-composition][data-design="25"] .au25-notes-list{display:grid;gap:12px}
+html[data-composition][data-design="25"] .au25-note{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 var(--au25-r-sm) var(--au25-r-sm) 0;padding:14px 16px;background:var(--surface)}
+html[data-composition][data-design="25"] .au25-note.is-done{opacity:.6;border-left-color:var(--line-strong)}
+html[data-composition][data-design="25"] .au25-note-text{margin:0 0 6px;font-size:15px;line-height:1.45;white-space:pre-wrap}
+html[data-composition][data-design="25"] .au25-note .au-note{margin:0 0 10px;font-size:12px}
