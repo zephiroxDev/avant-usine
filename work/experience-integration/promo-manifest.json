@@ -2,6 +2,23 @@
   "format": 1,
   "images": [
     {
+      "id": "25v01",
+      "patch": "25.1",
+      "image": "promo-25v01-public.png",
+      "original": "promo-25v01-public.png",
+      "video": "promo-25v01-public.mp4",
+      "animation": "promo-25v01-public.mp4",
+      "title": "Tout respire. Des paroles en grand.",
+      "platforms": [
+        "web-pc",
+        "web-mobile",
+        "desktop-pc",
+        "ios"
+      ],
+      "filename": "25.1 image.png",
+      "videoFilename": "25.1 video.mp4"
+    },
+    {
       "id": "25v00",
       "patch": "25.0",
       "image": "promo-25v00-public.png",

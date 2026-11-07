@@ -1,8 +1,8 @@
 {
   "platform": "ios",
-  "version": "2.4.0",
-  "buildNumber": 47,
-  "releaseId": "25.0",
+  "version": "2.4.1",
+  "buildNumber": 48,
+  "releaseId": "25.1",
   "channel": "stable",
   "source": "../experience-integration",
   "immersionBackground": "solid-customizable"

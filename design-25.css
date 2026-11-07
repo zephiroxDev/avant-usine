@@ -112,7 +112,7 @@ html[data-composition][data-design="25"] :is(.major-card,.au-panel,.au-card,.loc
  position:relative;border-radius:var(--au25-r)!important;background:var(--surface)!important;border:1px solid var(--line)!important;box-shadow:none!important;
 }
 html[data-composition][data-design="25"] :is(.major-card,.local-album,.download-card,.au24-beta-card,.au222-content-block)::before{
- content:"";position:absolute;left:-1px;top:-1px;width:28px;height:3px;background:var(--accent);border-radius:var(--au25-r) 0 0 0;pointer-events:none;
+ content:none!important;display:none!important;
 }
 html[data-composition][data-design="25"] :is(.major-card,.local-album,.download-card):hover{border-color:var(--line-strong)!important}
 html[data-composition][data-design="25"] .au24-beta-card{border-style:dashed!important}
@@ -277,6 +277,60 @@ html[data-composition][data-design="25"] .studio25-zen-dock button{min-height:46
  html[data-composition][data-design="25"] dialog:has(.au-studio-19){padding-bottom:40px!important}
 }
 
+/* ---------- Finitions 25.1 : de l'air partout, une seule forme de fermeture */
+html[data-composition][data-design="25"] :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.annotation-dialog-head,.au-art-header,.au-im-head,.au-dismiss-head){
+ background:transparent!important;box-shadow:none!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;
+ margin:0 0 18px!important;padding:4px 0 16px!important;display:flex!important;align-items:flex-start!important;justify-content:space-between;gap:16px!important;
+}
+html[data-composition][data-design="25"] :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.annotation-dialog-head,.au-art-header,.au-im-head) h2{margin:0!important;min-width:0;flex:1}
+html[data-composition][data-design="25"] :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.annotation-dialog-head,.au-art-header,.au-im-head,.au-dismiss-head) > button:last-child,
+html[data-composition][data-design="25"] :is(.xp-close,.au-art-close,.annotation-close,.au-announcement-close){
+ flex:none;min-width:44px!important;height:44px!important;min-height:44px!important;padding:0 14px!important;margin:0!important;border-radius:var(--au25-r-sm)!important;
+ background:transparent!important;border:1px solid var(--line-strong)!important;color:var(--ink)!important;box-shadow:none!important;outline-offset:2px!important;
+ font-family:var(--au25-text)!important;font-size:14px!important;font-weight:600!important;text-transform:none!important;letter-spacing:0!important;
+}
+html[data-composition][data-design="25"] :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.annotation-dialog-head,.au-art-header,.au-im-head,.au-dismiss-head) > button:last-child:hover{border-color:var(--accent)!important;color:var(--accent)!important}
+html[data-composition][data-design="25"] dialog :is(.major-dialog-head,.au-dialog-head,.xp-dialog-head,.au-art-header,.au231-dialog-head,.au-im-head) > button:focus:not(:focus-visible){outline:none!important}
+html[data-composition][data-design="25"] dialog:not(.au222-page-surface):not(.xp-full-player):not(#auImmersionApp){padding:clamp(18px,4vw,30px)!important}
+@media (max-width:700px){html[data-composition][data-design="25"] dialog:not(.au222-page-surface):not(.xp-full-player):not(#auImmersionApp):not(:has(.au-studio-19)){width:calc(100% - 24px)!important;max-width:calc(100% - 24px)!important;margin-inline:auto!important}}
+html[data-composition][data-design="25"] dialog button:not([class]){
+ min-height:44px;padding:0 18px;border-radius:var(--au25-r-sm);border:1px solid var(--line-strong);background:transparent;color:var(--ink);font:600 14px var(--au25-text);cursor:pointer;margin:6px 0;
+}
+html[data-composition][data-design="25"] dialog button:not([class]):hover{border-color:var(--accent);color:var(--accent)}
+html[data-composition][data-design="25"] :is(.au-actions,.major-actions,.au-dialog-actions,.button-row,.au222-actions,.local-actions){display:flex;flex-wrap:wrap;gap:12px!important}
+html[data-composition][data-design="25"] :is(.button,.au222-primary,.au222-secondary){min-height:46px;padding-inline:20px}
+html[data-composition][data-design="25"] .au222-text{min-height:44px;padding-inline:12px!important}
+html[data-composition][data-design="25"] .au222-footer{padding-block:28px!important}
+html[data-composition][data-design="25"] .au222-footer :is(button,a){min-height:44px;display:inline-flex;align-items:center}
+html[data-composition][data-design="25"] .au222-footer :is(nav,div){gap:6px 14px!important}
+html[data-composition][data-design="25"] .xp-mini :is(.au222-mini-previous,.xp-mini-play,.xp-mini-next){min-width:44px!important;width:44px!important;height:44px!important;display:inline-flex;align-items:center;justify-content:center}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls{gap:12px!important;padding:14px 4px 6px!important;border-top-color:var(--line-strong)!important;justify-content:center}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls button{min-width:48px!important;min-height:48px!important;padding:0 16px!important;font-size:14px!important;border-radius:var(--au25-r-sm)!important}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls input[type=range]{min-width:100%!important;margin:6px 0}
+html[data-composition][data-design="25"] #communityRefresh{min-width:44px!important;min-height:44px!important;display:inline-flex;align-items:center;justify-content:center}
+html[data-composition][data-design="25"] .lyrics-button{white-space:nowrap!important;min-width:max-content!important;min-height:44px;padding-inline:14px!important}
+html[data-composition][data-design="25"] .xp-dialog .lyrics-button{writing-mode:horizontal-tb!important}
+
+html[data-composition][data-design="25"] .listen-top{display:flex!important;flex-wrap:wrap;align-items:flex-end!important;justify-content:space-between;gap:14px 20px!important;padding-bottom:20px!important}
+html[data-composition][data-design="25"] .listen-top .text-button{order:0;min-height:44px;padding:0 14px 0 0!important;font-family:var(--au25-mono)!important;text-transform:uppercase;letter-spacing:.1em;font-size:12px!important}
+html[data-composition][data-design="25"] .listen-top .select-label{display:grid!important;gap:8px;text-align:left!important;font-family:var(--au25-mono);text-transform:uppercase;letter-spacing:.12em;font-size:11px!important;color:var(--muted)!important;min-width:min(280px,100%)}
+html[data-composition][data-design="25"] .listen-top select{min-height:46px;font:600 16px var(--au25-text)!important;text-transform:none;letter-spacing:0}
+@media (max-width:700px){html[data-composition][data-design="25"] .listen-top .select-label{flex:1 1 100%}}
+
+html[data-composition][data-design="25"] button.au25-glyph{font-size:20px!important;line-height:1!important}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-head{padding:calc(16px + env(safe-area-inset-top)) 16px 14px!important}
+
+html[data-composition][data-design="25"] main:has(> .au222-footer){display:flex!important;flex-direction:column}
+html[data-composition][data-design="25"] main > .au222-footer{order:99}
+html[data-composition][data-design="25"] main > :is(.au222-header,.au222-subnav){order:-1}
+html[data-composition][data-design="25"] dialog:not(.au222-page-surface) :is(.major-dialog-head,.au-dialog-head,.au231-dialog-head,.xp-dialog-head,.au-art-header){background:var(--surface-raised)!important}
+html[data-composition][data-design="25"] dialog:is(.au222-page-surface,:has(.au-studio-19)) :is(.major-dialog-head,.au-dialog-head){background:var(--paper)!important}
+html[data-composition][data-design="25"] dialog:has(.au-studio-19) .major-dialog-head{position:sticky;top:0;z-index:6;padding-top:10px!important}
+html[data-composition][data-design="25"] .au24-writer-player{gap:12px!important}
+html[data-composition][data-design="25"] .au24-writer-player :is(.au24-wp-jump,.au24-wp-speed,.au24-wp-play){min-height:44px!important;min-width:56px!important;padding:0 12px!important}
+html[data-composition][data-design="25"] .au24-writer-player .au24-wp-jumps,html[data-composition][data-design="25"] .au24-writer-player > div:has(> .au24-wp-jump){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important}
+html[data-composition][data-design="25"] .au24-rules :is(.au24-rules-close,header > button){font-size:20px!important;min-width:44px!important;min-height:44px!important}
+
 /* ---------- Pied de page ------------------------------------------------- */
 html[data-composition][data-design="25"] .au222-footer{border-top:1px solid var(--line)}
 html[data-composition][data-design="25"] .au222-footer :is(button,a){font-family:var(--au25-mono)!important;text-transform:uppercase;letter-spacing:.1em;font-size:11px!important}
@@ -318,3 +372,248 @@ html[data-composition][data-design="25"] dialog.xp-full-player .au222-nav{displa
  html[data-composition][data-design="25"] .au222-kicker::before{animation:none}
 }
 html[data-composition][data-design="25"][data-motion="off"] .au222-kicker::before{animation:none}
+html[data-composition][data-design="25"] .au25-test-notes{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+html[data-composition][data-design="25"] .au25-test-notes h3{margin:0 0 12px;font-size:18px}
+html[data-composition][data-design="25"] .au25-notes-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:10px}
+html[data-composition][data-design="25"] .au25-notes-toggle{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+html[data-composition][data-design="25"] .au25-notes-list{display:grid;gap:12px}
+html[data-composition][data-design="25"] .au25-note{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 var(--au25-r-sm) var(--au25-r-sm) 0;padding:14px 16px;background:var(--surface)}
+html[data-composition][data-design="25"] .au25-note.is-done{opacity:.6;border-left-color:var(--line-strong)}
+html[data-composition][data-design="25"] .au25-note-text{margin:0 0 6px;font-size:15px;line-height:1.45;white-space:pre-wrap}
+html[data-composition][data-design="25"] .au25-note .au-note{margin:0 0 10px;font-size:12px}
+
+/* ---------- 25.1 · remarques de la version de test ---------------------- */
+/* Cadres : vraie marge intérieure partout, et de l'espace entre les boutons. */
+html[data-composition][data-design="25"] .au222-content-block{padding:clamp(20px,2.6vw,34px)!important}
+html[data-composition][data-design="25"] :is(.au222-private-category,.au222-community-actions,.rn-community .au222-actions,.xp-community-landing :is(nav,div):has(> button + button)){display:flex!important;flex-wrap:wrap;gap:12px!important}
+html[data-composition][data-design="25"] :is(.au222-content-block,.xp-dialog-body,.major-dialog-body) > :is(button,.button) + :is(button,.button){margin-left:12px}
+html[data-composition][data-design="25"] .xp-dialog-body > :is(button,.button){margin-top:10px}
+html[data-composition][data-design="25"] .au221-explore{padding:clamp(4px,1vw,10px) clamp(4px,1.4vw,14px)}
+html[data-composition][data-design="25"] .au221-explore :is(p,.au221-lyrics,pre){padding-inline:clamp(2px,.6vw,8px)}
+html[data-composition][data-design="25"] .xp-community-landing{padding-inline:clamp(0px,1vw,10px)}
+html[data-composition][data-design="25"] .xp-community-landing :is(.au222-content-block,section){padding:clamp(20px,2.6vw,34px)}
+/* Pochettes : plus de reflet balayé mal placé, seulement le relief au survol. */
+html[data-composition][data-design="25"] :is(.au222-volume,.au222-volume-art,[class*=cover]).au222-veil::before,html[data-composition][data-design="25"] .au222-volume.au222-veil::after{content:none!important;display:none!important;animation:none!important}
+/* Volume : un curseur net à la place du ruban dessiné. */
+html[data-composition][data-design="25"] .au20-volume{width:150px!important;height:40px!important;display:inline-flex!important;align-items:center;gap:10px}
+html[data-composition][data-design="25"] .au20-volume canvas{display:none!important}
+html[data-composition][data-design="25"] .au20-volume input[type=range]{position:static!important;opacity:1!important;flex:1;min-width:0;height:20px!important;-webkit-appearance:none;appearance:none;background:transparent!important;cursor:pointer}
+html[data-composition][data-design="25"] .au20-volume input[type=range]::-webkit-slider-runnable-track{height:4px;background:linear-gradient(90deg,var(--accent) var(--au25-v,80%),var(--line-strong) var(--au25-v,80%))}
+html[data-composition][data-design="25"] .au20-volume input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;margin-top:-5px;border-radius:2px;background:var(--ink);border:0}
+html[data-composition][data-design="25"] .au20-volume input[type=range]::-moz-range-track{height:4px;background:var(--line-strong)}
+html[data-composition][data-design="25"] .au20-volume input[type=range]::-moz-range-progress{height:4px;background:var(--accent)}
+html[data-composition][data-design="25"] .au20-volume output{position:static!important;font-family:var(--au25-mono)!important;font-size:11px!important;min-width:38px;text-align:right;color:var(--muted)}
+/* Titres à la taille d'une fenêtre, pas d'une affiche. */
+html[data-composition][data-design="25"] main :is(.au222-content-block,.major-card,section) h2:not(.au222-page-heading h2){font-size:clamp(24px,2.6vw,36px)!important}
+html[data-composition][data-design="25"] .au222-page-heading h1{font-size:clamp(42px,5.4vw,84px)!important}
+/* Accueil : les volumes côte à côte, à taille raisonnable. */
+html[data-composition][data-design="25"] .au222-volume-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))!important;gap:clamp(16px,2vw,28px)!important}
+html[data-composition][data-design="25"] .au222-volume{max-width:420px}
+/* Le mini-lecteur ne recouvre plus la fin des pages. */
+html[data-composition][data-design="25"] #main{padding-bottom:140px}
+html[data-composition][data-design="25"] .xp-mini :is(.au222-mini-previous,.xp-mini-play,.xp-mini-next){font-size:22px!important;border-radius:var(--au25-r-sm)!important}
+html[data-composition][data-design="25"] .xp-mini :is(.au222-mini-previous,.xp-mini-next):hover{background:color-mix(in srgb,var(--accent) 12%,transparent)!important;color:var(--accent)!important}
+/* L'en-tête collant ne laisse plus passer les couleurs du contenu. */
+html[data-composition][data-design="25"] .au222-header{background:var(--paper)!important}
+
+/* ---------- 25.1 · audit d'espacement du site PC ------------------------- */
+html[data-composition][data-design="25"] .au222-nav{gap:10px!important}
+html[data-composition][data-design="25"] .au222-subnav{gap:10px!important}
+html[data-composition][data-design="25"] .au222-subnav-button{margin:0!important}
+html[data-composition][data-design="25"] :is(.dc-panel,.rn-blind-customize){padding:clamp(18px,2.4vw,28px)!important}
+html[data-composition][data-design="25"] .dc-panel > :is(h2,h3){margin-top:0!important;padding-right:110px}
+html[data-composition][data-design="25"] .dc-panel{position:relative}
+html[data-composition][data-design="25"] .dc-panel > .dc-text-button{position:absolute;top:clamp(18px,2.4vw,28px);right:clamp(18px,2.4vw,28px);min-height:40px;padding:0 14px!important;border:1px solid var(--line-strong)!important;border-radius:var(--au25-r-sm)!important;color:var(--ink)!important;background:transparent!important}
+html[data-composition][data-design="25"] dialog > :is(button,.button) + :is(button,.button){margin-left:12px!important}
+html[data-composition][data-design="25"] dialog > :is(select,input) + :is(button,.button){margin-top:12px!important}
+html[data-composition][data-design="25"] dialog > :is(button,.button){margin-top:6px;margin-bottom:6px}
+html[data-composition][data-design="25"] .au24-top{gap:12px!important;padding:16px 18px!important}
+html[data-composition][data-design="25"] .au-gamepad-settings{padding:clamp(16px,2vw,24px)!important}
+html[data-composition][data-design="25"] .track{padding-block:6px}
+html[data-composition][data-design="25"] .track :is(.au-icon,.track-share,.au-17-ai-report){margin:4px}
+/* Le logo ne garde plus un cadre orange quand une page s'ouvre. */
+html[data-composition][data-design="25"] .au222-brand:focus:not(:focus-visible),html[data-composition][data-design="25"] dialog .au222-brand:focus{outline:none!important;box-shadow:none!important}
+html[data-composition][data-design="25"] .au222-brand:focus-visible{outline:none!important;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:6px}
+html[data-composition][data-design="25"] #tracklist .track{border-bottom:0!important}
+html[data-composition][data-design="25"] #tracklist .au-track-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+html[data-composition][data-design="25"] #tracklist .au-track-row > .track{flex:1;min-width:0}
+html[data-composition][data-design="25"] .xp-track-options > summary{width:44px!important;height:44px!important;min-height:44px!important;display:grid!important;place-items:center;border:1px solid var(--line-strong)!important;border-radius:var(--au25-r-sm)!important;background:transparent!important;font-size:16px;cursor:pointer;list-style:none}
+html[data-composition][data-design="25"] .xp-track-options > summary:hover{border-color:var(--accent)!important;color:var(--accent)}
+html[data-composition][data-design="25"] .xp-track-options-body{gap:10px!important;padding:12px!important}
+html[data-composition][data-design="25"] .xp-track-options-body .au-track-actions{gap:10px!important}
+html[data-composition][data-design="25"] .xp-track-options:not([open]){background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;min-width:0!important;min-height:0!important;width:auto!important;height:auto!important}
+html[data-composition][data-design="25"] #tracklist .au-track-row{padding-block:4px}
+
+/* ---------- 25.1 · audit d'espacement de l'appli iPhone ----------------- */
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls{padding:16px 18px calc(16px + env(safe-area-inset-bottom))!important;border-radius:var(--au25-r)!important;background:var(--surface-raised)!important;margin:0 10px 10px!important}
+html[data-composition][data-design="25"] #auImmersionApp .au-im-controls label{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;width:100%}
+html[data-composition][data-design="25"] dialog :is(select,input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea){box-sizing:border-box;max-width:100%}
+html[data-composition][data-design="25"] .au-gamepad-settings select,html[data-composition][data-design="25"] .au22-settings > select{width:100%!important}
+html[data-composition][data-design="25"] dialog > select,html[data-composition][data-design="25"] .au-gamepad-settings select{margin-left:0!important;margin-right:0!important}
+html[data-composition][data-design="25"] main > .au222-footer{margin-top:40px!important}
+html[data-composition][data-design="25"] dialog select{margin-inline:0!important}
+html[data-composition][data-design="25"] dialog .au-spaced-controls:has(> select){gap:12px!important}
+html[data-composition][data-design="25"] .au222-brand.au222-brand.au222-brand:is(:focus,:focus-visible){outline:none!important;box-shadow:none!important}
+html[data-composition][data-design="25"] dialog.au222-page-surface > .au222-page-chrome{background:var(--paper)!important;box-shadow:none!important;border:0!important;border-bottom:1px solid var(--line)!important;margin-bottom:18px!important}
+html[data-composition][data-design="25"] dialog.au222-page-surface > .au222-page-chrome .au222-brand{background:transparent!important;box-shadow:none!important;border:0!important}
+html[data-composition][data-design="25"] .au24-code-form{display:grid;gap:12px;margin-bottom:16px}
+html[data-composition][data-design="25"] .au25-notes-bar{margin-top:6px}
+@media (max-width:700px){
+ html[data-composition][data-design="25"] .au24-top > input{flex:1 1 100%!important;width:100%!important;min-width:0}
+ html[data-composition][data-design="25"] .au24-top > :is(button,select){flex:1 1 auto}
+}
+html[data-composition][data-design="25"] .au222-footer{margin-top:40px!important}
+
+/* ---------- 25.1 · Blind Test : tout le jeu à l'écran -------------------- */
+html[data-composition][data-design="25"] #blindtest h1{font-size:clamp(34px,4.2vw,56px)!important;margin-block:0 10px!important}
+html[data-composition][data-design="25"] #blindtest .au-control-flow:has(.au-blind-answers){display:grid!important;grid-template-columns:auto 1fr;align-items:center;gap:10px 16px!important}
+html[data-composition][data-design="25"] #blindtest .au-control-flow:has(.au-blind-answers) > p{grid-column:1/-1;margin:0!important}
+html[data-composition][data-design="25"] #blindtest .au-control-flow:has(.au-blind-answers) > output{font-family:var(--au25-mono)!important;font-size:28px!important;line-height:1!important;min-height:0!important;height:auto!important;padding:0!important;margin:0!important;grid-column:1;grid-row:2}
+html[data-composition][data-design="25"] #blindtest .au-control-flow:has(.au-blind-answers) > button:not(.au-blind-answer):first-of-type{grid-column:2;grid-row:2;justify-self:start}
+html[data-composition][data-design="25"] #blindtest .au-blind-answers{grid-column:1/-1;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px!important;width:100%!important;max-width:none!important;margin:4px 0!important}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer{width:auto!important;min-width:0!important;height:auto!important;margin:0!important;padding:10px!important;display:flex!important;flex-direction:column;align-items:stretch;gap:6px;text-align:left}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer .au-motion-cover{width:100%!important;height:auto!important;aspect-ratio:1;max-height:min(22vh,170px);max-width:min(22vh,170px);margin:0 auto 4px!important}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer .au-motion-cover canvas{width:100%!important;height:100%!important}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer strong{font-size:14px;line-height:1.25;white-space:normal}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer small{font-family:var(--au25-mono);font-size:11px;color:var(--muted)}
+html[data-composition][data-design="25"] #blindtest .au-control-flow:has(.au-blind-answers) > button:not(.au-blind-answer):not(:first-of-type){grid-row:auto;justify-self:start}
+html[data-composition][data-design="25"] #blindtest .au-control-flow:has(.au-blind-answers) > button:not(.au-blind-answer):last-of-type{grid-column:2}
+@media (max-width:700px){
+ html[data-composition][data-design="25"] #blindtest .au-blind-answers{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px!important}
+ html[data-composition][data-design="25"] #blindtest .au-blind-answer .au-motion-cover{max-height:min(16vh,120px);max-width:min(16vh,120px)}
+}
+html[data-composition][data-design="25"] .studio25-primary{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+html[data-composition][data-design="25"] .studio25-primary > button{flex:1 1 130px;min-height:46px!important;margin:0!important;width:auto!important}
+html[data-composition][data-design="25"] .studio25-primary > .studio25-listen{flex:1.4 1 150px}
+html[data-composition][data-design="25"] .studio25-secondary{position:static!important;border:1px solid var(--line)!important;border-radius:var(--au25-r)!important;padding:12px 14px!important;background:var(--surface)!important}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus{min-height:0!important;justify-content:flex-start}
+html[data-composition][data-design="25"] .studio25-zen .studio25-primary{display:none!important}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .studio25-label{order:1}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .studio19-hint{order:2}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .studio19-phrase{order:3}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .au-note{order:4}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .studio19-next{order:5}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .studio19-running{order:6}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .studio19-slider-wrap{order:7}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .studio25-primary{order:8}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .studio19-overlap{order:9;justify-content:flex-start}
+html[data-composition][data-design="25"] .au-studio-19 .studio19-focus > .studio19-preview{order:10}
+
+
+/* ---------- 25.1 · Remarques de la version de test (lot 11 à 42) ---------- */
+/* 11 · plus aucun reflet animé au survol, nulle part */
+html[data-composition][data-design="25"] .au222-veil::before,html[data-composition][data-design="25"] .au222-veil:is(:hover,:focus-visible)::before{opacity:0!important;animation:none!important;background:none!important}
+/* 13 · volume du mini lecteur plus compact, à distance du bord */
+html[data-composition][data-design="25"] .xp-mini .au222-mini-volume{width:auto!important;max-width:118px;margin-right:10px!important}
+html[data-composition][data-design="25"] .xp-mini .au20-volume{width:112px!important;gap:8px}
+html[data-composition][data-design="25"] .xp-mini .au20-volume input[type=range]{flex:0 0 70px!important;width:70px!important;min-width:0!important}
+html[data-composition][data-design="25"] .xp-mini .au20-volume output{min-width:34px!important}
+html[data-composition][data-design="25"] .xp-mini .au222-mini-volume{grid-template-columns:auto!important;margin-right:18px!important}
+/* 14 · 25 · le nom du volume est déjà sur la pochette : on ne le répète pas dessous */
+html[data-composition][data-design="25"] :is(details.au222-all-volumes .album-card > h3,#recherche .xp-volume > h3){position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
+/* 16 · résumé de Ma musique aéré */
+html[data-composition][data-design="25"] .au-library-summary{padding:24px 26px!important;display:flex!important;flex-direction:column;gap:8px}
+html[data-composition][data-design="25"] .au-library-summary > .actions{margin-top:12px!important}
+/* 17 · Statistiques : le bouton « Mon compte » passe à droite */
+html[data-composition][data-design="25"] #statistiques p.au-note:has(> button){display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px}
+html[data-composition][data-design="25"] #statistiques p.au-note > button{margin-left:auto!important}
+/* 18 · Actualiser devient une icône */
+html[data-composition][data-design="25"] .dc-heading > button.au25-refresh{width:44px!important;height:44px!important;min-width:44px;padding:0!important;border:1px solid var(--line-strong)!important;border-radius:999px!important;font-size:19px!important;line-height:1!important;display:grid!important;place-items:center;flex:none}
+/* 21 · « Rechercher la manette » sur sa propre ligne, en bas de la section */
+html[data-composition][data-design="25"] .au-gamepad-settings{display:flex!important;flex-direction:column;gap:12px}
+html[data-composition][data-design="25"] .au-gamepad-settings > button{order:20;align-self:flex-start;margin:10px 0 4px!important}
+html[data-composition][data-design="25"] .au-gamepad-settings > p:empty{display:none}
+/* 22 · 23 · 30 · 34 · 35 · 37 · 38 · 41 · plus de flèche sur les listes déroulantes */
+html[data-composition][data-design="25"] select{-webkit-appearance:none!important;-moz-appearance:none!important;appearance:none!important;background-image:none!important;padding-right:14px!important}
+html[data-composition][data-design="25"] select::-ms-expand{display:none}
+/* 26 · Vérifier les synchronisations : textes et boutons espacés */
+html[data-composition][data-design="25"] .major-dialog-body.au-control-flow{display:flex!important;flex-flow:row wrap;align-items:flex-start;align-content:flex-start;gap:16px 12px!important}
+html[data-composition][data-design="25"] .major-dialog-body.au-control-flow > :not(button):not(.button){flex:1 1 100%;min-width:0;margin-top:0!important;margin-bottom:0!important}
+html[data-composition][data-design="25"] .major-dialog-body.au-control-flow > :is(button,.button){margin:0!important;flex:none}
+html[data-composition][data-design="25"] .major-dialog-body.au-control-flow :is(.actions,.major-actions){display:flex;flex-wrap:wrap;gap:12px!important}
+/* 27 · Gestion de la communauté : « Rechercher » aligné au bout du champ */
+html[data-composition][data-design="25"] form.v12-search{display:flex!important;align-items:center;gap:12px!important;flex-wrap:wrap}
+html[data-composition][data-design="25"] form.v12-search > :not(button):not(input):not(select){flex:1 1 240px!important;min-width:0}
+html[data-composition][data-design="25"] form.v12-search > input{flex:1 1 0!important;min-width:0;width:auto!important}
+html[data-composition][data-design="25"] form.v12-search > :is(input,label){flex:1 1 auto;min-width:0;margin:0!important}
+html[data-composition][data-design="25"] form.v12-search > label input{width:100%}
+html[data-composition][data-design="25"] form.v12-search{align-items:flex-end!important}
+html[data-composition][data-design="25"] form.v12-search > button{flex:none;margin:0 0 0 auto!important;height:50px!important;min-height:50px!important}
+/* 29 · « Fermer » de l'Espace Créateur à taille normale, écarté du bord */
+html[data-composition][data-design="25"] #creatorDialog > .au-dialog-head > button.au-icon:not(.au25-glyph){font-size:14px!important;width:auto!important;padding:0 18px!important;margin-right:8px!important}
+/* 31 · 32 · Gérer ma collection : texte des boutons qui tient */
+html[data-composition][data-design="25"] #catalogDialog > .actions .text-button{font-size:12.5px!important;white-space:normal!important;line-height:1.25!important;padding:8px 14px!important;text-align:center}
+/* 39 · plus de poignée de redimensionnement sur les zones de texte */
+html[data-composition][data-design="25"] textarea{resize:none!important}
+/* 36 · Campagnes : chaque zone de texte respire */
+html[data-composition][data-design="25"] dialog.au22-settings .xp-dialog-body > :is(input,textarea,select){display:block;margin:0 0 16px!important}
+html[data-composition][data-design="25"] dialog.au22-settings .xp-dialog-body > label:has(> :is(input:not([type=checkbox]):not([type=radio]),textarea,select)){display:grid;gap:8px;margin:0 0 16px!important}
+/* 33 · Éditeur du site repensé : une barre claire, le reste rangé */
+html[data-composition][data-design="25"] .au24-top{display:flex!important;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px 24px!important;padding:18px 24px!important}
+html[data-composition][data-design="25"] .au24-top > *{flex:none!important}
+html[data-composition][data-design="25"] .au25-ed-brand{display:flex;align-items:center;gap:18px}
+html[data-composition][data-design="25"] .au25-ed-brand strong{font-family:var(--au25-display);font-size:24px!important;text-transform:uppercase;letter-spacing:.01em;margin:0!important}
+html[data-composition][data-design="25"] .au25-ed-actions{display:flex;align-items:center;gap:12px;margin-left:auto}
+html[data-composition][data-design="25"] .au24-workspace button.au25-ed-primary{background:var(--accent)!important;color:#120e0a!important;border-color:transparent!important;font-weight:700}
+html[data-composition][data-design="25"] .au25-ed-actions > button:last-child{width:44px;height:44px;min-height:44px;padding:0!important;font-size:18px!important;border-radius:999px!important;display:grid;place-items:center}
+html[data-composition][data-design="25"] .au25-ed-draft{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:14px 24px;border-bottom:1px solid var(--line)}
+html[data-composition][data-design="25"] .au25-ed-label{font-family:var(--au25-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+html[data-composition][data-design="25"] .au25-ed-draft > select{flex:0 1 240px;min-width:160px;max-width:none!important}
+html[data-composition][data-design="25"] .au25-ed-draft > input{flex:1 1 220px;min-width:160px}
+html[data-composition][data-design="25"] .au25-ed-view{display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px;padding:14px 24px}
+html[data-composition][data-design="25"] .au25-ed-view > .au24-profiles{padding:0!important;gap:10px!important;flex:none;overflow:visible}
+html[data-composition][data-design="25"] .au25-ed-view > .au24-profiles button{min-height:36px!important;padding:6px 12px!important}
+html[data-composition][data-design="25"] .au25-ed-view > .au24-tools{padding:0!important;gap:10px!important;flex:0 1 auto;justify-content:flex-start}
+html[data-composition][data-design="25"] .au25-ed-view > .au24-tools > select{width:180px!important}
+html[data-composition][data-design="25"] .au24-tools > button.au25-ed-icon{width:40px;padding:0!important;font-size:18px!important}
+html[data-composition][data-design="25"] .au24-tools > button.au25-ed-mode{font-weight:700}
+html[data-composition][data-design="25"] details.au25-ed-more{position:relative;background:none!important;border:0!important;padding:0!important;box-shadow:none!important;margin:0!important}
+html[data-composition][data-design="25"] .au24-inspector .au24-move > button{flex:1 1 auto;white-space:nowrap;font-size:12px!important;padding-inline:12px!important}
+html[data-composition][data-design="25"] .au25-ed-more > summary{list-style:none;cursor:pointer;min-height:40px;display:flex;align-items:center;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--au25-r-sm);font-size:12px}
+html[data-composition][data-design="25"] .au25-ed-more > summary::-webkit-details-marker{display:none}
+html[data-composition][data-design="25"] .au25-ed-more[open] > summary{border-color:var(--accent)}
+html[data-composition][data-design="25"] .au25-ed-more-body{position:absolute;right:0;top:calc(100% + 8px);z-index:30;display:grid;gap:10px;min-width:260px;padding:14px;background:var(--surface-raised);border:1px solid var(--line-strong);border-radius:var(--au25-r);box-shadow:0 24px 50px -20px #000}
+html[data-composition][data-design="25"] .au25-ed-more-body > :is(button,label){width:100%;text-align:left;margin:0!important}
+html[data-composition][data-design="25"] .au25-ed-more-body input[type=file]{display:block;margin:8px 0 0!important;max-width:100%}
+html[data-composition][data-design="25"] .au24-status:empty{display:none}
+html[data-composition][data-design="25"] .au24-status{margin:0 24px 10px!important}
+html[data-composition][data-design="25"] .au24-inspector{padding:22px!important}
+html[data-composition][data-design="25"] .au24-inspector .au24-move{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+html[data-composition][data-design="25"] .au25-ed-fold{margin:16px 0;border:1px solid var(--line);border-radius:var(--au25-r-sm);padding:0 14px}
+html[data-composition][data-design="25"] .au25-ed-fold > summary{cursor:pointer;padding:13px 0;font-weight:700;font-size:13px}
+html[data-composition][data-design="25"] .au25-ed-fold[open]{padding-bottom:12px}
+html[data-composition][data-design="25"] .au25-ed-fold > label{display:grid;gap:7px;margin:12px 0;font-size:12px}
+html[data-composition][data-design="25"] .au25-ed-add{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:4px}
+html[data-composition][data-design="25"] .au25-ed-danger{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+html[data-composition][data-design="25"] .au25-ed-danger > button{flex:1 1 120px;margin:0!important}
+@media (max-width:700px){
+ html[data-composition][data-design="25"] .au25-ed-view > .au24-tools{justify-content:flex-start;margin-left:0}
+ html[data-composition][data-design="25"] .au24-top,html[data-composition][data-design="25"] .au25-ed-draft,html[data-composition][data-design="25"] .au25-ed-view{padding-inline:16px!important}
+ html[data-composition][data-design="25"] .au25-ed-more-body{left:0;right:auto}
+}
+/* Outils réservés : plus de petits rectangles sombres derrière les textes */
+html[data-staff=true][data-composition][data-design="25"] [data-au-access] :is(label,h1,h2,h3,p,span,a:not(.button)):not([class*=badge]):not(.au-chip){background:transparent!important}
+/* 5 · Lecteur en mode paroles (ordinateur) : les paroles prennent toute la place disponible */
+@media (min-width:900px){
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics #paroles{display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);gap:10px 16px!important;align-content:stretch}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics #paroles > .au222-lyric-identity{grid-column:1/-1;grid-row:1}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics #paroles > .au222-lyric-commands{grid-column:1;grid-row:2;margin:0!important}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics #paroles > .au222-lyric-actions{grid-column:2;grid-row:2;justify-content:flex-end;margin:0!important;max-height:none!important}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics #paroles > .lyrics-layout{grid-column:1/-1;grid-row:3;min-height:0;width:min(1000px,100%);max-width:none!important;justify-self:center;margin:0!important}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics .au22-estimated-label{margin:0 0 4px!important;font-size:11px!important;opacity:.7}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics .xp-listening-transport{padding-block:4px!important}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics .xp-listening-transport :is(.player-dock,.dock-inner){padding-block:0!important;min-height:0!important}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics .xp-listening-transport .dock-center{flex-direction:row!important;align-items:center;gap:22px!important}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics .xp-listening-transport .transport{order:-1;flex:none;margin:0!important}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics .xp-listening-transport .timeline{flex:1 1 auto;margin:0!important}
+}
+html[data-composition][data-design="25"] .au25-ed-brand > label{white-space:nowrap;flex:none}
+@media (max-width:700px){html[data-composition][data-design="25"] .au25-ed-brand strong{font-size:20px!important}}
+@media (max-width:899px){
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics #paroles > :is(.au222-lyric-commands,.au222-lyric-actions){flex-wrap:wrap!important;overflow:visible!important;max-height:none!important;gap:8px!important;row-gap:8px!important}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics #paroles > .au222-lyric-commands > button{padding:6px 10px!important;font-size:13px!important;min-height:34px!important}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics #paroles > .au222-lyric-actions > button{padding:6px 12px!important;font-size:12.5px!important;min-height:36px!important;flex:1 1 auto}
+ html[data-composition][data-design="25"] dialog.xp-full-player.xp-show-lyrics .au22-estimated-label{font-size:11px!important;margin:0 0 4px!important;opacity:.7}
+}
+/* Le lecteur plein écran recouvre la barre d'onglets : il n'a pas à lui réserver de place */
+@media (max-width:899px){html[data-composition][data-design="25"] :is(#au25-none,dialog.xp-full-player).au222-page-surface{padding-bottom:calc(18px + env(safe-area-inset-bottom))!important}}

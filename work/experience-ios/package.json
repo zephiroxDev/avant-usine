@@ -1,6 +1,6 @@
 {
   "name": "avant-usine-ios",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "private": true,
   "scripts": {
     "prepare:site": "node scripts/prepare-experience.cjs",

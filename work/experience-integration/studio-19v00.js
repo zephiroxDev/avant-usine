@@ -117,11 +117,12 @@ function create({host,audio,play,initial,lines=[],curves=[],times=[],ends=[],tit
   barSide.append(zen);bar.append(barMain,barSide);
   listen.classList.remove('secondary');listen.classList.add('studio25-listen');
   focus.prepend(E('p','Phrase en cours','studio25-label'));
-  focus.append(navigation);controls.remove();
+  // 25.1 : la barre et l'écoute ensemble en haut, le reste en dessous.
+  const primary=E('div',null,'studio25-primary');primary.append(listen,undo,...navigation.querySelectorAll(':scope > button'));navigation.remove();focus.append(primary);controls.remove();
   const fold=(title,node)=>{const d=E('details',null,'studio25-fold');const sm=E('summary',title);node.querySelector(':scope > h2')?.remove();d.append(sm,...node.childNodes);return d;};
   const comfortFold=fold('Réglages de confort · vitesse, sensibilité, pause',comfort),finishFold=fold('Enregistrer, règles et projets',finish);
   comfortFold.classList.add('au222-studio-comfort');
-  root.replaceChildren(bar,focus,zenDock,comfortFold,finishFold,advanced,status);
+  bar.classList.add('studio25-secondary');root.replaceChildren(focus,zenDock,bar,comfortFold,finishFold,advanced,status);
   const dlg=()=>root.closest('dialog');
   const setZen=on=>{root.classList.toggle('studio25-zen',on);dlg()?.classList.toggle('studio25-zen-dialog',on);zen.setAttribute('aria-pressed',String(on));try{localStorage.setItem('au-atelier-zen-25',on?'1':'0');}catch{}if(on)requestAnimationFrame(()=>focus.scrollIntoView({block:'center'}));};
   zen.onclick=()=>setZen(true);zenExit.onclick=()=>setZen(false);zenPlay.onclick=()=>listen.click();

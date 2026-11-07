@@ -25,3 +25,10 @@ new MutationObserver(m=>{if(m.some(r=>(r.target.id==='tracklist'||r.target.close
 (()=>{const paint=i=>{const min=+i.min||0,max=+i.max||100;i.style.setProperty('--au25-v',((+i.value-min)/(max-min||1)*100)+'%');};
  const scan=()=>document.querySelectorAll('.au20-volume input[type=range]').forEach(i=>{if(!i.dataset.au25v){i.dataset.au25v='1';i.addEventListener('input',()=>paint(i));}paint(i);});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',scan);else scan();setInterval(scan,1500);})();
+
+// 25.1 : icônes seules agrandies (✕, ↻…), « Actualiser » de Communauté en icône.
+(()=>{const scan=()=>{
+ document.querySelectorAll(':is(.major-dialog-head,.au-dialog-head,.xp-dialog-head,.au-art-header) > button,.xp-close,.au-art-close').forEach(b=>{const t=b.textContent.trim();b.classList.toggle('au25-glyph',t.length>0&&[...t].length<=2);});
+ document.querySelectorAll('.au-gamepad-settings > button:not(.button)').forEach(b=>b.classList.add('button','secondary'));
+ document.querySelectorAll('.dc-heading > button.dc-text-button').forEach(b=>{if(b.dataset.au25r)return;if(b.textContent.trim()!=='Actualiser')return;b.dataset.au25r='1';b.textContent='↻';b.setAttribute('aria-label','Actualiser');b.title='Actualiser';b.classList.add('au25-refresh');});
+};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',scan);else scan();setInterval(scan,1000);})();
