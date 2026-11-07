@@ -462,3 +462,4 @@ html[data-composition][data-design="25"] .au25-notes-bar{margin-top:6px}
  html[data-composition][data-design="25"] .au24-top > input{flex:1 1 100%!important;width:100%!important;min-width:0}
  html[data-composition][data-design="25"] .au24-top > :is(button,select){flex:1 1 auto}
 }
+html[data-composition][data-design="25"] .au222-footer{margin-top:40px!important}
