@@ -20,3 +20,8 @@ document.addEventListener('play',later,true);document.addEventListener('pause',l
 const own=n=>n.nodeType===1&&(n.classList.contains('au24-eq')||n.parentElement?.classList?.contains('au24-eq'));
 new MutationObserver(m=>{if(m.some(r=>(r.target.id==='tracklist'||r.target.closest?.('#tracklist'))&&![...r.addedNodes,...r.removedNodes].every(own)))later();}).observe(document.body,{childList:true,subtree:true});
 })();
+
+// 25.1 : remplissage du curseur de volume (le ruban dessiné est remplacé).
+(()=>{const paint=i=>{const min=+i.min||0,max=+i.max||100;i.style.setProperty('--au25-v',((+i.value-min)/(max-min||1)*100)+'%');};
+ const scan=()=>document.querySelectorAll('.au20-volume input[type=range]').forEach(i=>{if(!i.dataset.au25v){i.dataset.au25v='1';i.addEventListener('input',()=>paint(i));}paint(i);});
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',scan);else scan();setInterval(scan,1500);})();

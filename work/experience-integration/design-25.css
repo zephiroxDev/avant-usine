@@ -381,3 +381,37 @@ html[data-composition][data-design="25"] .au25-note{border:1px solid var(--line)
 html[data-composition][data-design="25"] .au25-note.is-done{opacity:.6;border-left-color:var(--line-strong)}
 html[data-composition][data-design="25"] .au25-note-text{margin:0 0 6px;font-size:15px;line-height:1.45;white-space:pre-wrap}
 html[data-composition][data-design="25"] .au25-note .au-note{margin:0 0 10px;font-size:12px}
+
+/* ---------- 25.1 · remarques de la version de test ---------------------- */
+/* Cadres : vraie marge intérieure partout, et de l'espace entre les boutons. */
+html[data-composition][data-design="25"] .au222-content-block{padding:clamp(20px,2.6vw,34px)!important}
+html[data-composition][data-design="25"] :is(.au222-private-category,.au222-community-actions,.rn-community .au222-actions,.xp-community-landing :is(nav,div):has(> button + button)){display:flex!important;flex-wrap:wrap;gap:12px!important}
+html[data-composition][data-design="25"] :is(.au222-content-block,.xp-dialog-body,.major-dialog-body) > :is(button,.button) + :is(button,.button){margin-left:12px}
+html[data-composition][data-design="25"] .xp-dialog-body > :is(button,.button){margin-top:10px}
+html[data-composition][data-design="25"] .au221-explore{padding:clamp(4px,1vw,10px) clamp(4px,1.4vw,14px)}
+html[data-composition][data-design="25"] .au221-explore :is(p,.au221-lyrics,pre){padding-inline:clamp(2px,.6vw,8px)}
+html[data-composition][data-design="25"] .xp-community-landing{padding-inline:clamp(0px,1vw,10px)}
+html[data-composition][data-design="25"] .xp-community-landing :is(.au222-content-block,section){padding:clamp(20px,2.6vw,34px)}
+/* Pochettes : plus de reflet balayé mal placé, seulement le relief au survol. */
+html[data-composition][data-design="25"] :is(.au222-volume,.au222-volume-art,[class*=cover]).au222-veil::before,html[data-composition][data-design="25"] .au222-volume.au222-veil::after{content:none!important;display:none!important;animation:none!important}
+/* Volume : un curseur net à la place du ruban dessiné. */
+html[data-composition][data-design="25"] .au20-volume{width:150px!important;height:40px!important;display:inline-flex!important;align-items:center;gap:10px}
+html[data-composition][data-design="25"] .au20-volume canvas{display:none!important}
+html[data-composition][data-design="25"] .au20-volume input[type=range]{position:static!important;opacity:1!important;flex:1;min-width:0;height:20px!important;-webkit-appearance:none;appearance:none;background:transparent!important;cursor:pointer}
+html[data-composition][data-design="25"] .au20-volume input[type=range]::-webkit-slider-runnable-track{height:4px;background:linear-gradient(90deg,var(--accent) var(--au25-v,80%),var(--line-strong) var(--au25-v,80%))}
+html[data-composition][data-design="25"] .au20-volume input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;margin-top:-5px;border-radius:2px;background:var(--ink);border:0}
+html[data-composition][data-design="25"] .au20-volume input[type=range]::-moz-range-track{height:4px;background:var(--line-strong)}
+html[data-composition][data-design="25"] .au20-volume input[type=range]::-moz-range-progress{height:4px;background:var(--accent)}
+html[data-composition][data-design="25"] .au20-volume output{position:static!important;font-family:var(--au25-mono)!important;font-size:11px!important;min-width:38px;text-align:right;color:var(--muted)}
+/* Titres à la taille d'une fenêtre, pas d'une affiche. */
+html[data-composition][data-design="25"] main :is(.au222-content-block,.major-card,section) h2:not(.au222-page-heading h2){font-size:clamp(24px,2.6vw,36px)!important}
+html[data-composition][data-design="25"] .au222-page-heading h1{font-size:clamp(42px,5.4vw,84px)!important}
+/* Accueil : les volumes côte à côte, à taille raisonnable. */
+html[data-composition][data-design="25"] .au222-volume-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))!important;gap:clamp(16px,2vw,28px)!important}
+html[data-composition][data-design="25"] .au222-volume{max-width:420px}
+/* Le mini-lecteur ne recouvre plus la fin des pages. */
+html[data-composition][data-design="25"] #main{padding-bottom:140px}
+html[data-composition][data-design="25"] .xp-mini :is(.au222-mini-previous,.xp-mini-play,.xp-mini-next){font-size:22px!important;border-radius:var(--au25-r-sm)!important}
+html[data-composition][data-design="25"] .xp-mini :is(.au222-mini-previous,.xp-mini-next):hover{background:color-mix(in srgb,var(--accent) 12%,transparent)!important;color:var(--accent)!important}
+/* L'en-tête collant ne laisse plus passer les couleurs du contenu. */
+html[data-composition][data-design="25"] .au222-header{background:var(--paper)!important}
