@@ -415,3 +415,31 @@ html[data-composition][data-design="25"] .xp-mini :is(.au222-mini-previous,.xp-m
 html[data-composition][data-design="25"] .xp-mini :is(.au222-mini-previous,.xp-mini-next):hover{background:color-mix(in srgb,var(--accent) 12%,transparent)!important;color:var(--accent)!important}
 /* L'en-tête collant ne laisse plus passer les couleurs du contenu. */
 html[data-composition][data-design="25"] .au222-header{background:var(--paper)!important}
+
+/* ---------- 25.1 · audit d'espacement du site PC ------------------------- */
+html[data-composition][data-design="25"] .au222-nav{gap:10px!important}
+html[data-composition][data-design="25"] .au222-subnav{gap:10px!important}
+html[data-composition][data-design="25"] .au222-subnav-button{margin:0!important}
+html[data-composition][data-design="25"] :is(.dc-panel,.rn-blind-customize){padding:clamp(18px,2.4vw,28px)!important}
+html[data-composition][data-design="25"] .dc-panel > :is(h2,h3){margin-top:0!important;padding-right:110px}
+html[data-composition][data-design="25"] .dc-panel{position:relative}
+html[data-composition][data-design="25"] .dc-panel > .dc-text-button{position:absolute;top:clamp(18px,2.4vw,28px);right:clamp(18px,2.4vw,28px);min-height:40px;padding:0 14px!important;border:1px solid var(--line-strong)!important;border-radius:var(--au25-r-sm)!important;color:var(--ink)!important;background:transparent!important}
+html[data-composition][data-design="25"] dialog > :is(button,.button) + :is(button,.button){margin-left:12px!important}
+html[data-composition][data-design="25"] dialog > :is(select,input) + :is(button,.button){margin-top:12px!important}
+html[data-composition][data-design="25"] dialog > :is(button,.button){margin-top:6px;margin-bottom:6px}
+html[data-composition][data-design="25"] .au24-top{gap:12px!important;padding:16px 18px!important}
+html[data-composition][data-design="25"] .au-gamepad-settings{padding:clamp(16px,2vw,24px)!important}
+html[data-composition][data-design="25"] .track{padding-block:6px}
+html[data-composition][data-design="25"] .track :is(.au-icon,.track-share,.au-17-ai-report){margin:4px}
+/* Le logo ne garde plus un cadre orange quand une page s'ouvre. */
+html[data-composition][data-design="25"] .au222-brand:focus:not(:focus-visible),html[data-composition][data-design="25"] dialog .au222-brand:focus{outline:none!important;box-shadow:none!important}
+html[data-composition][data-design="25"] .au222-brand:focus-visible{outline:none!important;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:6px}
+html[data-composition][data-design="25"] #tracklist .track{border-bottom:0!important}
+html[data-composition][data-design="25"] #tracklist .au-track-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+html[data-composition][data-design="25"] #tracklist .au-track-row > .track{flex:1;min-width:0}
+html[data-composition][data-design="25"] .xp-track-options > summary{width:44px!important;height:44px!important;min-height:44px!important;display:grid!important;place-items:center;border:1px solid var(--line-strong)!important;border-radius:var(--au25-r-sm)!important;background:transparent!important;font-size:16px;cursor:pointer;list-style:none}
+html[data-composition][data-design="25"] .xp-track-options > summary:hover{border-color:var(--accent)!important;color:var(--accent)}
+html[data-composition][data-design="25"] .xp-track-options-body{gap:10px!important;padding:12px!important}
+html[data-composition][data-design="25"] .xp-track-options-body .au-track-actions{gap:10px!important}
+html[data-composition][data-design="25"] .xp-track-options:not([open]){background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;min-width:0!important;min-height:0!important;width:auto!important;height:auto!important}
+html[data-composition][data-design="25"] #tracklist .au-track-row{padding-block:4px}
