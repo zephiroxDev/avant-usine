@@ -617,3 +617,44 @@ html[data-composition][data-design="25"] .au25-ed-brand > label{white-space:nowr
 }
 /* Le lecteur plein écran recouvre la barre d'onglets : il n'a pas à lui réserver de place */
 @media (max-width:899px){html[data-composition][data-design="25"] :is(#au25-none,dialog.xp-full-player).au222-page-surface{padding-bottom:calc(18px + env(safe-area-inset-bottom))!important}}
+
+/* ---------- 25.1.1 · Retours sur iPhone ---------- */
+/* Paroles : sur Safari et dans l'appli iPhone, le flou « filter » laissait des barres et des cadres noirs.
+   On le remplace par un flou dessiné par l'ombre du texte, qui ne crée aucun calque. */
+html.au25-webkit[data-composition][data-design="25"] .au-lyrics-viewport .au-lyric-line:not(#au25-a):not(#au25-b),
+html.au25-webkit[data-composition][data-design="25"] .au-lyrics-viewport .au-lyric-line:not(#au25-a):not(#au25-b) :is(.karaoke-main,.karaoke-char),
+html.au25-webkit[data-composition][data-design="25"] .au-lyrics-content:not(#au25-a):not(#au25-b){filter:none!important;-webkit-filter:none!important;will-change:auto!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important}
+html.au25-webkit[data-composition][data-design="25"] .au-lyrics-viewport .au-lyric-line:not(.is-current):not(.is-exiting):not(#au25-a):not(#au25-b) :is(.karaoke-main,.karaoke-char){color:transparent!important;-webkit-text-fill-color:transparent!important;background:none!important;text-shadow:0 0 calc(var(--au221-blur,1.6px) * 1.4 + 1px) rgba(236,226,208,.62)!important}
+html.au25-webkit[data-composition][data-design="25"] .au-lyrics-viewport .au-lyric-line{outline:0!important;box-shadow:none!important;border-color:transparent!important}
+/* La ligne du haut ne s'arrête plus net sous « Highlight approximatif » : elle s'efface en douceur. */
+html[data-composition][data-design="25"] .xp-full-player .au-lyrics-viewport{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 44px,#000 calc(100% - 36px),transparent 100%)!important;mask-image:linear-gradient(180deg,transparent 0,#000 44px,#000 calc(100% - 36px),transparent 100%)!important}
+
+/* Zones de sécurité : rien ne passe sous l'heure, la batterie ou la barre d'accueil. */
+html[data-composition][data-design="25"] .au25-safe-top{display:block;position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top);background:var(--paper);z-index:2147483000;pointer-events:none}
+@media (max-width:899px){
+ html[data-composition][data-design="25"] dialog.au222-page-surface:not(.xp-full-player){padding-bottom:calc(var(--au25-tab,72px) + 40px + env(safe-area-inset-bottom))!important}
+}
+
+/* Fenêtres : plus de bandeau AVANT L'USINE (le titre et la croix suffisent). Sur téléphone, la barre d'onglets reste. */
+html[data-composition][data-design="25"] dialog.au222-page-surface > .au222-page-chrome{position:static!important;height:0!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;background:none!important;box-shadow:none!important;overflow:visible!important}
+html[data-composition][data-design="25"] dialog.au222-page-surface > .au222-page-chrome > :is(.au222-brand,.au222-search,.au222-subnav){display:none!important}
+@media (min-width:701px){html[data-composition][data-design="25"] dialog.au222-page-surface > .au222-page-chrome{display:none!important}}
+
+/* Lecteur : barre de progression et temps éloignés des bords, un seul fond propre derrière les commandes. */
+html[data-composition][data-design="25"] .xp-full-player :is(.xp-listening-transport,.player-dock,.dock-inner,.dock-center,.xp-player-switch){background:transparent!important;box-shadow:none!important;border-color:transparent!important}
+html[data-composition][data-design="25"] .xp-full-player .xp-listening-transport .timeline{padding-inline:clamp(12px,4vw,28px)!important;box-sizing:border-box}
+html[data-composition][data-design="25"] .xp-full-player .xp-player-switch{padding-inline:clamp(12px,4vw,28px)!important}
+
+/* Réglages d'écoute : plus de double trait ni de vide, le titre passe au-dessus de son bouton. */
+html[data-composition][data-design="25"] .xp-original-options.au25-empty{display:none!important}
+html[data-composition][data-design="25"] .xp-annotations{display:flex!important;flex-direction:column;align-items:flex-start;gap:14px;border-top:0!important;padding-top:22px!important;margin-top:8px!important}
+html[data-composition][data-design="25"] .xp-annotations > h3{order:-1;margin:0!important}
+html[data-composition][data-design="25"] .xp-annotations > *:not(h3):not(button){align-self:stretch}
+
+/* Communauté : de l'air entre deux cadres qui se suivent. */
+html[data-composition][data-design="25"] .au222-content-block + .au222-content-block{margin-top:18px!important}
+/* Fenêtres plein écran : l'en-tête (titre + croix) colle tout en haut, sur un fond plein, et rien ne défile au-dessus. */
+html[data-composition][data-design="25"] dialog.au222-page-surface{padding-top:0!important}
+html[data-composition][data-design="25"] dialog.au222-page-surface > :is(.xp-dialog-head,.major-dialog-head,.au-dialog-head){position:sticky!important;top:0!important;z-index:20!important;padding-top:calc(28px + env(safe-area-inset-top))!important;margin-top:0!important;background:var(--paper)!important}
+html[data-composition][data-design="25"] dialog.au222-page-surface:not(:has(> :is(.xp-dialog-head,.major-dialog-head,.au-dialog-head))){padding-top:calc(28px + env(safe-area-inset-top))!important}
+@media (max-width:899px){html[data-composition][data-design="25"] dialog.au222-page-surface > :is(.xp-dialog-head,.major-dialog-head,.au-dialog-head){padding-top:calc(14px + env(safe-area-inset-top))!important}html[data-composition][data-design="25"] dialog.au222-page-surface:not(:has(> :is(.xp-dialog-head,.major-dialog-head,.au-dialog-head))){padding-top:calc(16px + env(safe-area-inset-top))!important}}

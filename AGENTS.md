@@ -84,3 +84,9 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - Éditeur du site (site-editor.js) : barre principale `.au25-ed-brand`/`.au25-ed-actions`, ligne `.au25-ed-draft`, ligne `.au25-ed-view`, options rares dans `details.au25-ed-more`, inspecteur replié (`au25Group`).
 - Compilation run 42425910916 (release/v25-1, 84c234d), publication via .github/v25-1-release.json.
 - Workflows : un nouveau branchement poussé ne déclenche pas la validation (filtre de chemins) → lancer `gh workflow run v25-1-validation.yml --ref release/v25-1`.
+
+## Livraison 25.1.1 (8 novembre 2026) — retours iPhone
+- Barres/cadres noirs des paroles sur iPhone/Safari = bug WebKit de `filter: blur()` sur les lignes dont les lettres utilisent `background-clip:text`. Corrigé dans design-25.css : sous `html.au25-webkit` (posé par design-25.js pour Safari/appli iOS) plus aucun `filter` sur les lignes, flou dessiné par `text-shadow`. Ne jamais remettre de `filter` sur `.au-lyric-line` pour WebKit.
+- Zones de sécurité : `.au25-safe-top` (div fixe ajoutée par design-25.js au body et à chaque fenêtre plein écran) + en-têtes de fenêtres collants à fond plein avec `env(safe-area-inset-top)`.
+- Bandeau `.au222-page-chrome` retiré des fenêtres (sur téléphone seule la barre d'onglets reste).
+- Site 25.1.1, Windows 0.10.2, iOS 2.4.2 (build 49) ; workflows v25-1-1.

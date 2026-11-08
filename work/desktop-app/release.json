@@ -1,6 +1,6 @@
 {
-  "releaseId": "25.1",
-  "desktopVersion": "0.10.1",
+  "releaseId": "25.1.1",
+  "desktopVersion": "0.10.2",
   "websiteSource": "../experience-integration",
   "publicationPolicy": "Historiques indépendants : publier chaque plateforme dès qu’elle est prête. Publier tous les fichiers de mise à jour et leur manifest avant de rendre la release Windows publique.",
   "immersionBackground": "solid-customizable"
