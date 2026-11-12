@@ -18,7 +18,7 @@ document.addEventListener('click',async event=>{
  }catch(error){notify('Export : '+(error.message||error));}
  finally{if(path)await files.deleteFile({path,directory:'CACHE'}).catch(()=>{});}
 },true);
-const accountUpdate=document.createElement('button');accountUpdate.type='button';accountUpdate.className='button secondary';accountUpdate.id='forceAppUpdate';accountUpdate.textContent='Forcer une mise à jour';accountUpdate.onclick=async()=>{accountUpdate.disabled=true;document.querySelector('#accountDialog')?.close();try{await check(true);}finally{accountUpdate.disabled=false;}};function mountAccountUpdate(){const host=document.getElementById?.('accountDialog');if(host&&!host.contains(accountUpdate))host.append(accountUpdate);}mountAccountUpdate();if(typeof MutationObserver!=='undefined')new MutationObserver(mountAccountUpdate).observe(document.body,{childList:true,subtree:true});
+const accountUpdate=document.createElement('button');accountUpdate.type='button';accountUpdate.className='button secondary';accountUpdate.id='forceAppUpdate';accountUpdate.textContent='Forcer une mise à jour';accountUpdate.onclick=async()=>{accountUpdate.disabled=true;document.querySelector('#accountDialog')?.close();try{await check(true);}finally{accountUpdate.disabled=false;}};function mountAccountUpdate(){const host=document.getElementById?.('accountDialog');if(host&&!host.contains(accountUpdate))(host.querySelector?.('#accountMember')||host).append(accountUpdate);}mountAccountUpdate();if(typeof MutationObserver!=='undefined')new MutationObserver(mountAccountUpdate).observe(document.body,{childList:true,subtree:true});
 let checking=false,offered=false,lastCheck=0,reportedFailure=false;window.AU_UPDATE_DIAGNOSTIC?.configure({platform:'ios',current,search:()=>check(true,true)});
 async function check(force=false,diagnose=false){
  if(!native){const error='Le service de mise à jour iOS est absent de cette installation. Télécharge puis signe la dernière IPA depuis le site pour réparer cette installation.';window.AU_UPDATE_DIAGNOSTIC?.record({error});if(force)notify(error);return;}
@@ -39,15 +39,16 @@ async function check(force=false,diagnose=false){
   if(!force&&localStorage.getItem(prefix+'skip')===version){if(force)notify('La version '+version+' est ignorée. La suivante sera proposée.');return;}
   const sha=latest.a.digest?.replace(/^sha256:/,'');
   if(!/^[a-f0-9]{64}$/i.test(sha||'')||!Number.isSafeInteger(latest.a.size)||latest.a.size<=0)throw Error('Le paquet ne dispose pas des informations de vérification nécessaires.');
+  if(!force&&document.querySelector?.('dialog[open]')){setTimeout(()=>{lastCheck=0;check();},20000);return;}
   offered=true;
   const modal=document.createElement('dialog');modal.className='au-ios-update';
   const heading=document.createElement('h2');heading.textContent='Mise à jour iOS '+version;
   const text=document.createElement('p');text.textContent='Télécharge le nouvel IPA, puis signe-le dans l’outil de ton choix avec un certificat et un profil valides avant de l’installer. Garde le même identifiant et une signature compatible pour conserver tes données.';
   modal.append(heading,text);
-  const button=(label,action)=>{const b=document.createElement('button');b.className='button';b.textContent=label;b.onclick=action;modal.append(b);return b;};
+  const button=(label,action,kind='button')=>{const b=document.createElement('button');b.type='button';b.className=kind;b.textContent=label;b.onclick=action;modal.append(b);return b;};
   const close=()=>{modal.close();modal.remove();offered=false;};
-  const later=button('Plus tard',()=>{localStorage.setItem(prefix+'remind',String(Date.now()+day));close();});
-  const skip=button('Sauter la version '+version+' et me le rappeler lors de la version qui sera déployée après la '+version,()=>{localStorage.setItem(prefix+'skip',version);close();});
+  const later=button('Plus tard',()=>{localStorage.setItem(prefix+'remind',String(Date.now()+day));close();},'button secondary au-ios-later');
+  const skip=button('Ignorer la version '+version,()=>{localStorage.setItem(prefix+'skip',version);close();},'text-button au-ios-skip');
   const download=button('Télécharger la mise à jour',async()=>{
    download.disabled=true;later.disabled=true;skip.disabled=true;
    const progress=document.createElement('progress');progress.max=100;modal.append(progress);
@@ -56,7 +57,7 @@ async function check(force=false,diagnose=false){
     listener=await native.addListener('progress',p=>{if(p.total>0){progress.value=p.bytes/p.total*100;text.textContent='Téléchargement : '+Math.round(progress.value)+' %';}else{progress.removeAttribute('value');text.textContent='Téléchargement : '+Math.round(p.bytes/1048576)+' Mo';}});
     const result=await native.download({url:latest.a.browser_download_url,sha256:sha,size:latest.a.size,name:latest.a.name});
     text.textContent='IPA téléchargé et vérifié. Appuie sur « Ouvrir dans un outil de signature », puis sélectionne ton outil de signature si iOS propose plusieurs applications.';
-    download.remove();
+    download.remove();skip.remove();
     button('Ouvrir dans un outil de signature',async()=>{try{const opened=await native.openIn({uri:result.uri});if(!opened.opened)text.textContent='Ouverture annulée. Tu peux réessayer avec « Ouvrir dans un outil de signature ».';}catch(error){text.textContent='Ouverture impossible : '+(error.message||error)+'. Ouvre ton outil de signature et importe le fichier depuis Fichiers > Avant l’usine > MisesAJour.';}});
    }catch(error){text.textContent='Téléchargement interrompu : '+(error.message||error)+'. L’installation actuelle est conservée.';download.disabled=false;}
    finally{await listener?.remove();progress.remove();later.disabled=false;skip.disabled=false;}

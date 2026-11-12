@@ -90,3 +90,12 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - Zones de sécurité : `.au25-safe-top` (div fixe ajoutée par design-25.js au body et à chaque fenêtre plein écran) + en-têtes de fenêtres collants à fond plein avec `env(safe-area-inset-top)`.
 - Bandeau `.au222-page-chrome` retiré des fenêtres (sur téléphone seule la barre d'onglets reste).
 - Site 25.1.1, Windows 0.10.2, iOS 2.4.2 (build 49) ; workflows v25-1-1.
+
+## Livraison 25.2 (12 novembre 2026) — Atelier + chasse aux bugs
+- Atelier : sync-slider-19v03.js garde le geste même si le son n'est pas prêt ; zone de toucher agrandie (`.studio19-slider::after`), classe `au25-dragging` pendant le glissement. Tous les `input[type=range]` : gestion tactile commune dans design-25.js.
+- design-25.js (bloc 25.2) : `AU_SAY_25` (message bref en bas), adoption des boutons ajoutés à l'ancien `.footer` (rouage Windows, mises à jour iOS) dans `.au222-footer`, historique navigateur (`au:routechange` → pushState `#route`, Précédent ferme d'abord la fenêtre ouverte), raccourcis clavier, remplacement des messages techniques anglais, Éditeur du site masqué sous 900 px et dans les applis mobiles.
+- composition-22-2.js : `trackAction` ne quitte plus le lecteur ; bouton Favori à état (`markFavorite`) ; « Signaler une IA » ; liens du pied de page rétablis.
+- Blind Test : `#blindtest [hidden]` doit rester masqué (ne pas forcer `display` sans `:not([hidden])`) ; réponses marquées `.is-correct` / `.is-wrong`. Le bouton « Skipper dû à un bug » est voulu (audio non chargé, retiré du total).
+- « Morceau précédent » : retour au début si > 3 s. Fenêtre de mise à jour iOS : structure plate (les tests lisent `modal.children`), ordre par CSS `order`.
+- Dans le navigateur de test (anglais), « Choose File » et les bulles de validation sont celles du navigateur : pas un bug du site.
+- Site 25.2, Windows 0.10.3, iOS 2.4.3 (build 50) ; affiche promo-25v03 ; workflows v25-2.

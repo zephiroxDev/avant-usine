@@ -2,6 +2,23 @@
   "format": 1,
   "images": [
     {
+      "id": "25v03",
+      "patch": "25.2",
+      "image": "promo-25v03-public.png",
+      "original": "promo-25v03-public.png",
+      "video": "promo-25v03-public.mp4",
+      "animation": "promo-25v03-public.mp4",
+      "title": "Tout sous la main.",
+      "platforms": [
+        "web-pc",
+        "web-mobile",
+        "desktop-pc",
+        "ios"
+      ],
+      "filename": "25.2 image.png",
+      "videoFilename": "25.2 video.mp4"
+    },
+    {
       "id": "25v02",
       "patch": "25.1.1",
       "image": "promo-25v02-public.png",

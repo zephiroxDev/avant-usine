@@ -66,7 +66,7 @@ function mount(){
 function askCode(b,note,cardNode){
  const d=E('dialog',null,'au-dialog au24-code-ask');d.setAttribute('aria-labelledby','au24-ask-title');
  const h=E('h2','Code d’accès');h.id='au24-ask-title';
- const p=E('p','Cette version de test de '+(label[b.platform]||b.platform)+' '+b.version+' est protégée. Saisis le code à 6 chiffres donné par le créateur.','au-note');
+ const p=E('p','La version de test '+(label[b.platform]||b.platform)+' '+b.version+' est protégée. Saisis le code à 6 chiffres donné par le créateur.','au-note');
  const form=E('form',null,'au24-ask-form'),input=E('input',null,'au24-code-input');input.inputMode='numeric';input.autocomplete='one-time-code';input.maxLength=6;input.pattern='[0-9]{6}';input.required=true;input.setAttribute('aria-label','Code à 6 chiffres');input.placeholder='••••••';
  const err=E('p',null,'au24-ask-error');err.setAttribute('role','alert');
  const row=E('div',null,'actions au24-ask-actions'),cancel=E('button','Annuler','button secondary'),ok=E('button','Valider','button');cancel.type='button';ok.type='submit';row.append(cancel,ok);

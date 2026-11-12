@@ -658,3 +658,84 @@ html[data-composition][data-design="25"] dialog.au222-page-surface{padding-top:0
 html[data-composition][data-design="25"] dialog.au222-page-surface > :is(.xp-dialog-head,.major-dialog-head,.au-dialog-head){position:sticky!important;top:0!important;z-index:20!important;padding-top:calc(28px + env(safe-area-inset-top))!important;margin-top:0!important;background:var(--paper)!important}
 html[data-composition][data-design="25"] dialog.au222-page-surface:not(:has(> :is(.xp-dialog-head,.major-dialog-head,.au-dialog-head))){padding-top:calc(28px + env(safe-area-inset-top))!important}
 @media (max-width:899px){html[data-composition][data-design="25"] dialog.au222-page-surface > :is(.xp-dialog-head,.major-dialog-head,.au-dialog-head){padding-top:calc(14px + env(safe-area-inset-top))!important}html[data-composition][data-design="25"] dialog.au222-page-surface:not(:has(> :is(.xp-dialog-head,.major-dialog-head,.au-dialog-head))){padding-top:calc(16px + env(safe-area-inset-top))!important}}
+
+/* ---------- 25.2 · Atelier : barre de synchronisation facile à attraper ---------- */
+/* Zone de toucher agrandie autour de la barre, sans changer sa taille visible. */
+html[data-composition][data-design="25"] .studio19-slider{overflow:visible!important;touch-action:none!important;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+html[data-composition][data-design="25"] .studio19-slider::after{content:"";position:absolute;inset:-12px -14px;touch-action:none}
+html[data-composition][data-design="25"] .studio19-slider-wrap{margin:14px 0!important}
+/* Pendant le glissement : rien d'autre ne bouge (pas de défilement, pas de sélection). */
+html.au25-dragging,html.au25-dragging body{overscroll-behavior:none!important;-webkit-user-select:none!important;user-select:none!important}
+html.au25-dragging dialog[open]{overflow:hidden!important}
+/* Les autres curseurs (progression, volume, effets) : même confort, même aspect.
+   La zone qui réagit passe à 44 px de haut grâce à une bordure invisible ; le trait visible ne bouge pas. */
+html[data-composition][data-design="25"] input[type=range]{touch-action:none!important;-webkit-tap-highlight-color:transparent}
+html[data-composition][data-design="25"] .timeline input[type=range]{height:44px!important;border:0 solid transparent!important;border-width:13px 0!important;margin-block:-13px!important;background-clip:padding-box!important;border-radius:7px/20px!important;box-shadow:inset 0 0 0 1px var(--line-strong)!important;cursor:pointer}
+html[data-composition][data-design="25"] .au20-volume input[type=range]{height:44px!important;border:0 solid transparent!important;border-width:12px 0!important;margin-block:-12px!important;background-clip:padding-box!important}
+html[data-composition][data-design="25"] .rn-beat-setting input[type=range]{height:44px!important;border:0 solid transparent!important;border-width:9px 0!important;margin-block:-9px!important;background:transparent!important;box-shadow:none!important;cursor:pointer}
+
+/* ---------- 25.2 · Corrections de la chasse aux bugs ---------- */
+/* Lecteur : la lumière va jusqu'aux bords ; plus de bandes sombres ni de rectangle flou. */
+html[data-composition][data-design="25"] :is(#au25-none,dialog.xp-full-player){padding-left:0!important;padding-right:0!important}
+html[data-composition][data-design="25"] dialog.xp-full-player > :is(.xp-dialog-head,.xp-dialog-body){padding-left:36px!important;padding-right:36px!important;box-sizing:border-box}
+html[data-composition][data-design="25"] dialog.xp-full-player > .xp-dialog-head{background:transparent!important;box-shadow:none!important;border-bottom-color:transparent!important}
+html[data-composition][data-design="25"] dialog.xp-full-player > .xp-dialog-body{scrollbar-width:none}
+html[data-composition][data-design="25"] dialog.xp-full-player > .xp-dialog-body::-webkit-scrollbar{display:none}
+html[data-composition][data-design="25"] dialog.xp-full-player .xp-player-switch{position:static!important;background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important;border:0!important}
+@media (max-width:899px){html[data-composition][data-design="25"] dialog.xp-full-player > :is(.xp-dialog-head,.xp-dialog-body){padding-left:18px!important;padding-right:18px!important}}
+html[data-composition][data-design="25"] .au222-player-related button[aria-pressed=true]{color:var(--accent)!important;border-color:var(--accent)!important}
+/* Blind Test : une zone masquée reste masquée ; bonne et mauvaise réponse visibles ; bilan lisible. */
+html[data-composition][data-design="25"] #blindtest [hidden]:not(#au25-a):not(#au25-b){display:none!important}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer.is-correct{border-color:#58c27d!important;box-shadow:0 0 0 2px #58c27d inset!important;opacity:1!important}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer.is-wrong{border-color:#e5604d!important;box-shadow:0 0 0 2px #e5604d inset!important;opacity:1!important}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer:disabled:not(.is-correct):not(.is-wrong){opacity:.45}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer.is-correct strong::after{content:"  ✓";color:#58c27d}
+html[data-composition][data-design="25"] #blindtest .au-blind-answer.is-wrong strong::after{content:"  ✕";color:#e5604d}
+html[data-composition][data-design="25"] #blindtest dl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0;margin:16px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+html[data-composition][data-design="25"] #blindtest dl > :is(dt,dd){margin:0;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px}
+html[data-composition][data-design="25"] #blindtest dl > dd{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+html[data-composition][data-design="25"] #blindtest dl > :is(dt,dd):nth-last-child(-n+2){border-bottom:0}
+html[data-composition][data-design="25"] #blindtest table{width:100%;border-collapse:collapse;margin:16px 0}
+html[data-composition][data-design="25"] #blindtest :is(th,td){text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);font-size:14px}
+/* Messages brefs : en bas, au-dessus du lecteur, jamais au milieu du contenu. */
+html[data-composition][data-design="25"] :is(.au221-feedback,.major-toast:not(:empty),.au25-toast){position:fixed!important;top:auto!important;left:50%!important;right:auto!important;bottom:calc(104px + env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;width:max-content;max-width:min(92vw,520px);margin:0!important;z-index:2147483000}
+html[data-composition][data-design="25"] .au25-toast{padding:10px 16px;border-radius:999px;background:#2a2520;color:#f3eadb;border:1px solid #ffffff26;font-size:13px;font-weight:600;box-shadow:0 8px 28px #0006;pointer-events:none;text-align:center}
+html[data-composition][data-design="25"] .au25-toast[hidden]{display:none!important}
+@media (max-width:899px){html[data-composition][data-design="25"] :is(.au221-feedback,.major-toast:not(:empty),.au25-toast){bottom:calc(158px + env(safe-area-inset-bottom))!important}}
+html[data-theme=light][data-composition][data-design="25"] :is(.au221-feedback,.au25-toast){background:#fffaf0!important;color:#1c1712!important;border-color:#1c171233!important}
+/* Messages privés : les miens à droite, en ambre ; pastille « non lus » sur une ligne. */
+html[data-composition][data-design="25"] .major-messages .major-message{width:fit-content!important;max-width:min(78%,640px)!important;margin-right:auto!important;margin-left:0!important;overflow-wrap:anywhere}
+html[data-composition][data-design="25"] .major-messages .major-message.mine{margin-left:auto!important;margin-right:0!important;background:color-mix(in srgb,var(--accent) 16%,transparent)!important;border-color:color-mix(in srgb,var(--accent) 45%,transparent)!important}
+html[data-composition][data-design="25"] .major-messages .major-message time{text-transform:none!important;letter-spacing:0!important;font-size:11px!important;opacity:.7}
+html[data-composition][data-design="25"] .major-unread{white-space:nowrap!important;width:max-content!important;height:auto!important;display:inline-block!important}
+html[data-composition][data-design="25"] dialog :is(.xp-dialog-head,.major-dialog-head,.au-dialog-head) :is(h1,h2){overflow-wrap:break-word;word-break:normal;hyphens:none}
+@media (max-width:899px){html[data-composition][data-design="25"] dialog:not(#accountDialog):not(.xp-full-player) > :is(.xp-dialog-head,.major-dialog-head){flex-wrap:wrap;row-gap:8px}html[data-composition][data-design="25"] dialog:not(#accountDialog):not(.xp-full-player) > :is(.xp-dialog-head,.major-dialog-head) :is(h1,h2){flex:1 1 55%;font-size:clamp(20px,6.4vw,28px)!important;line-height:1.05!important}}
+/* Personnaliser mon profil : un champ par ligne, lisible. */
+html[data-composition][data-design="25"] dialog .major-form{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:14px!important;max-width:640px}
+html[data-composition][data-design="25"] dialog .major-form > *{margin:0!important;justify-self:stretch}
+html[data-composition][data-design="25"] dialog .major-form :is(input[type=text],textarea,select){width:100%!important;box-sizing:border-box}
+html[data-composition][data-design="25"] dialog .major-form > :is(button,.button)[type=submit]{justify-self:start}
+html[data-composition][data-design="25"] input[type=file]{max-width:100%;font:inherit;color:var(--muted,inherit)}
+html[data-composition][data-design="25"] input[type=file]::file-selector-button{font:inherit;font-weight:600;min-height:40px;padding:0 14px;margin-right:12px;border-radius:6px;border:1px solid var(--line-strong,#ffffff33);background:transparent;color:var(--ink,inherit);cursor:pointer}
+/* Réglages : les interrupteurs sont actifs, donc lisibles. */
+html[data-composition][data-design="25"] #reglages .au221-settings-controls :is(button,a):not(:disabled){color:var(--ink)!important;opacity:1!important}
+/* Fenêtres : pas de contour de focus sur la fenêtre elle-même ni sur les titres. */
+html[data-composition][data-design="25"] dialog:focus,html[data-composition][data-design="25"] dialog:focus-visible,html[data-composition][data-design="25"] :is(h1,h2)[tabindex="-1"]:focus{outline:0!important;box-shadow:none}
+/* Mode clair : paroles lisibles, pied de page et fond des fenêtres clairs. */
+html[data-theme=light][data-composition][data-design="25"] :is(.xp-full-player,#paroles){--karaoke-ink:#1c1712!important;--karaoke-dim:#1c171247!important;--lyrics-ink:#1c1712!important}
+html[data-theme=light][data-composition][data-design="25"] :is(.xp-full-player,#paroles) .au-lyric-line:not(#au25-a):not(#au25-b),html[data-theme=light][data-composition][data-design="25"] :is(.xp-full-player,#paroles) .au-lyric-line:not(.is-current):not(.is-exiting):not(#au25-a):not(#au25-b) :is(.karaoke-main,.karaoke-word,.karaoke-char){color:#1c1712!important;-webkit-text-fill-color:#1c1712!important}
+html[data-theme=light][data-composition][data-design="25"] :is(.xp-full-player,#paroles) .au22-approx .au-lyric-line:is(.is-current,.is-exiting) .karaoke-char:not(#au25-a):not(#au25-b){background-image:linear-gradient(90deg,#1c1712 calc(var(--fill,0%) - 22%),#1c171247 calc(var(--fill,0%) + 22%))!important}
+html.au25-webkit[data-theme=light][data-composition][data-design="25"] .au-lyrics-viewport .au-lyric-line:not(.is-current):not(.is-exiting):not(#au25-a):not(#au25-b) :is(.karaoke-main,.karaoke-char){color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 calc(var(--au221-blur,1.6px) * 1.4 + 1px) rgba(28,23,18,.55)!important}
+html[data-theme=light][data-composition][data-design="25"] .au222-footer{background:#e9e0cf!important;color:#5b5145!important;border-top-color:#1c17121f!important}
+html[data-theme=light][data-composition][data-design="25"] .au222-footer :is(button,a,span){color:#5b5145!important}
+html[data-theme=light][data-composition][data-design="25"] dialog::backdrop{background:rgba(226,216,198,.92)!important}
+html[data-theme=light][data-composition][data-design="25"] .au222-subnav button:not([aria-current]):not(.active){color:#5b5145!important}
+/* Grand écran : le site et les fenêtres prennent plus de place. */
+@media (min-width:1500px){html[data-composition][data-design="25"] #main{max-width:1360px!important}html[data-composition][data-design="25"] .xp-mini{width:min(1360px,100%)!important}html[data-composition][data-design="25"] dialog.au222-page-surface{width:min(1360px,100vw)!important}}
+@media (min-width:1800px){html[data-composition][data-design="25"] #main{max-width:1560px!important}html[data-composition][data-design="25"] .xp-mini{width:min(1560px,100%)!important}html[data-composition][data-design="25"] dialog.au222-page-surface{width:min(1560px,100vw)!important}html[data-composition][data-design="25"] body{font-size:17px}}
+/* Très petits écrans : titres qui ne se coupent plus en plein mot. */
+@media (max-width:360px){html[data-composition][data-design="25"] main h1{font-size:clamp(28px,10.5vw,40px)!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}}
+/* Peu de hauteur (petit téléphone, téléphone couché) : en mode paroles, les paroles passent avant les boutons. */
+@media (max-height:600px){html[data-composition][data-design="25"] .xp-full-player.xp-show-lyrics :is(.au222-lyric-actions,.au222-player-actions,.au222-player-related){display:none!important}}
+/* Petites fenêtres sur téléphone : centrées, pas collées en haut. */
+@media (max-width:899px){html[data-composition][data-design="25"] dialog.au-dialog:not(.au222-page-surface):not(.xp-full-player){margin:auto!important}}

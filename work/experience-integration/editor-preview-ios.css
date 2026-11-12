@@ -1,7 +1,7 @@
 html{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 .au-ios-update{width:min(90vw,580px);max-height:85dvh;overflow:auto;background:#1d1916;color:#fff;border:1px solid #e8a24c;border-radius:16px;padding:24px}
 .au-ios-update::backdrop{background:#000b}
-.au-ios-update .button{display:block;width:100%;white-space:normal;margin-top:12px}
+html dialog.au-ios-update:not(#au-a):not(#au-b){margin:auto!important;inset:0!important;position:fixed!important;height:fit-content!important}html dialog.au-ios-update[open]:not(#au-a):not(#au-b){display:flex!important;flex-direction:column;gap:10px}html dialog.au-ios-update:not(#au-a):not(#au-b)>*{order:0;margin:0!important}html dialog.au-ios-update:not(#au-a):not(#au-b)>:is(.button,.text-button){display:block;width:100%!important;white-space:normal;box-sizing:border-box;order:1}html dialog.au-ios-update:not(#au-a):not(#au-b)>.au-ios-later{order:2}html dialog.au-ios-update:not(#au-a):not(#au-b)>.au-ios-skip{order:3;padding:10px;text-align:center;opacity:.8}
 .au-ios-update progress{width:100%;margin-top:16px}
 .au-ios-status{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom));left:5%;right:5%;padding:14px;background:#2a221b;color:white;border-radius:10px;z-index:10000}
 

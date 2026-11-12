@@ -35,7 +35,7 @@ test('Only newest published iOS package selected, numeric versions',()=>{
 test('Skipped version suppressed; a newer real version is proposed',async()=>{
  const c=context();c.storage.set('au-ios-skip',`${futureVersion}`);await c.check();assert.equal(c.elements.length,0);
  c.advance(60001);c.storage.set('au-ios-skip','1.0.1');await c.check();assert.equal(c.elements.length,1);
- assert.ok(c.elements[0].children.some(x=>x.textContent===`Sauter la version ${futureVersion} et me le rappeler lors de la version qui sera déployée après la ${futureVersion}`));
+ assert.ok(c.elements[0].children.some(x=>x.textContent===`Ignorer la version ${futureVersion}`));
 });
 test('Later postpones; verified download provides ESign action',async()=>{
  const c=context();await c.check();const modal=c.elements[0];
