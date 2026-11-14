@@ -6,7 +6,7 @@ window.initAppImmersion=function({audio,track,getVolume,AU_GENIUS_SYNC,move,star
  const d=E('dialog',app?'au-new-immersion':'au-dialog');d.id='auImmersionApp';d.setAttribute('aria-label','Écoute immersive');
  const close=B('Fermer',()=>d.close());close.setAttribute('aria-label','Fermer le mode immersion');
  let open;
- if(!app){const title=E('h2','','Mode immersion'),message=E('p','','Le mode immersion est exclusivement disponible dans les applications Avant l’usine pour Windows, Android et iPhone. Il n’est pas disponible sur les versions en ligne, sur PC ou mobile.');d.append(title,message,close);open=()=>d.showModal();}
+ if(!app){const title=E('h2','','Mode immersion'),message=E('p','','Le mode immersion est exclusivement disponible dans les applications Avant l’usine pour Windows et iPhone. Il n’est pas disponible sur les versions en ligne, sur PC ou mobile.');d.append(title,message,close);open=()=>d.showModal();}
  else{
   const head=E('header','au-im-head'),name=E('h2'),body=E('div','au-im-body'),art=E('section','au-im-art'),picture=E('div','au-im-picture'),lyrics=E('section','au-im-lyrics'),viewport=E('div','au-im-viewport'),note=E('p','au-im-note'),controls=E('footer','au-im-controls');
   lyrics.setAttribute('aria-label','Paroles du morceau');viewport.tabIndex=0;viewport.setAttribute('aria-label','Paroles défilantes');note.setAttribute('role','status');head.append(name,close);art.append(picture);lyrics.append(note,viewport);body.append(art,lyrics);d.append(head,body,controls);

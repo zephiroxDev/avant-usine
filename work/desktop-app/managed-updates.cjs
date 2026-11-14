@@ -11,7 +11,7 @@ function startUpdates({electron,window,store,current}){
    if(!release)return;const version=release.tag_name.slice(1);
    const raw=await bytesFrom(await net.fetch(manifestAsset.browser_download_url,{signal:AbortSignal.timeout(20000)}),1024*1024);if(hash(raw)!==manifestAsset.digest.slice(7))throw Error('Manifest non vérifié');
    const manifest=validateManifest(JSON.parse(raw.toString('utf8')),version);
-   panel=new BrowserWindow({parent:window,modal:false,width:590,height:560,resizable:false,show:false,title:'Avant l’Usine — Mise à jour',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'update-preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
+   panel=new BrowserWindow({parent:window,modal:false,width:590,height:450,resizable:false,show:false,title:'Avant l’Usine — Mise à jour',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'update-preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
    panel.setMenu(null);panel.webContents.setWindowOpenHandler(()=>({action:'deny'}));panel.webContents.on('will-navigate',event=>event.preventDefault());
    const send=(extra={})=>{if(panel&&!panel.isDestroyed())panel.webContents.send('au-update-state',{version,current,...extra});};
    let installing=false,chosen=false;

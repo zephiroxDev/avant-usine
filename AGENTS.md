@@ -99,3 +99,9 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - « Morceau précédent » : retour au début si > 3 s. Fenêtre de mise à jour iOS : structure plate (les tests lisent `modal.children`), ordre par CSS `order`.
 - Dans le navigateur de test (anglais), « Choose File » et les bulles de validation sont celles du navigateur : pas un bug du site.
 - Site 25.2, Windows 0.10.3, iOS 2.4.3 (build 50) ; affiche promo-25v03 ; workflows v25-2.
+
+## Livraison 25.2.1 (14 novembre 2026) — finitions de la chasse aux bugs
+- design-25.css (bloc 25.2.1) : mini-lecteur opaque + cache sous lui (`.xp-mini::after`), titres réduits en fenêtre peu haute (`max-height:780px`), en-tête de volume compact, grilles Répertoire/Téléchargements, `details` fermés en `display:block`, bouton de fermeture commun `.au25-close` (le texte « Fermer » reste dans le DOM, la croix est en `::before` ; `.au222-veil::before` oblige `content` en `!important`).
+- design-25.js `finishing()` : classe `au25-close`, point final des titres de fenêtres, `au25-quiet-focus` (pas d'anneau sans clavier), `au25-no-group` (Soutenir, Recherche… sans onglet surligné), reprise de la musique après le Blind Test, retour playlist depuis Recherche, bloc « Versions de test » en double masqué, titres « (feat. X) » normalisés à l'affichage.
+- Non traités, à reprendre : ordre de « Réglages d'écoute », numérotation de la recherche, site mobile en paysage/tablette, pied de page mobile, « Supprimer mon compte » sur iPhone, deux gabarits de fenêtres.
+- Site 25.2.1, Windows 0.10.4, iOS 2.4.4 (build 51) ; affiche promo-25v04 ; workflows v25-2-1.

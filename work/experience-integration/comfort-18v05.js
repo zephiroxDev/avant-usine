@@ -57,7 +57,7 @@ function end(event){if(sleep?.end&&(!sleep.target||sleep.target===event.currentT
 for(const a of audios){a.addEventListener('ended',end,true);a.addEventListener('timeupdate',elapsed);a.addEventListener('play',elapsed);}
 setInterval(elapsed,1000);document.addEventListener('visibilitychange',elapsed);window.addEventListener('pageshow',elapsed);
 const sleepButton=E('button','Minuteur de sommeil');sleepButton.className='text-button';sleepButton.onclick=()=>{
- const d=E('dialog'),h=E('h2','Minuteur de sommeil'),note=E('p');d.className='au-comfort-dialog';d.append(h,note);
+ const d=E('dialog'),h=E('h2','Minuteur de sommeil'),note=E('p');d.className='au-comfort-dialog';d.append(h,note);const watch=new AbortController();d.addEventListener('close',()=>watch.abort());for(const a of audios)for(const type of ['pause','ended','play'])a.addEventListener(type,()=>setTimeout(()=>status(),80),{signal:watch.signal});
  const status=()=>{note.textContent=sleep?.end?'Arrêt à la fin du morceau en cours.':sleep?.deadline?'Arrêt prévu à '+new Date(sleep.deadline).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'Aucun arrêt programmé.';};
  for(const minutes of [15,30,60]){const b=E('button',minutes+' minutes');b.className='button';b.onclick=()=>{sleep={deadline:Date.now()+minutes*60000};writeSleep();renderSleep();status();};d.append(b);}
  const endButton=E('button','À la fin du morceau');endButton.className='button';endButton.onclick=()=>{const active=audios.find(a=>!a.paused);if(!active){note.textContent='Lance un morceau avant de choisir cette option.';return;}sleep={end:true,target:active.id};writeSleep();renderSleep();status();};
