@@ -14,6 +14,7 @@ export default function accountPage(page, { section }) {
 
   function paint() {
     const me = acc.account();
+    document.title = (me ? 'Mon compte' : 'Se connecter') + ' · Avant l’usine';
     if (!acc.isReady()) { body.replaceChildren(h('div.loading', h('div.spin', { role: 'status', 'aria-label': 'Chargement' }))); return; }
     if (!me) return paintSignIn();
     const roles = [me.roles.creator && 'Créateur', me.roles.moderator && 'Modérateur', me.roles.supporter && !me.roles.creator && 'Soutien'].filter(Boolean);

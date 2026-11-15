@@ -6,7 +6,7 @@ import { sheet, toast, confirm } from '../../ui/overlay.js';
 
 const when = (iso) => { try { return new Date(iso).toLocaleString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch { return ''; } };
 const title = (key) => cat.track(key)?.title || key || 'Morceau';
-const who = (r) => r.profile?.nickname || r.nickname || r.author_name || r.user_nickname || 'Membre';
+const who = (r) => r.profile?.nickname || r.nickname || r.author_name || r.author?.nickname || (typeof r.author === 'string' ? r.author : '') || r.user_nickname || 'Membre';
 const empty = (text) => h('p.empty', { text });
 const row = (main, sub, ...actions) => h('div.choice', { style: { alignItems: 'flex-start', padding: '14px 16px', minHeight: '0', flexWrap: 'wrap', cursor: 'default' } },
   h('span', { style: { display: 'grid', gap: '4px', minWidth: '0', flex: '1 1 260px' } }, h('span', { text: main }), sub ? h('small', { style: { whiteSpace: 'pre-line' }, text: sub }) : null),
@@ -138,10 +138,19 @@ export async function catalogue(box) {
 }
 
 export async function audio(box) {
+  // Le serveur renvoie une empreinte sonore par morceau : deux empreintes identiques = le même fichier audio.
   const rows = (await act('au_audio_audit', 'list')) || [];
-  const list = Array.isArray(rows) ? rows : rows.items || rows.duplicates || [];
-  box.replaceChildren(...(list.length ? list.map((r) => row(title(r.track || r.track_key) + (r.duplicate_of ? ' · doublon de ' + title(r.duplicate_of) : ''), (r.src || r.url || '') + (r.reason ? '\n' + r.reason : '')))
-    : [empty('Aucun problème audio détecté.')]));
+  const groups = new Map();
+  for (const r of rows) { if (!r.signature) continue; const k = JSON.stringify(r.signature); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r); }
+  const dupes = [...groups.values()].filter((g) => g.length > 1);
+  const known = new Set(rows.map((r) => r.track_key));
+  const missing = cat.allTracks().filter((t) => !known.has(t.key));
+  box.replaceChildren(
+    h('p.note', { text: rows.length + ' morceaux analysés sur ' + cat.trackCount() + '.' }),
+    h('h3', { text: 'Doublons' }),
+    ...(dupes.length ? dupes.map((g) => row(g.map((r) => title(r.track_key)).join(' = '), g.map((r) => decodeURIComponent((r.src || '').split('/').pop() || '')).join('\n'))) : [empty('Aucun doublon : chaque morceau a un audio différent.')]),
+    h('h3', { style: { marginTop: '12px' }, text: 'Pas encore analysés' }),
+    ...(missing.length ? missing.map((t) => row(t.title, t.volume.label + ', piste ' + t.number)) : [empty('Tous les morceaux ont été analysés.')]));
 }
 
 export async function avantPremieres(box) {
@@ -207,19 +216,22 @@ export async function campagnes(box) {
   box.replaceChildren(
     h('div.row-actions', btn('Nouvelle campagne', () => edit({}), '.btn-main')),
     ...(rows.length ? rows.map((c) => row((c.title || 'Sans titre') + ' · ' + (c.state || ''), (c.topic || '') + (c.due_at ? ' · prévue le ' + when(c.due_at) : ''),
-      btn('Modifier', () => edit(c)),
-      c.state !== 'scheduled' ? btn('Programmer', async () => { await act('au_release22', 'campaign_state', { id: c.id, state: 'scheduled' }); campagnes(box); }) : btn('Suspendre', async () => { await act('au_release22', 'campaign_state', { id: c.id, state: 'draft' }); campagnes(box); })))
+      btn('Dupliquer', () => edit(c)),
+      c.state === 'scheduled' ? btn('Suspendre', async () => { await act('au_release22', 'campaign_state', { id: c.id, state: 'paused' }); campagnes(box); })
+        : c.state === 'finished' ? null
+        : btn('Programmer', async () => { if (!(await confirm('Programmer « ' + (c.title || 'cette campagne') + ' » ?', 'Elle partira à la date prévue, uniquement aux membres qui ont accepté ce sujet.', { ok: 'Programmer' }))) return; await act('au_release22', 'campaign_state', { id: c.id, state: 'scheduled' }); campagnes(box); }, '.btn-main')))
       : [empty('Aucune campagne.')]));
 
   function edit(c) {
-    sheet(c.id ? 'Modifier la campagne' : 'Nouvelle campagne', (b, s) => {
-      const t = h('input.input', { value: c.title || '', maxlength: '120' });
-      const body = h('textarea.input', { maxlength: '2000' }); body.value = c.body || '';
+    // Le serveur crée toujours une nouvelle campagne (brouillon) : « Dupliquer » repart d'une existante.
+    sheet(c.id ? 'Nouvelle campagne à partir de celle-ci' : 'Nouvelle campagne', (b, s) => {
+      const t = h('input.input', { value: c.title || '', maxlength: '100' });
+      const body = h('textarea.input', { maxlength: '1000' }); body.value = c.body || '';
       const topic = h('select.input', [['patches', 'Nouveautés'], ['community', 'Communauté'], ['lyrics', 'Paroles'], ['return', 'Retour'], ['download', 'Applications']].map(([v, l]) => h('option', { value: v, selected: c.topic === v, text: l })));
       const due = h('input.input', { type: 'datetime-local', value: c.due_at ? new Date(c.due_at).toISOString().slice(0, 16) : '' });
       b.append(h('form', { style: { display: 'grid', gap: '12px' }, onsubmit: async (e) => {
         e.preventDefault();
-        try { await act('au_release22', 'campaign_save', { id: c.id || null, title: t.value.trim(), body: body.value.trim(), topic: topic.value, due_at: due.value ? new Date(due.value).toISOString() : null }); s.close(); toast('Campagne enregistrée.'); campagnes(box); }
+        try { await act('au_release22', 'campaign_save', { title: t.value.trim(), body: body.value.trim(), topic: topic.value, due_at: due.value ? new Date(due.value).toISOString() : null }); s.close(); toast('Brouillon de campagne enregistré.'); campagnes(box); }
         catch (err) { toast(err.message); }
       } }, h('label.field', h('span', { text: 'Titre' }), t), h('label.field', h('span', { text: 'Message' }), body), h('label.field', h('span', { text: 'Sujet' }), topic), h('label.field', h('span', { text: 'Date d’envoi' }), due),
         h('p.note', { text: 'Rien n’est envoyé tant que la campagne n’est pas programmée. Elle ne part qu’aux membres qui ont accepté ce sujet.' }),
@@ -232,11 +244,11 @@ export async function promo(box) {
   const manifest = await fetch('../promo-manifest.json', { cache: 'no-cache' }).then((r) => r.json()).catch(() => null);
   let status = [];
   try { const c = await client(); const { data } = await c.from('au_promo_status').select('*'); status = data || []; } catch { /* statut indisponible */ }
-  const items = Array.isArray(manifest) ? manifest : manifest?.items || manifest?.posters || [];
-  box.replaceChildren(...(items.length ? items.slice().reverse().map((it) => {
+  const items = Array.isArray(manifest) ? manifest : manifest?.images || manifest?.items || [];
+  box.replaceChildren(...(items.length ? items.map((it) => {
     const img = it.image || it.png || it.src || '';
     const st = status.find((s) => s.image === img);
-    return row((it.patch ? 'Version ' + it.patch : img) + (st?.published ? ' · publiée' : ''), (it.title || '') ,
+    return row((it.patch ? 'Version ' + it.patch : img) + (st?.published ? ' · publiée' : ''), [it.title, Array.isArray(it.platforms) ? it.platforms.join(', ') : ''].filter(Boolean).join(' · '),
       img ? h('a.btn.btn-soft.btn-sm', { href: '../' + img.replace(/^\.\//, ''), target: '_blank', rel: 'noopener', text: 'Voir l’affiche' }) : null,
       (it.video || it.mp4) ? h('a.btn.btn-soft.btn-sm', { href: '../' + String(it.video || it.mp4).replace(/^\.\//, ''), target: '_blank', rel: 'noopener', text: 'Voir la vidéo' }) : null,
       btn(st?.published ? 'Marquer non publiée' : 'Marquer publiée', async () => { await rpc('au_promo_mark_18v08', { p_image: img, p_action: 'published', p_published: !st?.published }); promo(box); }));

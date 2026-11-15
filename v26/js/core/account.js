@@ -27,6 +27,11 @@ async function adopt(session) {
   emit('account');
   lib.useAccount(u.id);
   try { me.roles = (await rpc('au_account_access')) || {}; emit('account'); } catch { /* rôles indisponibles */ }
+  // Pseudo et avatar du profil public (plutôt que le début de l'adresse e-mail).
+  try {
+    const p = await rpc('au_social', { p_action: 'me', p: {} });
+    if (me?.id === u.id && p) { me.name = p.nickname || me.name; me.avatar = p.avatar || ''; emit('account'); }
+  } catch { /* profil indisponible */ }
 }
 
 export async function initAccount() {
