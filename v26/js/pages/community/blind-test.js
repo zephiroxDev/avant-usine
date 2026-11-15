@@ -1,9 +1,9 @@
-import { h, icon } from '../../core/dom.js';
-import { rpc } from '../../core/api.js';
-import * as cat from '../../core/catalog.js';
-import * as player from '../../core/player.js';
-import { account } from '../../core/account.js';
-import { record } from '../../core/stats.js';
+import { h, icon } from '../../core/dom.js?v=202611152246';
+import { rpc } from '../../core/api.js?v=202611152246';
+import * as cat from '../../core/catalog.js?v=202611152246';
+import * as player from '../../core/player.js?v=202611152246';
+import { account } from '../../core/account.js?v=202611152246';
+import { record } from '../../core/stats.js?v=202611152246';
 
 const LEVELS = [
   { id: 'easy', label: 'Tranquille', seconds: 10, hint: '10 secondes d’écoute' },

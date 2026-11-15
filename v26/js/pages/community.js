@@ -1,5 +1,5 @@
-import { h } from '../core/dom.js';
-import { go } from '../router.js';
+import { h } from '../core/dom.js?v=202611152246';
+import { go } from '../router.js?v=202611152246';
 
 export const SECTIONS = [
   ['', 'Le fil', 'Histoires et souvenirs autour des morceaux.'],
@@ -21,6 +21,7 @@ export default async function community(page, { section = '' }, query) {
     h('div.wrap', h('nav.tablist', { 'aria-label': 'Rubriques de la communauté' },
       SECTIONS.map(([id, label]) => h('a.chip', { href: '#/communaute' + (id ? '/' + id : ''), 'aria-selected': String(id === section), text: label })))),
     body);
-  const mod = await import('./community/' + (section || 'feed') + '.js');
+  // Même étiquette de version que ce fichier (voir work/refonte-26/version.sh).
+  const mod = await import('./community/' + (section || 'feed') + '.js' + new URL(import.meta.url).search);
   return mod.default(body, query, page);
 }

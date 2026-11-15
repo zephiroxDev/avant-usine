@@ -1,10 +1,10 @@
-import { h, icon } from '../../core/dom.js';
-import { act } from '../../core/api.js';
-import { account } from '../../core/account.js';
-import { on } from '../../core/bus.js';
-import { toast, confirm } from '../../ui/overlay.js';
-import { avatarOf, openProfile } from './membres.js';
-import { go, setQuery } from '../../router.js';
+import { h, icon } from '../../core/dom.js?v=202611152246';
+import { act } from '../../core/api.js?v=202611152246';
+import { account } from '../../core/account.js?v=202611152246';
+import { on } from '../../core/bus.js?v=202611152246';
+import { toast, confirm } from '../../ui/overlay.js?v=202611152246';
+import { avatarOf, openProfile } from './membres.js?v=202611152246';
+import { go, setQuery } from '../../router.js?v=202611152246';
 
 const when = (iso) => { try { const d = new Date(iso); const today = new Date().toDateString() === d.toDateString(); return today ? d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }); } catch { return ''; } };
 
@@ -83,7 +83,7 @@ export default function messages(body, query) {
   async function blocked() {
     try {
       const rows = (await act('au_social', 'blocked')) || [];
-      const { sheet } = await import('../../ui/overlay.js');
+      const { sheet } = await import('../../ui/overlay.js?v=202611152246');
       sheet('Comptes bloqués', (b, s) => {
         if (!rows.length) b.append(h('p.empty', { text: 'Tu n’as bloqué personne.' }));
         for (const p of rows) b.append(h('div.choice', h('span', { text: p.nickname || 'Membre' }), h('button.btn.btn-soft.btn-sm', { type: 'button', text: 'Débloquer', onclick: async () => { try { await act('au_social', 'block', { peer: p.id, blocked: false }); toast('Membre débloqué.'); s.close(); } catch (e) { toast(e.message); } } })));

@@ -1,12 +1,12 @@
-import { h, icon } from '../core/dom.js';
-import { on } from '../core/bus.js';
-import * as cat from '../core/catalog.js';
-import * as lib from '../core/library.js';
-import * as player from '../core/player.js';
-import { account } from '../core/account.js';
-import { trackRow, markCurrent } from '../ui/track.js';
-import { sheet, toast } from '../ui/overlay.js';
-import { go } from '../router.js';
+import { h, icon } from '../core/dom.js?v=202611152246';
+import { on } from '../core/bus.js?v=202611152246';
+import * as cat from '../core/catalog.js?v=202611152246';
+import * as lib from '../core/library.js?v=202611152246';
+import * as player from '../core/player.js?v=202611152246';
+import { account } from '../core/account.js?v=202611152246';
+import { trackRow, markCurrent } from '../ui/track.js?v=202611152246';
+import { sheet, toast } from '../ui/overlay.js?v=202611152246';
+import { go } from '../router.js?v=202611152246';
 
 const SECTIONS = [
   ['favoris', 'Favoris'],
@@ -30,8 +30,8 @@ export default function music(page, { section = 'favoris' }) {
   const paint = () => {
     if (section === 'favoris') return paintFavorites();
     if (section === 'playlists') return paintPlaylists();
-    if (section === 'mon-annee') return import('./my-year.js').then((m) => m.default(body));
-    if (section === 'sur-cet-appareil') return import('./device.js').then((m) => m.default(body));
+    if (section === 'mon-annee') return import('./my-year.js?v=202611152246').then((m) => m.default(body));
+    if (section === 'sur-cet-appareil') return import('./device.js?v=202611152246').then((m) => m.default(body));
   };
   paint();
   const offs = [on('library', () => { if (section === 'favoris' || section === 'playlists') paint(); }), on('player', () => markCurrent(body))];

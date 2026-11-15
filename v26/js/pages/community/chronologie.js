@@ -1,8 +1,8 @@
-import { h, icon } from '../../core/dom.js';
-import { act } from '../../core/api.js';
-import * as cat from '../../core/catalog.js';
-import { account } from '../../core/account.js';
-import { sheet, toast } from '../../ui/overlay.js';
+import { h, icon } from '../../core/dom.js?v=202611152246';
+import { act } from '../../core/api.js?v=202611152246';
+import * as cat from '../../core/catalog.js?v=202611152246';
+import { account } from '../../core/account.js?v=202611152246';
+import { sheet, toast } from '../../ui/overlay.js?v=202611152246';
 
 export function songDate(d) {
   if (!d) return '';

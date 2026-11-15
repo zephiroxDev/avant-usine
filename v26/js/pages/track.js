@@ -1,15 +1,15 @@
-import { h, icon } from '../core/dom.js';
-import { rpc, act } from '../core/api.js';
-import * as cat from '../core/catalog.js';
-import * as player from '../core/player.js';
-import { getLyrics } from '../core/lyrics.js';
-import { account } from '../core/account.js';
-import { on } from '../core/bus.js';
-import { favButton, addToPlaylist } from '../ui/track.js';
-import { toast } from '../ui/overlay.js';
-import { go } from '../router.js';
+import { h, icon } from '../core/dom.js?v=202611152246';
+import { rpc, act } from '../core/api.js?v=202611152246';
+import * as cat from '../core/catalog.js?v=202611152246';
+import * as player from '../core/player.js?v=202611152246';
+import { getLyrics } from '../core/lyrics.js?v=202611152246';
+import { account } from '../core/account.js?v=202611152246';
+import { on } from '../core/bus.js?v=202611152246';
+import { favButton, addToPlaylist } from '../ui/track.js?v=202611152246';
+import { toast } from '../ui/overlay.js?v=202611152246';
+import { go } from '../router.js?v=202611152246';
 
-import { visitorToken } from '../core/visitor.js';
+import { visitorToken } from '../core/visitor.js?v=202611152246';
 const dateFr = (iso) => { try { return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); } catch { return ''; } };
 function songDate(d) {
   if (!d) return '';

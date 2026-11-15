@@ -1,27 +1,27 @@
 // Démarrage d'Avant l'usine 26.
-import { h } from './core/dom.js';
-import { loadCatalog } from './core/catalog.js';
-import { initAccount } from './core/account.js';
-import * as player from './core/player.js';
-import './core/stats.js';
-import './core/prefs.js';
-import { route, start } from './router.js';
-import { buildShell } from './ui/shell.js';
+import { h } from './core/dom.js?v=202611152246';
+import { loadCatalog } from './core/catalog.js?v=202611152246';
+import { initAccount } from './core/account.js?v=202611152246';
+import * as player from './core/player.js?v=202611152246';
+import './core/stats.js?v=202611152246';
+import './core/prefs.js?v=202611152246';
+import { route, start } from './router.js?v=202611152246';
+import { buildShell } from './ui/shell.js?v=202611152246';
 
-route('/', () => import('./pages/home.js'), 'accueil');
-route('/volumes', () => import('./pages/volumes.js'), 'volumes');
-route('/volume/:n', () => import('./pages/volume.js'), 'volumes');
-route('/morceau/:key', () => import('./pages/track.js'), 'volumes');
-route('/recherche', () => import('./pages/search.js'), 'recherche');
-route('/ma-musique', () => import('./pages/music.js'), 'musique');
-route('/ma-musique/:section', () => import('./pages/music.js'), 'musique');
-route('/playlist/:id', () => import('./pages/playlist.js'), 'musique');
-route('/communaute', () => import('./pages/community.js'), 'communaute');
-route('/communaute/:section', () => import('./pages/community.js'), 'communaute');
-route('/compte', () => import('./pages/account.js'), 'compte');
-route('/compte/:section', () => import('./pages/account.js'), 'compte');
-route('/a-propos/:section', () => import('./pages/about.js'), 'apropos');
-route('/introuvable', () => import('./pages/notfound.js'), 'notfound');
+route('/', () => import('./pages/home.js?v=202611152246'), 'accueil');
+route('/volumes', () => import('./pages/volumes.js?v=202611152246'), 'volumes');
+route('/volume/:n', () => import('./pages/volume.js?v=202611152246'), 'volumes');
+route('/morceau/:key', () => import('./pages/track.js?v=202611152246'), 'volumes');
+route('/recherche', () => import('./pages/search.js?v=202611152246'), 'recherche');
+route('/ma-musique', () => import('./pages/music.js?v=202611152246'), 'musique');
+route('/ma-musique/:section', () => import('./pages/music.js?v=202611152246'), 'musique');
+route('/playlist/:id', () => import('./pages/playlist.js?v=202611152246'), 'musique');
+route('/communaute', () => import('./pages/community.js?v=202611152246'), 'communaute');
+route('/communaute/:section', () => import('./pages/community.js?v=202611152246'), 'communaute');
+route('/compte', () => import('./pages/account.js?v=202611152246'), 'compte');
+route('/compte/:section', () => import('./pages/account.js?v=202611152246'), 'compte');
+route('/a-propos/:section', () => import('./pages/about.js?v=202611152246'), 'apropos');
+route('/introuvable', () => import('./pages/notfound.js?v=202611152246'), 'notfound');
 
 async function boot() {
   const app = document.getElementById('app');
@@ -34,18 +34,18 @@ async function boot() {
   const shareId = new URLSearchParams(location.search).get('share');
   if (shareId) {
     history.replaceState(null, '', location.pathname + (location.hash || '#/'));
-    import('./core/api.js').then(({ act }) => act('au_track_share_17v06', 'resolve', { id: shareId })).then((s) => {
+    import('./core/api.js?v=202611152246').then(({ act }) => act('au_track_share_17v06', 'resolve', { id: shareId })).then((s) => {
       if (!s?.track_key) return;
       location.hash = '#/morceau/' + s.track_key;
-      if (s.author?.nickname) import('./ui/overlay.js').then(({ toast }) => toast('Morceau partagé par ' + s.author.nickname + '.'));
-    }).catch(() => import('./ui/overlay.js').then(({ toast }) => toast('Ce lien de partage n’est plus valide.')));
+      if (s.author?.nickname) import('./ui/overlay.js?v=202611152246').then(({ toast }) => toast('Morceau partagé par ' + s.author.nickname + '.'));
+    }).catch(() => import('./ui/overlay.js?v=202611152246').then(({ toast }) => toast('Ce lien de partage n’est plus valide.')));
   }
   start(shell.outlet);
   app.removeAttribute('aria-busy');
   initAccount();
 
   // Fermeture générale décidée dans le Studio : bandeau avec le message du créateur.
-  import('./core/api.js').then(({ act }) => act('au_maintenance_19', 'read')).then((r) => {
+  import('./core/api.js?v=202611152246').then(({ act }) => act('au_maintenance_19', 'read')).then((r) => {
     const all = r?.settings?.all;
     if (all?.closed) app.prepend(h('div', { role: 'status', style: { background: 'var(--accent)', color: 'var(--accent-ink)', padding: '12px var(--gutter)', fontWeight: '600', textAlign: 'center' }, text: all.message }));
   }).catch(() => {});

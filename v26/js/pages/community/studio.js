@@ -1,13 +1,13 @@
 // Atelier « Synchroniser des paroles » : maintenir et glisser la barre au rythme du chant, phrase par phrase.
 // Produit le format attendu par le serveur (au_private.studio_validate_19) et l'envoie avec au_sync 'submit'.
-import { h, icon, clock } from '../../core/dom.js';
-import { act } from '../../core/api.js';
-import * as cat from '../../core/catalog.js';
-import * as player from '../../core/player.js';
-import { account } from '../../core/account.js';
-import { isSung } from '../../core/lyrics.js';
-import { store } from '../../core/bus.js';
-import { sheet, toast, confirm, closeSheet } from '../../ui/overlay.js';
+import { h, icon, clock } from '../../core/dom.js?v=202611152246';
+import { act } from '../../core/api.js?v=202611152246';
+import * as cat from '../../core/catalog.js?v=202611152246';
+import * as player from '../../core/player.js?v=202611152246';
+import { account } from '../../core/account.js?v=202611152246';
+import { isSung } from '../../core/lyrics.js?v=202611152246';
+import { store } from '../../core/bus.js?v=202611152246';
+import { sheet, toast, confirm, closeSheet } from '../../ui/overlay.js?v=202611152246';
 
 export async function openStudio(initialKey) {
   if (player.isPlaying()) player.el.pause();

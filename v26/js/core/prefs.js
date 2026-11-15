@@ -1,6 +1,6 @@
 // Préférences locales (thème, animations) + minuteur de sommeil.
-import { store, emit } from './bus.js';
-import * as player from './player.js';
+import { store, emit } from './bus.js?v=202611152246';
+import * as player from './player.js?v=202611152246';
 
 const KEY = 'au26-prefs';
 const defaults = { theme: 'dark', motion: 'on' };

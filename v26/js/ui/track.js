@@ -1,9 +1,9 @@
 // Ligne de morceau réutilisée partout + actions communes (favori, playlist).
-import { h, icon } from '../core/dom.js';
-import * as player from '../core/player.js';
-import * as lib from '../core/library.js';
-import { sheet, toast } from './overlay.js';
-import { go } from '../router.js';
+import { h, icon } from '../core/dom.js?v=202611152246';
+import * as player from '../core/player.js?v=202611152246';
+import * as lib from '../core/library.js?v=202611152246';
+import { sheet, toast } from './overlay.js?v=202611152246';
+import { go } from '../router.js?v=202611152246';
 
 export function favButton(t, cls = '.icon-btn') {
   const b = h('button' + cls, { type: 'button' });

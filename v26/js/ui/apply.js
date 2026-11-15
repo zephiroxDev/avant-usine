@@ -1,9 +1,9 @@
 // Candidature de modérateur (révélée par la phrase cachée du Guide : 7 appuis sur « Mon compte »).
-import { h } from '../core/dom.js';
-import { act } from '../core/api.js';
-import { account } from '../core/account.js';
-import { sheet, toast } from './overlay.js';
-import { go } from '../router.js';
+import { h } from '../core/dom.js?v=202611152246';
+import { act } from '../core/api.js?v=202611152246';
+import { account } from '../core/account.js?v=202611152246';
+import { sheet, toast } from './overlay.js?v=202611152246';
+import { go } from '../router.js?v=202611152246';
 
 export function openApplication() {
   if (!account()) { toast('Connecte-toi d’abord pour envoyer ta candidature.'); go('/compte'); return; }

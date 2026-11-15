@@ -1,9 +1,9 @@
 // « Sur cet appareil » (ex-Local). Sur le site web : préparer un volume complet à emporter
 // (audio étiqueté, pochettes, paroles synchronisées en LRC) grâce aux modules d'export de l'ancien site, réutilisés tels quels.
 // L'import et le stockage de fichiers personnels restent dans les applications (avec le même surlignage estimé des paroles).
-import { h, icon } from '../core/dom.js';
-import * as cat from '../core/catalog.js';
-import { toast } from '../ui/overlay.js';
+import { h, icon } from '../core/dom.js?v=202611152246';
+import * as cat from '../core/catalog.js?v=202611152246';
+import { toast } from '../ui/overlay.js?v=202611152246';
 
 let modPromise = null;
 function loadExport() {
@@ -12,7 +12,7 @@ function loadExport() {
     if (!window.AU_LOCAL_STORAGE_18 && !window.AU_LOCAL_18) await add('../local-storage-18v07.js');
     if (!window.AU_LOCAL_18) await add('../local-18v00.js');
     if (!window.AU_AUDIO_EDITS_19) await add('../audio-edits-19v06.js');
-    return import('../../../album-download-21.mjs');
+    return import('../../../album-download-21.mjs?v=202611152246');
   })();
   modPromise.catch(() => { modPromise = null; });
   return modPromise;

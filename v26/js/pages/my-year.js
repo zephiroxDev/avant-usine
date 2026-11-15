@@ -1,9 +1,9 @@
 // « Mon année » : statistiques (moteur et libellés de l'ancien site réutilisés), résumés et trophées.
 // Chaque rubrique n'est construite qu'à son ouverture : l'ancienne page fabriquait 12 000 éléments d'un coup.
-import { h } from '../core/dom.js';
-import { rpc } from '../core/api.js';
-import { account } from '../core/account.js';
-import * as cat from '../core/catalog.js';
+import { h } from '../core/dom.js?v=202611152246';
+import { rpc } from '../core/api.js?v=202611152246';
+import { account } from '../core/account.js?v=202611152246';
+import * as cat from '../core/catalog.js?v=202611152246';
 
 let enginePromise = null;
 function loadEngine() {
@@ -122,7 +122,7 @@ export default function myYear(body) {
   }
 
   async function openSummary(s) {
-    const { sheet } = await import('../ui/overlay.js');
+    const { sheet } = await import('../ui/overlay.js?v=202611152246');
     sheet(s.kind === 'annual' ? 'Résumé ' + s.year : 'Mon résumé', async (b) => {
       b.append(h('div.loading', h('div.spin', { role: 'status', 'aria-label': 'Chargement' })));
       try {

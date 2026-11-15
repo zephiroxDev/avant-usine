@@ -1,10 +1,10 @@
 // Publications anonymes de la communauté : histoires (story), recherches d'archives (wanted) et réponses (contribution).
-import { h } from '../../core/dom.js';
-import { rpc } from '../../core/api.js';
-import { visitorToken } from '../../core/visitor.js';
-import { account } from '../../core/account.js';
-import * as cat from '../../core/catalog.js';
-import { sheet, toast, confirm } from '../../ui/overlay.js';
+import { h } from '../../core/dom.js?v=202611152246';
+import { rpc } from '../../core/api.js?v=202611152246';
+import { visitorToken } from '../../core/visitor.js?v=202611152246';
+import { account } from '../../core/account.js?v=202611152246';
+import * as cat from '../../core/catalog.js?v=202611152246';
+import { sheet, toast, confirm } from '../../ui/overlay.js?v=202611152246';
 
 const dateFr = (iso) => { try { return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); } catch { return ''; } };
 

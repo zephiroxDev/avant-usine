@@ -1,13 +1,13 @@
 // En-tête, onglets, mini-lecteur et lecteur plein écran.
-import { h, icon, clock } from '../core/dom.js';
-import { on } from '../core/bus.js';
-import * as player from '../core/player.js';
-import { getLyrics, locate } from '../core/lyrics.js';
-import { go } from '../router.js';
-import { favButton, addToPlaylist, markCurrent } from './track.js';
-import { toast } from './overlay.js';
-import { account } from '../core/account.js';
-import { buildFooter } from './footer.js';
+import { h, icon, clock } from '../core/dom.js?v=202611152246';
+import { on } from '../core/bus.js?v=202611152246';
+import * as player from '../core/player.js?v=202611152246';
+import { getLyrics, locate } from '../core/lyrics.js?v=202611152246';
+import { go } from '../router.js?v=202611152246';
+import { favButton, addToPlaylist, markCurrent } from './track.js?v=202611152246';
+import { toast } from './overlay.js?v=202611152246';
+import { account } from '../core/account.js?v=202611152246';
+import { buildFooter } from './footer.js?v=202611152246';
 
 const TABS = [
   ['accueil', 'Accueil', '/', 'home'],
@@ -26,7 +26,7 @@ export function buildShell(app) {
     e.preventDefault();
     clearTimeout(tapTimer);
     taps++;
-    if (taps === 7) { taps = 0; import('./apply.js').then((m) => m.openApplication()); return; }
+    if (taps === 7) { taps = 0; import('./apply.js?v=202611152246').then((m) => m.openApplication()); return; }
     tapTimer = setTimeout(() => { taps = 0; go('/compte'); }, 600);
   });
   const top = h('header.top', h('div.wrap',

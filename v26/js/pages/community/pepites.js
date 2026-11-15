@@ -1,9 +1,9 @@
-import { h, icon } from '../../core/dom.js';
-import { rpc } from '../../core/api.js';
-import { visitorToken } from '../../core/visitor.js';
-import * as cat from '../../core/catalog.js';
-import { toast } from '../../ui/overlay.js';
-import * as player from '../../core/player.js';
+import { h, icon } from '../../core/dom.js?v=202611152246';
+import { rpc } from '../../core/api.js?v=202611152246';
+import { visitorToken } from '../../core/visitor.js?v=202611152246';
+import * as cat from '../../core/catalog.js?v=202611152246';
+import { toast } from '../../ui/overlay.js?v=202611152246';
+import * as player from '../../core/player.js?v=202611152246';
 
 export default function pepites(body) {
   let data = [];

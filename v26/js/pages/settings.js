@@ -1,19 +1,19 @@
 // Sous-pages de « Mon compte » : profil, réglages, sauvegarde, confidentialité, studio.
-import { h, icon } from '../core/dom.js';
-import { act, rpc } from '../core/api.js';
-import { account } from '../core/account.js';
-import { on, emit } from '../core/bus.js';
-import * as prefs from '../core/prefs.js';
-import * as lib from '../core/library.js';
-import * as cat from '../core/catalog.js';
-import { toast, confirm } from '../ui/overlay.js';
-import { go } from '../router.js';
+import { h, icon } from '../core/dom.js?v=202611152246';
+import { act, rpc } from '../core/api.js?v=202611152246';
+import { account } from '../core/account.js?v=202611152246';
+import { on, emit } from '../core/bus.js?v=202611152246';
+import * as prefs from '../core/prefs.js?v=202611152246';
+import * as lib from '../core/library.js?v=202611152246';
+import * as cat from '../core/catalog.js?v=202611152246';
+import { toast, confirm } from '../ui/overlay.js?v=202611152246';
+import { go } from '../router.js?v=202611152246';
 
 const TITLES = { profil: 'Profil', reglages: 'Réglages', sauvegarde: 'Sauvegarde', confidentialite: 'Données et compte', studio: 'Studio' };
 
 export default async function settings(page, section) {
   if (!TITLES[section]) { go('/compte', { replace: true }); return; }
-  if (section === 'studio') { const m = await import('./studio/index.js'); return m.default(page); }
+  if (section === 'studio') { const m = await import('./studio/index.js?v=202611152246'); return m.default(page); }
   const body = h('div.wrap', { style: { display: 'grid', gap: '28px', maxWidth: '760px' } });
   page.append(h('header.wrap.page-head', h('a.note', { href: '#/compte', text: '‹ Mon compte' }), h('h1.title', { text: TITLES[section] })), body);
   const needsAccount = section === 'profil' || section === 'confidentialite';
@@ -218,7 +218,7 @@ function confidentialite(body) {
       h('label.field', h('span', { text: 'Écris SUPPRIMER pour confirmer' }), typed),
       h('div.row-actions', h('button.btn.btn-danger', { type: 'button', text: 'Supprimer définitivement mon compte', onclick: async () => {
         if (typed.value.trim() !== 'SUPPRIMER') { toast('Écris SUPPRIMER en majuscules pour confirmer.'); typed.focus(); return; }
-        try { await act('au_moderation_v12', 'delete_self', { confirm: 'SUPPRIMER', reason: reason.value, details: details.value.trim() }); toast('Ton compte a été supprimé.'); const { signOut } = await import('../core/account.js'); await signOut().catch(() => {}); go('/'); }
+        try { await act('au_moderation_v12', 'delete_self', { confirm: 'SUPPRIMER', reason: reason.value, details: details.value.trim() }); toast('Ton compte a été supprimé.'); const { signOut } = await import('../core/account.js?v=202611152246'); await signOut().catch(() => {}); go('/'); }
         catch (e) { toast(e.message); }
       } }))));
 }
