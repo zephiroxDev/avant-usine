@@ -44,3 +44,7 @@ Toutes les pages sont construites (plus aucune page provisoire) :
 PUBLIÉ le 16 novembre 2026 (commit 6de5490) : l'adresse principale redirige vers /v26/ (anciennes routes et ?share= traduits), ancien site à ancien.html. Demandes pour la suite : work/refonte-26/PROCHAIN-PATCH-26.md.
 
 Reste (ancienne note) : publication sur l'adresse de test /v26/ (feu vert d'Iloan + connexion GitHub par Iloan), puis tests connectés avec Iloan (compte, messages, contributions, Studio bouton par bouton), puis bascule.
+
+## Serveur — 16 novembre 2026
+- Migration `fix_release22_campaigns_ambiguous_alias` (accord d'Iloan) : alias `c` → `rc` dans la liste des campagnes de `au_private.release22_api`. Les Campagnes s'affichent de nouveau (aussi dans l'ancien site).
+- Studio testé en ligne avec le compte créateur : 16 outils sur 16 s'ouvrent. Aucune action modifiante n'a été lancée pendant le test.

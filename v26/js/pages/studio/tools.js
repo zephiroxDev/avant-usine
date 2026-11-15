@@ -212,11 +212,13 @@ export async function journal(box) {
 }
 
 /* ---------- Communication ---------- */
+const STATE = { draft: 'brouillon', scheduled: 'programmée', paused: 'en pause', finished: 'terminée' };
+const TOPIC = { patches: 'Nouveautés', community: 'Communauté', lyrics: 'Paroles', return: 'Retour', download: 'Applications' };
 export async function campagnes(box) {
   const rows = (await act('au_release22', 'campaigns')) || [];
   box.replaceChildren(
     h('div.row-actions', btn('Nouvelle campagne', () => edit({}), '.btn-main')),
-    ...(rows.length ? rows.map((c) => row((c.title || 'Sans titre') + ' · ' + (c.state || ''), (c.topic || '') + (c.due_at ? ' · prévue le ' + when(c.due_at) : ''),
+    ...(rows.length ? rows.map((c) => row((c.title || 'Sans titre').trim() + ' · ' + (STATE[c.state] || c.state || ''), (TOPIC[c.topic] || c.topic || '') + (c.due_at ? ' · prévue le ' + when(c.due_at) : '') + (c.claimed ? ' · ' + c.claimed + ' envoi' + (c.claimed > 1 ? 's' : '') : ''),
       btn('Dupliquer', () => edit(c)),
       c.state === 'scheduled' ? btn('Suspendre', async () => { await act('au_release22', 'campaign_state', { id: c.id, state: 'paused' }); campagnes(box); })
         : c.state === 'finished' ? null
