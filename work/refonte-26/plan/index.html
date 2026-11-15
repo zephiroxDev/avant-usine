@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avant l’usine 26 — plan du site</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#17171a;--muted:#5f5d58;--line:#e2ddd2;--accent:#1f3fe0;--new:#0b7a4b;--old:#9a3b1b;--soft:#eef1ff}
+@media (prefers-color-scheme:dark){:root{--bg:#131316;--card:#1c1c20;--ink:#f1f0ec;--muted:#a7a59f;--line:#2e2e34;--accent:#8ea2ff;--new:#4fd39a;--old:#ff9c7a;--soft:#22253a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+main{width:min(100% - 32px,1040px);margin:0 auto;padding:40px 0 80px}
+h1{font-size:clamp(30px,5vw,44px);line-height:1.1;margin:0 0 8px;text-wrap:balance}
+h2{font-size:24px;line-height:1.2;margin:48px 0 14px;text-wrap:balance}
+h3{font-size:17px;line-height:1.3;margin:0 0 6px}
+p{margin:0 0 12px;text-wrap:pretty}
+.lede{color:var(--muted);font-size:18px;max-width:46em}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.card ul{margin:8px 0 0;padding-left:18px}
+.card li{margin:4px 0}
+.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--accent);margin-bottom:8px}
+.from{color:var(--muted);font-size:14px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:15px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+td.o{color:var(--old)}td.n{color:var(--new);font-weight:600}
+.wrapt{overflow-x:auto}
+.q{background:var(--soft);border-radius:14px;padding:18px 20px;margin-top:14px}
+.q ol{margin:6px 0 0;padding-left:20px}.q li{margin:8px 0}
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}
+.nav span{padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:600}
+.nav span.me{margin-left:auto}
+</style>
+</head>
+<body><main>
+<h1>Avant l’usine 26&#8239;: un nouveau site</h1>
+<p class="lede">Même contenu, mêmes fonctions, mais une autre organisation. Chaque fonction a une seule place, un nom clair, et se trouve en deux gestes au maximum. Rien n’est supprimé&#8239;; tout est rangé autrement.</p>
+
+<h2>1. La navigation</h2>
+<p>Cinq destinations, identiques sur ordinateur (en haut) et sur téléphone (barre en bas). La recherche devient un onglet à part entière. Le compte quitte les onglets et devient ton avatar, en haut à droite.</p>
+<div class="nav"><span>Accueil</span><span>Volumes</span><span>Recherche</span><span>Ma musique</span><span>Communauté</span><span class="me">Avatar → Mon compte</span></div>
+<p class="from">Aujourd’hui&#8239;: 4 onglets (Écouter, Ma musique, Communauté, Compte) avec chacun 4 à 9 sous&#8209;onglets qui défilent, et une recherche invisible sur téléphone.</p>
+
+<h2>2. Les pages</h2>
+<div class="grid">
+ <div class="card"><span class="tag">Accueil</span><h3>Reprendre là où tu t’étais arrêté</h3><ul>
+  <li>Reprendre l’écoute (dernier morceau, position)</li><li>Les volumes en un coup d’œil</li><li>Un morceau au hasard</li><li>Le Blind Test en raccourci</li><li>Ce qui a changé sur le site (nouveautés)</li></ul></div>
+ <div class="card"><span class="tag">Volumes</span><h3>Tout le catalogue</h3><ul>
+  <li>Volumes disponibles et à venir, clairement séparés</li><li>Page d’un volume&#8239;: morceaux, télécharger le volume, pochette animée</li><li><b>Nouveau&#8239;: une page par morceau</b> (voir plus bas)</li></ul></div>
+ <div class="card"><span class="tag">Recherche</span><h3>Trouver n’importe quoi</h3><ul>
+  <li>Titres, volumes, invités (feat.)</li><li>Recherche dans les paroles</li><li>Résultats avec le vrai numéro de piste</li><li>Ajout direct en favori ou en playlist</li></ul></div>
+ <div class="card"><span class="tag">Ma musique</span><h3>Tout ce qui est à toi</h3><ul>
+  <li>Favoris</li><li>Playlists</li><li>Historique d’écoute</li><li>Mon année (statistiques et résumé annuel, trophées)</li><li>Sur cet appareil (ancien «&#8239;Local&#8239;»&#8239;: albums préparés, export, conversion)</li></ul></div>
+ <div class="card"><span class="tag">Communauté</span><h3>Partager la passion</h3><ul>
+  <li>Le fil&#8239;: histoires, pépites (coups de cœur), archives recherchées</li><li>Jouer&#8239;: Blind Test</li><li>Membres et messages privés</li><li>Chronologie (ancien «&#8239;Répertoire&#8239;»&#8239;: dates des morceaux)</li><li>Contribuer (voir plus bas)</li></ul></div>
+ <div class="card"><span class="tag">Mon compte</span><h3>Via ton avatar</h3><ul>
+  <li>Profil (pseudo, avatar, bannière, ambiance)</li><li>Réglages&#8239;: écoute, affichage, manettes, notifications, confidentialité</li><li>Sauvegarde et transfert</li><li>Applications à télécharger</li><li>Connexion, déconnexion, suppression du compte</li></ul></div>
+</div>
+
+<h2>3. Le morceau, au centre de tout</h2>
+<div class="grid">
+ <div class="card"><span class="tag">Nouveau</span><h3>La page d’un morceau</h3><p>Aujourd’hui, tout ce qui concerne un morceau est éparpillé (lecteur, Textes expliqués, Répertoire, Atelier, commentaires…). Demain, une seule page avec des onglets&#8239;:</p><ul>
+  <li><b>Paroles</b> (et les passages expliqués surlignés)</li><li><b>Explications</b></li><li><b>Commentaires</b></li><li><b>Infos</b>&#8239;: date, volume, invités, source</li></ul><p class="from">Actions toujours visibles&#8239;: écouter, favori, playlist, partager, signaler.</p></div>
+ <div class="card"><span class="tag">Lecteur</span><h3>Le lecteur plein écran</h3><ul>
+  <li>Trois vues&#8239;: Pochette, Paroles, File d’attente</li><li>Réglages d’écoute qui s’ouvrent sur les réglages (minuteur, effets, vitesse), les explications en dessous</li><li>Mode immersion</li><li>Lien vers la page du morceau</li></ul></div>
+ <div class="card"><span class="tag">Contribuer</span><h3>Pour tous les membres connectés</h3><ul>
+  <li>Synchroniser des paroles (ancien «&#8239;Atelier&#8239;»)</li><li>Écrire ou corriger des paroles</li><li>Expliquer un passage</li><li>Proposer une date</li><li>Mes contributions et leur statut</li></ul><p class="from">Accessible depuis la page du morceau («&#8239;Contribuer&#8239;») et depuis Communauté.</p></div>
+</div>
+
+<h2>4. Le Studio (réservé au créateur et aux modérateurs)</h2>
+<p>L’Espace Créateur devient le <b>Studio</b>&#8239;: invisible pour le public, avec un tableau de bord qui montre d’abord <b>ce qui attend une décision</b>.</p>
+<div class="grid">
+ <div class="card"><span class="tag">À traiter</span><h3>Tableau de bord</h3><ul><li>Propositions de paroles et de synchronisations</li><li>Signalements (commentaires, messages, IA)</li><li>Candidatures modérateurs</li><li>Demandes d’accès créateur</li></ul></div>
+ <div class="card"><span class="tag">Catalogue</span><h3>Le contenu</h3><ul><li>Volumes et paroles</li><li>Liens Archive.org</li><li>Doublons audio</li><li>Remplacement d’un audio</li><li>Avant-premières</li></ul></div>
+ <div class="card"><span class="tag">Communauté</span><h3>Les gens</h3><ul><li>Membres et sanctions</li><li>Activité des modérateurs</li><li>Historique des signalements</li><li>Journal de la Chronologie</li></ul></div>
+ <div class="card"><span class="tag">Communication</span><h3>Faire connaître</h3><ul><li>Promotion (affiches, TikTok)</li><li>Campagnes, mails et notifications</li><li>Nouveautés et notes de version</li><li>Versions de test et codes d’accès</li><li>Retours des testeurs</li></ul></div>
+ <div class="card"><span class="tag">Site</span><h3>Le site lui-même</h3><ul><li>Fermetures et maintenance</li><li>Éditeur du site (ordinateur)</li><li>Personnalisation</li><li>Compteur de visites</li></ul></div>
+</div>
+
+<h2>5. Les noms qui changent</h2>
+<div class="wrapt"><table>
+<tr><th>Aujourd’hui</th><th>Demain</th><th>Pourquoi</th></tr>
+<tr><td class="o">Écouter (onglet)</td><td class="n">Accueil + Volumes</td><td>Deux besoins différents&#8239;: reprendre, ou parcourir</td></tr>
+<tr><td class="o">Compte (onglet)</td><td class="n">Avatar → Mon compte</td><td>Libère une place pour la Recherche</td></tr>
+<tr><td class="o">Textes expliqués</td><td class="n">Explications (page du morceau)</td><td>Rangé avec le morceau concerné</td></tr>
+<tr><td class="o">Répertoire</td><td class="n">Chronologie</td><td>Dit ce que c’est&#8239;: les dates des morceaux</td></tr>
+<tr><td class="o">Local</td><td class="n">Sur cet appareil</td><td>«&#8239;Local&#8239;» est un mot technique</td></tr>
+<tr><td class="o">Statistiques et résumés</td><td class="n">Mon année</td><td>Plus personnel, regroupe stats, résumé et trophées</td></tr>
+<tr><td class="o">Atelier de synchronisation</td><td class="n">Synchroniser des paroles</td><td>Le nom dit l’action</td></tr>
+<tr><td class="o">Highlight / Highlight approximatif</td><td class="n">Paroles synchronisées / défilement estimé</td><td>Plus de jargon</td></tr>
+<tr><td class="o">Coups de cœur</td><td class="n">Pépites</td><td>Un seul nom au lieu de deux</td></tr>
+<tr><td class="o">Infos, fonctionnalités &amp; astuces</td><td class="n">Guide</td><td>Court et clair (la phrase cachée est conservée)</td></tr>
+<tr><td class="o">Espace Créateur / Gestion du projet</td><td class="n">Studio</td><td>Un seul nom</td></tr>
+<tr><td class="o">Skipper dû à un bug</td><td class="n">Extrait illisible, passer</td><td>Même fonction, retiré du score, en français</td></tr>
+<tr><td class="o">Je ne sais pas</td><td class="n">Je ne sais pas</td><td>Inchangé, compte toujours comme une erreur</td></tr>
+</table></div>
+
+<h2>6. Ce qui change sous le capot</h2>
+<div class="grid">
+ <div class="card"><h3>Un seul code propre</h3><p>Aujourd’hui&#8239;: 49 fichiers empilés version après version, qui se corrigent les uns les autres. Demain&#8239;: un code unique, organisé par page.</p></div>
+ <div class="card"><h3>Rapide en toutes circonstances</h3><p>Chaque page n’est construite que quand on l’ouvre, et libérée quand on la quitte. Fini les gels de deux minutes et la page qui grossit.</p></div>
+ <div class="card"><h3>Contrôle automatique avant chaque mise en ligne</h3><p>Accents qui touchent, signes seuls sur une ligne, textes coupés, chevauchements, espaces insécables&#8239;: vérifiés automatiquement sur téléphone, tablette et ordinateur, puis par moi en direct.</p></div>
+ <div class="card"><h3>Mêmes serveurs, mêmes comptes</h3><p>Le nouveau site utilise les mêmes données (comptes, favoris, playlists, paroles, messages). Rien n’est perdu, et l’ancien site et les applis continuent de fonctionner.</p></div>
+</div>
+
+<div class="q"><h3>Mes questions pour toi</h3><ol>
+ <li><b>Identité visuelle</b>&#8239;: A (Nuit de vinyle), B (Plein soleil), C (Port de nuit), un mélange, ou je te propose d’autres pistes une fois le plan validé&#8239;?</li>
+ <li><b>Pépites</b>&#8239;: aujourd’hui les votes sont liés au navigateur. Je les lie au compte (un vote par membre, sur tous ses appareils)&#8239;?</li>
+ <li><b>Blind Test</b>&#8239;: on ajoute un classement entre membres&#8239;? (Si oui, je protège les réponses côté serveur pour empêcher la triche.)</li>
+ <li><b>Android et PS4</b>&#8239;: on retire toute mention du nouveau site, ou on garde «&#8239;en pause&#8239;»&#8239;?</li>
+ <li>Quelque chose à <b>déplacer, renommer ou ajouter</b> dans ce plan&#8239;?</li>
+</ol></div>
+</main></body></html>

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Avant l’usine — maquette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Archivo:wdth,wght@100..125,500..800&family=Unbounded:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ---------- Socle commun ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media (max-width:599px){html{scrollbar-width:none}html::-webkit-scrollbar{display:none}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-family:var(--display);font-weight:var(--display-weight);letter-spacing:var(--display-track);text-wrap:balance;hyphens:none}
+p{text-wrap:pretty}
+.wrap{width:min(100% - 2*var(--gutter),1180px);margin-inline:auto}
+:root{--gutter:20px;--tab:64px;--mini:72px}
+@media (min-width:900px){:root{--gutter:40px;--tab:0px}}
+
+/* En-tête */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:24px;height:64px}
+.logo{font-family:var(--display);font-weight:var(--display-weight);font-size:20px;line-height:1;letter-spacing:var(--display-track);white-space:nowrap}
+.logo b{color:var(--accent);font-weight:inherit}
+.nav{display:none;gap:4px;margin-left:auto}
+.nav button{height:40px;padding:0 14px;border-radius:var(--r-pill);font-weight:500;font-size:15px;color:var(--muted)}
+.nav button[aria-current]{color:var(--ink);background:var(--surface)}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--muted);font-size:15px}
+.search svg{width:18px;height:18px}
+@media (min-width:900px){.nav{display:flex}.search{margin-left:8px;min-width:220px}}
+@media (max-width:899px){.search span{display:none}.search{width:40px;justify-content:center;padding:0}}
+
+/* Héros */
+.hero{padding:clamp(40px,7vw,96px) 0 clamp(40px,6vw,72px)}
+.hero .wrap{display:grid;gap:40px;align-items:center}
+@media (min-width:900px){.hero .wrap{grid-template-columns:1.15fr .85fr}}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.hero h1{margin-top:18px;font-size:clamp(44px,7.2vw,88px);line-height:var(--display-lh);text-transform:var(--display-case)}
+.hero h1 em{font-style:var(--em-style);color:var(--accent)}
+.lede{margin-top:20px;max-width:34em;font-size:clamp(16px,1.6vw,18px);color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:var(--r-btn);font-weight:600;font-size:16px;white-space:nowrap}
+.btn svg{width:18px;height:18px;flex:none}
+.btn-main{background:var(--accent);color:var(--on-accent)}
+.btn-ghost{border:1px solid var(--line-strong);color:var(--ink)}
+.stack{position:relative;height:clamp(240px,34vw,380px);max-width:460px;width:100%;justify-self:center}
+.stack img{position:absolute;width:62%;aspect-ratio:1;object-fit:cover;border-radius:var(--r-cover);box-shadow:var(--cover-shadow)}
+.stack img:nth-child(1){left:0;top:12%;transform:rotate(var(--rot1))}
+.stack img:nth-child(2){left:19%;top:4%;transform:rotate(var(--rot2));z-index:1}
+.stack img:nth-child(3){left:38%;top:14%;transform:rotate(var(--rot3))}
+
+/* Sections */
+.section{padding:clamp(32px,5vw,56px) 0}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:24px}
+.section-head h2{font-size:clamp(28px,3.4vw,40px);line-height:var(--display-lh);text-transform:var(--display-case)}
+.link{font-weight:600;font-size:15px;color:var(--accent);white-space:nowrap}
+.volumes{display:grid;gap:clamp(14px,2vw,24px);grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))}
+@media (max-width:599px){.volumes{grid-template-columns:repeat(2,1fr)}}
+.vol{display:grid;gap:12px;text-align:left}
+.vol img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r-cover);box-shadow:var(--cover-shadow)}
+.vol h3{font-family:var(--body);font-weight:600;letter-spacing:0;font-size:16px;line-height:1.3}
+.vol p{font-size:14px;color:var(--muted)}
+.list{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:28px 44px 1fr auto;align-items:center;gap:14px;padding:12px 4px;border-bottom:1px solid var(--line)}
+.row .n{font-variant-numeric:tabular-nums;font-size:14px;color:var(--muted);text-align:right}
+.row img{width:44px;height:44px;border-radius:calc(var(--r-cover)*.6);object-fit:cover}
+.row .t{min-width:0}
+.row .t strong{display:block;font-weight:600;font-size:15px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t span{font-size:13px;color:var(--muted)}
+.row .d{font-variant-numeric:tabular-nums;font-size:14px;color:var(--muted)}
+.row.on .t strong{color:var(--accent)}
+
+/* Mini-lecteur + barre d'onglets */
+.spacer{height:calc(var(--mini) + var(--tab) + 32px)}
+.mini{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tab) + 10px + env(safe-area-inset-bottom));z-index:30;width:min(100% - 20px,1180px);height:var(--mini);display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:14px;padding:0 10px;border-radius:var(--r-panel);background:var(--panel);border:1px solid var(--line);box-shadow:0 18px 40px -18px rgb(0 0 0/.55)}
+.mini img{width:52px;height:52px;border-radius:calc(var(--r-cover)*.6);object-fit:cover}
+.mini .t{min-width:0}
+.mini strong{display:block;font-weight:600;font-size:15px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini span{font-size:13px;color:var(--muted)}
+.ctrl{display:flex;align-items:center;gap:4px}
+.ic{width:44px;height:44px;display:grid;place-items:center;border-radius:50%}
+.ic svg{width:22px;height:22px}
+.ic.play{background:var(--accent);color:var(--on-accent)}
+.mini .bar{position:absolute;left:14px;right:14px;bottom:0;height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+.mini .bar i{display:block;height:100%;width:38%;background:var(--accent)}
+@media (max-width:599px){.ctrl .side{display:none}}
+.tabs{position:fixed;inset:auto 0 0 0;z-index:30;height:calc(var(--tab) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);display:grid;grid-template-columns:repeat(4,1fr);background:var(--bg);border-top:1px solid var(--line)}
+.tabs button{display:grid;place-items:center;align-content:center;gap:4px;font-size:12px;font-weight:600;color:var(--muted)}
+.tabs svg{width:22px;height:22px}
+.tabs [aria-current]{color:var(--accent)}
+@media (min-width:900px){.tabs{display:none}}
+
+/* Vue lecteur */
+.player{min-height:100dvh;display:grid;grid-template-rows:auto auto 1fr auto;gap:22px;padding:calc(16px + env(safe-area-inset-top)) var(--gutter) calc(24px + env(safe-area-inset-bottom));background:var(--player-bg)}
+.player-top{display:grid;grid-template-columns:44px 1fr 44px;align-items:center}
+.player-top p{text-align:center;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.close{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line-strong)}
+.close svg{width:18px;height:18px}
+.now{display:grid;grid-template-columns:72px 1fr;gap:16px;align-items:center}
+.now img{width:72px;height:72px;border-radius:var(--r-cover);object-fit:cover;box-shadow:var(--cover-shadow)}
+.now h2{font-size:26px;line-height:var(--display-lh);text-transform:var(--display-case)}
+.now p{font-size:14px;color:var(--muted);margin-top:4px}
+.lyrics{display:grid;align-content:center;gap:18px;overflow:hidden;mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent)}
+.lyrics p{font-family:var(--lyric);font-weight:600;font-size:clamp(22px,6vw,30px);line-height:1.28;color:var(--ghost)}
+.lyrics p.past{color:var(--ghost-past)}
+.lyrics p.cur{color:var(--ink)}
+.lyrics p.cur span{color:var(--accent)}
+.transport{display:grid;gap:14px}
+.time{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}
+.track{height:4px;border-radius:4px;background:var(--line);position:relative}
+.track i{position:absolute;inset:0 62% 0 0;background:var(--accent);border-radius:inherit}
+.track b{position:absolute;left:38%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--ink)}
+.big{display:flex;justify-content:center;align-items:center;gap:28px}
+.big .ic.play{width:68px;height:68px}
+.big .ic.play svg{width:28px;height:28px}
+
+/* ---------- Identité A : Nuit de vinyle ---------- */
+[data-theme=a]{--bg:#0f0d0c;--surface:#1c1917;--panel:#1a1715;--ink:#f4ece0;--muted:#a89e91;--line:#2c2724;--line-strong:#463f3a;--accent:#e5483b;--on-accent:#fff7ef;--ghost:#4a433d;--ghost-past:#6b625a;
+ --display:"Fraunces",Georgia,serif;--display-weight:600;--display-track:-.01em;--display-lh:1.06;--display-case:none;--em-style:italic;--lyric:"Fraunces",Georgia,serif;--body:"Inter",system-ui,sans-serif;
+ --r-pill:999px;--r-btn:999px;--r-cover:6px;--r-panel:18px;--rot1:-6deg;--rot2:2deg;--rot3:8deg;--cover-shadow:0 22px 40px -20px rgb(0 0 0/.8);
+ --player-bg:radial-gradient(120% 70% at 50% 0%,#3a1512 0%,#0f0d0c 62%)}
+/* ---------- Identité B : Plein soleil ---------- */
+[data-theme=b]{--bg:#f3efe6;--surface:#e7e1d4;--panel:#fffdf8;--ink:#151515;--muted:#5d5a54;--line:#d9d2c3;--line-strong:#151515;--accent:#1f3fe0;--on-accent:#ffffff;--ghost:#c4bdae;--ghost-past:#9a9387;
+ --display:"Archivo",system-ui,sans-serif;--display-weight:800;--display-track:-.015em;--display-lh:1.04;--display-case:none;--em-style:normal;--lyric:"Archivo",system-ui,sans-serif;--body:"Inter",system-ui,sans-serif;
+ --r-pill:999px;--r-btn:4px;--r-cover:2px;--r-panel:6px;--rot1:0deg;--rot2:0deg;--rot3:0deg;--cover-shadow:none;
+ --player-bg:linear-gradient(#ffd23f 0 34%,#f3efe6 34%)}
+[data-theme=b] h1,[data-theme=b] h2{font-stretch:112%}
+[data-theme=b] .hero h1 em{background:linear-gradient(transparent 62%,#ffd23f 62% 92%,transparent 92%)}
+[data-theme=b] .stack img{border:2px solid var(--ink)}
+[data-theme=b] .stack img:nth-child(1){left:0;top:30%;width:48%}
+[data-theme=b] .stack img:nth-child(2){left:26%;top:0;width:48%}
+[data-theme=b] .stack img:nth-child(3){left:52%;top:30%;width:48%}
+[data-theme=b] .vol img,[data-theme=b] .row img,[data-theme=b] .mini img,[data-theme=b] .now img{outline:2px solid var(--ink);outline-offset:-2px}
+[data-theme=b] .mini{box-shadow:4px 4px 0 var(--ink);border:2px solid var(--ink)}
+/* ---------- Identité C : Port de nuit ---------- */
+[data-theme=c]{--bg:#07111c;--surface:#11202f;--panel:rgb(17 32 47/.82);--ink:#eaf4f7;--muted:#8ea3b2;--line:#1b3044;--line-strong:#2d4a63;--accent:#3fe0c4;--on-accent:#04201b;--ghost:#29445a;--ghost-past:#4a6880;
+ --display:"Unbounded",system-ui,sans-serif;--display-weight:600;--display-track:-.02em;--display-lh:1.12;--display-case:none;--em-style:normal;--lyric:"Manrope",system-ui,sans-serif;--body:"Manrope",system-ui,sans-serif;
+ --r-pill:999px;--r-btn:14px;--r-cover:16px;--r-panel:22px;--rot1:-4deg;--rot2:0deg;--rot3:4deg;--cover-shadow:0 24px 50px -22px rgb(0 0 0/.9);
+ --player-bg:radial-gradient(90% 60% at 80% 0%,rgb(63 224 196/.22),transparent 60%),radial-gradient(80% 50% at 0% 100%,rgb(255 107 91/.18),transparent 60%),#07111c}
+[data-theme=c] body{background:radial-gradient(70% 50% at 85% -10%,rgb(63 224 196/.14),transparent 60%),radial-gradient(60% 40% at -10% 30%,rgb(255 107 91/.10),transparent 60%),var(--bg) fixed}
+[data-theme=c] .hero h1 em{background:linear-gradient(90deg,#3fe0c4,#ff6b5b);-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme=c] .mini{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+[data-theme=c] .hero h1{font-size:clamp(38px,6vw,76px)}
+</style>
+</head>
+<body>
+<div id="home">
+  <header class="top"><div class="wrap">
+    <div class="logo">Avant l’<b>usine</b></div>
+    <nav class="nav" aria-label="Navigation principale">
+      <button aria-current="page">Écouter</button><button>Ma musique</button><button>Communauté</button><button>Compte</button>
+    </nav>
+    <button class="search" aria-label="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Rechercher un morceau</span></button>
+  </div></header>
+
+  <main>
+    <section class="hero"><div class="wrap">
+      <div>
+        <p class="eyebrow">Les premiers sons de JuL</p>
+        <h1>Avant les albums, <em>déjà tout un univers.</em></h1>
+        <p class="lede">Retrouve les premiers morceaux, explore les volumes et laisse les souvenirs revenir.</p>
+        <div class="actions">
+          <button class="btn btn-main"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>Lancer l’écoute</button>
+          <button class="btn btn-ghost">Explorer les volumes</button>
+        </div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <img src="../../../cover-01.webp" alt=""><img src="../../../cover-02.webp" alt=""><img src="../../../cover-03.webp" alt="">
+      </div>
+    </div></section>
+
+    <section class="section"><div class="wrap">
+      <div class="section-head"><h2>Les volumes</h2><button class="link">Tout voir</button></div>
+      <div class="volumes">
+        <button class="vol"><img src="../../../cover-01.webp" alt=""><div><h3>Avant l’usine · Vol. 1</h3><p>JuL · 37 morceaux</p></div></button>
+        <button class="vol"><img src="../../../cover-02.webp" alt=""><div><h3>Avant l’usine · Vol. 2</h3><p>JuL · 48 morceaux</p></div></button>
+        <button class="vol"><img src="../../../cover-03.webp" alt=""><div><h3>Avant l’usine · Vol. 3</h3><p>JuL · 33 morceaux</p></div></button>
+      </div>
+    </div></section>
+
+    <section class="section"><div class="wrap">
+      <div class="section-head"><h2>À écouter maintenant</h2><button class="link">Volume 1</button></div>
+      <div class="list">
+        <div class="row on"><span class="n">1</span><img src="../../../cover-01.webp" alt=""><div class="t"><strong>Marre de tout</strong><span>JuL · Volume 1</span></div><span class="d">4:12</span></div>
+        <div class="row"><span class="n">2</span><img src="../../../cover-01.webp" alt=""><div class="t"><strong>Amis ennemis</strong><span>JuL · Volume 1</span></div><span class="d">3:48</span></div>
+        <div class="row"><span class="n">3</span><img src="../../../cover-01.webp" alt=""><div class="t"><strong>Dans mon secteur</strong><span>JuL · Volume 1</span></div><span class="d">3:31</span></div>
+        <div class="row"><span class="n">4</span><img src="../../../cover-01.webp" alt=""><div class="t"><strong>Doublesse</strong><span>JuL · Volume 1</span></div><span class="d">3:05</span></div>
+        <div class="row"><span class="n">6</span><img src="../../../cover-01.webp" alt=""><div class="t"><strong>Écoute ça</strong><span>JuL · Volume 1</span></div><span class="d">3:57</span></div>
+      </div>
+    </div></section>
+    <div class="spacer"></div>
+  </main>
+
+  <section class="mini" aria-label="Lecteur">
+    <img src="../../../cover-01.webp" alt="">
+    <div class="t"><strong>Marre de tout</strong><span>JuL · Volume 1</span></div>
+    <div class="ctrl">
+      <button class="ic side" aria-label="Précédent"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12l-9-6z"/></svg></button>
+      <button class="ic play" aria-label="Lecture"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+      <button class="ic side" aria-label="Suivant"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l9-6z"/></svg></button>
+    </div>
+    <div class="bar"><i></i></div>
+  </section>
+
+  <nav class="tabs" aria-label="Onglets">
+    <button aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>Écouter</button>
+    <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4v16M10 4v16M15 5l4 15"/></svg>Ma musique</button>
+    <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="3.5"/><path d="M3 20c.6-3.4 3-5 6-5s5.4 1.6 6 5M16 5.5a3 3 0 0 1 0 6M18 15c1.8.6 2.8 2.2 3 5"/></svg>Communauté</button>
+    <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8.5" r="4"/><path d="M4 20.5c1-4 4.2-6 8-6s7 2 8 6"/></svg>Compte</button>
+  </nav>
+</div>
+
+<div id="player" hidden>
+  <section class="player" aria-label="Lecteur plein écran">
+    <div class="player-top">
+      <button class="close" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <p>À l’écoute</p><span></span>
+    </div>
+    <div class="now"><img src="../../../cover-01.webp" alt=""><div><h2>Marre de tout</h2><p>JuL · Volume 1</p></div></div>
+    <div class="lyrics" aria-label="Paroles (texte d’exemple)">
+      <p class="past">Ligne déjà chantée, plus discrète</p>
+      <p class="past">Une autre ligne passée</p>
+      <p class="cur"><span>La ligne chantée s’éclaire</span> mot après mot</p>
+      <p>La ligne suivante attend son tour</p>
+      <p>Puis encore une autre</p>
+    </div>
+    <div class="transport">
+      <div class="time"><span>1:36</span><div class="track"><i></i><b></b></div><span>4:12</span></div>
+      <div class="big">
+        <button class="ic" aria-label="Précédent"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12l-9-6z"/></svg></button>
+        <button class="ic play" aria-label="Pause"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
+        <button class="ic" aria-label="Suivant"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l9-6z"/></svg></button>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+const q=new URLSearchParams(location.search);
+document.documentElement.dataset.theme=q.get('theme')||'a';
+if(q.get('vue')==='lecteur'){document.getElementById('home').hidden=true;document.getElementById('player').hidden=false;}
+</script>
+</body>
+</html>
