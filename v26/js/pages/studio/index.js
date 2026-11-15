@@ -74,8 +74,9 @@ export default async function studio(page) {
     const tool = TOOLS.find((t) => t[0] === id);
     const panel = h('div', { style: { display: 'grid', gap: '16px' } }, h('div.loading', h('div.spin', { role: 'status', 'aria-label': 'Chargement' })));
     body.replaceChildren(h('div', { style: { display: 'grid', gap: '18px' } },
-      h('button.btn.btn-soft.btn-sm', { type: 'button', style: { justifySelf: 'start' }, text: '‹ Tableau de bord', onclick: () => { current = ''; dashboard(); } }),
+      h('button.btn.btn-soft.btn-sm', { type: 'button', style: { justifySelf: 'start' }, text: '‹ Tableau de bord', onclick: () => { current = ''; dashboard(); window.scrollTo(0, 0); } }),
       h('h2', { style: { fontSize: '30px' }, text: tool[2] }), h('p.note', { text: tool[3] }), panel));
+    window.scrollTo(0, 0);
     try { const m = await import('./tools.js'); await m[toolName(id)](panel); }
     catch (e) { panel.replaceChildren(h('p.empty', { text: e.message || 'Outil indisponible.' })); }
   }

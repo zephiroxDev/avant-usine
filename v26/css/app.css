@@ -122,6 +122,9 @@ p,li,dd{text-wrap:pretty}
 .btn-line:hover{border-color:var(--ink)}
 .btn-soft{background:var(--surface)}
 .btn-soft:hover{background:var(--surface-2)}
+/* Sur une carte (même fond), un bouton discret prend un contour pour rester visible. */
+.choice .btn-soft,.tile .btn-soft,.sheet-card .btn-soft{background:transparent;border:1px solid var(--line-strong)}
+.choice .btn-soft:hover,.tile .btn-soft:hover,.sheet-card .btn-soft:hover{border-color:var(--ink)}
 .btn-danger{border:1px solid rgb(255 107 94/.5);color:var(--danger)}
 .btn[disabled]{opacity:.45;pointer-events:none}
 .btn-sm{min-height:38px;padding:0 14px;font-size:14px}

@@ -11,7 +11,8 @@ const empty = (text) => h('p.empty', { text });
 const row = (main, sub, ...actions) => h('div.choice', { style: { alignItems: 'flex-start', padding: '14px 16px', minHeight: '0', flexWrap: 'wrap', cursor: 'default' } },
   h('span', { style: { display: 'grid', gap: '4px', minWidth: '0', flex: '1 1 260px' } }, h('span', { text: main }), sub ? h('small', { style: { whiteSpace: 'pre-line' }, text: sub }) : null),
   actions.length ? h('span.row-actions', { style: { flex: 'none' } }, actions) : null);
-const btn = (text, run, kind = '.btn-soft') => h('button.btn.btn-sm' + kind, { type: 'button', text, onclick: async (e) => { e.currentTarget.disabled = true; try { await run(); } catch (err) { toast(err.message); } finally { e.currentTarget.disabled = false; } } });
+// Bouton à contour : visible sur le fond des cartes (le fond « soft » s'y confondait).
+const btn = (text, run, kind = '.btn-line') => h('button.btn.btn-sm' + kind, { type: 'button', text, onclick: async (e) => { e.currentTarget.disabled = true; try { await run(); } catch (err) { toast(err.message); } finally { e.currentTarget.disabled = false; } } });
 function ask(titleText, label, { ok = 'Valider', value = '', multiline = true, required = false } = {}) {
   return new Promise((resolve) => {
     let done = false;
@@ -248,9 +249,11 @@ export async function promo(box) {
   box.replaceChildren(...(items.length ? items.map((it) => {
     const img = it.image || it.png || it.src || '';
     const st = status.find((s) => s.image === img);
-    return row((it.patch ? 'Version ' + it.patch : img) + (st?.published ? ' · publiée' : ''), [it.title, Array.isArray(it.platforms) ? it.platforms.join(', ') : ''].filter(Boolean).join(' · '),
-      img ? h('a.btn.btn-soft.btn-sm', { href: '../' + img.replace(/^\.\//, ''), target: '_blank', rel: 'noopener', text: 'Voir l’affiche' }) : null,
-      (it.video || it.mp4) ? h('a.btn.btn-soft.btn-sm', { href: '../' + String(it.video || it.mp4).replace(/^\.\//, ''), target: '_blank', rel: 'noopener', text: 'Voir la vidéo' }) : null,
+    const PLATFORM = { 'web-pc': 'Site PC', 'web-mobile': 'Site mobile', 'desktop-pc': 'Windows', ios: 'iPhone et iPad', android: 'Android', ps4: 'PS4' };
+    const platforms = Array.isArray(it.platforms) ? it.platforms.map((p) => PLATFORM[p] || p).join(', ') : '';
+    return row((it.patch ? 'Version ' + it.patch : img) + (st?.published ? ' · publiée' : ''), [it.title, platforms].filter(Boolean).join(' · '),
+      img ? h('a.btn.btn-line.btn-sm', { href: '../' + img.replace(/^\.\//, ''), target: '_blank', rel: 'noopener', text: 'Voir l’affiche' }) : null,
+      (it.video || it.mp4) ? h('a.btn.btn-line.btn-sm', { href: '../' + String(it.video || it.mp4).replace(/^\.\//, ''), target: '_blank', rel: 'noopener', text: 'Voir la vidéo' }) : null,
       btn(st?.published ? 'Marquer non publiée' : 'Marquer publiée', async () => { await rpc('au_promo_mark_18v08', { p_image: img, p_action: 'published', p_published: !st?.published }); promo(box); }));
   }) : [empty('Aucune affiche dans le catalogue promo.')]));
 }
