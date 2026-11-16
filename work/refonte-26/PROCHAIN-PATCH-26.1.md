@@ -59,6 +59,12 @@ Décision du 16 novembre 2026. Permettre l'import de ses propres musiques sur le
 - Android (`work/android-app`) : version 0.3.4, source encore `github-sync-import` ; compilation en CI (`android-build.yml`, désactivé par la pause), signature avec la clé locale (ne jamais committer), publication par `releases/livraison.json` + `android-release.yml`. Mises à jour : android.js lit les releases GitHub. Ni Node ni Python sur ce PC.
 - La chaîne exige pour la version 26.0 : `NOTES-26.0.md`, notes Windows/iPhone (patch-notes.json), numéros (Windows 0.11.0, iPhone 2.5.0 build 52 proposés) et UNE affiche dans promo-manifest.json (check-promo.cjs). Attention : la promo automatique (promo-auto) peut publier l'affiche sur TikTok → accord d'Iloan avant d'ajouter l'affiche.
 
+## Version 26.0 des applis — en cours (16 novembre 2026, soir)
+- Numéros : Windows 0.11.0, iPhone/iPad 2.5.0 build 52, releaseId 26.0. Notes : `work/desktop-app/NOTES-26.0.md` + patch-notes.json des deux applis.
+- Affiche « Tout neuf. » : `promo-26v00-public.png` + `.mp4` (6 s, 30 i/s constant), fabriquée par `work/refonte-26/affiche/affiche-26.html` (images enregistrées par serveur-local.ps1 en POST dans `affiche/sortie`, assemblées par ffmpeg d'`outils`). Ajoutée à `work/experience-integration/promo-manifest.json` SEULEMENT : pas encore dans le promo-manifest.json du site en ligne (la promo auto TikTok la publierait avant Android). L'ajouter au site au moment de la sortie.
+- Workflows `v26-0-validation.yml` / `v26-0-promote.yml` / `.github/scripts/promote-v26-0.py` (copies de la 25.2.1, v26 ajoutée aux chemins et aux contrôles). Commit e2d9d09 + 7dc28fd (déclencheur), branche release/v26-0. Validation run 43913301152.
+- Ensuite : `.github/v26-0-release.json` {version 26.0, sourceCommit 7dc28fd…, runId 43913301152} poussé sur main → promotion.
+
 ## Nouvelle direction des applis (décision d'Iloan, 16 novembre 2026)
 - **Appli Windows** = le site v26 tel quel, en appli, avec en plus la conservation **indéfinie** des musiques importées.
 - **Applis iPhone/iPad et Android** = **uniquement l'espace des musiques importées** (rien d'autre du site), **plus le Blind Test avec les musiques importées**.

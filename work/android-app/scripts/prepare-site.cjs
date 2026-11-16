@@ -1,4 +1,4 @@
-require('../../mine-sync/check-promo.cjs')(require('../release.json').releaseId);
+require('../../mine-sync/check-promo.cjs')(require('../release.json').releaseId,require('node:path').resolve(__dirname,'../../experience-integration'));
 const fs=require('node:fs'),path=require('node:path');
 const source=path.resolve(__dirname,'../../github-sync-import'),dest=path.resolve(__dirname,'../site');
 const {adaptCopy}=require('../../desktop-app/scripts/desktop-copy.cjs');
@@ -22,3 +22,25 @@ for(const name of ['icon-512.png','icon-192.png','favicon-32.png','apple-touch-i
 fs.copyFileSync(path.resolve(__dirname,'../assets/logo.png'),path.join(dest,'android-logo.png'));
 for(const name of ['android.js','android.css'])fs.copyFileSync(path.resolve(__dirname,'../web',name),path.join(dest,name));
 console.log('Interface mobile Android préparée : '+fs.readdirSync(dest).length+' fichiers.');
+
+// Site 26 (décision d'Iloan, 16 novembre 2026) : l'appli Android rouvre en mode « musiques importées uniquement »
+// (le site bloque le reste grâce à data-au-app="android"). L'ancien site reste dans le paquet avec android.js
+// (mises à jour et export de l'appli) ; sa page d'accueil redirige tout de suite vers la v26.
+{
+  const v26=path.resolve(__dirname,'../../../v26'),out=path.join(dest,'v26');
+  fs.rmSync(out,{recursive:true,force:true});fs.cpSync(v26,out,{recursive:true});
+  // Affiche de la version (Gestion promo) et modules partagés utilisés par la v26.
+  const shared=path.resolve(__dirname,'../../experience-integration');
+  for(const name of ['promo-manifest.json','promo-26v00-public.png'])fs.copyFileSync(path.join(shared,name),path.join(dest,name));
+  fs.copyFileSync(path.resolve(__dirname,'../web/android-26.css'),path.join(dest,'android-26.css'));
+  const page=path.join(out,'index.html');let v=fs.readFileSync(page,'utf8');
+  if(!v.includes('<head>')||!v.includes('</head>')||!v.includes('</body>'))throw Error('Page de la v26 incomplète');
+  v=v.replace('<head>','<head><script>document.documentElement.dataset.auApp="android";</script>')
+     .replace('</head>','<link rel="stylesheet" href="../android-26.css"></head>')
+     .replace('</body>','<script src="../local-storage-18v07.js" defer></script><script src="../local-18v00.js" defer></script><script src="../backup-18v06.js" defer></script><script src="../android.js" defer></script></body>');
+  fs.writeFileSync(page,v);
+  const entry=path.join(dest,'index.html');let old=fs.readFileSync(entry,'utf8');
+  old=old.replace('<head>','<head><script>location.replace("./v26/index.html"+location.hash);</script>');
+  fs.writeFileSync(entry,old);
+  console.log('Site 26 ajouté à l’appli Android (musiques importées uniquement).');
+}

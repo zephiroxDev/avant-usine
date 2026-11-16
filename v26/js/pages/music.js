@@ -1,13 +1,13 @@
-import { h, icon } from '../core/dom.js?v=202611161800';
-import { on } from '../core/bus.js?v=202611161800';
-import * as cat from '../core/catalog.js?v=202611161800';
-import * as lib from '../core/library.js?v=202611161800';
-import * as player from '../core/player.js?v=202611161800';
-import { account } from '../core/account.js?v=202611161800';
-import { trackRow, markCurrent } from '../ui/track.js?v=202611161800';
-import { sheet, toast } from '../ui/overlay.js?v=202611161800';
-import { go } from '../router.js?v=202611161800';
-import { localOnly } from '../core/platform.js?v=202611161800';
+import { h, icon } from '../core/dom.js?v=202611161830';
+import { on } from '../core/bus.js?v=202611161830';
+import * as cat from '../core/catalog.js?v=202611161830';
+import * as lib from '../core/library.js?v=202611161830';
+import * as player from '../core/player.js?v=202611161830';
+import { account } from '../core/account.js?v=202611161830';
+import { trackRow, markCurrent } from '../ui/track.js?v=202611161830';
+import { sheet, toast } from '../ui/overlay.js?v=202611161830';
+import { go } from '../router.js?v=202611161830';
+import { localOnly } from '../core/platform.js?v=202611161830';
 
 const SECTIONS = [
   ['favoris', 'Favoris'],
@@ -31,14 +31,14 @@ export default function music(page, { section = 'favoris' }) {
   const paint = () => {
     if (section === 'favoris') return paintFavorites();
     if (section === 'playlists') return paintPlaylists();
-    if (section === 'mon-annee') return import('./my-year.js?v=202611161800').then((m) => m.default(body));
+    if (section === 'mon-annee') return import('./my-year.js?v=202611161830').then((m) => m.default(body));
     if (section === 'sur-cet-appareil') {
       // Musiques importées, puis (hors applis téléphone) « Emporter un volume ».
       const mine = h('div');
       const take = h('div', { style: { marginTop: '40px', paddingTop: '28px', borderTop: '1px solid var(--line)' } });
       body.replaceChildren(mine, localOnly ? '' : take);
-      import('./imported.js?v=202611161800').then((m) => { const off = m.default(mine); offs.push(off); });
-      if (!localOnly) import('./device.js?v=202611161800').then((m) => { const off = m.default(take); offs.push(off); });
+      import('./imported.js?v=202611161830').then((m) => { const off = m.default(mine); offs.push(off); });
+      if (!localOnly) import('./device.js?v=202611161830').then((m) => { const off = m.default(take); offs.push(off); });
       return;
     }
   };

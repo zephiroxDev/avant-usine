@@ -1,6 +1,6 @@
 // Moteur de lecture unique : un seul élément audio pour tout le site.
-import { emit, store } from './bus.js?v=202611161800';
-import { track as findTrack } from './catalog.js?v=202611161800';
+import { emit, store } from './bus.js?v=202611161830';
+import { track as findTrack } from './catalog.js?v=202611161830';
 
 const audio = new Audio();
 audio.preload = 'metadata';

@@ -1,13 +1,13 @@
 // Mes musiques importées : import, écoute, paroles (surlignage estimé ou synchronisé dans l'Atelier),
 // pochettes classiques ou animées, Blind Test. Tout reste sur l'appareil.
-import { h, icon, clock } from '../core/dom.js?v=202611161800';
-import { on } from '../core/bus.js?v=202611161800';
-import * as local from '../core/local.js?v=202611161800';
-import * as player from '../core/player.js?v=202611161800';
-import { forgetLyrics } from '../core/lyrics.js?v=202611161800';
-import { app, inApp, localOnly, standalone, isIOS, isPhone } from '../core/platform.js?v=202611161800';
-import { sheet, toast, confirm } from '../ui/overlay.js?v=202611161800';
-import { markCurrent } from '../ui/track.js?v=202611161800';
+import { h, icon, clock } from '../core/dom.js?v=202611161830';
+import { on } from '../core/bus.js?v=202611161830';
+import * as local from '../core/local.js?v=202611161830';
+import * as player from '../core/player.js?v=202611161830';
+import { forgetLyrics } from '../core/lyrics.js?v=202611161830';
+import { app, inApp, localOnly, standalone, isIOS, isPhone } from '../core/platform.js?v=202611161830';
+import { sheet, toast, confirm } from '../ui/overlay.js?v=202611161830';
+import { markCurrent } from '../ui/track.js?v=202611161830';
 
 const pick = (accept, multiple = false) => new Promise((resolve) => {
   const input = h('input', { type: 'file', accept, multiple, style: { display: 'none' } });
@@ -117,7 +117,7 @@ export default function imported(body) {
         act('Écouter', 'play', () => player.playList(t.volume.tracks.map((x) => x.key), t.key)),
         act('Modifier les infos', 'edit', () => editInfo(t)),
         act('Paroles', 'lyrics', () => editLyrics(t)),
-        act('Synchroniser dans l’Atelier', 'lyrics', () => import('./community/studio.js?v=202611161800').then((m) => m.openStudio(t.key))),
+        act('Synchroniser dans l’Atelier', 'lyrics', () => import('./community/studio.js?v=202611161830').then((m) => m.openStudio(t.key))),
         act('Pochette (classique ou animée)', 'cover', () => coverSheet({ t })),
         act('Supprimer de l’appareil', 'trash', () => remove(t), '.btn-soft')));
     });
@@ -178,10 +178,10 @@ export default function imported(body) {
   }
 }
 
-/** Appli iPhone : emplacement où ios.js (mises à jour de l'appli) range son bouton « Forcer une mise à jour ».
+/** Applis iPhone et Android : emplacement où ios.js / android.js (mises à jour de l'appli) range son bouton « Forcer une mise à jour ».
  *  ios.js cherche #accountDialog et appelle sa méthode close() avant de vérifier. */
 function updateHost() {
-  if (app !== 'ios') return null;
+  if (app !== 'ios' && app !== 'android') return null;
   document.getElementById('accountDialog')?.remove();
   const host = h('div#accountDialog');
   host.close = () => {};

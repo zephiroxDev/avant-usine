@@ -1,0 +1,17 @@
+/* Appli Android sur le site 26 : seulement la fenêtre de mise à jour (android.js) et ses messages,
+   aux couleurs de la v26. android.css (ancien site) n'est pas chargé : il restylerait les pages de la v26. */
+dialog.au-android-update{width:min(92vw,440px);max-width:none;margin:auto;padding:24px;border:1px solid var(--line-strong);border-radius:var(--r-lg);background:var(--bg-raise);color:var(--ink);box-shadow:var(--shadow-float);display:grid;gap:14px}
+dialog.au-android-update:not([open]){display:none}
+dialog.au-android-update::backdrop{background:rgb(0 0 0/.6)}
+dialog.au-android-update h2{font-family:var(--display);font-size:24px;line-height:1.2}
+dialog.au-android-update p{color:var(--muted);line-height:1.5}
+dialog.au-android-update button{min-height:46px;padding:0 18px;border-radius:999px;font-weight:600;font-size:15px}
+dialog.au-android-update button.button:not(.secondary){background:var(--accent);color:var(--accent-ink)}
+dialog.au-android-update button.secondary{background:transparent;color:var(--ink);border:1px solid var(--line-strong)}
+dialog.au-android-update button.text-button{background:none;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+dialog.au-android-update button:disabled{opacity:.5}
+dialog.au-android-update progress{width:100%;height:8px;accent-color:var(--accent)}
+.au-android-saving{position:fixed;z-index:95;left:50%;bottom:calc(var(--mini) + var(--safe-b) + 20px);transform:translateX(-50%);max-width:min(92vw,440px);padding:12px 18px;border-radius:var(--r);background:var(--ink);color:var(--bg);font-size:14px;font-weight:600;text-align:center}
+/* Bouton « Forcer une mise à jour » ajouté par android.js dans #accountDialog (bas de la page Mes musiques). */
+#accountDialog{display:flex;flex-wrap:wrap;gap:10px}
+#accountDialog #forceAppUpdate{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;color:var(--ink);font-weight:600;font-size:14px}
