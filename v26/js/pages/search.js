@@ -1,9 +1,9 @@
-import { h, icon } from '../core/dom.js?v=202611161845';
-import { on } from '../core/bus.js?v=202611161845';
-import * as cat from '../core/catalog.js?v=202611161845';
-import { trackRow, markCurrent, addToPlaylist, favButton } from '../ui/track.js?v=202611161845';
-import { setQuery } from '../router.js?v=202611161845';
-import * as lib from '../core/library.js?v=202611161845';
+import { h, icon } from '../core/dom.js?v=202611161905';
+import { on } from '../core/bus.js?v=202611161905';
+import * as cat from '../core/catalog.js?v=202611161905';
+import { trackRow, markCurrent, addToPlaylist, favButton } from '../ui/track.js?v=202611161905';
+import { setQuery } from '../router.js?v=202611161905';
+import * as lib from '../core/library.js?v=202611161905';
 
 export default function search(page, _params, query) {
   // ?playlist=<id> : mode « ajouter à cette playlist » (ajout direct, sans redemander).

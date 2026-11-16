@@ -1,6 +1,6 @@
 // Préférences locales (animations) + minuteur de sommeil.
-import { store, emit } from './bus.js?v=202611161845';
-import * as player from './player.js?v=202611161845';
+import { store, emit } from './bus.js?v=202611161905';
+import * as player from './player.js?v=202611161905';
 
 const KEY = 'au26-prefs';
 const defaults = { motion: 'on' }; // Mode clair supprimé (demande d'Iloan, 16 nov. 2026) : le site est toujours sombre.

@@ -1,13 +1,13 @@
 // En-tête, onglets, mini-lecteur et lecteur plein écran.
-import { h, icon, clock } from '../core/dom.js?v=202611161845';
-import { on } from '../core/bus.js?v=202611161845';
-import * as player from '../core/player.js?v=202611161845';
-import { getLyrics, locate, lineLetters } from '../core/lyrics.js?v=202611161845';
-import { go } from '../router.js?v=202611161845';
-import { favButton, addToPlaylist, markCurrent } from './track.js?v=202611161845';
-import { toast } from './overlay.js?v=202611161845';
-import { account } from '../core/account.js?v=202611161845';
-import { buildFooter } from './footer.js?v=202611161845';
+import { h, icon, clock } from '../core/dom.js?v=202611161905';
+import { on } from '../core/bus.js?v=202611161905';
+import * as player from '../core/player.js?v=202611161905';
+import { getLyrics, locate, lineLetters } from '../core/lyrics.js?v=202611161905';
+import { go } from '../router.js?v=202611161905';
+import { favButton, addToPlaylist, markCurrent } from './track.js?v=202611161905';
+import { toast } from './overlay.js?v=202611161905';
+import { account } from '../core/account.js?v=202611161905';
+import { buildFooter } from './footer.js?v=202611161905';
 
 const TABS = [
   ['accueil', 'Accueil', '/', 'home'],
@@ -26,7 +26,7 @@ export function buildShell(app) {
     e.preventDefault();
     clearTimeout(tapTimer);
     taps++;
-    if (taps === 7) { taps = 0; import('./apply.js?v=202611161845').then((m) => m.openApplication()); return; }
+    if (taps === 7) { taps = 0; import('./apply.js?v=202611161905').then((m) => m.openApplication()); return; }
     tapTimer = setTimeout(() => { taps = 0; go('/compte'); }, 600);
   });
   const top = h('header.top', h('div.wrap',
@@ -144,15 +144,17 @@ export function buildShell(app) {
 
     // Paroles seules : après 5 s sans action sur l'écran Paroles, l'interface s'efface doucement.
     // Le premier toucher la fait revenir sans rien déclencher d'autre.
+    // Sur PC la zone des paroles grandit quand l'interface s'efface : on recentre la phrase en cours.
+    const recenterSoon = () => setTimeout(() => { if (follow && active >= 0 && lineEls[active]) lyricsList.scrollTo({ top: lineEls[active].offsetTop - lyricsList.clientHeight * 0.38, behavior: 'smooth' }); }, 1250);
     let idleTimer = 0;
     let swallow = false;
     const armIdle = () => {
       clearTimeout(idleTimer);
-      if (el.classList.contains('open') && view === 'lyrics') idleTimer = setTimeout(() => el.classList.add('idle'), 5000);
+      if (el.classList.contains('open') && view === 'lyrics') idleTimer = setTimeout(() => { el.classList.add('idle'); recenterSoon(); }, 5000);
     };
     const wake = (e) => {
       if (el.classList.contains('idle')) {
-        el.classList.remove('idle');
+        el.classList.remove('idle'); recenterSoon();
         if (e.type === 'pointerdown') { swallow = true; setTimeout(() => { swallow = false; }, 700); }
       }
       armIdle();
@@ -162,6 +164,7 @@ export function buildShell(app) {
 
     function setView(v) {
       view = v;
+      el.dataset.view = v;
       coverView.hidden = v !== 'cover';
       lyricsView.hidden = v !== 'lyrics';
       queueView.hidden = v !== 'queue';

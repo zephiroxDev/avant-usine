@@ -255,6 +255,17 @@ details.tile[open]>summary{margin-bottom:14px}
 .player-top,.p-foot,.ly-note{transition:opacity 1.2s var(--ease)}
 .player.idle .player-top,.player.idle .p-foot,.player.idle .ly-note{opacity:0;pointer-events:none}
 .player.idle{cursor:none}
+/* PC : les paroles occupent tout l'écran, sous l'en-tête et les commandes ;
+   quand l'interface s'efface, leur zone s'agrandit doucement jusqu'aux bords. */
+@media (min-width:900px){
+  .player[data-view=lyrics] .player-top,.player[data-view=lyrics] .p-foot{position:relative;z-index:1}
+  .player[data-view=lyrics] .player-top{grid-row:1}
+  .player[data-view=lyrics] .p-foot{grid-row:3}
+  .player[data-view=lyrics] .player-body{position:absolute;inset:0;width:auto;margin:0;padding:calc(var(--safe-t) + 76px) clamp(40px,6vw,120px) calc(var(--safe-b) + 196px);transition:padding 1.2s var(--ease)}
+  .player.idle[data-view=lyrics] .player-body{padding-top:28px;padding-bottom:28px}
+  .player[data-view=lyrics] .p-lyrics{width:min(100%,1500px);margin:0 auto;padding:34vh 0}
+  .player[data-view=lyrics] .ly{font-size:clamp(34px,3.4vw,64px);line-height:1.22;padding:.28em 0}
+}
 .ly-back{font-family:var(--body);font-weight:500;font-size:.6em;line-height:1.4;margin-top:.3em;opacity:.85}
 .lyrics-read .back{display:block;font-size:.78em;color:var(--muted);margin-top:2px}
 .ly-note{text-align:center;font-size:13px;color:var(--muted);padding:8px 0 0}

@@ -1,5 +1,5 @@
-import { h } from '../core/dom.js?v=202611161845';
-import * as cat from '../core/catalog.js?v=202611161845';
+import { h } from '../core/dom.js?v=202611161905';
+import * as cat from '../core/catalog.js?v=202611161905';
 
 export default function volumes(page) {
   const ready = cat.available();

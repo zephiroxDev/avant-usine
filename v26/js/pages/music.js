@@ -1,12 +1,12 @@
-import { h, icon } from '../core/dom.js?v=202611161845';
-import { on } from '../core/bus.js?v=202611161845';
-import * as cat from '../core/catalog.js?v=202611161845';
-import * as lib from '../core/library.js?v=202611161845';
-import * as player from '../core/player.js?v=202611161845';
-import { account } from '../core/account.js?v=202611161845';
-import { trackRow, markCurrent } from '../ui/track.js?v=202611161845';
-import { sheet, toast } from '../ui/overlay.js?v=202611161845';
-import { go } from '../router.js?v=202611161845';
+import { h, icon } from '../core/dom.js?v=202611161905';
+import { on } from '../core/bus.js?v=202611161905';
+import * as cat from '../core/catalog.js?v=202611161905';
+import * as lib from '../core/library.js?v=202611161905';
+import * as player from '../core/player.js?v=202611161905';
+import { account } from '../core/account.js?v=202611161905';
+import { trackRow, markCurrent } from '../ui/track.js?v=202611161905';
+import { sheet, toast } from '../ui/overlay.js?v=202611161905';
+import { go } from '../router.js?v=202611161905';
 
 const SECTIONS = [
   ['favoris', 'Favoris'],
@@ -30,8 +30,8 @@ export default function music(page, { section = 'favoris' }) {
   const paint = () => {
     if (section === 'favoris') return paintFavorites();
     if (section === 'playlists') return paintPlaylists();
-    if (section === 'mon-annee') return import('./my-year.js?v=202611161845').then((m) => m.default(body));
-    if (section === 'sur-cet-appareil') return import('./device.js?v=202611161845').then((m) => m.default(body));
+    if (section === 'mon-annee') return import('./my-year.js?v=202611161905').then((m) => m.default(body));
+    if (section === 'sur-cet-appareil') return import('./device.js?v=202611161905').then((m) => m.default(body));
   };
   paint();
   const offs = [on('library', () => { if (section === 'favoris' || section === 'playlists') paint(); }), on('player', () => markCurrent(body))];

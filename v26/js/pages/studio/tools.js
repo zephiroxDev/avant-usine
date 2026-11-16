@@ -1,8 +1,8 @@
 // Outils du Studio. Chaque fonction reçoit le conteneur de l'outil et le remplit.
-import { h } from '../../core/dom.js?v=202611161845';
-import { act, rpc, client } from '../../core/api.js?v=202611161845';
-import * as cat from '../../core/catalog.js?v=202611161845';
-import { sheet, toast, confirm } from '../../ui/overlay.js?v=202611161845';
+import { h } from '../../core/dom.js?v=202611161905';
+import { act, rpc, client } from '../../core/api.js?v=202611161905';
+import * as cat from '../../core/catalog.js?v=202611161905';
+import { sheet, toast, confirm } from '../../ui/overlay.js?v=202611161905';
 
 const when = (iso) => { try { return new Date(iso).toLocaleString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch { return ''; } };
 const title = (key) => cat.track(key)?.title || key || 'Morceau';

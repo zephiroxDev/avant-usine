@@ -1,27 +1,27 @@
 // Démarrage d'Avant l'usine 26.
-import { h } from './core/dom.js?v=202611161845';
-import { loadCatalog } from './core/catalog.js?v=202611161845';
-import { initAccount } from './core/account.js?v=202611161845';
-import * as player from './core/player.js?v=202611161845';
-import './core/stats.js?v=202611161845';
-import './core/prefs.js?v=202611161845';
-import { route, start } from './router.js?v=202611161845';
-import { buildShell } from './ui/shell.js?v=202611161845';
+import { h } from './core/dom.js?v=202611161905';
+import { loadCatalog } from './core/catalog.js?v=202611161905';
+import { initAccount } from './core/account.js?v=202611161905';
+import * as player from './core/player.js?v=202611161905';
+import './core/stats.js?v=202611161905';
+import './core/prefs.js?v=202611161905';
+import { route, start } from './router.js?v=202611161905';
+import { buildShell } from './ui/shell.js?v=202611161905';
 
-route('/', () => import('./pages/home.js?v=202611161845'), 'accueil');
-route('/volumes', () => import('./pages/volumes.js?v=202611161845'), 'volumes');
-route('/volume/:n', () => import('./pages/volume.js?v=202611161845'), 'volumes');
-route('/morceau/:key', () => import('./pages/track.js?v=202611161845'), 'volumes');
-route('/recherche', () => import('./pages/search.js?v=202611161845'), 'recherche');
-route('/ma-musique', () => import('./pages/music.js?v=202611161845'), 'musique');
-route('/ma-musique/:section', () => import('./pages/music.js?v=202611161845'), 'musique');
-route('/playlist/:id', () => import('./pages/playlist.js?v=202611161845'), 'musique');
-route('/communaute', () => import('./pages/community.js?v=202611161845'), 'communaute');
-route('/communaute/:section', () => import('./pages/community.js?v=202611161845'), 'communaute');
-route('/compte', () => import('./pages/account.js?v=202611161845'), 'compte');
-route('/compte/:section', () => import('./pages/account.js?v=202611161845'), 'compte');
-route('/a-propos/:section', () => import('./pages/about.js?v=202611161845'), 'apropos');
-route('/introuvable', () => import('./pages/notfound.js?v=202611161845'), 'notfound');
+route('/', () => import('./pages/home.js?v=202611161905'), 'accueil');
+route('/volumes', () => import('./pages/volumes.js?v=202611161905'), 'volumes');
+route('/volume/:n', () => import('./pages/volume.js?v=202611161905'), 'volumes');
+route('/morceau/:key', () => import('./pages/track.js?v=202611161905'), 'volumes');
+route('/recherche', () => import('./pages/search.js?v=202611161905'), 'recherche');
+route('/ma-musique', () => import('./pages/music.js?v=202611161905'), 'musique');
+route('/ma-musique/:section', () => import('./pages/music.js?v=202611161905'), 'musique');
+route('/playlist/:id', () => import('./pages/playlist.js?v=202611161905'), 'musique');
+route('/communaute', () => import('./pages/community.js?v=202611161905'), 'communaute');
+route('/communaute/:section', () => import('./pages/community.js?v=202611161905'), 'communaute');
+route('/compte', () => import('./pages/account.js?v=202611161905'), 'compte');
+route('/compte/:section', () => import('./pages/account.js?v=202611161905'), 'compte');
+route('/a-propos/:section', () => import('./pages/about.js?v=202611161905'), 'apropos');
+route('/introuvable', () => import('./pages/notfound.js?v=202611161905'), 'notfound');
 
 async function boot() {
   const app = document.getElementById('app');
@@ -34,18 +34,18 @@ async function boot() {
   const shareId = new URLSearchParams(location.search).get('share');
   if (shareId) {
     history.replaceState(null, '', location.pathname + (location.hash || '#/'));
-    import('./core/api.js?v=202611161845').then(({ act }) => act('au_track_share_17v06', 'resolve', { id: shareId })).then((s) => {
+    import('./core/api.js?v=202611161905').then(({ act }) => act('au_track_share_17v06', 'resolve', { id: shareId })).then((s) => {
       if (!s?.track_key) return;
       location.hash = '#/morceau/' + s.track_key;
-      if (s.author?.nickname) import('./ui/overlay.js?v=202611161845').then(({ toast }) => toast('Morceau partagé par ' + s.author.nickname + '.'));
-    }).catch(() => import('./ui/overlay.js?v=202611161845').then(({ toast }) => toast('Ce lien de partage n’est plus valide.')));
+      if (s.author?.nickname) import('./ui/overlay.js?v=202611161905').then(({ toast }) => toast('Morceau partagé par ' + s.author.nickname + '.'));
+    }).catch(() => import('./ui/overlay.js?v=202611161905').then(({ toast }) => toast('Ce lien de partage n’est plus valide.')));
   }
   start(shell.outlet);
   app.removeAttribute('aria-busy');
   initAccount();
 
   // Fermeture générale décidée dans le Studio : bandeau avec le message du créateur.
-  import('./core/api.js?v=202611161845').then(({ act }) => act('au_maintenance_19', 'read')).then((r) => {
+  import('./core/api.js?v=202611161905').then(({ act }) => act('au_maintenance_19', 'read')).then((r) => {
     const all = r?.settings?.all;
     if (all?.closed) app.prepend(h('div', { role: 'status', style: { background: 'var(--accent)', color: 'var(--accent-ink)', padding: '12px var(--gutter)', fontWeight: '600', textAlign: 'center' }, text: all.message }));
   }).catch(() => {});

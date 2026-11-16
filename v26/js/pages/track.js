@@ -1,15 +1,15 @@
-import { h, icon } from '../core/dom.js?v=202611161845';
-import { rpc, act } from '../core/api.js?v=202611161845';
-import * as cat from '../core/catalog.js?v=202611161845';
-import * as player from '../core/player.js?v=202611161845';
-import { getLyrics, splitBacks } from '../core/lyrics.js?v=202611161845';
-import { account } from '../core/account.js?v=202611161845';
-import { on } from '../core/bus.js?v=202611161845';
-import { favButton, addToPlaylist } from '../ui/track.js?v=202611161845';
-import { toast } from '../ui/overlay.js?v=202611161845';
-import { go } from '../router.js?v=202611161845';
+import { h, icon } from '../core/dom.js?v=202611161905';
+import { rpc, act } from '../core/api.js?v=202611161905';
+import * as cat from '../core/catalog.js?v=202611161905';
+import * as player from '../core/player.js?v=202611161905';
+import { getLyrics, splitBacks } from '../core/lyrics.js?v=202611161905';
+import { account } from '../core/account.js?v=202611161905';
+import { on } from '../core/bus.js?v=202611161905';
+import { favButton, addToPlaylist } from '../ui/track.js?v=202611161905';
+import { toast } from '../ui/overlay.js?v=202611161905';
+import { go } from '../router.js?v=202611161905';
 
-import { visitorToken } from '../core/visitor.js?v=202611161845';
+import { visitorToken } from '../core/visitor.js?v=202611161905';
 const dateFr = (iso) => { try { return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); } catch { return ''; } };
 function songDate(d) {
   if (!d) return '';
