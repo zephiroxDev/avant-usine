@@ -1,5 +1,7 @@
 # Avant l’usine 26 — état de la refonte (15 novembre 2026)
 
+> **16 novembre 2026 au soir : version 26.0 sortie partout** (site v26, Windows 0.11.0, iPhone/iPad 2.5.0, Android 0.4.0, affiche dans Gestion promo). État détaillé et reste à faire : `PROCHAIN-PATCH-26.1.md`. Prochaine séance (demande d'Iloan) : corriger les derniers bugs, puis passer à autre chose.
+
 Nouveau site PC + mobile reconstruit de zéro dans `depot/v26/` (publication prévue à `…/avant-usine/v26/`, adresse de test). Rien n’est publié ni commité. Les applis iPhone/Windows restent sur l’ancien code (`work/experience-integration`). Android et PS4 restent « en pause ».
 
 Aperçu local : `powershell -File work/refonte-26/serveur-local.ps1` puis http://localhost:8126/v26/ (racine = dossier depot, les pochettes et le catalogue sont partagés avec l’ancien site via `../`).
