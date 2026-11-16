@@ -227,7 +227,7 @@ details.tile[open]>summary{margin-bottom:14px}
 .player-body>*{min-height:0;overflow:hidden}
 /* La pochette rétrécit avec la hauteur disponible : jamais coupée, même sur un écran peu haut. */
 .p-cover{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,3vh,24px);padding:12px 0}
-.p-cover img{flex:0 1 auto;min-height:0;height:auto;max-height:100%;width:auto;max-width:min(78vw,420px);aspect-ratio:1;object-fit:cover;border-radius:var(--r-cover);box-shadow:var(--shadow-cover)}
+.p-cover img,.p-cover video{flex:0 1 auto;min-height:0;height:auto;max-height:100%;width:auto;max-width:min(78vw,420px);aspect-ratio:1;object-fit:cover;border-radius:var(--r-cover);box-shadow:var(--shadow-cover)}
 .p-cover .p-id{flex:none}
 @media (max-height:600px){
   .p-cover{flex-direction:row;gap:24px}
@@ -307,3 +307,15 @@ details.tile[open]>summary{margin-bottom:14px}
 @keyframes spin{to{transform:rotate(1turn)}}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ============ Musiques importées ============ */
+.notice{border-color:var(--line-strong);gap:10px}
+.steps{display:grid;gap:6px;padding-left:1.4em;margin:0;list-style:decimal}
+.steps li{line-height:1.45}
+.local-head{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;align-items:center}
+.local-cover{width:96px;height:96px;border-radius:var(--r-cover);object-fit:cover;background:var(--surface);box-shadow:var(--shadow-cover)}
+@media (min-width:720px){.local-head{grid-template-columns:132px minmax(0,1fr)}.local-cover{width:132px;height:132px}}
+
+/* ============ Applis iPhone/Android : musiques importées uniquement ============ */
+:root[data-local-only=on]{--tabs:0px}
+:root[data-local-only=on] .tabs,:root[data-local-only=on] .nav,:root[data-local-only=on] .searchbox,:root[data-local-only=on] .avatar,:root[data-local-only=on] .site-foot,:root[data-local-only=on] .music-tabs{display:none}

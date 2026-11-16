@@ -1,6 +1,6 @@
 // Catalogue : version publiée sur le serveur (au_catalog_read), avec repli sur le fichier local du site.
-import { rpc } from './api.js?v=202611161905';
-import { store, emit } from './bus.js?v=202611161905';
+import { rpc } from './api.js?v=202611162020';
+import { store, emit } from './bus.js?v=202611162020';
 
 const CACHE = 'au26-catalog';
 let volumes = [];
@@ -91,7 +91,10 @@ export const allVolumes = () => volumes;
 export const available = () => volumes.filter((v) => v.tracks.length);
 export const upcoming = () => volumes.filter((v) => !v.tracks.length);
 export const volume = (n) => volumes.find((v) => v.number === Number(n)) || null;
-export const track = (key) => byKey.get(String(key)) || null;
+// Musiques importées (« local:<id> ») : fournies par core/local.js, sans dépendance circulaire.
+let extra = () => null;
+export const registerExtra = (fn) => { extra = fn; };
+export const track = (key) => byKey.get(String(key)) || extra(String(key)) || null;
 export const allTracks = () => volumes.flatMap((v) => v.tracks);
 export const trackCount = () => byKey.size;
 

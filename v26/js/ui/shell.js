@@ -1,13 +1,13 @@
 // En-tête, onglets, mini-lecteur et lecteur plein écran.
-import { h, icon, clock } from '../core/dom.js?v=202611161905';
-import { on } from '../core/bus.js?v=202611161905';
-import * as player from '../core/player.js?v=202611161905';
-import { getLyrics, locate, lineLetters } from '../core/lyrics.js?v=202611161905';
-import { go } from '../router.js?v=202611161905';
-import { favButton, addToPlaylist, markCurrent } from './track.js?v=202611161905';
-import { toast } from './overlay.js?v=202611161905';
-import { account } from '../core/account.js?v=202611161905';
-import { buildFooter } from './footer.js?v=202611161905';
+import { h, icon, clock } from '../core/dom.js?v=202611162020';
+import { on } from '../core/bus.js?v=202611162020';
+import * as player from '../core/player.js?v=202611162020';
+import { getLyrics, locate, lineLetters } from '../core/lyrics.js?v=202611162020';
+import { go } from '../router.js?v=202611162020';
+import { favButton, addToPlaylist, markCurrent } from './track.js?v=202611162020';
+import { toast } from './overlay.js?v=202611162020';
+import { account } from '../core/account.js?v=202611162020';
+import { buildFooter } from './footer.js?v=202611162020';
 
 const TABS = [
   ['accueil', 'Accueil', '/', 'home'],
@@ -26,7 +26,7 @@ export function buildShell(app) {
     e.preventDefault();
     clearTimeout(tapTimer);
     taps++;
-    if (taps === 7) { taps = 0; import('./apply.js?v=202611161905').then((m) => m.openApplication()); return; }
+    if (taps === 7) { taps = 0; import('./apply.js?v=202611162020').then((m) => m.openApplication()); return; }
     tapTimer = setTimeout(() => { taps = 0; go('/compte'); }, 600);
   });
   const top = h('header.top', h('div.wrap',
@@ -108,7 +108,9 @@ export function buildShell(app) {
     const idTitle = h('h2');
     const idSub = h('p');
     const songLink = h('a', { href: '#/', text: 'Voir la page du morceau' });
-    const coverView = h('div.p-cover', coverImg, h('div.p-id', idTitle, idSub, h('p', songLink)));
+    const coverVid = h('video', { muted: true, loop: true, playsinline: true, 'aria-hidden': 'true', hidden: true });
+    coverVid.muted = true; coverVid.playsInline = true;
+    const coverView = h('div.p-cover', coverImg, coverVid, h('div.p-id', idTitle, idSub, h('p', songLink)));
     const lyricsList = h('div.p-lyrics', { role: 'list' });
     const lyricsNote = h('p.ly-note');
     const lyricsView = h('div', { style: { display: 'grid', gridTemplateRows: 'minmax(0,1fr) auto', minHeight: '0' } }, lyricsList, lyricsNote);
@@ -183,6 +185,21 @@ export function buildShell(app) {
       if (!t) return;
       coverImg.src = t.volume.cover;
       idTitle.textContent = t.title;
+      // Pochette animée d'une musique importée : vidéo en boucle, sans son, à la place de l'image.
+      const motion = t.local && t.volume.motion && document.documentElement.dataset.motion !== 'off' ? t.volume.motion : '';
+      if (motion) { if (coverVid.getAttribute('src') !== motion) { coverVid.src = motion; coverVid.poster = t.volume.cover; } coverVid.hidden = false; coverImg.hidden = true; coverVid.play().catch(() => {}); }
+      else { coverVid.hidden = true; coverImg.hidden = false; if (coverVid.getAttribute('src')) { coverVid.removeAttribute('src'); coverVid.load(); } }
+      if (t.local) {
+        // Musique importée : pas de page publique, de favori serveur ni de partage.
+        idSub.textContent = [t.artist, t.volume.title].filter(Boolean).join(' · ');
+        songLink.href = '#/ma-musique/sur-cet-appareil';
+        songLink.textContent = 'Voir mes musiques importées';
+        actions.replaceChildren(h('button.btn.btn-line.btn-sm', { type: 'button', onclick: () => { api.close(false); import('../pages/community/studio.js?v=202611162020').then((m) => m.openStudio(t.key)); } }, icon('lyrics'), h('span', { text: 'Synchroniser dans l’Atelier' })));
+        if (view === 'lyrics') loadLyrics();
+        if (view === 'queue') paintQueue();
+        return;
+      }
+      songLink.textContent = 'Voir la page du morceau';
       idSub.textContent = (t.feat ? 'feat. ' + t.feat + ' · ' : t.artist + ' · ') + t.volume.title;
       songLink.href = '#/morceau/' + t.key;
       actions.replaceChildren(

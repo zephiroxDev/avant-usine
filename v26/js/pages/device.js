@@ -1,9 +1,9 @@
 // « Sur cet appareil » (ex-Local). Sur le site web : préparer un volume complet à emporter
 // (audio étiqueté, pochettes, paroles synchronisées en LRC) grâce aux modules d'export de l'ancien site, réutilisés tels quels.
-// L'import et le stockage de fichiers personnels restent dans les applications (avec le même surlignage estimé des paroles).
-import { h, icon } from '../core/dom.js?v=202611161905';
-import * as cat from '../core/catalog.js?v=202611161905';
-import { toast } from '../ui/overlay.js?v=202611161905';
+// L’import de fichiers personnels est dans pages/imported.js (affiché au-dessus).
+import { h, icon } from '../core/dom.js?v=202611162020';
+import * as cat from '../core/catalog.js?v=202611162020';
+import { toast } from '../ui/overlay.js?v=202611162020';
 
 let modPromise = null;
 function loadExport() {
@@ -12,7 +12,7 @@ function loadExport() {
     if (!window.AU_LOCAL_STORAGE_18 && !window.AU_LOCAL_18) await add('../local-storage-18v07.js');
     if (!window.AU_LOCAL_18) await add('../local-18v00.js');
     if (!window.AU_AUDIO_EDITS_19) await add('../audio-edits-19v06.js');
-    return import('../../../album-download-21.mjs?v=202611161905');
+    return import('../../../album-download-21.mjs?v=202611162020');
   })();
   modPromise.catch(() => { modPromise = null; });
   return modPromise;
@@ -26,11 +26,7 @@ export default function device(body) {
     h('div.tile', { style: { gap: '8px' } },
       h('h3', { text: 'Emporter un volume' }),
       h('p', { text: 'Le site prépare une archive avec chaque morceau (titre, numéro et pochette intégrés), la pochette en grand et les paroles synchronisées lisibles par la plupart des lecteurs. La préparation se fait sur ton appareil : garde cet onglet ouvert jusqu’au téléchargement.' })),
-    list, status,
-    h('div.tile', { style: { gap: '8px' } },
-      h('h3', { text: 'Tes propres fichiers' }),
-      h('p', { text: 'Importer tes fichiers audio et les garder durablement est possible dans les applications Avant l’usine. Leurs paroles y défilent avec le même surlignage estimé que sur le site.' }),
-      h('a.btn.btn-line.btn-sm', { href: '#/a-propos/applications', style: { justifySelf: 'start' }, text: 'Voir les applications' }))));
+    list, status));
   list.replaceChildren(...cat.available().map((v) => h('div.trk.with-cover',
     h('img.trk-cover', { src: v.cover, alt: '', width: '44', height: '44' }),
     h('span.trk-main', h('span.trk-title', { text: v.title }), h('span.trk-sub', { text: v.tracks.length + ' morceaux' })),

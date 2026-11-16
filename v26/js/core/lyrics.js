@@ -1,7 +1,7 @@
 // Paroles : texte (au_sync source) et synchronisation publiée (au_sync published).
-import { act } from './api.js?v=202611161905';
-import { track as catalogTrack } from './catalog.js?v=202611161905';
-import { on } from './bus.js?v=202611161905';
+import { act } from './api.js?v=202611162020';
+import { track as catalogTrack } from './catalog.js?v=202611162020';
+import { on } from './bus.js?v=202611162020';
 
 // Une connexion ou déconnexion change les paroles accessibles : on vide le cache.
 on('account', () => cache.clear());
@@ -13,7 +13,30 @@ const NOT_SUNG = /^\s*[\[(]\s*(paroles de|refrain|couplet|intro|outro|pont|pr[é
 const BRACKET_ONLY = /^\s*\[[^\]]*\]\s*$/;
 export const isSung = (line) => !!line.trim() && !NOT_SUNG.test(line) && !BRACKET_ONLY.test(line);
 
+/** Musiques importées : paroles gardées sur l'appareil (même format que les synchronisations publiées). */
+function localLyrics(t) {
+  const data = t.lyricsData;
+  if (data && Array.isArray(data.lines) && data.lines.length && Array.isArray(data.times) && data.times.length === data.lines.length) {
+    const keep = data.lines.map((l, i) => ({ text: String(l), i })).filter((x) => isSung(x.text));
+    const highlight = data.sync_mode === 'highlight' && Array.isArray(data.curves);
+    return {
+      synced: true,
+      lines: keep.map((x) => x.text),
+      times: keep.map((x) => Number(data.times[x.i]) || 0),
+      ends: keep.map((x) => Number(data.line_ends?.[x.i]) || null),
+      curves: keep.map((x) => (highlight ? data.curves[x.i] || null : null)),
+      duration: Number(data.duration) || null,
+    };
+  }
+  const text = t.plain || (data?.lines || []).join('\n');
+  return { synced: false, lines: String(text || '').replace(/\r/g, '').split('\n').filter(isSung), provenance: 'appareil' };
+}
+
+/** Oublie les paroles gardées en mémoire (après une modification dans l'Atelier). */
+export const forgetLyrics = (key) => cache.delete(key);
+
 async function fetchLyrics(key) {
+  if (key.startsWith('local:')) { const t = catalogTrack(key); return t ? localLyrics(t) : { synced: false, lines: [] }; }
   let published = null;
   try { published = await act('au_sync', 'published', { track: key }); } catch { /* pas de synchronisation */ }
   if (published?.sync_mode === 'highlight' && Array.isArray(published.lines) && published.lines.length) {

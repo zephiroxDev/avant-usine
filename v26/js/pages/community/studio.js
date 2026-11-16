@@ -1,13 +1,13 @@
 // Atelier « Synchroniser des paroles » : maintenir et glisser la barre au rythme du chant, phrase par phrase.
 // Produit le format attendu par le serveur (au_private.studio_validate_19) et l'envoie avec au_sync 'submit'.
-import { h, icon, clock } from '../../core/dom.js?v=202611161905';
-import { act } from '../../core/api.js?v=202611161905';
-import * as cat from '../../core/catalog.js?v=202611161905';
-import * as player from '../../core/player.js?v=202611161905';
-import { account } from '../../core/account.js?v=202611161905';
-import { isSung } from '../../core/lyrics.js?v=202611161905';
-import { store } from '../../core/bus.js?v=202611161905';
-import { sheet, toast, confirm, closeSheet } from '../../ui/overlay.js?v=202611161905';
+import { h, icon, clock } from '../../core/dom.js?v=202611162020';
+import { act } from '../../core/api.js?v=202611162020';
+import * as cat from '../../core/catalog.js?v=202611162020';
+import * as player from '../../core/player.js?v=202611162020';
+import { account } from '../../core/account.js?v=202611162020';
+import { isSung, forgetLyrics } from '../../core/lyrics.js?v=202611162020';
+import { store } from '../../core/bus.js?v=202611162020';
+import { sheet, toast, confirm, closeSheet } from '../../ui/overlay.js?v=202611162020';
 
 export async function openStudio(initialKey) {
   if (player.isPlaying()) player.el.pause();
@@ -27,8 +27,16 @@ export async function openStudio(initialKey) {
   async function load(k) {
     key = k;
     s.body.replaceChildren(h('div.loading', h('div.spin', { role: 'status', 'aria-label': 'Chargement' })));
-    try { src = await act('au_sync', 'source', { track: key }); }
-    catch (e) { s.body.replaceChildren(h('p.empty', { text: e.message }), picker()); return; }
+    if (isLocal()) {
+      // Musique importée : le texte vient de l'appareil ; s'il manque, on le demande d'abord.
+      const t = cat.track(key);
+      const text = t?.plain || (t?.lyricsData?.lines || []).join('\n');
+      if (!text.trim()) { askText(t); return; }
+      src = { lines: text.split('\n'), hash: 'local', provenance: 'tes paroles' };
+    } else {
+      try { src = await act('au_sync', 'source', { track: key }); }
+      catch (e) { s.body.replaceChildren(h('p.empty', { text: e.message }), picker()); return; }
+    }
     const raw = (src.lines || []).map((l) => (typeof l === 'string' ? l : l?.text || ''));
     draftKey = 'au26-studio:' + (account()?.id || 'invite') + ':' + key + ':' + src.hash;
     const draft = store.get(draftKey);
@@ -43,8 +51,30 @@ export async function openStudio(initialKey) {
   }
 
   function save() { if (work && draftKey) store.set(draftKey, work); }
+  function isLocal() { return String(key).startsWith('local:'); }
+
+  /** Musique importée sans paroles : on colle le texte, une phrase par ligne. */
+  function askText(t) {
+    const area = h('textarea.input', { rows: '10', placeholder: 'Une phrase par ligne, telle qu’elle est chantée.', 'aria-label': 'Paroles' });
+    s.body.replaceChildren(picker(),
+      h('p', { text: 'Ce morceau n’a pas encore de paroles. Colle-les ici, une phrase par ligne, puis synchronise-les.' }),
+      area,
+      h('div.row-actions', h('button.btn.btn-main', { type: 'button', text: 'Continuer', onclick: async () => {
+        const text = area.value.replace(/\r/g, '').split('\n').map((x) => x.trim()).filter(Boolean).join('\n');
+        if (!text) { area.focus(); return; }
+        const local = await import('../../core/local.js?v=202611162020' + new URL(import.meta.url).search);
+        await local.updateTrack(t.id, { plain: text });
+        forgetLyrics(key);
+        await load(key);
+      } })));
+  }
 
   function picker() {
+    if (isLocal()) {
+      const sel = h('select.input', { 'aria-label': 'Morceau à synchroniser' }, cat.track(key).volume.tracks.map((t) => h('option', { value: t.key, selected: t.key === key, text: t.number + '. ' + t.title })));
+      sel.addEventListener('change', () => { save(); load(sel.value); });
+      return h('label.field', h('span', { text: 'Morceau' }), sel);
+    }
     const sel = h('select.input', { 'aria-label': 'Morceau à synchroniser' }, cat.available().map((v) => h('optgroup', { label: v.label }, v.tracks.map((t) => h('option', { value: t.key, selected: t.key === key, text: t.number + '. ' + t.title })))));
     sel.addEventListener('change', () => { save(); load(sel.value); });
     return h('label.field', h('span', { text: 'Morceau' }), sel);
@@ -137,7 +167,7 @@ export async function openStudio(initialKey) {
         line ? h('span', { style: { display: 'inline-flex', gap: '8px', alignItems: 'center' } }, voiceSel, h('button.btn.btn-soft.btn-sm', { type: 'button', text: 'Ajouter une voix', onclick: addVoice })) : null),
       h('div.row-actions', { style: { borderTop: '1px solid var(--line)', paddingTop: '16px' } },
         h('button.btn.btn-line', { type: 'button', text: 'Aperçu', disabled: !done, onclick: preview }),
-        h('button.btn.btn-main', { type: 'button', text: 'Envoyer pour validation', disabled: !allDone, onclick: submit }),
+        h('button.btn.btn-main', { type: 'button', text: isLocal() ? 'Enregistrer sur l’appareil' : 'Envoyer pour validation', disabled: !allDone, onclick: submit }),
         h('button.btn.btn-soft.btn-sm', { type: 'button', text: 'Tout recommencer', onclick: async () => { if (await confirmReset()) { store.del(draftKey); await load(key); } } })),
       h('p.note', { text: `${done} phrase${done > 1 ? 's' : ''} placée${done > 1 ? 's' : ''} sur ${work.lines.length}. Ton travail est enregistré automatiquement sur cet appareil.` }));
 
@@ -184,24 +214,58 @@ export async function openStudio(initialKey) {
     paint();
   }
 
-  async function submit() {
+  /** Données de synchronisation au format du serveur (studio_validate_19) :
+   *  courbe = [[lettre, temps]…], de 0 à la longueur de la phrase, temps entre son début et sa fin.
+   *  Le geste est enregistré en pourcentage : on le convertit ici en nombre de lettres. */
+  function studioData() {
     const lines = work.lines;
     const duration = round(audio.duration || cat.track(key).duration || 0);
     for (let i = 0; i < lines.length; i++) {
-      if (lines[i].start == null || lines[i].end == null) { toast('La phrase ' + (i + 1) + ' n’est pas placée.'); return; }
-      if (i > 0 && lines[i].start < lines[i - 1].start) { toast('La phrase ' + (i + 1) + ' commence avant la précédente. Refais-la.'); work.i = i; render(); return; }
+      if (lines[i].start == null || lines[i].end == null) { toast('La phrase ' + (i + 1) + ' n’est pas placée.'); return null; }
+      if (i > 0 && lines[i].start < lines[i - 1].start) { toast('La phrase ' + (i + 1) + ' commence avant la précédente. Refais-la.'); work.i = i; render(); return null; }
     }
-    const studio_data = {
+    const curves = lines.map((l) => {
+      const len = l.text.length;
+      const a = round(l.start), b = round(Math.min(l.end, duration));
+      const pts = [[0, a]];
+      for (const [p, t] of l.curve.length >= 2 ? l.curve : [[0, a], [100, b]]) {
+        const x = round((Math.max(0, Math.min(100, p)) / 100) * len);
+        const tt = round(Math.max(a, Math.min(b, t)));
+        const last = pts[pts.length - 1];
+        if (x > last[0] && tt > last[1]) pts.push([x, tt]);
+      }
+      const last = pts[pts.length - 1];
+      if (last[0] < len) { if (b > last[1]) pts.push([len, b]); else last[0] = len; }
+      return pts;
+    });
+    return {
       sync_mode: 'highlight',
       duration,
       lines: lines.map((l) => l.text),
-      times: lines.map((l) => l.start),
-      line_ends: lines.map((l) => Math.min(l.end, duration)),
-      curves: lines.map((l) => (l.curve.length >= 2 ? l.curve : [[0, l.start], [100, l.end]])),
+      times: lines.map((l) => round(l.start)),
+      line_ends: lines.map((l) => round(Math.min(l.end, duration))),
+      curves,
       tracks: work.voices.map((v, i) => ({ id: v.id, name: v.name, kind: i === 0 ? 'main' : 'voice' })),
       line_tracks: lines.map((l) => l.voice || 'main'),
       version: '2.0',
     };
+  }
+
+  async function submit() {
+    const studio_data = studioData();
+    if (!studio_data) return;
+    if (isLocal()) {
+      // Musique importée : la synchronisation reste sur l'appareil, rien n'est envoyé.
+      try {
+        const local = await import('../../core/local.js?v=202611162020' + new URL(import.meta.url).search);
+        await local.updateTrack(cat.track(key).id, { lyrics: studio_data, plain: studio_data.lines.join('\n') });
+        forgetLyrics(key);
+        store.del(draftKey);
+        closeSheet();
+        toast('Synchronisation enregistrée sur cet appareil.');
+      } catch (e) { toast(e.message); }
+      return;
+    }
     try {
       await act('au_sync', 'submit', { track: key, hash: src.hash, studio_data });
       store.del(draftKey);

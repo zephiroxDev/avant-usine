@@ -1,7 +1,7 @@
 // Aiguillage par adresse (#/volumes, #/morceau/1:1…). Une seule page vivante à la fois :
 // la précédente est retirée du document et ses écouteurs sont libérés.
-import { h } from './core/dom.js?v=202611161905';
-import { emit } from './core/bus.js?v=202611161905';
+import { h } from './core/dom.js?v=202611162020';
+import { emit } from './core/bus.js?v=202611162020';
 
 const routes = [];      // { re, keys, load, tab }
 let host = null;
@@ -34,8 +34,13 @@ export function setQuery(params) {
   history.replaceState(null, '', '#' + p + (q ? '?' + q : ''));
 }
 
+// Pages autorisées (applis iPhone/Android : musiques importées uniquement). null = tout est autorisé.
+let allowed = null;
+export function restrictTo(list, home) { allowed = { list, home }; }
+
 async function render() {
   const { path: p, query } = path();
+  if (allowed && !allowed.list.some((a) => (a instanceof RegExp ? a.test(p) : a === p))) { history.replaceState(null, '', '#' + allowed.home); return render(); }
   let match = null; let params = {};
   for (const r of routes) {
     const m = r.re.exec(p);

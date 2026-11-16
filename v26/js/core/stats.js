@@ -1,8 +1,8 @@
 // Mesures d'écoute et de jeu (membres connectés uniquement), envoyées par lots à au_stats_record_17v01.
-import { rpc } from './api.js?v=202611161905';
-import { account } from './account.js?v=202611161905';
-import { on } from './bus.js?v=202611161905';
-import * as player from './player.js?v=202611161905';
+import { rpc } from './api.js?v=202611162020';
+import { account } from './account.js?v=202611162020';
+import { on } from './bus.js?v=202611162020';
+import * as player from './player.js?v=202611162020';
 
 const queue = [];
 let timer = 0;
@@ -33,7 +33,7 @@ function closeListening() {
 let last = 0;
 on('time', () => {
   const t = player.current();
-  if (!t || player.el.paused) { last = 0; return; }
+  if (!t || t.local || player.el.paused) { last = 0; return; } // les musiques importées restent privées : rien n'est envoyé
   const now = performance.now();
   if (!listening || listening.key !== t.key) { closeListening(); listening = { key: t.key, volume: t.volume.number, seconds: 0, id: uuid() }; record('track_start', { trackKey: t.key, volume: t.volume.number, playbackId: listening.id }); }
   if (last) listening.seconds += Math.min(2, (now - last) / 1000);

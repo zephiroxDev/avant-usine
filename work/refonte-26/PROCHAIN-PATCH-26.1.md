@@ -40,6 +40,18 @@ Décision du 16 novembre 2026. Permettre l'import de ses propres musiques sur le
 - Paroles seules : après 5 s sans action sur l'écran Paroles, l'en-tête, les commandes et la note s'effacent doucement (1,2 s). Le premier toucher/clic les fait revenir sans rien déclencher d'autre.
 - À reprendre dans les applis de musiques importées.
 
+## Musiques importées dans la v26 (16 novembre 2026, soir)
+- `v26/js/core/local.js` : même base que l'ancien site et les applis (IndexedDB `au-personal-library-18` v1, tables tracks/albums/playlists, fichiers en blocs de 1 Mo + SHA-256) → les musiques déjà importées dans les applis sont retrouvées. Lecture des infos intégrées (ID3, FLAC, WAV), regroupement par album, ordre par numéro de piste.
+- `v26/js/pages/imported.js` (Ma musique › Sur cet appareil) : import, écoute, infos, paroles (surlignage estimé), Atelier (synchro enregistrée sur l'appareil), pochettes classiques ou animées (morceau ou album), suppression, Blind Test (`#/communaute/blind-test?source=appareil`). Message PC (appli Windows) / tutos écran d'accueil iPhone et Android.
+- `v26/js/core/platform.js` : `data-au-app` (ajouté par les scripts de préparation des applis) ; `?au-app=android` pour simuler. Applis iOS/Android = pages autorisées seulement (router `restrictTo`).
+- BUG CORRIGÉ : l'Atelier v26 envoyait les courbes en pourcentage ; le serveur (studio_validate_19) exige des lettres (0 → longueur de la phrase). Conversion dans `studioData()`.
+- Musiques importées : aucune statistique ni favori envoyé au serveur.
+
+## Mises à jour automatiques des applis déjà installées (à respecter)
+- Windows : le lanceur figé (`version-store.cjs` validateManifest) n'accepte que `product.cjs` et `site/<nom-sans-dossier>`, 1000 fichiers, 32 Mo/fichier, 128 Mo au total, URL `releases/download/vX.Y.Z/au-<sha256>.bin`. `product.cjs` (servi par le protocole avantusine://local) fait partie de la mise à jour → livrer la v26 « à plat » (`v26__js__core__dom.js`) et faire reconstituer les sous-dossiers par le gestionnaire de protocole de `product.cjs`. Même origine avantusine://local → musiques importées conservées.
+- iPhone : IOSUpdates.checkReleases/download (IPA) → nouvelle version de l'appli publiée par les workflows existants.
+- Android : mécanisme à vérifier avant de rouvrir.
+
 ## Nouvelle direction des applis (décision d'Iloan, 16 novembre 2026)
 - **Appli Windows** = le site v26 tel quel, en appli, avec en plus la conservation **indéfinie** des musiques importées.
 - **Applis iPhone/iPad et Android** = **uniquement l'espace des musiques importées** (rien d'autre du site), **plus le Blind Test avec les musiques importées**.

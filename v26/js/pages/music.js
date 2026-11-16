@@ -1,12 +1,13 @@
-import { h, icon } from '../core/dom.js?v=202611161905';
-import { on } from '../core/bus.js?v=202611161905';
-import * as cat from '../core/catalog.js?v=202611161905';
-import * as lib from '../core/library.js?v=202611161905';
-import * as player from '../core/player.js?v=202611161905';
-import { account } from '../core/account.js?v=202611161905';
-import { trackRow, markCurrent } from '../ui/track.js?v=202611161905';
-import { sheet, toast } from '../ui/overlay.js?v=202611161905';
-import { go } from '../router.js?v=202611161905';
+import { h, icon } from '../core/dom.js?v=202611162020';
+import { on } from '../core/bus.js?v=202611162020';
+import * as cat from '../core/catalog.js?v=202611162020';
+import * as lib from '../core/library.js?v=202611162020';
+import * as player from '../core/player.js?v=202611162020';
+import { account } from '../core/account.js?v=202611162020';
+import { trackRow, markCurrent } from '../ui/track.js?v=202611162020';
+import { sheet, toast } from '../ui/overlay.js?v=202611162020';
+import { go } from '../router.js?v=202611162020';
+import { localOnly } from '../core/platform.js?v=202611162020';
 
 const SECTIONS = [
   ['favoris', 'Favoris'],
@@ -21,21 +22,30 @@ export default function music(page, { section = 'favoris' }) {
   const body = h('section.wrap');
   page.append(
     h('header.wrap.page-head',
-      h('h1.title', { text: 'Ma musique' }),
-      h('p.lede', { text: me ? 'Tes favoris et tes playlists te suivent sur tous tes appareils.' : 'Tes favoris et tes playlists sont gardés sur cet appareil. Connecte-toi pour les retrouver partout.' })),
-    h('div.wrap', h('div.tablist', { role: 'tablist', 'aria-label': 'Ma musique' },
+      h('h1.title', { text: localOnly ? 'Mes musiques' : 'Ma musique' }),
+      h('p.lede', { text: localOnly ? 'Tes musiques importées restent sur ce téléphone.' : me ? 'Tes favoris et tes playlists te suivent sur tous tes appareils.' : 'Tes favoris et tes playlists sont gardés sur cet appareil. Connecte-toi pour les retrouver partout.' })),
+    h('div.wrap.music-tabs', h('div.tablist', { role: 'tablist', 'aria-label': 'Ma musique' },
       SECTIONS.map(([id, label]) => h('a.chip', { href: '#/ma-musique' + (id === 'favoris' ? '' : '/' + id), role: 'tab', 'aria-selected': String(id === section), text: label })))),
     body);
 
   const paint = () => {
     if (section === 'favoris') return paintFavorites();
     if (section === 'playlists') return paintPlaylists();
-    if (section === 'mon-annee') return import('./my-year.js?v=202611161905').then((m) => m.default(body));
-    if (section === 'sur-cet-appareil') return import('./device.js?v=202611161905').then((m) => m.default(body));
+    if (section === 'mon-annee') return import('./my-year.js?v=202611162020').then((m) => m.default(body));
+    if (section === 'sur-cet-appareil') {
+      // Musiques importées, puis (hors applis téléphone) « Emporter un volume ».
+      const mine = h('div');
+      const take = h('div', { style: { marginTop: '40px', paddingTop: '28px', borderTop: '1px solid var(--line)' } });
+      body.replaceChildren(mine, localOnly ? '' : take);
+      import('./imported.js?v=202611162020').then((m) => { const off = m.default(mine); offs.push(off); });
+      if (!localOnly) import('./device.js?v=202611162020').then((m) => { const off = m.default(take); offs.push(off); });
+      return;
+    }
   };
+  const offs = [];
   paint();
-  const offs = [on('library', () => { if (section === 'favoris' || section === 'playlists') paint(); }), on('player', () => markCurrent(body))];
-  return () => offs.forEach((f) => f());
+  offs.push(on('library', () => { if (section === 'favoris' || section === 'playlists') paint(); }), on('player', () => markCurrent(body)));
+  return () => offs.forEach((f) => f?.());
 
   function paintFavorites() {
     const keys = lib.favoriteKeys();

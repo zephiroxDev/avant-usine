@@ -1,9 +1,11 @@
-import { h, icon } from '../../core/dom.js?v=202611161905';
-import { rpc } from '../../core/api.js?v=202611161905';
-import * as cat from '../../core/catalog.js?v=202611161905';
-import * as player from '../../core/player.js?v=202611161905';
-import { account } from '../../core/account.js?v=202611161905';
-import { record } from '../../core/stats.js?v=202611161905';
+import { h, icon } from '../../core/dom.js?v=202611162020';
+import { rpc } from '../../core/api.js?v=202611162020';
+import * as cat from '../../core/catalog.js?v=202611162020';
+import * as player from '../../core/player.js?v=202611162020';
+import { account } from '../../core/account.js?v=202611162020';
+import { record } from '../../core/stats.js?v=202611162020';
+import * as local from '../../core/local.js?v=202611162020';
+import { localOnly } from '../../core/platform.js?v=202611162020';
 
 const LEVELS = [
   { id: 'easy', label: 'Tranquille', seconds: 10, hint: '10 secondes d’écoute' },
@@ -14,10 +16,14 @@ const ROUNDS = [10, 20, 50];
 const shuffle = (a) => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()));
 
-export default function blindTest(body) {
+export default function blindTest(body, query) {
+  // Source des extraits : le catalogue, ou les musiques importées (?source=appareil, et toujours dans les applis téléphone).
+  const mine = localOnly || query?.get?.('source') === 'appareil';
+  const allTracks = () => (mine ? local.tracks().filter((t) => !t.unavailable) : cat.allTracks());
+  const groups = () => (mine ? [...new Map(allTracks().map((t) => [t.volume.label, { title: t.volume.label, tracks: t.volume.tracks.filter((x) => !x.unavailable) }])).values()] : cat.available());
   let level = LEVELS[0];
   let rounds = 10;
-  let pool = new Set(cat.allTracks().map((t) => t.key));
+  let pool = new Set(allTracks().map((t) => t.key));
   let game = null;
   const extract = new Audio();
   extract.preload = 'auto';
@@ -27,6 +33,7 @@ export default function blindTest(body) {
   let pickerOpen = false;
 
   setup();
+  if (mine) local.ready().then(() => { pool = new Set(allTracks().map((t) => t.key)); setup(); }).catch(() => {});
   return () => endGame(true);
 
   function setup() {
@@ -38,9 +45,9 @@ export default function blindTest(body) {
     // Le panneau reste ouvert quand on coche un volume entier (l'écran est reconstruit, l'état ouvert est conservé).
     const picker = h('details.tile', { open: pickerOpen, ontoggle: (e) => { pickerOpen = e.target.open; } }, h('summary', { style: { cursor: 'pointer', fontWeight: '600' } }, 'Choisir les morceaux · ', selCount),
       h('div.row-actions', { style: { margin: '12px 0' } },
-        h('button.btn.btn-soft.btn-sm', { type: 'button', text: 'Tout cocher', onclick: () => { pool = new Set(cat.allTracks().map((t) => t.key)); setup(); } }),
+        h('button.btn.btn-soft.btn-sm', { type: 'button', text: 'Tout cocher', onclick: () => { pool = new Set(allTracks().map((t) => t.key)); setup(); } }),
         h('button.btn.btn-soft.btn-sm', { type: 'button', text: 'Tout décocher', onclick: () => { pool.clear(); setup(); } })),
-      cat.available().map((v) => h('fieldset', { style: { border: '0', padding: '0', margin: '0 0 12px' } },
+      groups().map((v) => h('fieldset', { style: { border: '0', padding: '0', margin: '0 0 12px' } },
         h('legend', { style: { fontWeight: '600', marginBottom: '8px' } }, h('label', { style: { display: 'flex', gap: '10px', alignItems: 'center' } },
           h('input', { type: 'checkbox', checked: v.tracks.every((t) => pool.has(t.key)), onchange: (e) => { v.tracks.forEach((t) => (e.target.checked ? pool.add(t.key) : pool.delete(t.key))); setup(); } }), v.title)),
         h('div', { style: { display: 'grid', gap: '6px', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,230px),1fr))' } },
@@ -55,7 +62,7 @@ export default function blindTest(body) {
       h('div.row-actions', h('button.btn.btn-main', { type: 'button', disabled: pool.size < 4, onclick: start }, icon('play'), h('span', { text: 'Lancer la partie' }))),
       pool.size < 4 ? h('p.note', { text: 'Sélectionne au moins 4 morceaux.' }) : null,
       history));
-    if (account()) rpc('au_blind_history_17v01').then((r) => {
+    if (account() && !mine) rpc('au_blind_history_17v01').then((r) => {
       if (!r?.games) return;
       history.replaceChildren(h('div.tile', h('h3', { text: 'Ton parcours' }),
         h('p', { text: `${r.games} partie${r.games > 1 ? 's' : ''} · meilleur score ${r.bestScore} · ${r.correct} bonne${r.correct > 1 ? 's' : ''} réponse${r.correct > 1 ? 's' : ''} sur ${r.rounds}` + (r.fastestMs ? ` · réponse la plus rapide en ${(r.fastestMs / 1000).toFixed(1).replace('.', ',')} s` : '') })));
@@ -73,7 +80,7 @@ export default function blindTest(body) {
   function round() {
     const key = game.keys[game.i];
     const t = cat.track(key);
-    const others = shuffle(cat.allTracks().filter((x) => x.key !== key && x.title !== t.title)).slice(0, 3);
+    const others = shuffle(allTracks().filter((x) => x.key !== key && x.title !== t.title)).slice(0, 3);
     const answers = shuffle([t, ...others]);
     const clock = h('output', { style: { fontVariantNumeric: 'tabular-nums', fontSize: '15px', color: 'var(--muted)' }, text: '0,0 s' });
     const listen = h('button.btn.btn-main', { type: 'button', onclick: play }, icon('play'), h('span', { text: 'Écouter l’extrait' }));
@@ -139,7 +146,7 @@ export default function blindTest(body) {
       else if (b.dataset.key === key) b.style.outline = '2px solid var(--danger)';
       else b.style.opacity = '.5';
     }
-    record('blind_round', { gameId: game.id, trackKey: t.key, difficulty: level.id, correct, responseMs, round: game.i + 1 });
+    if (!mine) record('blind_round', { gameId: game.id, trackKey: t.key, difficulty: level.id, correct, responseMs, round: game.i + 1 });
     after.replaceChildren(
       h('p', { style: { fontWeight: '600', color: correct ? 'var(--ok)' : 'var(--danger)', alignSelf: 'center' }, text: correct ? 'Bien joué.' : key ? 'Raté : c’était « ' + t.title + ' ».' : 'C’était « ' + t.title + ' ».' }),
       h('button.btn.btn-main', { type: 'button', text: game.i + 1 < game.keys.length ? 'Morceau suivant' : 'Voir le résultat', onclick: next }));
@@ -156,7 +163,7 @@ export default function blindTest(body) {
   function next() {
     game.i++; game.done = false;
     if (game.i < game.keys.length) return round();
-    record('blind_game', { gameId: game.id, difficulty: level.id, rounds: game.played, score: game.score, completed: true });
+    if (!mine) record('blind_game', { gameId: game.id, difficulty: level.id, rounds: game.played, score: game.score, completed: true });
     const total = game.played;
     body.replaceChildren(h('div.tile', { style: { maxWidth: '560px', gap: '14px' } },
       h('h2', { style: { fontSize: '30px' }, text: `${game.score} sur ${total}` }),

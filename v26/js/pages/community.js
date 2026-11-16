@@ -1,5 +1,5 @@
-import { h } from '../core/dom.js?v=202611161905';
-import { go } from '../router.js?v=202611161905';
+import { h } from '../core/dom.js?v=202611162020';
+import { go } from '../router.js?v=202611162020';
 
 export const SECTIONS = [
   ['', 'Le fil', 'Histoires et souvenirs autour des morceaux.'],
@@ -18,7 +18,7 @@ export default async function community(page, { section = '' }, query) {
   const body = h('section.wrap');
   page.append(
     h('header.wrap.page-head', h('h1.title', { text: section ? entry[1] : 'Communauté' }), h('p.lede', { text: entry[2] })),
-    h('div.wrap', h('nav.tablist', { 'aria-label': 'Rubriques de la communauté' },
+    h('div.wrap.music-tabs', h('nav.tablist', { 'aria-label': 'Rubriques de la communauté' },
       SECTIONS.map(([id, label]) => h('a.chip', { href: '#/communaute' + (id ? '/' + id : ''), 'aria-selected': String(id === section), text: label })))),
     body);
   // Même étiquette de version que ce fichier (voir work/refonte-26/version.sh).
