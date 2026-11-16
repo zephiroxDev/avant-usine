@@ -1,7 +1,7 @@
 // Compte membre : session Supabase partagée avec l'ancien site, rôles, bibliothèque.
-import { client, rpc, friendly } from './api.js?v=202611162020';
-import { emit } from './bus.js?v=202611162020';
-import * as lib from './library.js?v=202611162020';
+import { client, rpc, friendly } from './api.js?v=202611161800';
+import { emit } from './bus.js?v=202611161800';
+import * as lib from './library.js?v=202611161800';
 
 let me = null;          // { id, email, name, avatar, confirmed, roles:{creator,moderator,supporter} }
 let ready = false;

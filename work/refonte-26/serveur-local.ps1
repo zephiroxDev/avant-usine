@@ -10,6 +10,19 @@ while ($listener.IsListening) {
   $ctx = $listener.GetContext()
   try {
     $rel = [Uri]::UnescapeDataString($ctx.Request.Url.AbsolutePath.TrimStart('/'))
+    # Fabrication des affiches : la page dessinée dans le navigateur envoie ses images (PNG) ici.
+    # Écriture autorisée seulement dans work/refonte-26/affiche/sortie, noms simples uniquement.
+    if ($ctx.Request.HttpMethod -eq 'POST') {
+      $out = Join-Path $root 'work\refonte-26\affiche\sortie'
+      $name = [System.IO.Path]::GetFileName($rel)
+      if ($rel -like 'work/refonte-26/affiche/sortie/*' -and $name -match '^[a-zA-Z0-9_.-]+\.png$') {
+        New-Item -ItemType Directory -Force -Path $out | Out-Null
+        $ms = [System.IO.MemoryStream]::new(); $ctx.Request.InputStream.CopyTo($ms)
+        [System.IO.File]::WriteAllBytes((Join-Path $out $name), $ms.ToArray())
+        $ctx.Response.StatusCode = 204
+      } else { $ctx.Response.StatusCode = 403 }
+      continue
+    }
     if ($rel -eq '' -or $rel.EndsWith('/')) { $rel += 'index.html' }
     $path = [System.IO.Path]::GetFullPath((Join-Path $root $rel))
     if (-not $path.StartsWith($root) -or -not (Test-Path $path -PathType Leaf)) {

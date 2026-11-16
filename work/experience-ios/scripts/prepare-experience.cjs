@@ -28,3 +28,23 @@ const activity=path.join(dest,'activity-17v01.js');fs.writeFileSync(activity,fs.
 const comfort=path.join(dest,'comfort-18v05.js');fs.writeFileSync(comfort,fs.readFileSync(comfort,'utf8').replace('setInterval(elapsed,1000);',"window.addEventListener('au:native-sleep',finish);setInterval(elapsed,1000);"));
 const history=path.join(dest,'histories-17v01.js'),prefix='window.AU_PLATFORM_HISTORIES=';const histories=JSON.parse(fs.readFileSync(history,'utf8').slice(prefix.length).trim().replace(/;$/,''));histories.ios=require('../patch-notes.json');fs.writeFileSync(history,prefix+JSON.stringify(histories)+';');
 console.log('Prepared isolated iPhone beta '+release.version+' ('+release.buildNumber+'); no Windows/Android build.');
+
+// Site 26 (décision d'Iloan, 16 novembre 2026) : l'appli iPhone/iPad ouvre la v26 en mode « musiques importées uniquement »
+// (le site bloque le reste grâce à data-au-app="ios"). L'ancien site reste dans le paquet, avec ios.js (mises à jour de l'appli),
+// et sa page d'accueil redirige tout de suite vers la v26.
+{
+  const v26=path.resolve(root,'../../v26'),out=path.join(dest,'v26');
+  fs.rmSync(out,{recursive:true,force:true});fs.cpSync(v26,out,{recursive:true});
+  fs.writeFileSync(path.join(dest,'ios-26.css'),fs.readFileSync(path.join(root,'web/ios-26.css'),'utf8'));
+  const page=path.join(out,'index.html');let v=fs.readFileSync(page,'utf8');
+  if(!v.includes('<head>')||!v.includes('</head>')||!v.includes('</body>'))throw Error('Page de la v26 incomplète');
+  v=v.replace('<head>','<head><script>document.documentElement.dataset.auApp="ios";</script>')
+     .replace('</head>','<link rel="stylesheet" href="../ios-26.css"></head>')
+     // Modules partagés avec l'ancien site (stockage des musiques, sauvegarde) puis le service de mise à jour de l'appli.
+     .replace('</body>','<script src="../local-storage-18v07.js" defer></script><script src="../local-18v00.js" defer></script><script src="../backup-18v06.js" defer></script><script src="../ios.js" defer></script></body>');
+  fs.writeFileSync(page,v);
+  const entry=path.join(dest,'index.html');let old=fs.readFileSync(entry,'utf8');
+  old=old.replace('<head>','<head><script>location.replace("./v26/index.html"+location.hash);</script>');
+  fs.writeFileSync(entry,old);
+  console.log('Site 26 ajouté à l’appli iPhone (musiques importées uniquement).');
+}

@@ -52,6 +52,13 @@ Décision du 16 novembre 2026. Permettre l'import de ses propres musiques sur le
 - iPhone : IOSUpdates.checkReleases/download (IPA) → nouvelle version de l'appli publiée par les workflows existants.
 - Android : mécanisme à vérifier avant de rouvrir.
 
+## Applis sur le site 26 — code préparé le 16 novembre 2026 (pas encore compilé ni publié)
+- Windows (`work/desktop-app`) : `product.cjs` reconstitue les dossiers (v26/js/core/dom.js → fichier `v26__js__core__dom.js`) ; `scripts/prepare-site.cjs` copie la v26 à plat, ajoute `data-au-app="desktop"`, garde l'ancien site en `ancien.html` et met la page de redirection du site web en `index.html`. Nouveau test `test/site-26.test.cjs`. Rien d'autre du lanceur ni des mises à jour n'est modifié.
+- iPhone (`work/experience-ios`) : `scripts/prepare-experience.cjs` copie la v26 dans `site/v26`, ajoute `data-au-app="ios"`, `ios-26.css` (fenêtre de mise à jour seulement), les modules `local-storage-18v07.js`, `local-18v00.js`, `backup-18v06.js` (exigés par la sonde du simulateur) et `ios.js` (mises à jour de l'appli, inchangé). L'ancienne page d'accueil redirige tout de suite vers la v26 (son contenu reste intact pour les tests). Bouton « Forcer une mise à jour » en bas de Mes musiques (#accountDialog).
+- Perdu pour l'instant dans l'appli iPhone : paroles en direct sur l'écran verrouillé / Dynamic Island (ios-lyrics*.js liés à l'ancien site).
+- Android (`work/android-app`) : version 0.3.4, source encore `github-sync-import` ; compilation en CI (`android-build.yml`, désactivé par la pause), signature avec la clé locale (ne jamais committer), publication par `releases/livraison.json` + `android-release.yml`. Mises à jour : android.js lit les releases GitHub. Ni Node ni Python sur ce PC.
+- La chaîne exige pour la version 26.0 : `NOTES-26.0.md`, notes Windows/iPhone (patch-notes.json), numéros (Windows 0.11.0, iPhone 2.5.0 build 52 proposés) et UNE affiche dans promo-manifest.json (check-promo.cjs). Attention : la promo automatique (promo-auto) peut publier l'affiche sur TikTok → accord d'Iloan avant d'ajouter l'affiche.
+
 ## Nouvelle direction des applis (décision d'Iloan, 16 novembre 2026)
 - **Appli Windows** = le site v26 tel quel, en appli, avec en plus la conservation **indéfinie** des musiques importées.
 - **Applis iPhone/iPad et Android** = **uniquement l'espace des musiques importées** (rien d'autre du site), **plus le Blind Test avec les musiques importées**.

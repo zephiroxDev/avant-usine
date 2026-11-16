@@ -1,8 +1,8 @@
 // Mesures d'écoute et de jeu (membres connectés uniquement), envoyées par lots à au_stats_record_17v01.
-import { rpc } from './api.js?v=202611162020';
-import { account } from './account.js?v=202611162020';
-import { on } from './bus.js?v=202611162020';
-import * as player from './player.js?v=202611162020';
+import { rpc } from './api.js?v=202611161800';
+import { account } from './account.js?v=202611161800';
+import { on } from './bus.js?v=202611161800';
+import * as player from './player.js?v=202611161800';
 
 const queue = [];
 let timer = 0;

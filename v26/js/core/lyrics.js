@@ -1,7 +1,7 @@
 // Paroles : texte (au_sync source) et synchronisation publiée (au_sync published).
-import { act } from './api.js?v=202611162020';
-import { track as catalogTrack } from './catalog.js?v=202611162020';
-import { on } from './bus.js?v=202611162020';
+import { act } from './api.js?v=202611161800';
+import { track as catalogTrack } from './catalog.js?v=202611161800';
+import { on } from './bus.js?v=202611161800';
 
 // Une connexion ou déconnexion change les paroles accessibles : on vide le cache.
 on('account', () => cache.clear());

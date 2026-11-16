@@ -1,5 +1,5 @@
 // Fenêtres (feuilles) et messages courts. Une seule feuille ouverte à la fois, fermée par Échap, le fond ou ✕.
-import { h, icon } from '../core/dom.js?v=202611162020';
+import { h, icon } from '../core/dom.js?v=202611161800';
 
 let toastEl = null;
 let toastTimer = 0;

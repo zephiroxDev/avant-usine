@@ -5,7 +5,12 @@ exports.createWindow=async({electron,root,onReady})=>{
  try{protocol.unhandle('avantusine');}catch{}protocol.handle('avantusine',request=>{
   const url=new URL(request.url);if(url.hostname!=='local'||url.username||url.password)return new Response('Introuvable',{status:404});
   let name;try{name=decodeURIComponent(url.pathname);}catch{return new Response('Introuvable',{status:404});}
-  const file=path.resolve(root,'.'+(name==='/'?'/index.html':name));if(!file.startsWith(path.resolve(root)+path.sep)||name.includes('\\')||!fs.existsSync(file)||!fs.statSync(file).isFile())return new Response('Introuvable',{status:404});return net.fetch(pathToFileURL(file).href);
+  if(name.endsWith('/'))name+='index.html';
+  let file=path.resolve(root,'.'+name);
+  // Site 26 : les lanceurs déjà installés n'acceptent que des fichiers sans dossier (site/<nom>).
+  // La v26 est donc livrée « à plat » (v26/js/core/dom.js → v26__js__core__dom.js) et ses dossiers sont reconstitués ici.
+  if(!name.includes('\\')&&!(fs.existsSync(file)&&fs.statSync(file).isFile())){const flat=name.slice(1).split('/').join('__');if(/^[a-zA-Z0-9_.-]+$/.test(flat)&&!flat.startsWith('.'))file=path.resolve(root,flat);}
+  if(!file.startsWith(path.resolve(root)+path.sep)||name.includes('\\')||!fs.existsSync(file)||!fs.statSync(file).isFile())return new Response('Introuvable',{status:404});return net.fetch(pathToFileURL(file).href);
  });
  Menu.setApplicationMenu(null);const window=new BrowserWindow({title:'Avant l’usine',width:1280,height:860,minWidth:800,minHeight:600,backgroundColor:'#121212',icon:path.join(root,'icon-512.png'),autoHideMenuBar:true,show:false,webPreferences:{preload:path.join(root,'desktop-diagnostic-preload.cjs'),nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true}});
  const iconState=path.join(app.getPath('userData'),'app-icon.json');let selectedIcon='portrait';try{const saved=JSON.parse(fs.readFileSync(iconState,'utf8')).icon;if(['portrait','legacy'].includes(saved))selectedIcon=saved;}catch{}

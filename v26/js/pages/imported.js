@@ -1,13 +1,13 @@
 // Mes musiques importées : import, écoute, paroles (surlignage estimé ou synchronisé dans l'Atelier),
 // pochettes classiques ou animées, Blind Test. Tout reste sur l'appareil.
-import { h, icon, clock } from '../core/dom.js?v=202611162020';
-import { on } from '../core/bus.js?v=202611162020';
-import * as local from '../core/local.js?v=202611162020';
-import * as player from '../core/player.js?v=202611162020';
-import { forgetLyrics } from '../core/lyrics.js?v=202611162020';
-import { inApp, localOnly, standalone, isIOS, isPhone } from '../core/platform.js?v=202611162020';
-import { sheet, toast, confirm } from '../ui/overlay.js?v=202611162020';
-import { markCurrent } from '../ui/track.js?v=202611162020';
+import { h, icon, clock } from '../core/dom.js?v=202611161800';
+import { on } from '../core/bus.js?v=202611161800';
+import * as local from '../core/local.js?v=202611161800';
+import * as player from '../core/player.js?v=202611161800';
+import { forgetLyrics } from '../core/lyrics.js?v=202611161800';
+import { app, inApp, localOnly, standalone, isIOS, isPhone } from '../core/platform.js?v=202611161800';
+import { sheet, toast, confirm } from '../ui/overlay.js?v=202611161800';
+import { markCurrent } from '../ui/track.js?v=202611161800';
 
 const pick = (accept, multiple = false) => new Promise((resolve) => {
   const input = h('input', { type: 'file', accept, multiple, style: { display: 'none' } });
@@ -45,7 +45,8 @@ export default function imported(body) {
     status, listBox,
     localOnly ? h('div.row-actions', { style: { borderTop: '1px solid var(--line)', paddingTop: '18px' } },
       h('a.btn.btn-soft.btn-sm', { href: '#/compte/reglages', text: 'Réglages' }),
-      h('a.btn.btn-soft.btn-sm', { href: '#/a-propos/confidentialite', text: 'Confidentialité' })) : null));
+      h('a.btn.btn-soft.btn-sm', { href: '#/a-propos/confidentialite', text: 'Confidentialité' }),
+      updateHost()) : null));
 
   const offs = [on('local', paint), on('player', () => markCurrent(listBox))];
   listBox.append(h('div.loading', h('div.spin', { role: 'status', 'aria-label': 'Chargement' })));
@@ -116,7 +117,7 @@ export default function imported(body) {
         act('Écouter', 'play', () => player.playList(t.volume.tracks.map((x) => x.key), t.key)),
         act('Modifier les infos', 'edit', () => editInfo(t)),
         act('Paroles', 'lyrics', () => editLyrics(t)),
-        act('Synchroniser dans l’Atelier', 'lyrics', () => import('./community/studio.js?v=202611162020').then((m) => m.openStudio(t.key))),
+        act('Synchroniser dans l’Atelier', 'lyrics', () => import('./community/studio.js?v=202611161800').then((m) => m.openStudio(t.key))),
         act('Pochette (classique ou animée)', 'cover', () => coverSheet({ t })),
         act('Supprimer de l’appareil', 'trash', () => remove(t), '.btn-soft')));
     });
@@ -175,6 +176,16 @@ export default function imported(body) {
     if (player.current()?.key === t.key) player.el.pause();
     try { await local.removeTracks([t.id]); toast('Morceau supprimé.'); } catch (e) { toast(e.message); }
   }
+}
+
+/** Appli iPhone : emplacement où ios.js (mises à jour de l'appli) range son bouton « Forcer une mise à jour ».
+ *  ios.js cherche #accountDialog et appelle sa méthode close() avant de vérifier. */
+function updateHost() {
+  if (app !== 'ios') return null;
+  document.getElementById('accountDialog')?.remove();
+  const host = h('div#accountDialog');
+  host.close = () => {};
+  return host;
 }
 
 /** Pochette : vidéo animée en boucle si elle existe, sinon image. */

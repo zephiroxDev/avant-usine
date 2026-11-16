@@ -42,3 +42,25 @@ for(const file of fs.readdirSync(destination)){if(/^app-\d+v\d+\.js$/.test(file)
 const comfortPath=path.join(destination,'comfort-18v05.js');fs.appendFileSync(comfortPath,"\nwindow.AU_UPDATE_DIAGNOSTIC.configure({platform:'desktop',current:'"+require('../release.json').desktopVersion+"'});\n");
 const discoveryPath=path.join(destination,'release-22.js');fs.writeFileSync(discoveryPath,fs.readFileSync(discoveryPath,'utf8').replaceAll('23.0',desktopRelease));
 console.log('Interface locale et historique Windows préparés : '+fs.readdirSync(destination).length+' fichiers.');
+
+// Site 26 (décision d'Iloan, 16 novembre 2026) : l'appli Windows ouvre le site v26, l'ancien site reste à ancien.html.
+// Les lanceurs installés n'acceptent que site/<nom-sans-dossier> : la v26 est copiée « à plat »
+// (v26/js/core/dom.js → v26__js__core__dom.js) ; product.cjs reconstitue les dossiers quand il sert les pages.
+{
+  const v26=path.resolve(__dirname,'../../../v26');
+  for(const name of fs.readdirSync(destination))if(name.startsWith('v26__'))fs.unlinkSync(path.join(destination,name));
+  const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
+  let copied=0;
+  for(const file of walk(v26)){
+    const flat=('v26/'+path.relative(v26,file).split(path.sep).join('/')).split('/').join('__');
+    if(!/^[a-zA-Z0-9_.-]+$/.test(flat))throw Error('Nom de fichier v26 refusé par le lanceur : '+flat);
+    fs.copyFileSync(file,path.join(destination,flat));copied++;
+  }
+  const v26Index=path.join(destination,'v26__index.html');let page=fs.readFileSync(v26Index,'utf8');
+  if(!page.includes('<head>'))throw Error('En-tête de la v26 introuvable');
+  fs.writeFileSync(v26Index,page.replace('<head>','<head><script>document.documentElement.dataset.auApp="desktop";</script>'));
+  // Entrée : la page de redirection du site web (anciennes adresses traduites), l'ancien site gardé à côté.
+  fs.copyFileSync(path.join(destination,'index.html'),path.join(destination,'ancien.html'));
+  fs.copyFileSync(path.resolve(__dirname,'../../../index.html'),path.join(destination,'index.html'));
+  console.log('Site 26 ajouté à plat : '+copied+' fichiers.');
+}
