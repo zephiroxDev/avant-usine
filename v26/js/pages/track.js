@@ -1,15 +1,15 @@
-import { h, icon } from '../core/dom.js?v=202611152246';
-import { rpc, act } from '../core/api.js?v=202611152246';
-import * as cat from '../core/catalog.js?v=202611152246';
-import * as player from '../core/player.js?v=202611152246';
-import { getLyrics } from '../core/lyrics.js?v=202611152246';
-import { account } from '../core/account.js?v=202611152246';
-import { on } from '../core/bus.js?v=202611152246';
-import { favButton, addToPlaylist } from '../ui/track.js?v=202611152246';
-import { toast } from '../ui/overlay.js?v=202611152246';
-import { go } from '../router.js?v=202611152246';
+import { h, icon } from '../core/dom.js?v=202611161750';
+import { rpc, act } from '../core/api.js?v=202611161750';
+import * as cat from '../core/catalog.js?v=202611161750';
+import * as player from '../core/player.js?v=202611161750';
+import { getLyrics, splitBacks } from '../core/lyrics.js?v=202611161750';
+import { account } from '../core/account.js?v=202611161750';
+import { on } from '../core/bus.js?v=202611161750';
+import { favButton, addToPlaylist } from '../ui/track.js?v=202611161750';
+import { toast } from '../ui/overlay.js?v=202611161750';
+import { go } from '../router.js?v=202611161750';
 
-import { visitorToken } from '../core/visitor.js?v=202611152246';
+import { visitorToken } from '../core/visitor.js?v=202611161750';
 const dateFr = (iso) => { try { return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); } catch { return ''; } };
 function songDate(d) {
   if (!d) return '';
@@ -24,6 +24,7 @@ export default function trackPage(page, { key }, query) {
   if (!t) { go('/volumes', { replace: true }); return; }
   const context = t.volume.tracks.map((x) => x.key);
   const offs = [];
+  let notesPromise = null; // déclaré avant l'ouverture du premier onglet (sinon « before initialization »)
 
   const shareBtn = h('button.btn.btn-line', { type: 'button', onclick: share }, icon('share'), h('span', { text: 'Partager' }));
   const head = h('header.wrap.song-head',
@@ -76,13 +77,17 @@ export default function trackPage(page, { key }, query) {
       if (hit) {
         const i = line.indexOf(hit.quote.trim());
         p.append(line.slice(0, i), h('button', { type: 'button', style: { color: 'var(--accent)', textDecoration: 'underline', textDecorationStyle: 'dotted', textUnderlineOffset: '4px' }, text: hit.quote.trim(), onclick: () => select('explications') }), line.slice(i + hit.quote.trim().length));
-      } else p.textContent = line;
+      } else {
+        // Chœurs entre parenthèses : sous la ligne, en plus petit.
+        const parts = splitBacks(line);
+        if (parts.mainText) p.append(parts.mainText);
+        if (parts.backText) p.append(h('span.back', { text: parts.backText }));
+      }
       wrap.append(p);
     }
     return h('div', wrap, h('p.note', { style: { marginTop: '16px' }, text: data.synced ? 'Paroles synchronisées : elles défilent au rythme du chant dans le lecteur.' : 'Pas encore synchronisé : le lecteur fait défiler ce texte au rythme estimé.' }), contribute());
   }
 
-  let notesPromise = null;
   function loadNotes() {
     notesPromise ||= rpc('au_list_annotations', { p_song_key: t.key, p_token: visitorToken(), p_offset: 0, p_sort: 'top' }).then((r) => r?.items || []);
     return notesPromise;

@@ -1,7 +1,7 @@
 // Pages « À propos » : guide, nouveautés, applications, soutenir, confidentialité.
-import { h, icon } from '../core/dom.js?v=202611152246';
-import { go } from '../router.js?v=202611152246';
-import { toast, sheet } from '../ui/overlay.js?v=202611152246';
+import { h, icon } from '../core/dom.js?v=202611161750';
+import { go } from '../router.js?v=202611161750';
+import { toast, sheet } from '../ui/overlay.js?v=202611161750';
 
 const PAGES = {
   guide: ['Guide', guide],
@@ -44,7 +44,7 @@ const REST = [
   ['Mon année', 'Ton temps d’écoute, tes morceaux préférés, tes résumés et tes trophées, mois par mois ou sur l’année.'],
   ['Blind Test', 'Trois niveaux : 10 secondes, 5 secondes ou une seule note. « Je ne sais pas » compte comme une erreur ; un extrait illisible peut être passé sans compter.'],
   ['Sauvegarde', 'Dans Mon compte › Sauvegarde, télécharge un fichier avec tes favoris et tes playlists pour les retrouver sur un autre appareil.'],
-  ['Thème', 'Mode sombre ou clair, animations activées ou réduites : tout se règle dans Mon compte › Réglages.'],
+  ['Animations', 'Animations activées ou réduites : ça se règle dans Mon compte › Réglages.'],
 ];
 
 function guide(body) {

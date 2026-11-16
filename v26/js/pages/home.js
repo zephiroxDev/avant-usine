@@ -1,8 +1,8 @@
-import { h, icon, clock } from '../core/dom.js?v=202611152246';
-import { on } from '../core/bus.js?v=202611152246';
-import * as cat from '../core/catalog.js?v=202611152246';
-import * as player from '../core/player.js?v=202611152246';
-import { go } from '../router.js?v=202611152246';
+import { h, icon, clock } from '../core/dom.js?v=202611161750';
+import { on } from '../core/bus.js?v=202611161750';
+import * as cat from '../core/catalog.js?v=202611161750';
+import * as player from '../core/player.js?v=202611161750';
+import { go } from '../router.js?v=202611161750';
 
 export default function home(page) {
   const vols = cat.available();
@@ -15,8 +15,7 @@ export default function home(page) {
       h('p.lede', { text: `${cat.trackCount()} morceaux d’avant l’usine, réunis en ${vols.length} volumes, avec les paroles qui défilent au rythme du chant.` }),
       h('div.row-actions',
         h('button.btn.btn-main', { type: 'button', onclick: () => { const c = player.current(); if (c) { player.toggle(); window.AU26.openPlayer(); } else if (first) { player.playKey(first.key); window.AU26.openPlayer(); } } }, icon('play'), h('span', { text: 'Lancer l’écoute' })),
-        h('button.btn.btn-line', { type: 'button', onclick: () => { const all = cat.allTracks(); const t = all[Math.floor(Math.random() * all.length)]; if (t) { player.playKey(t.key); window.AU26.openPlayer(); } } }, icon('shuffle'), h('span', { text: 'Un morceau au hasard' })))),
-    h('div.stack', { 'aria-hidden': 'true' }, vols.slice(0, 3).map((v) => h('img', { src: v.cover, alt: '', width: '300', height: '300' }))));
+        h('button.btn.btn-line', { type: 'button', onclick: () => { const all = cat.allTracks(); const t = all[Math.floor(Math.random() * all.length)]; if (t) { player.playKey(t.key); window.AU26.openPlayer(); } } }, icon('shuffle'), h('span', { text: 'Un morceau au hasard' })))));
 
   const resumeSlot = h('div');
   const paintResume = () => {

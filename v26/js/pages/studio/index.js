@@ -1,9 +1,9 @@
 // Studio : outils du créateur et de la modération. Les droits sont vérifiés par le serveur à chaque appel ;
 // l'interface ne fait que masquer ce qui n'est pas utile. Un outil n'est chargé qu'à son ouverture.
-import { h } from '../../core/dom.js?v=202611152246';
-import { account, can } from '../../core/account.js?v=202611152246';
-import { on } from '../../core/bus.js?v=202611152246';
-import { act } from '../../core/api.js?v=202611152246';
+import { h } from '../../core/dom.js?v=202611161750';
+import { account, can } from '../../core/account.js?v=202611161750';
+import { on } from '../../core/bus.js?v=202611161750';
+import { act } from '../../core/api.js?v=202611161750';
 
 export const TOOLS = [
   // [id, groupe, titre, description, réservé au créateur ?]
@@ -77,7 +77,7 @@ export default async function studio(page) {
       h('button.btn.btn-soft.btn-sm', { type: 'button', style: { justifySelf: 'start' }, text: '‹ Tableau de bord', onclick: () => { current = ''; dashboard(); window.scrollTo(0, 0); } }),
       h('h2', { style: { fontSize: '30px' }, text: tool[2] }), h('p.note', { text: tool[3] }), panel));
     window.scrollTo(0, 0);
-    try { const m = await import('./tools.js?v=202611152246'); await m[toolName(id)](panel); }
+    try { const m = await import('./tools.js?v=202611161750'); await m[toolName(id)](panel); }
     catch (e) { panel.replaceChildren(h('p.empty', { text: e.message || 'Outil indisponible.' })); }
   }
 }

@@ -1,7 +1,7 @@
 // Paroles : texte (au_sync source) et synchronisation publiée (au_sync published).
-import { act } from './api.js?v=202611152246';
-import { track as catalogTrack } from './catalog.js?v=202611152246';
-import { on } from './bus.js?v=202611152246';
+import { act } from './api.js?v=202611161750';
+import { track as catalogTrack } from './catalog.js?v=202611161750';
+import { on } from './bus.js?v=202611161750';
 
 // Une connexion ou déconnexion change les paroles accessibles : on vide le cache.
 on('account', () => cache.clear());
@@ -47,6 +47,83 @@ async function fetchLyrics(key) {
   }
 }
 
+/** Sépare les chœurs entre parenthèses (affichés sous la ligne, en plus petit).
+ *  Renvoie des morceaux repérés par leur position en lettres dans la ligne complète,
+ *  pour que le surlignage lettre par lettre reste juste. */
+export function splitBacks(line) {
+  const chars = Array.from(line);
+  const ranges = [];
+  let depth = 0, start = -1;
+  chars.forEach((ch, i) => {
+    if (ch === '(') { if (depth++ === 0) start = i; }
+    else if (ch === ')' && depth && --depth === 0) ranges.push([start, i]);
+  });
+  const main = [], backs = [];
+  let cursor = 0;
+  for (const [s, e] of ranges) {
+    if (s > cursor) main.push([cursor, s]);
+    backs.push([s + 1, e]);
+    cursor = e + 1;
+  }
+  if (cursor < chars.length) main.push([cursor, chars.length]);
+  // Nettoyage après retrait des chœurs : espaces doublées, espace restée devant « , » ou « . ».
+  // Le repère \u0001 marque la frontière rempli / restant pendant le nettoyage.
+  const tidy = (s) => s.replace(/\s+/g, ' ').replace(/ (?=\u0001?[,.…])/g, '').replace(/^ +| +$/g, '');
+  const cut = (parts, sep, n) => {
+    let s = '', first = true, marked = false;
+    for (const [a, b] of parts) {
+      const piece = chars.slice(a, b);
+      if (!piece.join('').trim()) continue;
+      if (!first && sep) { s += sep; } first = false;
+      const k = Math.max(0, Math.min(b - a, n - a));
+      if (!marked && k < piece.length) { s += piece.slice(0, k).join('') + '\u0001' + piece.slice(k).join(''); marked = true; }
+      else s += piece.join('');
+    }
+    if (!marked) s += '\u0001';
+    const [on, off = ''] = tidy(s).split('\u0001');
+    return [on, off];
+  };
+  const whole = (parts, sep) => cut(parts, sep, Infinity)[0];
+  return {
+    chars, main, backs,
+    mainText: ranges.length ? whole(main, '') : line,
+    backText: whole(backs, ' · '),
+    /** Texte rempli / restant pour n lettres chantées (n compté dans la ligne complète). */
+    paint(n) {
+      return { main: ranges.length ? cut(main, '', n) : [chars.slice(0, n).join(''), chars.slice(n).join('')], back: cut(backs, ' · ', n) };
+    },
+  };
+}
+
+/** Lettres à afficher, avec leur position dans la ligne complète (pour le surlignage progressif).
+ *  main = texte principal, back = chœurs (séparés par « · »). Mêmes règles de nettoyage que splitBacks. */
+export function lineLetters(line) {
+  const { chars, main, backs } = splitBacks(line);
+  const hasBacks = backs.length > 0;
+  const collect = (parts, sep) => {
+    const out = [];
+    for (const [a, b] of parts) {
+      const piece = chars.slice(a, b);
+      if (!piece.join('').trim()) continue;
+      if (out.length && sep) for (const ch of sep) out.push({ ch, i: a });
+      for (let k = a; k < b; k++) out.push({ ch: chars[k], i: k });
+    }
+    // Espaces doublées, espace devant « , . … », espaces au début et à la fin.
+    const clean = [];
+    for (let k = 0; k < out.length; k++) {
+      const c = out[k];
+      if (/\s/.test(c.ch)) {
+        if (!clean.length || /\s/.test(clean[clean.length - 1].ch)) continue;
+        const next = out.slice(k + 1).find((x) => !/\s/.test(x.ch));
+        if (!next || /[,.…]/.test(next.ch)) continue;
+        clean.push({ ch: ' ', i: c.i });
+      } else clean.push(c);
+    }
+    return clean;
+  };
+  return { length: chars.length, main: hasBacks ? collect(main, '') : chars.map((ch, i) => ({ ch, i })), back: collect(backs, ' · ') };
+}
+
 export function getLyrics(key) {
   if (!cache.has(key)) {
     const p = fetchLyrics(key);
@@ -56,16 +133,18 @@ export function getLyrics(key) {
   return cache.get(key);
 }
 
-/** Position dans la ligne (0 → 1) d'après la courbe [[pourcentage, temps], …]. */
-function curveProgress(curve, t, start, end) {
+/** Position dans la ligne (0 → 1) d'après la courbe [[lettre, temps], …].
+ *  La position est un NOMBRE DE LETTRES (0 → longueur de la ligne), comme dans l'Atelier. */
+function curveProgress(curve, t, start, end, length) {
   if (Array.isArray(curve) && curve.length > 1) {
+    const total = length || curve[curve.length - 1][0] || 1;
     if (t <= curve[0][1]) return 0;
     for (let i = 1; i < curve.length; i++) {
       const [p1, t1] = curve[i];
       const [p0, t0] = curve[i - 1];
-      if (t <= t1) return (p0 + (p1 - p0) * ((t - t0) / Math.max(0.001, t1 - t0))) / 100;
+      if (t <= t1) return Math.min(1, (p0 + (p1 - p0) * ((t - t0) / Math.max(0.001, t1 - t0))) / total);
     }
-    return Math.min(1, curve[curve.length - 1][0] / 100);
+    return 1;
   }
   if (end && end > start) return Math.max(0, Math.min(1, (t - start) / (end - start)));
   return 1;
@@ -78,9 +157,11 @@ export function locate(data, t, duration) {
     let i = -1;
     for (let k = 0; k < data.times.length; k++) { if (data.times[k] <= t) i = k; else break; }
     if (i < 0) return { index: -1, progress: 0 };
-    const end = data.ends[i] ?? data.times[i + 1] ?? (data.times[i] + 4);
+    const c = data.curves[i];
+    const curveEnd = Array.isArray(c) && c.length ? c[c.length - 1][1] : 0;
+    const end = Math.max(data.ends[i] || 0, curveEnd) || data.times[i + 1] || (data.times[i] + 4);
     if (t > end + 0.25 && (data.times[i + 1] ?? Infinity) > t + 0.6) return { index: i, progress: 1, done: true };
-    return { index: i, progress: curveProgress(data.curves[i], t, data.times[i], end) };
+    return { index: i, progress: curveProgress(data.curves[i], t, data.times[i], end, Array.from(data.lines[i]).length) };
   }
   // Défilement estimé : répartition régulière sur la durée du morceau.
   const total = Number.isFinite(duration) && duration > 0 ? duration : 0;

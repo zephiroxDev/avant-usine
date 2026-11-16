@@ -1,21 +1,19 @@
-// Préférences locales (thème, animations) + minuteur de sommeil.
-import { store, emit } from './bus.js?v=202611152246';
-import * as player from './player.js?v=202611152246';
+// Préférences locales (animations) + minuteur de sommeil.
+import { store, emit } from './bus.js?v=202611161750';
+import * as player from './player.js?v=202611161750';
 
 const KEY = 'au26-prefs';
-const defaults = { theme: 'dark', motion: 'on' };
+const defaults = { motion: 'on' }; // Mode clair supprimé (demande d'Iloan, 16 nov. 2026) : le site est toujours sombre.
 let prefs = { ...defaults, ...(store.get(KEY) || {}) };
-// L'ancien site gardait le thème sous 'au-theme' : on le reprend au premier passage.
-if (!store.get(KEY)) { try { const old = localStorage.getItem('au-theme'); if (old === 'light' || old === '"light"') prefs.theme = 'light'; } catch { /* rien */ } }
 
 export const get = (k) => prefs[k];
 export function set(k, v) { prefs[k] = v; store.set(KEY, prefs); apply(); emit('prefs', { key: k, value: v }); }
 
 export function apply() {
   const root = document.documentElement;
-  root.dataset.theme = prefs.theme === 'light' ? 'light' : 'dark';
+  root.dataset.theme = 'dark';
   root.dataset.motion = prefs.motion === 'off' ? 'off' : 'on';
-  document.querySelector('meta[name=theme-color]')?.setAttribute('content', prefs.theme === 'light' ? '#f6f1e8' : '#0f0d0c');
+  document.querySelector('meta[name=theme-color]')?.setAttribute('content', '#0f0d0c');
 }
 
 // Minuteur : arrêt après N minutes, ou à la fin du morceau en cours.

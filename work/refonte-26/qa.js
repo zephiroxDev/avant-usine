@@ -27,6 +27,8 @@
     // 3. Mot ou signe seul sur la dernière ligne.
     for (const e of [...root().querySelectorAll('h1,h2,h3,p,button,a,li,dd,dt,span,small,label,summary,strong')].filter((x) => vis(x) && !isSr(x) && x.textContent.trim().length > 2)) {
       if ([...e.children].some((c) => /^(P|DIV|LI|H\d|UL|OL|SECTION|INPUT)$/.test(c.tagName)) || e.closest('.top,.mini,.tabs')) continue;
+      // Les chœurs entre parenthèses sont volontairement sur leur propre ligne, sous la phrase.
+      if (e.querySelector('.back,.ly-back') || e.closest('.back,.ly-back')) continue;
       const rg = document.createRange(); rg.selectNodeContents(e);
       const lines = {}; for (const r of rg.getClientRects()) { if (r.width < 0.5) continue; const k = Math.round(r.top / 4); lines[k] = lines[k] || { l: r.left, r: r.right }; lines[k].l = Math.min(lines[k].l, r.left); lines[k].r = Math.max(lines[k].r, r.right); }
       const ks = Object.keys(lines).map(Number).sort((a, b) => a - b); if (ks.length < 2) continue;

@@ -1,13 +1,13 @@
 // En-tête, onglets, mini-lecteur et lecteur plein écran.
-import { h, icon, clock } from '../core/dom.js?v=202611152246';
-import { on } from '../core/bus.js?v=202611152246';
-import * as player from '../core/player.js?v=202611152246';
-import { getLyrics, locate } from '../core/lyrics.js?v=202611152246';
-import { go } from '../router.js?v=202611152246';
-import { favButton, addToPlaylist, markCurrent } from './track.js?v=202611152246';
-import { toast } from './overlay.js?v=202611152246';
-import { account } from '../core/account.js?v=202611152246';
-import { buildFooter } from './footer.js?v=202611152246';
+import { h, icon, clock } from '../core/dom.js?v=202611161750';
+import { on } from '../core/bus.js?v=202611161750';
+import * as player from '../core/player.js?v=202611161750';
+import { getLyrics, locate, lineLetters } from '../core/lyrics.js?v=202611161750';
+import { go } from '../router.js?v=202611161750';
+import { favButton, addToPlaylist, markCurrent } from './track.js?v=202611161750';
+import { toast } from './overlay.js?v=202611161750';
+import { account } from '../core/account.js?v=202611161750';
+import { buildFooter } from './footer.js?v=202611161750';
 
 const TABS = [
   ['accueil', 'Accueil', '/', 'home'],
@@ -26,7 +26,7 @@ export function buildShell(app) {
     e.preventDefault();
     clearTimeout(tapTimer);
     taps++;
-    if (taps === 7) { taps = 0; import('./apply.js?v=202611152246').then((m) => m.openApplication()); return; }
+    if (taps === 7) { taps = 0; import('./apply.js?v=202611161750').then((m) => m.openApplication()); return; }
     tapTimer = setTimeout(() => { taps = 0; go('/compte'); }, 600);
   });
   const top = h('header.top', h('div.wrap',
@@ -193,8 +193,21 @@ export function buildShell(app) {
         return;
       }
       lineEls = data.lines.map((text, i) => {
-        const b = h('button.ly', { type: 'button', role: 'listitem', onclick: () => { if (data.synced) { player.seek(data.times[i]); follow = true; } } }, h('span.on'), h('span.off', { text }));
-        b.dataset.text = text;
+        // Chœurs entre parenthèses : sous la ligne principale, en plus petit.
+        // Chaque lettre est un élément : le blanc la remplit progressivement, avec un dégradé doux.
+        const letters = lineLetters(text);
+        const spans = [];
+        const row = (list, cls) => {
+          if (!list.length) return null;
+          return h('span.' + cls, { 'aria-hidden': 'true' }, list.map(({ ch, i: at }) => {
+            const s = h('span.lt', { text: ch });
+            s._at = at; s._v = -1; spans.push(s);
+            return s;
+          }));
+        };
+        const b = h('button.ly', { type: 'button', role: 'listitem', 'aria-label': text, onclick: () => { if (data.synced) { player.seek(data.times[i]); follow = true; } } },
+          row(letters.main, 'ly-main'), row(letters.back, 'ly-back'));
+        b._spans = spans; b._len = letters.length; b._p = -1;
         return b;
       });
       lyricsList.replaceChildren(...lineEls);
@@ -207,7 +220,7 @@ export function buildShell(app) {
       const a = player.el;
       const { index, progress } = locate(lyricData, a.currentTime, a.duration);
       if (index !== active || force) {
-        lineEls.forEach((b, i) => { b.classList.toggle('past', i < index); b.classList.toggle('cur', i === index); if (i !== index) { b.firstChild.textContent = ''; b.lastChild.textContent = b.dataset.text; } });
+        lineEls.forEach((b, i) => { b.classList.toggle('past', i < index); b.classList.toggle('cur', i === index); if (i !== index) fillLine(b, 0); });
         active = index;
         if (follow && index >= 0) {
           const target = lineEls[index];
@@ -216,9 +229,30 @@ export function buildShell(app) {
       }
       if (index >= 0) {
         const b = lineEls[index];
-        const text = b.dataset.text;
-        const n = Math.round(text.length * Math.max(0, Math.min(1, progress)));
-        if (b.firstChild.textContent.length !== n) { b.firstChild.textContent = text.slice(0, n); b.lastChild.textContent = text.slice(n); }
+        fillLine(b, Math.max(0, Math.min(1, progress)));
+      }
+    }
+
+    /** Remplissage progressif : un dégradé large d'environ 4 lettres avance au rythme du chant.
+     *  p = avancement de la ligne (0 → 1). À p = 1, toutes les lettres sont entièrement blanches. */
+    const SOFT = 1;
+    function fillLine(b, p) {
+      if (b._p === p) return;
+      b._p = p;
+      const head = p * (b._len + SOFT);
+      const level = (x) => Math.max(0, Math.min(1, (head - x) / SOFT));
+      for (const s of b._spans) {
+        const a = level(s._at), z = level(s._at + 1);
+        const key = a === z ? (a === 1 ? 2 : a === 0 ? 0 : a) : a + z * 7;
+        if (s._v === key) continue;
+        s._v = key;
+        if (a === 1 && z === 1) s.className = 'lt full';
+        else if (a === 0 && z === 0) s.className = 'lt';
+        else {
+          s.className = 'lt mid';
+          s.style.setProperty('--a', Math.round(a * 100) + '%');
+          s.style.setProperty('--b', Math.round(z * 100) + '%');
+        }
       }
     }
 

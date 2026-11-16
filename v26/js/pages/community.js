@@ -1,5 +1,5 @@
-import { h } from '../core/dom.js?v=202611152246';
-import { go } from '../router.js?v=202611152246';
+import { h } from '../core/dom.js?v=202611161750';
+import { go } from '../router.js?v=202611161750';
 
 export const SECTIONS = [
   ['', 'Le fil', 'Histoires et souvenirs autour des morceaux.'],

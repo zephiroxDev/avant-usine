@@ -1,10 +1,10 @@
-import { h, icon } from '../../core/dom.js?v=202611152246';
-import { act, rpc } from '../../core/api.js?v=202611152246';
-import * as cat from '../../core/catalog.js?v=202611152246';
-import { account } from '../../core/account.js?v=202611152246';
-import { visitorToken } from '../../core/visitor.js?v=202611152246';
-import { sheet, toast } from '../../ui/overlay.js?v=202611152246';
-import { getLyrics } from '../../core/lyrics.js?v=202611152246';
+import { h, icon } from '../../core/dom.js?v=202611161750';
+import { act, rpc } from '../../core/api.js?v=202611161750';
+import * as cat from '../../core/catalog.js?v=202611161750';
+import { account } from '../../core/account.js?v=202611161750';
+import { visitorToken } from '../../core/visitor.js?v=202611161750';
+import { sheet, toast } from '../../ui/overlay.js?v=202611161750';
+import { getLyrics } from '../../core/lyrics.js?v=202611161750';
 
 const STATUS = { pending: 'En attente de validation', approved: 'Publiée', rejected: 'À reprendre' };
 
@@ -22,7 +22,7 @@ export default function contribuer(body, query) {
   const mine = h('div', { style: { display: 'grid', gap: '8px' } });
   body.append(
     h('div.tiles',
-      tile('Synchroniser des paroles', 'Fais défiler les paroles au rythme du chant, phrase par phrase.', () => import('./studio.js?v=202611152246').then((m) => m.openStudio(preset || cat.allTracks()[0].key))),
+      tile('Synchroniser des paroles', 'Fais défiler les paroles au rythme du chant, phrase par phrase.', () => import('./studio.js?v=202611161750').then((m) => m.openStudio(preset || cat.allTracks()[0].key))),
       tile('Écrire ou corriger des paroles', 'Propose le texte d’un morceau qui n’en a pas encore, ou une correction.', () => lyricsForm(preset)),
       tile('Expliquer un passage', 'Une référence, un mot d’argot, une anecdote : éclaire un passage pour les autres.', () => noteForm(preset)),
       tile('Envoyer un fichier', 'Tu as déjà une synchronisation au format JSON ou LRC ? Envoie-la.', () => fileForm(preset))),

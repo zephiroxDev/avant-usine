@@ -1,19 +1,19 @@
 // Sous-pages de « Mon compte » : profil, réglages, sauvegarde, confidentialité, studio.
-import { h, icon } from '../core/dom.js?v=202611152246';
-import { act, rpc } from '../core/api.js?v=202611152246';
-import { account } from '../core/account.js?v=202611152246';
-import { on, emit } from '../core/bus.js?v=202611152246';
-import * as prefs from '../core/prefs.js?v=202611152246';
-import * as lib from '../core/library.js?v=202611152246';
-import * as cat from '../core/catalog.js?v=202611152246';
-import { toast, confirm } from '../ui/overlay.js?v=202611152246';
-import { go } from '../router.js?v=202611152246';
+import { h, icon } from '../core/dom.js?v=202611161750';
+import { act, rpc } from '../core/api.js?v=202611161750';
+import { account } from '../core/account.js?v=202611161750';
+import { on, emit } from '../core/bus.js?v=202611161750';
+import * as prefs from '../core/prefs.js?v=202611161750';
+import * as lib from '../core/library.js?v=202611161750';
+import * as cat from '../core/catalog.js?v=202611161750';
+import { toast, confirm } from '../ui/overlay.js?v=202611161750';
+import { go } from '../router.js?v=202611161750';
 
 const TITLES = { profil: 'Profil', reglages: 'Réglages', sauvegarde: 'Sauvegarde', confidentialite: 'Données et compte', studio: 'Studio' };
 
 export default async function settings(page, section) {
   if (!TITLES[section]) { go('/compte', { replace: true }); return; }
-  if (section === 'studio') { const m = await import('./studio/index.js?v=202611152246'); return m.default(page); }
+  if (section === 'studio') { const m = await import('./studio/index.js?v=202611161750'); return m.default(page); }
   const body = h('div.wrap', { style: { display: 'grid', gap: '28px', maxWidth: '760px' } });
   page.append(h('header.wrap.page-head', h('a.note', { href: '#/compte', text: '‹ Mon compte' }), h('h1.title', { text: TITLES[section] })), body);
   const needsAccount = section === 'profil' || section === 'confidentialite';
@@ -70,7 +70,7 @@ async function profil(body) {
   body.replaceChildren(h('form', { style: { display: 'grid', gap: '22px' }, onsubmit: async (e) => {
     e.preventDefault(); save.disabled = true;
     try {
-      await act('au_social', 'profile_save', { nickname: nick.value.trim(), bio: bio.value, accent: accent.value, style, theme: prefs.get('theme') === 'light' ? 'light' : 'dark', avatar, banner, allow_messages: allow });
+      await act('au_social', 'profile_save', { nickname: nick.value.trim(), bio: bio.value, accent: accent.value, style, theme: 'dark', avatar, banner, allow_messages: allow });
       toast('Profil enregistré.'); emit('account');
     } catch (err) { toast(err.message); }
     save.disabled = false;
@@ -119,7 +119,6 @@ function reglages(body) {
         h('div.row-actions', [[15, '15 min'], [30, '30 min'], [60, '1 h'], ['track', 'Fin du morceau'], [0, 'Désactiver']].map(([v, t]) => h('button.chip', { type: 'button', text: t, onclick: () => { prefs.setSleep(v); toast(v ? 'Minuteur activé.' : 'Minuteur désactivé.'); } }))),
         sleepNote)),
     group('Affichage',
-      h('div.field', h('span', { text: 'Thème' }), seg([['dark', 'Sombre'], ['light', 'Clair']], prefs.get('theme'), (v) => { prefs.set('theme', v); if (account()) act('au_social', 'theme', { theme: v }).catch(() => {}); }, 'Thème')),
       h('div.field', h('span', { text: 'Animations' }), seg([['on', 'Activées'], ['off', 'Réduites']], prefs.get('motion'), (v) => prefs.set('motion', v), 'Animations'))),
     group('Notifications', notif));
   paintNotifications(notif);
@@ -218,7 +217,7 @@ function confidentialite(body) {
       h('label.field', h('span', { text: 'Écris SUPPRIMER pour confirmer' }), typed),
       h('div.row-actions', h('button.btn.btn-danger', { type: 'button', text: 'Supprimer définitivement mon compte', onclick: async () => {
         if (typed.value.trim() !== 'SUPPRIMER') { toast('Écris SUPPRIMER en majuscules pour confirmer.'); typed.focus(); return; }
-        try { await act('au_moderation_v12', 'delete_self', { confirm: 'SUPPRIMER', reason: reason.value, details: details.value.trim() }); toast('Ton compte a été supprimé.'); const { signOut } = await import('../core/account.js?v=202611152246'); await signOut().catch(() => {}); go('/'); }
+        try { await act('au_moderation_v12', 'delete_self', { confirm: 'SUPPRIMER', reason: reason.value, details: details.value.trim() }); toast('Ton compte a été supprimé.'); const { signOut } = await import('../core/account.js?v=202611161750'); await signOut().catch(() => {}); go('/'); }
         catch (e) { toast(e.message); }
       } }))));
 }
