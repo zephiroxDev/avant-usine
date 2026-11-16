@@ -35,10 +35,16 @@ Décision du 16 novembre 2026. Permettre l'import de ses propres musiques sur le
 - Mode clair SUPPRIMÉ (Iloan n'en veut pas) : plus de choix « Thème » dans Réglages, site toujours sombre même si un ancien réglage « clair » est enregistré ; texte du Guide mis à jour. Les applis de musiques importées : sombre uniquement aussi.
 - Étiquette de version 202611161750 appliquée.
 
+## Publié le 16 novembre 2026 (soir)
+- Lecteur, onglet Paroles : les phrases à venir sont floues selon leur distance (la suivante nette, puis de plus en plus floues plus bas, jusqu'à 4 px), et redeviennent nettes en approchant. Flou dessiné par text-shadow (jamais de filter : bug WebKit). Défilement à la main → plus de flou.
+- Paroles seules : après 5 s sans action sur l'écran Paroles, l'en-tête, les commandes et la note s'effacent doucement (1,2 s). Le premier toucher/clic les fait revenir sans rien déclencher d'autre.
+- À reprendre dans les applis de musiques importées.
+
 ## Nouvelle direction des applis (décision d'Iloan, 16 novembre 2026)
 - **Appli Windows** = le site v26 tel quel, en appli, avec en plus la conservation **indéfinie** des musiques importées.
 - **Applis iPhone/iPad et Android** = **uniquement l'espace des musiques importées** (rien d'autre du site), **plus le Blind Test avec les musiques importées**.
 - **Paroles dans les applis de musiques importées** (iPhone/iPad + Android) : mêmes règles que le site v26 — surlignage jusqu'au bout de chaque ligne, remplissage BLANC progressif avec un dégradé d'1 lettre (foncé en mode clair), chœurs entre parenthèses sous la ligne en plus petit (séparés par « · »), aucune espace laissée devant « , » ou « . », et surlignage estimé pour les morceaux non synchronisés. Réutiliser `lineLetters()`/`splitBacks()`/`locate()` de `v26/js/core/lyrics.js` et `fillLine` de `v26/js/ui/shell.js`.
 - **Atelier dans les applis de musiques importées** (Windows, iPhone/iPad, Android) : pouvoir synchroniser les paroles de ses musiques importées (même geste que l'Atelier du site), et leur mettre une pochette classique ou animée. Tout reste sur l'appareil.
+- **iPhone « Duo »** (question d'Iloan, 16 novembre 2026) : adapter l'appli iPhone à cet appareil. Pas encore fait : vérifier d'abord ce qu'est exactement l'appareil (écran pliable ? deux écrans ?) et ses tailles d'écran, puis prévoir la mise en page.
 - **Android ROUVRE** (consigne d'Iloan, 16 novembre 2026) : même contenu que l'appli iPhone, musiques importées uniquement + Blind Test avec elles. PS4 reste en pause.
 - Message du site (26.1) : sur PC, proposer l'appli Windows ; sur téléphone, l'écran d'accueil (plus tard aussi l'appli de musiques importées).

@@ -248,6 +248,13 @@ details.tile[open]>summary{margin-bottom:14px}
 .ly .lt.full{color:var(--ly-on)}
 .ly .lt.mid{color:transparent;background-image:linear-gradient(90deg,color-mix(in srgb,var(--ly-on) var(--a),var(--ly-off)),color-mix(in srgb,var(--ly-on) var(--b),var(--ly-off)));-webkit-background-clip:text;background-clip:text}
 .ly-main,.ly-back{display:block}
+/* Phrases à venir floues selon la distance (text-shadow, pas de filter : bug WebKit). */
+.ly{transition:color .25s,text-shadow .6s var(--ease)}
+.ly.blur{color:transparent;text-shadow:0 0 var(--blur) var(--ghost)}
+/* Paroles seules après 5 s sans action : le reste de l'interface s'efface doucement. */
+.player-top,.p-foot,.ly-note{transition:opacity 1.2s var(--ease)}
+.player.idle .player-top,.player.idle .p-foot,.player.idle .ly-note{opacity:0;pointer-events:none}
+.player.idle{cursor:none}
 .ly-back{font-family:var(--body);font-weight:500;font-size:.6em;line-height:1.4;margin-top:.3em;opacity:.85}
 .lyrics-read .back{display:block;font-size:.78em;color:var(--muted);margin-top:2px}
 .ly-note{text-align:center;font-size:13px;color:var(--muted);padding:8px 0 0}

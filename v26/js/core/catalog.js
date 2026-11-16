@@ -1,6 +1,6 @@
 // Catalogue : version publiée sur le serveur (au_catalog_read), avec repli sur le fichier local du site.
-import { rpc } from './api.js?v=202611161750';
-import { store, emit } from './bus.js?v=202611161750';
+import { rpc } from './api.js?v=202611161845';
+import { store, emit } from './bus.js?v=202611161845';
 
 const CACHE = 'au26-catalog';
 let volumes = [];

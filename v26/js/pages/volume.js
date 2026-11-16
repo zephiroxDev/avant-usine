@@ -1,9 +1,9 @@
-import { h, icon } from '../core/dom.js?v=202611161750';
-import { on } from '../core/bus.js?v=202611161750';
-import * as cat from '../core/catalog.js?v=202611161750';
-import * as player from '../core/player.js?v=202611161750';
-import { trackRow, markCurrent } from '../ui/track.js?v=202611161750';
-import { go } from '../router.js?v=202611161750';
+import { h, icon } from '../core/dom.js?v=202611161845';
+import { on } from '../core/bus.js?v=202611161845';
+import * as cat from '../core/catalog.js?v=202611161845';
+import * as player from '../core/player.js?v=202611161845';
+import { trackRow, markCurrent } from '../ui/track.js?v=202611161845';
+import { go } from '../router.js?v=202611161845';
 
 export default function volume(page, { n }) {
   const v = cat.volume(n);

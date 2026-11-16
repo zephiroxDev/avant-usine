@@ -1,13 +1,13 @@
 // En-tête, onglets, mini-lecteur et lecteur plein écran.
-import { h, icon, clock } from '../core/dom.js?v=202611161750';
-import { on } from '../core/bus.js?v=202611161750';
-import * as player from '../core/player.js?v=202611161750';
-import { getLyrics, locate, lineLetters } from '../core/lyrics.js?v=202611161750';
-import { go } from '../router.js?v=202611161750';
-import { favButton, addToPlaylist, markCurrent } from './track.js?v=202611161750';
-import { toast } from './overlay.js?v=202611161750';
-import { account } from '../core/account.js?v=202611161750';
-import { buildFooter } from './footer.js?v=202611161750';
+import { h, icon, clock } from '../core/dom.js?v=202611161845';
+import { on } from '../core/bus.js?v=202611161845';
+import * as player from '../core/player.js?v=202611161845';
+import { getLyrics, locate, lineLetters } from '../core/lyrics.js?v=202611161845';
+import { go } from '../router.js?v=202611161845';
+import { favButton, addToPlaylist, markCurrent } from './track.js?v=202611161845';
+import { toast } from './overlay.js?v=202611161845';
+import { account } from '../core/account.js?v=202611161845';
+import { buildFooter } from './footer.js?v=202611161845';
 
 const TABS = [
   ['accueil', 'Accueil', '/', 'home'],
@@ -26,7 +26,7 @@ export function buildShell(app) {
     e.preventDefault();
     clearTimeout(tapTimer);
     taps++;
-    if (taps === 7) { taps = 0; import('./apply.js?v=202611161750').then((m) => m.openApplication()); return; }
+    if (taps === 7) { taps = 0; import('./apply.js?v=202611161845').then((m) => m.openApplication()); return; }
     tapTimer = setTimeout(() => { taps = 0; go('/compte'); }, 600);
   });
   const top = h('header.top', h('div.wrap',
@@ -137,8 +137,28 @@ export function buildShell(app) {
       h('div.player-top', close, h('div.tablist', { role: 'tablist', 'aria-label': 'Affichage du lecteur' }, viewBtns), h('span')),
       body, foot);
 
-    lyricsList.addEventListener('wheel', () => { follow = false; }, { passive: true });
-    lyricsList.addEventListener('touchmove', () => { follow = false; }, { passive: true });
+    // Défilement à la main : on arrête de suivre et on retire le flou pour pouvoir tout lire.
+    const stopFollow = () => { if (follow) { follow = false; paintBlur(); } };
+    lyricsList.addEventListener('wheel', stopFollow, { passive: true });
+    lyricsList.addEventListener('touchmove', stopFollow, { passive: true });
+
+    // Paroles seules : après 5 s sans action sur l'écran Paroles, l'interface s'efface doucement.
+    // Le premier toucher la fait revenir sans rien déclencher d'autre.
+    let idleTimer = 0;
+    let swallow = false;
+    const armIdle = () => {
+      clearTimeout(idleTimer);
+      if (el.classList.contains('open') && view === 'lyrics') idleTimer = setTimeout(() => el.classList.add('idle'), 5000);
+    };
+    const wake = (e) => {
+      if (el.classList.contains('idle')) {
+        el.classList.remove('idle');
+        if (e.type === 'pointerdown') { swallow = true; setTimeout(() => { swallow = false; }, 700); }
+      }
+      armIdle();
+    };
+    for (const type of ['pointerdown', 'pointermove', 'keydown', 'wheel', 'touchstart']) el.addEventListener(type, wake, { capture: true, passive: true });
+    el.addEventListener('click', (e) => { if (swallow) { swallow = false; e.stopPropagation(); e.preventDefault(); } }, true);
 
     function setView(v) {
       view = v;
@@ -146,8 +166,10 @@ export function buildShell(app) {
       lyricsView.hidden = v !== 'lyrics';
       queueView.hidden = v !== 'queue';
       for (const b of viewBtns) b.setAttribute('aria-selected', String(b.dataset.view === v));
-      if (v === 'lyrics') { follow = true; loadLyrics(); }
+      if (v === 'lyrics') { follow = true; loadLyrics(); paintBlur(); }
       if (v === 'queue') paintQueue();
+      el.classList.remove('idle');
+      armIdle();
       loop();
     }
 
@@ -222,6 +244,7 @@ export function buildShell(app) {
       if (index !== active || force) {
         lineEls.forEach((b, i) => { b.classList.toggle('past', i < index); b.classList.toggle('cur', i === index); if (i !== index) fillLine(b, 0); });
         active = index;
+        paintBlur();
         if (follow && index >= 0) {
           const target = lineEls[index];
           lyricsList.scrollTo({ top: target.offsetTop - lyricsList.clientHeight * 0.38, behavior: force ? 'auto' : 'smooth' });
@@ -233,7 +256,18 @@ export function buildShell(app) {
       }
     }
 
-    /** Remplissage progressif : un dégradé large d'environ 4 lettres avance au rythme du chant.
+    /** Flou des phrases à venir : nettes juste après la ligne en cours, de plus en plus floues plus bas.
+     *  Dessiné avec text-shadow (jamais de filter : bug WebKit avec background-clip:text). */
+    function paintBlur() {
+      lineEls.forEach((b, i) => {
+        const d = i - active;
+        const blur = follow && d >= 2 ? Math.min(4, (d - 1) * 1.1) : 0;
+        if (blur) { b.classList.add('blur'); b.style.setProperty('--blur', blur.toFixed(1) + 'px'); }
+        else b.classList.remove('blur');
+      });
+    }
+
+    /** Remplissage progressif : un dégradé large d'1 lettre avance au rythme du chant.
      *  p = avancement de la ligne (0 → 1). À p = 1, toutes les lettres sont entièrement blanches. */
     const SOFT = 1;
     function fillLine(b, p) {
@@ -289,10 +323,12 @@ export function buildShell(app) {
         document.documentElement.style.overflow = 'hidden';
         paintTrack(); paintState(); loop();
         close.focus({ preventScroll: true });
+        armIdle();
       },
       close(restoreFocus = true) {
         if (!el.classList.contains('open')) return;
-        el.classList.remove('open');
+        el.classList.remove('open', 'idle');
+        clearTimeout(idleTimer);
         el.setAttribute('aria-hidden', 'true'); el.inert = true;
         document.removeEventListener('keydown', onKey);
         document.documentElement.style.overflow = '';
