@@ -1,0 +1,13 @@
+{
+  "version": "26.0",
+  "sourceCommit": "1a48d5dbbafa6d8ef4f34271ea3c3f96d724c1e1",
+  "runId": 43943552142,
+  "physicalIOSVerified": false,
+  "platforms": [
+    "web-pc",
+    "web-mobile",
+    "desktop",
+    "ios",
+    "android"
+  ]
+}
