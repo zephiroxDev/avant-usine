@@ -3,8 +3,8 @@
 // tables tracks / albums / playlists, fichiers découpés et vérifiés par SHA-256) :
 // les musiques déjà importées dans les applis restent disponibles après le passage à la v26.
 // Rien n'est envoyé au serveur.
-import { emit } from './bus.js?v=202611161830';
-import { registerExtra } from './catalog.js?v=202611161830';
+import { emit } from './bus.js?v=202611162100';
+import { registerExtra } from './catalog.js?v=202611162100';
 
 const DB_NAME = 'au-personal-library-18';
 const STORES = ['tracks', 'albums', 'playlists'];

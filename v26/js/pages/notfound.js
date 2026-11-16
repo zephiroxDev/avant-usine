@@ -1,4 +1,4 @@
-import { h } from '../core/dom.js?v=202611161830';
+import { h } from '../core/dom.js?v=202611162100';
 
 export default function notfound(page) {
   page.append(h('div.wrap.page-head',

@@ -1,7 +1,7 @@
 // Pages « À propos » : guide, nouveautés, applications, soutenir, confidentialité.
-import { h, icon } from '../core/dom.js?v=202611161830';
-import { go } from '../router.js?v=202611161830';
-import { toast, sheet } from '../ui/overlay.js?v=202611161830';
+import { h, icon } from '../core/dom.js?v=202611162100';
+import { go } from '../router.js?v=202611162100';
+import { toast, sheet } from '../ui/overlay.js?v=202611162100';
 
 const PAGES = {
   guide: ['Guide', guide],
@@ -60,7 +60,7 @@ function guide(body) {
 }
 
 /* ---------- Nouveautés ---------- */
-const PLATFORMS = [['web-pc', 'Site sur ordinateur'], ['web-mobile', 'Site sur téléphone'], ['ios', 'iPhone et iPad'], ['desktop-pc', 'Windows'], ['android', 'Android (en pause)'], ['ps4', 'PS4 (en pause)']];
+const PLATFORMS = [['web-pc', 'Site sur ordinateur'], ['web-mobile', 'Site sur téléphone'], ['ios', 'iPhone et iPad'], ['desktop-pc', 'Windows'], ['android', 'Android'], ['ps4', 'PS4 (en pause)']];
 async function nouveautes(body) {
   body.append(h('div.loading', h('div.spin', { role: 'status', 'aria-label': 'Chargement' })));
   if (!window.AU_PLATFORM_HISTORIES) await new Promise((ok) => { const s = document.createElement('script'); s.src = '../histories-17v01.js'; s.onload = ok; s.onerror = ok; document.head.append(s); });
@@ -85,11 +85,12 @@ const cmp = (a, b) => { const x = a.split('.').map(Number), y = b.split('.').map
 async function applications(body) {
   const win = h('div.tile', h('h3', { text: 'Windows' }), h('p.note', { text: 'Recherche de la dernière version…' }));
   const ios = h('div.tile', h('h3', { text: 'iPhone et iPad' }), h('p.note', { text: 'Recherche de la dernière version…' }));
+  const and = h('div.tile', h('h3', { text: 'Android' }), h('p.note', { text: 'Recherche de la dernière version…' }));
   const tests = h('div');
   body.append(
-    h('p.lede', { text: 'Avant l’usine existe aussi en application, avec l’import de tes propres fichiers et le mode Immersion.' }),
-    h('div.tiles', win, ios), tests,
-    h('div.tile', h('h3', { text: 'Android et PS4' }), h('p', { text: 'Ces deux versions sont en pause pour le moment. Tes données et ton compte sont conservés.' })));
+    h('p.lede', { text: 'Sur ordinateur, l’application Windows reprend tout le site et garde tes musiques importées pour toujours. Sur téléphone, les applications iPhone et Android sont l’espace de tes musiques importées, avec l’Atelier et le Blind Test.' }),
+    h('div.tiles', win, ios, and), tests,
+    h('div.tile', h('h3', { text: 'PS4' }), h('p', { text: 'La version PS4 est en pause pour le moment. Tes données et ton compte sont conservés.' })));
   let releases = [];
   try { releases = await fetch('https://api.github.com/repos/zephiroxDev/avant-usine/releases?per_page=40').then((r) => (r.ok ? r.json() : [])); } catch { /* hors ligne */ }
   const live = releases.filter((r) => !r.draft);
@@ -105,6 +106,11 @@ async function applications(body) {
   ios.replaceChildren(h('h3', { text: 'iPhone et iPad' }), i ? h('p.note', { text: 'Version ' + i.tag_name.slice(5) }) : h('p.note', { text: 'Version indisponible pour le moment.' }),
     h('p', { text: 'Le fichier n’est pas signé par Apple : installe-le avec SideStore ou AltStore, puis renouvelle-le tous les 7 jours depuis ces applications.' }),
     ipa ? h('div.row-actions', h('a.btn.btn-main.btn-sm', { href: ipa.browser_download_url }, icon('download'), h('span', { text: 'Télécharger l’IPA (' + mb(ipa.size) + ')' }))) : null);
+  const a = live.filter((r) => /^android-v\d/.test(r.tag_name)).sort((x, y) => cmp(y.tag_name.slice(9), x.tag_name.slice(9)))[0];
+  const apk = asset(a, /\.apk$/);
+  and.replaceChildren(h('h3', { text: 'Android' }), a ? h('p.note', { text: 'Version ' + a.tag_name.slice(9) }) : h('p.note', { text: 'Version indisponible pour le moment.' }),
+    h('p', { text: 'Ouvre le fichier sur ton téléphone puis autorise l’installation depuis ton navigateur si Android te le demande. Les mises à jour se proposent ensuite toutes seules.' }),
+    apk ? h('div.row-actions', h('a.btn.btn-main.btn-sm', { href: apk.browser_download_url }, icon('download'), h('span', { text: 'Télécharger l’APK (' + mb(apk.size) + ')' }))) : null);
 
   // Versions de test : affichées seulement si plus récentes que la version publique de la même plateforme.
   try {

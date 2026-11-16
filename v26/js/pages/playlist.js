@@ -1,11 +1,11 @@
-import { h, icon } from '../core/dom.js?v=202611161830';
-import { on } from '../core/bus.js?v=202611161830';
-import * as cat from '../core/catalog.js?v=202611161830';
-import * as lib from '../core/library.js?v=202611161830';
-import * as player from '../core/player.js?v=202611161830';
-import { trackRow, markCurrent } from '../ui/track.js?v=202611161830';
-import { sheet, toast } from '../ui/overlay.js?v=202611161830';
-import { go } from '../router.js?v=202611161830';
+import { h, icon } from '../core/dom.js?v=202611162100';
+import { on } from '../core/bus.js?v=202611162100';
+import * as cat from '../core/catalog.js?v=202611162100';
+import * as lib from '../core/library.js?v=202611162100';
+import * as player from '../core/player.js?v=202611162100';
+import { trackRow, markCurrent } from '../ui/track.js?v=202611162100';
+import { sheet, toast } from '../ui/overlay.js?v=202611162100';
+import { go } from '../router.js?v=202611162100';
 
 export default function playlistPage(page, { id }) {
   const head = h('header.wrap.page-head');

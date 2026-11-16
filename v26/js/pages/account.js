@@ -1,11 +1,11 @@
-import { h, icon } from '../core/dom.js?v=202611161830';
-import { on } from '../core/bus.js?v=202611161830';
-import * as acc from '../core/account.js?v=202611161830';
-import { toast, confirm } from '../ui/overlay.js?v=202611161830';
-import { go } from '../router.js?v=202611161830';
+import { h, icon } from '../core/dom.js?v=202611162100';
+import { on } from '../core/bus.js?v=202611162100';
+import * as acc from '../core/account.js?v=202611162100';
+import { toast, confirm } from '../ui/overlay.js?v=202611162100';
+import { go } from '../router.js?v=202611162100';
 
 export default function accountPage(page, { section }) {
-  if (section) return import('./settings.js?v=202611161830').then((m) => m.default(page, section));
+  if (section) return import('./settings.js?v=202611162100').then((m) => m.default(page, section));
   const body = h('div.wrap');
   page.append(body);
   paint();

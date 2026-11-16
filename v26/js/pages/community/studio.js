@@ -1,13 +1,13 @@
 // Atelier « Synchroniser des paroles » : maintenir et glisser la barre au rythme du chant, phrase par phrase.
 // Produit le format attendu par le serveur (au_private.studio_validate_19) et l'envoie avec au_sync 'submit'.
-import { h, icon, clock } from '../../core/dom.js?v=202611161830';
-import { act } from '../../core/api.js?v=202611161830';
-import * as cat from '../../core/catalog.js?v=202611161830';
-import * as player from '../../core/player.js?v=202611161830';
-import { account } from '../../core/account.js?v=202611161830';
-import { isSung, forgetLyrics } from '../../core/lyrics.js?v=202611161830';
-import { store } from '../../core/bus.js?v=202611161830';
-import { sheet, toast, confirm, closeSheet } from '../../ui/overlay.js?v=202611161830';
+import { h, icon, clock } from '../../core/dom.js?v=202611162100';
+import { act } from '../../core/api.js?v=202611162100';
+import * as cat from '../../core/catalog.js?v=202611162100';
+import * as player from '../../core/player.js?v=202611162100';
+import { account } from '../../core/account.js?v=202611162100';
+import { isSung, forgetLyrics } from '../../core/lyrics.js?v=202611162100';
+import { store } from '../../core/bus.js?v=202611162100';
+import { sheet, toast, confirm, closeSheet } from '../../ui/overlay.js?v=202611162100';
 
 export async function openStudio(initialKey) {
   if (player.isPlaying()) player.el.pause();
@@ -62,7 +62,7 @@ export async function openStudio(initialKey) {
       h('div.row-actions', h('button.btn.btn-main', { type: 'button', text: 'Continuer', onclick: async () => {
         const text = area.value.replace(/\r/g, '').split('\n').map((x) => x.trim()).filter(Boolean).join('\n');
         if (!text) { area.focus(); return; }
-        const local = await import('../../core/local.js?v=202611161830' + new URL(import.meta.url).search);
+        const local = await import('../../core/local.js?v=202611162100' + new URL(import.meta.url).search);
         await local.updateTrack(t.id, { plain: text });
         forgetLyrics(key);
         await load(key);
@@ -257,7 +257,7 @@ export async function openStudio(initialKey) {
     if (isLocal()) {
       // Musique importée : la synchronisation reste sur l'appareil, rien n'est envoyé.
       try {
-        const local = await import('../../core/local.js?v=202611161830' + new URL(import.meta.url).search);
+        const local = await import('../../core/local.js?v=202611162100' + new URL(import.meta.url).search);
         await local.updateTrack(cat.track(key).id, { lyrics: studio_data, plain: studio_data.lines.join('\n') });
         forgetLyrics(key);
         store.del(draftKey);

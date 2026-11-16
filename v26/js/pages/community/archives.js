@@ -1,5 +1,5 @@
-import { h, icon } from '../../core/dom.js?v=202611161830';
-import { listPosts, postCard, composer, deletePost } from './posts.js?v=202611161830';
+import { h, icon } from '../../core/dom.js?v=202611162100';
+import { listPosts, postCard, composer, deletePost } from './posts.js?v=202611162100';
 
 export default function archives(body) {
   const list = h('div', { style: { display: 'grid', gap: '14px' } });
