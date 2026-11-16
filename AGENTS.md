@@ -105,3 +105,10 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - design-25.js `finishing()` : classe `au25-close`, point final des titres de fenêtres, `au25-quiet-focus` (pas d'anneau sans clavier), `au25-no-group` (Soutenir, Recherche… sans onglet surligné), reprise de la musique après le Blind Test, retour playlist depuis Recherche, bloc « Versions de test » en double masqué, titres « (feat. X) » normalisés à l'affichage.
 - Non traités, à reprendre : ordre de « Réglages d'écoute », numérotation de la recherche, site mobile en paysage/tablette, pied de page mobile, « Supprimer mon compte » sur iPhone, deux gabarits de fenêtres.
 - Site 25.2.1, Windows 0.10.4, iOS 2.4.4 (build 51) ; affiche promo-25v04 ; workflows v25-2-1.
+
+## Livraison 26.0 (16 novembre 2026) — « Tout neuf. »
+- Site v26 (refonte complète, `v26/`) en ligne, avec musiques importées (`v26/js/core/local.js`, même base IndexedDB `au-personal-library-18` que les applis), Atelier et Blind Test sur les musiques importées, mode sombre seul. L'ancien site reste à `ancien.html`.
+- Windows 0.11.0 (release v0.11.0) : le site v26 livré « à plat » (`site/v26__js__core__dom.js`…) car le lanceur figé n'accepte que `site/<nom>` ; `product.cjs` reconstitue les dossiers. Mises à jour automatiques conservées.
+- iPhone/iPad 2.5.0 build 52 (ios-v2.5.0, non signé, non vérifié sur appareil physique) et Android 0.4.0 (android-v0.4.0, clé d'origine c56f1a5c…) : v26 en mode « musiques importées uniquement » (`data-au-app`), ios.js / android.js gardés pour les mises à jour. Dynamic Island (paroles en direct) pas encore portée sur la v26.
+- Serveur : `fix_release22_campaigns_ambiguous_alias`, `reopen_android_26_0` (Android rouvert ; seule la PS4 reste en pause).
+- Workflows v26-0-validation / v26-0-promote, android-26-build / android-26-release (les anciens workflows Android restent désactivés par la pause). Affiche promo-26v00 dans Gestion promo. Détails : `work/refonte-26/PROCHAIN-PATCH-26.1.md`.

@@ -2,6 +2,24 @@
   "format": 1,
   "images": [
     {
+      "id": "26v00",
+      "patch": "26.0",
+      "image": "promo-26v00-public.png",
+      "original": "promo-26v00-public.png",
+      "video": "promo-26v00-public.mp4",
+      "animation": "promo-26v00-public.mp4",
+      "title": "Tout neuf.",
+      "platforms": [
+        "web-pc",
+        "web-mobile",
+        "desktop-pc",
+        "ios",
+        "android"
+      ],
+      "filename": "26.0 image.png",
+      "videoFilename": "26.0 video.mp4"
+    },
+    {
       "id": "25v04",
       "patch": "25.2.1",
       "image": "promo-25v04-public.png",

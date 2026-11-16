@@ -63,6 +63,9 @@ Décision du 16 novembre 2026. Permettre l'import de ses propres musiques sur le
 - Numéros : Windows 0.11.0, iPhone/iPad 2.5.0 build 52, releaseId 26.0. Notes : `work/desktop-app/NOTES-26.0.md` + patch-notes.json des deux applis.
 - Affiche « Tout neuf. » : `promo-26v00-public.png` + `.mp4` (6 s, 30 i/s constant), fabriquée par `work/refonte-26/affiche/affiche-26.html` (images enregistrées par serveur-local.ps1 en POST dans `affiche/sortie`, assemblées par ffmpeg d'`outils`). Ajoutée à `work/experience-integration/promo-manifest.json` SEULEMENT : pas encore dans le promo-manifest.json du site en ligne (la promo auto TikTok la publierait avant Android). L'ajouter au site au moment de la sortie.
 - Workflows `v26-0-validation.yml` / `v26-0-promote.yml` / `.github/scripts/promote-v26-0.py` (copies de la 25.2.1, v26 ajoutée aux chemins et aux contrôles). Commit e2d9d09 + 7dc28fd (déclencheur), branche release/v26-0. Validation run 43913301152.
+- Android 0.4.0 : compilé (run 43913822385, commit 6e2882a), téléchargé par Iloan, rangé dans `Avant-l-usine/android-26/` (hors dépôt), signé avec la clé d'origine (certificat c56f1a5c…, identique à 0.3.4), livré en 34 morceaux dans `work/android-app/releases` (commit 37519d7) → workflow `android-26-release.yml` (nouveau : android-release.yml est désactivé par la pause).
+- Windows : 2 échecs de test corrigés (assets.test.cjs lit `ancien.html`). Validation réussie : run 43943552142 (1a48d5d). Promotion lancée par `.github/v26-0-release.json` (commit 2d02fda).
+- Android 0.4.0 PUBLIÉ (release android-v0.4.0, prerelease). Serveur : migration `reopen_android_26_0` (accord d'Iloan) → `au_paused_client_20` ne bloque plus que la PS4 ; test HTTP réel : Android 200, iPhone 200, PS4 503.
 - Ensuite : `.github/v26-0-release.json` {version 26.0, sourceCommit 7dc28fd…, runId 43913301152} poussé sur main → promotion.
 
 ## Nouvelle direction des applis (décision d'Iloan, 16 novembre 2026)
