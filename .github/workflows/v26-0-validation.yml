@@ -1,4 +1,5 @@
 name: V26.0 — validation Windows et iPhone
+# Déclenchée par un envoi sur release/v26-0 (gh absent du PC : pas de lancement manuel).
 run-name: V26.0 — compilation des applications actives
 on:
   push:
