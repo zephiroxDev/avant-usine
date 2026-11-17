@@ -1,7 +1,5 @@
-# Vidéos de jeux pour Hypno Box
+# Vidéos de référence Hypno Box
 
-Dépose ici les vidéos des petits jeux à refaire, nommées dans l'ordre :
-`03.mp4`, `04.mov`… jusqu'à `14`. Les vidéos 01 et 02 sont déjà là.
-
-Sur GitHub : choisis la branche `claude/optimistic-wozniak-nhhr5h`, ouvre ce dossier,
-puis « Add file » › « Upload files ». Limite : 25 Mo par fichier depuis le navigateur.
+Les 14 vidéos de jeux à refaire, allégées (480 px, sans son), numérotées par heure d'enregistrement.
+Les sources de la page sont dans `../hypno-box/` : `base.html` (socle) + `gNN-*.js` (un fichier par jeu),
+assemblés par `python3 build.py` en `index.html`, puis publiés sur l'artifact Hypno Box.
