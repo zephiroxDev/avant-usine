@@ -96,7 +96,7 @@ window.HBP = (() => {
   }
   function counter(g, c, text, y) {          // big count at the top of the arena, like the videos
     const fs = Math.round(Math.min(c.W * 0.07, 30));
-    g.save(); g.font = '800 ' + fs + 'px "Unbounded", system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.save(); g.font = '800 ' + fs + 'px "Unbounded", system-ui, sans-serif'; const w = g.measureText(text).width; if (w > c.W * 0.9) g.font = '800 ' + Math.floor(fs * c.W * 0.9 / w) + 'px "Unbounded", system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
     g.fillStyle = 'rgba(241,238,255,.92)'; g.fillText(text, c.W / 2, y); g.restore();
   }
   // shared ending: a short hold, fade out, history line, new round
