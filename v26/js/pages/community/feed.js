@@ -1,5 +1,5 @@
-import { h, icon } from '../../core/dom.js?v=202611231930';
-import { listPosts, postCard, composer, deletePost } from './posts.js?v=202611231930';
+import { h, icon } from '../../core/dom.js?v=202611232000';
+import { listPosts, postCard, composer, deletePost } from './posts.js?v=202611232000';
 
 export default function feed(body) {
   const list = h('div', { style: { display: 'grid', gap: '14px' } });

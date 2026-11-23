@@ -1,6 +1,6 @@
 // Pied de page commun : pages d'information, réseaux officiels et compteur de visites.
-import { h } from '../core/dom.js?v=202611231930';
-import { rpc } from '../core/api.js?v=202611231930';
+import { h } from '../core/dom.js?v=202611232000';
+import { rpc } from '../core/api.js?v=202611232000';
 
 const OFFICIAL = [
   ['Instagram', 'https://www.instagram.com/juldetp/'], ['TikTok', 'https://www.tiktok.com/@juldetp'], ['Snapchat', 'https://www.snapchat.com/add/jul135city'],

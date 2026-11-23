@@ -1,8 +1,8 @@
-import { h, icon, clock } from '../core/dom.js?v=202611231930';
-import { on } from '../core/bus.js?v=202611231930';
-import * as cat from '../core/catalog.js?v=202611231930';
-import * as player from '../core/player.js?v=202611231930';
-import { go } from '../router.js?v=202611231930';
+import { h, icon, clock } from '../core/dom.js?v=202611232000';
+import { on } from '../core/bus.js?v=202611232000';
+import * as cat from '../core/catalog.js?v=202611232000';
+import * as player from '../core/player.js?v=202611232000';
+import { go } from '../router.js?v=202611232000';
 
 export default function home(page) {
   const vols = cat.available();

@@ -1,9 +1,9 @@
 // Mesures d'écoute et de jeu (membres connectés uniquement), envoyées par lots à au_stats_record_17v01.
-import { rpc } from './api.js?v=202611231930';
-import { account } from './account.js?v=202611231930';
-import { on } from './bus.js?v=202611231930';
-import * as player from './player.js?v=202611231930';
-import { app } from './platform.js?v=202611231930';
+import { rpc } from './api.js?v=202611232000';
+import { account } from './account.js?v=202611232000';
+import { on } from './bus.js?v=202611232000';
+import * as player from './player.js?v=202611232000';
+import { app } from './platform.js?v=202611232000';
 
 const queue = [];
 let timer = 0;
@@ -19,9 +19,9 @@ function touchSession() {
   lastActivity = Date.now();
 }
 
-export function record(kind, details = {}) {
+export function record(kind, details = {}, at = Date.now()) {
   if (!account()) return;
-  queue.push({ id: uuid(), kind, at: new Date().toISOString(), details: { ...details, sessionId, platform } });
+  queue.push({ id: uuid(), kind, at: new Date(at).toISOString(), details: { ...details, sessionId, platform } });
   clearTimeout(timer);
   timer = setTimeout(flush, queue.length >= 20 ? 0 : 15000);
 }
@@ -48,14 +48,15 @@ function emitSegment(to) {
   seg = null;
   // Mêmes garde-fous que l'horloge de l'ancien site : pas de saut, pas de mise en mémoire tampon comptée.
   if (wall <= 0 || wall > 35 || advance <= 0 || advance > wall * rate + 0.5) return;
-  const seconds = Math.round(Math.min(wall, advance / rate) * 100) / 100;
+  // 20 ms de marge : le serveur ignore un segment qui chevauche le précédent, même d'une milliseconde.
+  const seconds = Math.floor(Math.min(wall - 0.02, advance / rate) * 100) / 100;
   if (seconds <= 0) return;
   touchSession();
   record('listening', {
     trackKey: playback.key, volume: playback.volume, playbackId: playback.id, seconds,
     startPosition: Math.round(from.pos * 100) / 100, endPosition: Math.round(to.pos * 100) / 100,
     duration: Number.isFinite(audio.duration) ? audio.duration : undefined,
-  });
+  }, to.wall);
 }
 function endPlayback(completed) {
   emitSegment(lastSample);

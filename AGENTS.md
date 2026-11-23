@@ -123,4 +123,5 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - Serveur (données) : « aux ordres » corrigé dans au_sync_published et au_genius_sync_text (1:1).
 - « Amis ennemis » (1:2) n'a aucunes paroles : erreur 400 « Le créateur doit d'abord enregistrer les paroles » normale.
 - « Mon année » : `songTime`/`volumeTime` du moteur sont des listes [{key,value}] (lues comme objets → « Morceau le plus écouté : 0 », « Volume 0 »). Corrigé dans my-year.js.
-- Version 202611231930 (`bash work/refonte-26/version.sh`). Applis Windows/iPhone/Android non republiées. Pas d'affiche (accord d'Iloan requis, promo auto TikTok).
+- Segments d’écoute datés à leur fin (`record(kind, details, at)`) avec 20 ms de marge : sinon la règle anti-chevauchement du serveur jetait un segment sur deux.
+- Version 202611232000 (`bash work/refonte-26/version.sh`). Applis Windows/iPhone/Android non republiées. Pas d'affiche (accord d'Iloan requis, promo auto TikTok).
