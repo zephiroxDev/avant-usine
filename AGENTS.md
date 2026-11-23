@@ -112,3 +112,14 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - iPhone/iPad 2.5.0 build 52 (ios-v2.5.0, non signé, non vérifié sur appareil physique) et Android 0.4.0 (android-v0.4.0, clé d'origine c56f1a5c…) : v26 en mode « musiques importées uniquement » (`data-au-app`), ios.js / android.js gardés pour les mises à jour. Dynamic Island (paroles en direct) pas encore portée sur la v26.
 - Serveur : `fix_release22_campaigns_ambiguous_alias`, `reopen_android_26_0` (Android rouvert ; seule la PS4 reste en pause).
 - Workflows v26-0-validation / v26-0-promote, android-26-build / android-26-release (les anciens workflows Android restent désactivés par la pause). Affiche promo-26v00 dans Gestion promo. Détails : `work/refonte-26/PROCHAIN-PATCH-26.1.md`.
+
+## Livraison 26.0.2 (23 novembre 2026) — chasse aux bugs (site seulement)
+- `summary-rules-17v01.js` : `parisParts` réutilise un seul `Intl.DateTimeFormat` + mémoire des dates (« Mon année » gelait ~2 min avec 12 000 événements ; résultats identiques, ×48). Copié dans work/experience-integration et work/github-sync-import.
+- `v26/js/core/stats.js` : écoute envoyée en segments de 20 s avec startPosition/endPosition (le serveur refuse > 35 s ou sans positions, et rejette tout le lot : aucune écoute comptée depuis la 26.0) ; track_end, session, login, section, usage rétablis ; plateformes web-pc / web-mobile / desktop-pc comme l'ancien site.
+- Blind Test : minuteur et chrono démarrent à l'événement `playing` (ou `seeked` si l'extrait joue déjà).
+- Playlists : limite de 50 vérifiée à la création (`lib.MAX_PLAYLISTS`) ; Monter/Descendre/Annuler utilisent la position réelle dans `p.keys`.
+- Studio (`pages/studio/tools.js`) : `e.currentTarget` gardé avant `await` (boutons restés grisés).
+- Atelier (`pages/community/studio.js`) : import de `local.js` sans double `?v=` (deuxième instance du module vide → « Morceau introuvable » pour les musiques importées). Concerne surtout les applis : à reporter dans leurs prochaines versions.
+- Serveur (données) : « aux ordres » corrigé dans au_sync_published et au_genius_sync_text (1:1).
+- « Amis ennemis » (1:2) n'a aucunes paroles : erreur 400 « Le créateur doit d'abord enregistrer les paroles » normale.
+- Version 202611231900 (`bash work/refonte-26/version.sh`). Applis Windows/iPhone/Android non republiées. Pas d'affiche (accord d'Iloan requis, promo auto TikTok).

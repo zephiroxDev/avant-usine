@@ -1,11 +1,11 @@
-import { h, icon } from '../core/dom.js?v=202611162100';
-import { on } from '../core/bus.js?v=202611162100';
-import * as cat from '../core/catalog.js?v=202611162100';
-import * as lib from '../core/library.js?v=202611162100';
-import * as player from '../core/player.js?v=202611162100';
-import { trackRow, markCurrent } from '../ui/track.js?v=202611162100';
-import { sheet, toast } from '../ui/overlay.js?v=202611162100';
-import { go } from '../router.js?v=202611162100';
+import { h, icon } from '../core/dom.js?v=202611231900';
+import { on } from '../core/bus.js?v=202611231900';
+import * as cat from '../core/catalog.js?v=202611231900';
+import * as lib from '../core/library.js?v=202611231900';
+import * as player from '../core/player.js?v=202611231900';
+import { trackRow, markCurrent } from '../ui/track.js?v=202611231900';
+import { sheet, toast } from '../ui/overlay.js?v=202611231900';
+import { go } from '../router.js?v=202611231900';
 
 export default function playlistPage(page, { id }) {
   const head = h('header.wrap.page-head');
@@ -32,9 +32,9 @@ export default function playlistPage(page, { id }) {
     list.replaceChildren(h('div.tracks', keys.map((k, i) => trackRow(cat.track(k), {
       cover: true, showVolume: true, context: keys,
       tools: [
-        keys.length > 1 ? h('button.icon-btn', { type: 'button', 'aria-label': 'Monter', disabled: i === 0, style: { opacity: i === 0 ? '.3' : '' }, onclick: () => lib.movePlaylistItem(p.id, i, i - 1) }, icon('up')) : null,
-        keys.length > 1 ? h('button.icon-btn', { type: 'button', 'aria-label': 'Descendre', disabled: i === keys.length - 1, style: { opacity: i === keys.length - 1 ? '.3' : '' }, onclick: () => lib.movePlaylistItem(p.id, i, i + 1) }, icon('down')) : null,
-        h('button.icon-btn', { type: 'button', 'aria-label': 'Retirer de la playlist', onclick: () => { lib.removeFromPlaylist(p.id, k); toast('Morceau retiré.', { label: 'Annuler', run: () => { lib.addToPlaylist(p.id, k); lib.movePlaylistItem(p.id, lib.playlist(p.id).keys.length - 1, i); } }); } }, icon('close')),
+        keys.length > 1 ? h('button.icon-btn', { type: 'button', 'aria-label': 'Monter', disabled: i === 0, style: { opacity: i === 0 ? '.3' : '' }, onclick: () => lib.movePlaylistItem(p.id, p.keys.indexOf(k), p.keys.indexOf(keys[i - 1])) }, icon('up')) : null,
+        keys.length > 1 ? h('button.icon-btn', { type: 'button', 'aria-label': 'Descendre', disabled: i === keys.length - 1, style: { opacity: i === keys.length - 1 ? '.3' : '' }, onclick: () => lib.movePlaylistItem(p.id, p.keys.indexOf(k), p.keys.indexOf(keys[i + 1])) }, icon('down')) : null,
+        h('button.icon-btn', { type: 'button', 'aria-label': 'Retirer de la playlist', onclick: () => { const at = p.keys.indexOf(k); lib.removeFromPlaylist(p.id, k); toast('Morceau retiré.', { label: 'Annuler', run: () => { lib.addToPlaylist(p.id, k); lib.movePlaylistItem(p.id, lib.playlist(p.id).keys.length - 1, at); } }); } }, icon('close')),
       ].filter(Boolean),
     }))));
   }

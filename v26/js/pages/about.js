@@ -1,7 +1,7 @@
 // Pages « À propos » : guide, nouveautés, applications, soutenir, confidentialité.
-import { h, icon } from '../core/dom.js?v=202611162100';
-import { go } from '../router.js?v=202611162100';
-import { toast, sheet } from '../ui/overlay.js?v=202611162100';
+import { h, icon } from '../core/dom.js?v=202611231900';
+import { go } from '../router.js?v=202611231900';
+import { toast, sheet } from '../ui/overlay.js?v=202611231900';
 
 const PAGES = {
   guide: ['Guide', guide],

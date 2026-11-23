@@ -1,11 +1,11 @@
-import { h, icon } from '../../core/dom.js?v=202611162100';
-import { rpc } from '../../core/api.js?v=202611162100';
-import * as cat from '../../core/catalog.js?v=202611162100';
-import * as player from '../../core/player.js?v=202611162100';
-import { account } from '../../core/account.js?v=202611162100';
-import { record } from '../../core/stats.js?v=202611162100';
-import * as local from '../../core/local.js?v=202611162100';
-import { localOnly } from '../../core/platform.js?v=202611162100';
+import { h, icon } from '../../core/dom.js?v=202611231900';
+import { rpc } from '../../core/api.js?v=202611231900';
+import * as cat from '../../core/catalog.js?v=202611231900';
+import * as player from '../../core/player.js?v=202611231900';
+import { account } from '../../core/account.js?v=202611231900';
+import { record } from '../../core/stats.js?v=202611231900';
+import * as local from '../../core/local.js?v=202611231900';
+import { localOnly } from '../../core/platform.js?v=202611231900';
 
 const LEVELS = [
   { id: 'easy', label: 'Tranquille', seconds: 10, hint: '10 secondes d’écoute' },
@@ -111,10 +111,19 @@ export default function blindTest(body, query) {
     const go = () => {
       const d = extract.duration || 120;
       extract.currentTime = Math.max(5, d * (0.2 + Math.random() * 0.4));
-      extract.play().catch(() => {});
       clearTimeout(stopTimer);
-      stopTimer = setTimeout(() => extract.pause(), level.seconds * 1000);
-      if (!game.started) { game.started = performance.now(); tick(); }
+      // Le minuteur et le chrono démarrent quand le son sort vraiment (le chargement après le saut
+      // pouvait durer plus d'1 s : en Expert, on n'entendait parfois presque rien).
+      const begin = () => {
+        if (!game || game.done) { extract.pause(); return; }
+        clearTimeout(stopTimer);
+        stopTimer = setTimeout(() => extract.pause(), level.seconds * 1000);
+        if (!game.started) { game.started = performance.now(); tick(); }
+      };
+      // Extrait déjà en cours (« Réécouter ») : 'playing' ne se redéclenche pas toujours, on attend la fin du saut.
+      const ev = extract.paused ? 'playing' : 'seeked';
+      extract.addEventListener(ev, begin, { once: true });
+      extract.play().catch(() => { extract.removeEventListener(ev, begin); });
       game.view.listen.lastChild.textContent = 'Réécouter l’extrait';
     };
     if (extract.readyState >= 1) go(); else extract.addEventListener('loadedmetadata', go, { once: true });

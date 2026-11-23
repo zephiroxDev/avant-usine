@@ -1,8 +1,8 @@
 // Favoris et playlists. Même format et mêmes clés que l'ancien site :
 // invité → 'au-library-v1', membre → 'au-library-user:<id>' + synchronisation serveur avec révision.
-import { store, emit } from './bus.js?v=202611162100';
-import { rpc } from './api.js?v=202611162100';
-import { track } from './catalog.js?v=202611162100';
+import { store, emit } from './bus.js?v=202611231900';
+import { rpc } from './api.js?v=202611231900';
+import { track } from './catalog.js?v=202611231900';
 
 let userId = null;
 let favorites = new Set();
@@ -99,7 +99,9 @@ export function toggleFavorite(key) {
 
 export const allPlaylists = () => playlists;
 export const playlist = (id) => playlists.find((p) => p.id === id) || null;
+export const MAX_PLAYLISTS = 50; // même limite que clean() : au-delà, les playlists disparaissaient au rechargement
 export function createPlaylist(name) {
+  if (playlists.length >= MAX_PLAYLISTS) return null;
   const p = { id: uid(), name: String(name).trim().slice(0, 80), keys: [] };
   playlists.push(p);
   persist();

@@ -4,9 +4,18 @@
  const rarities=Object.freeze(['Minimal','Basique','Typique','Commun','Atypique','Rare','Très rare','Précieux','Extrêmement rare','Rarissime','Exotique','Extraordinairement rare']);
  const listeningHours=Object.freeze([1,5,15,30,60,120,250,500,900,1500,2200,3000]);
  const newYearMessage='Une nouvelle année commence ! Les compteurs de la nouvelle année repartent à zéro. Votre résumé, vos statistiques et vos trophées de l’année passée restent conservés dans votre historique.';
+ // Un seul formateur (en créer un par appel coûtait ~0,6 ms : « Mon année » gelait ~2 min avec 12 000 événements).
+ let parisFormat=null;const parisCache=new Map();
  function parisParts(instant){
-  const d=new Date(instant);if(!Number.isFinite(d.getTime()))throw new RangeError('Date invalide');
-  return Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(d).filter(p=>p.type!=='literal').map(p=>[p.type,Number(p.value)]));
+  const d=new Date(instant),t=d.getTime();if(!Number.isFinite(t))throw new RangeError('Date invalide');
+  let parts=parisCache.get(t);
+  if(!parts){
+   parisFormat||=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
+   parts=Object.fromEntries(parisFormat.formatToParts(d).filter(p=>p.type!=='literal').map(p=>[p.type,Number(p.value)]));
+   if(parisCache.size>=50000)parisCache.clear();
+   parisCache.set(t,parts);
+  }
+  return {...parts};
  }
  function parisMidnight(year,month=1,day=1){
   let value=Date.UTC(year,month-1,day);

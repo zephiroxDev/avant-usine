@@ -1,13 +1,13 @@
-import { h, icon } from '../core/dom.js?v=202611162100';
-import { on } from '../core/bus.js?v=202611162100';
-import * as cat from '../core/catalog.js?v=202611162100';
-import * as lib from '../core/library.js?v=202611162100';
-import * as player from '../core/player.js?v=202611162100';
-import { account } from '../core/account.js?v=202611162100';
-import { trackRow, markCurrent } from '../ui/track.js?v=202611162100';
-import { sheet, toast } from '../ui/overlay.js?v=202611162100';
-import { go } from '../router.js?v=202611162100';
-import { localOnly } from '../core/platform.js?v=202611162100';
+import { h, icon } from '../core/dom.js?v=202611231900';
+import { on } from '../core/bus.js?v=202611231900';
+import * as cat from '../core/catalog.js?v=202611231900';
+import * as lib from '../core/library.js?v=202611231900';
+import * as player from '../core/player.js?v=202611231900';
+import { account } from '../core/account.js?v=202611231900';
+import { trackRow, markCurrent } from '../ui/track.js?v=202611231900';
+import { sheet, toast } from '../ui/overlay.js?v=202611231900';
+import { go } from '../router.js?v=202611231900';
+import { localOnly } from '../core/platform.js?v=202611231900';
 
 const SECTIONS = [
   ['favoris', 'Favoris'],
@@ -31,14 +31,14 @@ export default function music(page, { section = 'favoris' }) {
   const paint = () => {
     if (section === 'favoris') return paintFavorites();
     if (section === 'playlists') return paintPlaylists();
-    if (section === 'mon-annee') return import('./my-year.js?v=202611162100').then((m) => m.default(body));
+    if (section === 'mon-annee') return import('./my-year.js?v=202611231900').then((m) => m.default(body));
     if (section === 'sur-cet-appareil') {
       // Musiques importées, puis (hors applis téléphone) « Emporter un volume ».
       const mine = h('div');
       const take = h('div', { style: { marginTop: '40px', paddingTop: '28px', borderTop: '1px solid var(--line)' } });
       body.replaceChildren(mine, localOnly ? '' : take);
-      import('./imported.js?v=202611162100').then((m) => { const off = m.default(mine); offs.push(off); });
-      if (!localOnly) import('./device.js?v=202611162100').then((m) => { const off = m.default(take); offs.push(off); });
+      import('./imported.js?v=202611231900').then((m) => { const off = m.default(mine); offs.push(off); });
+      if (!localOnly) import('./device.js?v=202611231900').then((m) => { const off = m.default(take); offs.push(off); });
       return;
     }
   };
@@ -80,7 +80,7 @@ export default function music(page, { section = 'favoris' }) {
   function newPlaylist() {
     sheet('Nouvelle playlist', (b, s) => {
       const input = h('input.input', { type: 'text', maxlength: '80', placeholder: 'Ex. : Mes sons de l’été', autocomplete: 'off', spellcheck: 'false' });
-      b.append(h('form.field', { onsubmit: (e) => { e.preventDefault(); const name = input.value.trim(); if (!name) { input.focus(); return; } const p = lib.createPlaylist(name); s.close(); toast('Playlist créée.'); go('/playlist/' + p.id); } },
+      b.append(h('form.field', { onsubmit: (e) => { e.preventDefault(); const name = input.value.trim(); if (!name) { input.focus(); return; } const p = lib.createPlaylist(name); s.close(); if (!p) { toast('Tu as déjà ' + lib.MAX_PLAYLISTS + ' playlists : supprimes-en une pour en créer une nouvelle.'); return; } toast('Playlist créée.'); go('/playlist/' + p.id); } },
         h('label.field', h('span', { text: 'Nom' }), input),
         h('div.row-actions', h('button.btn.btn-main', { type: 'submit', text: 'Créer' }))));
     });

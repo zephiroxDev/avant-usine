@@ -1,9 +1,9 @@
 // Ligne de morceau réutilisée partout + actions communes (favori, playlist).
-import { h, icon } from '../core/dom.js?v=202611162100';
-import * as player from '../core/player.js?v=202611162100';
-import * as lib from '../core/library.js?v=202611162100';
-import { sheet, toast } from './overlay.js?v=202611162100';
-import { go } from '../router.js?v=202611162100';
+import { h, icon } from '../core/dom.js?v=202611231900';
+import * as player from '../core/player.js?v=202611231900';
+import * as lib from '../core/library.js?v=202611231900';
+import { sheet, toast } from './overlay.js?v=202611231900';
+import { go } from '../router.js?v=202611231900';
 
 export function favButton(t, cls = '.icon-btn') {
   const b = h('button' + cls, { type: 'button' });
@@ -33,7 +33,7 @@ export function addToPlaylist(t, preferred) {
         h('span', { text: p.name }), h('small', { text: has ? 'Déjà dedans' : p.keys.length + ' morceau' + (p.keys.length > 1 ? 'x' : '') })));
     }
     const input = h('input.input', { type: 'text', maxlength: '80', placeholder: 'Nom de la playlist', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Nom de la nouvelle playlist' });
-    const form = h('form.field', { onsubmit: (e) => { e.preventDefault(); const name = input.value.trim(); if (!name) { input.focus(); return; } const p = lib.createPlaylist(name); lib.addToPlaylist(p.id, t.key); s.close(); toast(`Playlist « ${p.name} » créée.`); } },
+    const form = h('form.field', { onsubmit: (e) => { e.preventDefault(); const name = input.value.trim(); if (!name) { input.focus(); return; } const p = lib.createPlaylist(name); s.close(); if (!p) { toast('Tu as déjà ' + lib.MAX_PLAYLISTS + ' playlists : supprimes-en une pour en créer une nouvelle.'); return; } lib.addToPlaylist(p.id, t.key); toast(`Playlist « ${p.name} » créée.`); } },
       h('span', { text: 'Nouvelle playlist' }), input, h('button.btn.btn-main', { type: 'submit', text: 'Créer et ajouter' }));
     body.append(form);
   });

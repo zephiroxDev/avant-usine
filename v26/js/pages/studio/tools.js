@@ -1,8 +1,8 @@
 // Outils du Studio. Chaque fonction reçoit le conteneur de l'outil et le remplit.
-import { h } from '../../core/dom.js?v=202611162100';
-import { act, rpc, client } from '../../core/api.js?v=202611162100';
-import * as cat from '../../core/catalog.js?v=202611162100';
-import { sheet, toast, confirm } from '../../ui/overlay.js?v=202611162100';
+import { h } from '../../core/dom.js?v=202611231900';
+import { act, rpc, client } from '../../core/api.js?v=202611231900';
+import * as cat from '../../core/catalog.js?v=202611231900';
+import { sheet, toast, confirm } from '../../ui/overlay.js?v=202611231900';
 
 const when = (iso) => { try { return new Date(iso).toLocaleString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch { return ''; } };
 const title = (key) => cat.track(key)?.title || key || 'Morceau';
@@ -12,7 +12,7 @@ const row = (main, sub, ...actions) => h('div.choice', { style: { alignItems: 'f
   h('span', { style: { display: 'grid', gap: '4px', minWidth: '0', flex: '1 1 260px' } }, h('span', { text: main }), sub ? h('small', { style: { whiteSpace: 'pre-line' }, text: sub }) : null),
   actions.length ? h('span.row-actions', { style: { flex: 'none' } }, actions) : null);
 // Bouton à contour : visible sur le fond des cartes (le fond « soft » s'y confondait).
-const btn = (text, run, kind = '.btn-line') => h('button.btn.btn-sm' + kind, { type: 'button', text, onclick: async (e) => { e.currentTarget.disabled = true; try { await run(); } catch (err) { toast(err.message); } finally { e.currentTarget.disabled = false; } } });
+const btn = (text, run, kind = '.btn-line') => h('button.btn.btn-sm' + kind, { type: 'button', text, onclick: async (e) => { const b = e.currentTarget; b.disabled = true; try { await run(); } catch (err) { toast(err.message); } finally { b.disabled = false; } } });
 function ask(titleText, label, { ok = 'Valider', value = '', multiline = true, required = false } = {}) {
   return new Promise((resolve) => {
     let done = false;
