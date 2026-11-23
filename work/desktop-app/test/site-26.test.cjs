@@ -3,13 +3,23 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 const {createWindow}=require('../product.cjs');
 
-async function serveFrom(root){
+async function serveFrom(root,loadResult=()=>Promise.resolve()){
  let serve;
- class Window{constructor(){this.webContents={setWindowOpenHandler(){},on(){}};}setIcon(){}on(){}once(){}loadURL(){return Promise.resolve();}}
+ class Window{constructor(){this.webContents={setWindowOpenHandler(){},on(){}};}setIcon(){}on(){}once(){}loadURL(){return loadResult();}}
  const electron={BrowserWindow:Window,Menu:{setApplicationMenu(){}},ipcMain:{removeHandler(){},handle(){}},app:{getVersion:()=>require('../package.json').version,getPath:()=>path.join(root,'userdata')},protocol:{unhandle(){},handle(_s,fn){serve=fn;}},net:{fetch:async url=>new Response('servi:'+url)},shell:{openExternal(){}},session:{defaultSession:{setPermissionRequestHandler(){}}}};
  await createWindow({electron,root,onReady(){}});
  return serve;
 }
+
+// 0.11.0 : la redirection de index.html vers v26/ interrompt le premier chargement (ERR_ABORTED, -3) ;
+// le lanceur prenait ce rejet pour une panne et affichait « Impossible d'ouvrir l'appli ».
+test('la redirection vers la v26 ne fait plus échouer l’ouverture de la fenêtre',async()=>{
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'au-site26-'));fs.writeFileSync(path.join(root,'index.html'),'x');
+ const aborted=Object.assign(new Error("ERR_ABORTED (-3) loading 'avantusine://local/'"),{code:'ERR_ABORTED',errno:-3});
+ await assert.doesNotReject(serveFrom(root,()=>Promise.reject(aborted)));
+ const broken=Object.assign(new Error('ERR_FILE_NOT_FOUND (-6)'),{code:'ERR_FILE_NOT_FOUND',errno:-6});
+ await assert.rejects(serveFrom(root,()=>Promise.reject(broken)),/ERR_FILE_NOT_FOUND/);
+});
 
 test('les adresses de la v26 retrouvent leurs fichiers à plat',async()=>{
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'au-site26-'));

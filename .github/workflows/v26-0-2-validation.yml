@@ -1,0 +1,81 @@
+name: V26.0.2 — validation Windows
+# Déclenchée par un envoi sur release/v26-0-2 (gh absent du PC : pas de lancement manuel).
+run-name: V26.0.2 — compilation de l’appli Windows 0.11.1
+on:
+  push:
+    branches: [release/v26-0-2]
+    paths: ['v26/**', 'index.html', 'work/experience-integration/**', 'work/desktop-app/**', '.github/workflows/v26-0-2-validation.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: v26-0-2-validation
+  cancel-in-progress: true
+jobs:
+  server-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: isolated-test-password
+          POSTGRES_DB: adjustments_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Verify migration and publication semantics on temporary PostgreSQL
+        env:
+          PGPASSWORD: isolated-test-password
+        working-directory: work/experience-ios/test/minor-adjustments
+        run: |
+          set -o pipefail
+          for script in fixture.sql original.sql migration.sql tests.sql; do
+            psql -h localhost -U postgres -d adjustments_test -v ON_ERROR_STOP=1 -f "$script" | tee -a postgres-tests.log
+          done
+          psql -h localhost -U postgres -d adjustments_test -v ON_ERROR_STOP=1 -f ../visitor-counter/schema.sql | tee -a postgres-tests.log
+          psql -h localhost -U postgres -d adjustments_test -v ON_ERROR_STOP=1 -f ../visitor-counter/tests.sql | tee -a postgres-tests.log
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: minor-adjustments-server-tests
+          path: work/experience-ios/test/minor-adjustments/postgres-tests.log
+  windows:
+    needs: server-tests
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: npm install --global pnpm@11.25.0
+      - run: python -m pip install Pillow
+      - name: Build and verify Windows package and incremental update
+        shell: pwsh
+        run: ./work/desktop-app/scripts/release.ps1
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows-v26-0-2-candidate
+          path: |
+            outputs/application-windows/**
+            outputs/application-windows-*/**
+            outputs/avant-usine-web-*
+            outputs/avant-usine-sources-*
+            outputs/livraison-*
+            work/desktop-app/update-assets/
+          if-no-files-found: error
+          retention-days: 7

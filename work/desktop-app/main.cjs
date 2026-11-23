@@ -18,7 +18,7 @@ else {
   window.webContents.on('will-navigate',(event,value)=>{const url=typeof value==='string'?value:value.url;const target=new URL(url);if(target.protocol!=='avantusine:'||target.hostname!=='local'){event.preventDefault();external(url);}});
   window.on('page-title-updated',event=>event.preventDefault());
   window.once('ready-to-show',()=>{window.show();checkForUpdates({net,dialog,shell,window,current:app.getVersion()});});
-  window.loadURL('avantusine://local/').catch(error=>dialog.showErrorBox('Avant l’Usine','Impossible d’ouvrir l’interface locale : '+error.message));
+  window.loadURL('avantusine://local/').catch(error=>error?.code==='ERR_ABORTED'||dialog.showErrorBox('Avant l’Usine','Impossible d’ouvrir l’interface locale : '+error.message));
   app.on('activate',()=>{if(window)window.show();});
  }).catch(error=>dialog.showErrorBox('Avant l’Usine',error.message));
  app.on('window-all-closed',()=>app.quit());

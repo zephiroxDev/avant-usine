@@ -41,5 +41,5 @@ exports.createWindow=async({electron,root,onReady})=>{
  window.webContents.setWindowOpenHandler(({url})=>{external(url);return {action:'deny'};});
  window.webContents.on('will-navigate',(event,value)=>{const url=new URL(typeof value==='string'?value:value.url);if(url.protocol!=='avantusine:'||url.hostname!=='local'){event.preventDefault();external(url.href);}});
  window.on('page-title-updated',event=>event.preventDefault());window.once('ready-to-show',()=>{window.show();setImmediate(()=>onReady(window));});
- await window.loadURL('avantusine://local/');return window;
+ /* 0.11.1 : index.html redirige aussitôt vers v26/ (location.replace). Electron rejette alors loadURL avec ERR_ABORTED alors que la page s'ouvre bien : le lanceur croyait à une panne (« Impossible d'ouvrir l'appli »). */ await window.loadURL('avantusine://local/').catch(error=>{if(error?.code!=='ERR_ABORTED'&&error?.errno!==-3)throw error;});return window;
 };

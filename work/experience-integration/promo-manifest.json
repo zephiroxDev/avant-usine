@@ -2,6 +2,22 @@
   "format": 1,
   "images": [
     {
+      "id": "26v02",
+      "patch": "26.0.2",
+      "image": "promo-26v02-public.png",
+      "original": "promo-26v02-public.png",
+      "video": "promo-26v02-public.mp4",
+      "animation": "promo-26v02-public.mp4",
+      "title": "Ça repart.",
+      "platforms": [
+        "web-pc",
+        "web-mobile",
+        "desktop-pc"
+      ],
+      "filename": "26.0.2 image.png",
+      "videoFilename": "26.0.2 video.mp4"
+    },
+    {
       "id": "26v00",
       "patch": "26.0",
       "image": "promo-26v00-public.png",
