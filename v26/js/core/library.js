@@ -1,8 +1,8 @@
 // Favoris et playlists. Même format et mêmes clés que l'ancien site :
 // invité → 'au-library-v1', membre → 'au-library-user:<id>' + synchronisation serveur avec révision.
-import { store, emit } from './bus.js?v=202611231900';
-import { rpc } from './api.js?v=202611231900';
-import { track } from './catalog.js?v=202611231900';
+import { store, emit } from './bus.js?v=202611231930';
+import { rpc } from './api.js?v=202611231930';
+import { track } from './catalog.js?v=202611231930';
 
 let userId = null;
 let favorites = new Set();

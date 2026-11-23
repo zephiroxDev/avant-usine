@@ -1,11 +1,11 @@
-import { h, icon } from '../../core/dom.js?v=202611231900';
-import { rpc } from '../../core/api.js?v=202611231900';
-import * as cat from '../../core/catalog.js?v=202611231900';
-import * as player from '../../core/player.js?v=202611231900';
-import { account } from '../../core/account.js?v=202611231900';
-import { record } from '../../core/stats.js?v=202611231900';
-import * as local from '../../core/local.js?v=202611231900';
-import { localOnly } from '../../core/platform.js?v=202611231900';
+import { h, icon } from '../../core/dom.js?v=202611231930';
+import { rpc } from '../../core/api.js?v=202611231930';
+import * as cat from '../../core/catalog.js?v=202611231930';
+import * as player from '../../core/player.js?v=202611231930';
+import { account } from '../../core/account.js?v=202611231930';
+import { record } from '../../core/stats.js?v=202611231930';
+import * as local from '../../core/local.js?v=202611231930';
+import { localOnly } from '../../core/platform.js?v=202611231930';
 
 const LEVELS = [
   { id: 'easy', label: 'Tranquille', seconds: 10, hint: '10 secondes d’écoute' },

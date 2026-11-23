@@ -1,8 +1,8 @@
-import { h, icon } from '../../core/dom.js?v=202611231900';
-import { act } from '../../core/api.js?v=202611231900';
-import { account } from '../../core/account.js?v=202611231900';
-import { sheet } from '../../ui/overlay.js?v=202611231900';
-import { go } from '../../router.js?v=202611231900';
+import { h, icon } from '../../core/dom.js?v=202611231930';
+import { act } from '../../core/api.js?v=202611231930';
+import { account } from '../../core/account.js?v=202611231930';
+import { sheet } from '../../ui/overlay.js?v=202611231930';
+import { go } from '../../router.js?v=202611231930';
 
 export function avatarOf(p, size = 44) {
   const s = { width: size + 'px', height: size + 'px', flex: 'none' };

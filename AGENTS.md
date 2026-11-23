@@ -122,4 +122,5 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - Atelier (`pages/community/studio.js`) : import de `local.js` sans double `?v=` (deuxième instance du module vide → « Morceau introuvable » pour les musiques importées). Concerne surtout les applis : à reporter dans leurs prochaines versions.
 - Serveur (données) : « aux ordres » corrigé dans au_sync_published et au_genius_sync_text (1:1).
 - « Amis ennemis » (1:2) n'a aucunes paroles : erreur 400 « Le créateur doit d'abord enregistrer les paroles » normale.
-- Version 202611231900 (`bash work/refonte-26/version.sh`). Applis Windows/iPhone/Android non republiées. Pas d'affiche (accord d'Iloan requis, promo auto TikTok).
+- « Mon année » : `songTime`/`volumeTime` du moteur sont des listes [{key,value}] (lues comme objets → « Morceau le plus écouté : 0 », « Volume 0 »). Corrigé dans my-year.js.
+- Version 202611231930 (`bash work/refonte-26/version.sh`). Applis Windows/iPhone/Android non republiées. Pas d'affiche (accord d'Iloan requis, promo auto TikTok).

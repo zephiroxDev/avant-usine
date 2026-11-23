@@ -1,7 +1,7 @@
 // Aiguillage par adresse (#/volumes, #/morceau/1:1…). Une seule page vivante à la fois :
 // la précédente est retirée du document et ses écouteurs sont libérés.
-import { h } from './core/dom.js?v=202611231900';
-import { emit } from './core/bus.js?v=202611231900';
+import { h } from './core/dom.js?v=202611231930';
+import { emit } from './core/bus.js?v=202611231930';
 
 const routes = [];      // { re, keys, load, tab }
 let host = null;

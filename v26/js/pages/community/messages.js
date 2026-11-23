@@ -1,10 +1,10 @@
-import { h, icon } from '../../core/dom.js?v=202611231900';
-import { act } from '../../core/api.js?v=202611231900';
-import { account } from '../../core/account.js?v=202611231900';
-import { on } from '../../core/bus.js?v=202611231900';
-import { toast, confirm } from '../../ui/overlay.js?v=202611231900';
-import { avatarOf, openProfile } from './membres.js?v=202611231900';
-import { go, setQuery } from '../../router.js?v=202611231900';
+import { h, icon } from '../../core/dom.js?v=202611231930';
+import { act } from '../../core/api.js?v=202611231930';
+import { account } from '../../core/account.js?v=202611231930';
+import { on } from '../../core/bus.js?v=202611231930';
+import { toast, confirm } from '../../ui/overlay.js?v=202611231930';
+import { avatarOf, openProfile } from './membres.js?v=202611231930';
+import { go, setQuery } from '../../router.js?v=202611231930';
 
 const when = (iso) => { try { const d = new Date(iso); const today = new Date().toDateString() === d.toDateString(); return today ? d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }); } catch { return ''; } };
 
@@ -83,7 +83,7 @@ export default function messages(body, query) {
   async function blocked() {
     try {
       const rows = (await act('au_social', 'blocked')) || [];
-      const { sheet } = await import('../../ui/overlay.js?v=202611231900');
+      const { sheet } = await import('../../ui/overlay.js?v=202611231930');
       sheet('Comptes bloqués', (b, s) => {
         if (!rows.length) b.append(h('p.empty', { text: 'Tu n’as bloqué personne.' }));
         for (const p of rows) b.append(h('div.choice', h('span', { text: p.nickname || 'Membre' }), h('button.btn.btn-soft.btn-sm', { type: 'button', text: 'Débloquer', onclick: async () => { try { await act('au_social', 'block', { peer: p.id, blocked: false }); toast('Membre débloqué.'); s.close(); } catch (e) { toast(e.message); } } })));

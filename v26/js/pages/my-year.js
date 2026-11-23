@@ -1,9 +1,9 @@
 // « Mon année » : statistiques (moteur et libellés de l'ancien site réutilisés), résumés et trophées.
 // Chaque rubrique n'est construite qu'à son ouverture : l'ancienne page fabriquait 12 000 éléments d'un coup.
-import { h } from '../core/dom.js?v=202611231900';
-import { rpc } from '../core/api.js?v=202611231900';
-import { account } from '../core/account.js?v=202611231900';
-import * as cat from '../core/catalog.js?v=202611231900';
+import { h } from '../core/dom.js?v=202611231930';
+import { rpc } from '../core/api.js?v=202611231930';
+import { account } from '../core/account.js?v=202611231930';
+import * as cat from '../core/catalog.js?v=202611231930';
 
 let enginePromise = null;
 function loadEngine() {
@@ -89,8 +89,11 @@ export default function myYear(body) {
 
   function paintStats(r, metrics) {
     const v = r.values || {};
-    const songs = Object.entries(r.songTime || {}).sort((a, b) => b[1] - a[1]).slice(0, 5);
-    const volumes = Object.entries(r.volumeTime || {}).sort((a, b) => b[1] - a[1]);
+    // Le moteur renvoie des listes [{ key, value }] (et non des objets { clé: valeur }) : lues comme des
+    // objets, elles donnaient « Morceau le plus écouté : 0 » et « Volume 0 ».
+    const pairs = (x) => (Array.isArray(x) ? x.map((r) => [r.key, Number(r.value) || 0]) : Object.entries(x || {}));
+    const songs = pairs(r.songTime).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const volumes = pairs(r.volumeTime).sort((a, b) => b[1] - a[1]);
     const card = (title, value, note) => h('div.tile', { style: { gap: '4px' } }, h('p.note', { text: title }), h('p', { style: { fontFamily: 'var(--display)', fontWeight: '600', fontSize: '30px', lineHeight: '1.15' }, text: value }), note ? h('p.note', { text: note }) : null);
     stats.replaceChildren(
       r.coverageComplete ? null : h('p.note', { text: 'Suivi disponible depuis le ' + (r.trackingSince ? new Date(r.trackingSince).toLocaleDateString('fr-FR') : '—') + ' : la période n’est que partiellement couverte.' }),
@@ -122,7 +125,7 @@ export default function myYear(body) {
   }
 
   async function openSummary(s) {
-    const { sheet } = await import('../ui/overlay.js?v=202611231900');
+    const { sheet } = await import('../ui/overlay.js?v=202611231930');
     sheet(s.kind === 'annual' ? 'Résumé ' + s.year : 'Mon résumé', async (b) => {
       b.append(h('div.loading', h('div.spin', { role: 'status', 'aria-label': 'Chargement' })));
       try {
