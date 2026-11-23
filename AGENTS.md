@@ -125,3 +125,9 @@ Dynamic Island toujours non validée physiquement : bêta31 encore figée ; essa
 - « Mon année » : `songTime`/`volumeTime` du moteur sont des listes [{key,value}] (lues comme objets → « Morceau le plus écouté : 0 », « Volume 0 »). Corrigé dans my-year.js.
 - Segments d’écoute datés à leur fin (`record(kind, details, at)`) avec 20 ms de marge : sinon la règle anti-chevauchement du serveur jetait un segment sur deux.
 - Version 202611232000 (`bash work/refonte-26/version.sh`). Applis Windows/iPhone/Android non republiées. Pas d'affiche (accord d'Iloan requis, promo auto TikTok).
+
+## Livraison 26.0.2 Windows 0.11.1 (23 novembre 2026) — l'appli s'ouvre de nouveau
+- Cause : depuis la 0.11.0, `site/index.html` (page de redirection) envoie aussitôt vers `v26/` par `location.replace`. Electron rejette alors `loadURL('avantusine://local/')` avec ERR_ABORTED (-3) alors que la page s'ouvre ; `bootstrap.cjs` prenait ce rejet pour une panne (« Impossible d'ouvrir l'appli »). Les mises à jour automatiques ne démarrant qu'une fois la fenêtre prête, les 0.11.0 ne pouvaient pas se réparer seules : réinstallation manuelle de la 0.11.1 nécessaire.
+- Correctif : `product.cjs` ignore ERR_ABORTED sur le premier chargement (toute autre erreur reste remontée) ; `main.cjs` idem. Test `work/desktop-app/test/site-26.test.cjs` (« la redirection vers la v26 ne fait plus échouer l'ouverture »).
+- Validation run 45244612278 (release/v26-0-2, 1fb1509, Windows seul) ; promotion par `.github/v26-0-2-release.json` → release v0.11.1 (Installation, Portable, manifest, 179 fichiers au-*.bin). Vérifié sur le PC d'Iloan : installée par-dessus la 0.11.0, l'appli s'ouvre sur la v26, compte conservé.
+- Affiche promo-26v02 (« Ça repart. ») ajoutée seulement à `work/experience-integration/promo-manifest.json` (pas au manifeste en ligne : pas de publication TikTok sans accord). Bonus « Réglages › Application Windows » non fait.
