@@ -16,7 +16,9 @@
       if (x + 1 < cols && y + 1 < rows) { bonds.push([id(x, y), id(x + 1, y + 1), CELL * Math.SQRT2, 0.4]); bonds.push([id(x + 1, y), id(x, y + 1), CELL * Math.SQRT2, 0.4]); }
     }
     const m = MASSES[st.round % MASSES.length], br = 0.034 * (1 + Math.log10(m) * 0.22);
-    Object.assign(st, { p, bonds, alive: new Uint8Array(bonds.length).fill(1), broken: 0, m, ball: { x: 0.92, y: -0.1, px: 0.92, py: -0.1, r: br, rot: 0 }, rt: 0, hit: false, still: 0, label: 1.4, dust: [] });
+    const hb = new Int32Array(cap).fill(-1), vb = new Int32Array(cap).fill(-1);
+    bonds.forEach(([i, j, L, w], k) => { if (j === i + 1 && w < 1) hb[i] = k; else if (j === i + cols) vb[i] = k; });
+    Object.assign(st, { hb, vb, ang: new Float32Array(cap), p, bonds, alive: new Uint8Array(bonds.length).fill(1), broken: 0, m, ball: { x: 0.92, y: -0.1, px: 0.92, py: -0.1, r: br, rot: 0 }, rt: 0, hit: false, still: 0, label: 1.4, dust: [] });
   }
   function solve(c, st, h) {
     const p = st.p, X = p.X, Y = p.Y, B = st.bonds, al = st.alive, brk = c.opt.strength || 0.07;
@@ -34,6 +36,17 @@
       for (const q of RAMP) P.capsule(p, i, q[0], q[1], q[2], q[3], r + 0.012);
     }
   }
+  function contacts(c, st) {
+    const b = st.ball;
+    // ball against blocks: the heavier the ball, the more the blocks give way
+    const p = st.p, wb = 1 / (st.m * 0.25), wp = 1, rr = b.r + CELL / 2;
+    for (let i = 0; i < p.n; i++) {
+      const dx = p.X[i] - b.x, dy = p.Y[i] - b.y, d2 = dx * dx + dy * dy; if (d2 >= rr * rr || d2 < 1e-12) continue;
+      const d = Math.sqrt(d2), o = (rr - d) / d, s = wb + wp;
+      p.X[i] += dx * o * wp / s; p.Y[i] += dy * o * wp / s; b.x -= dx * o * wb / s; b.y -= dy * o * wb / s;
+      if (!st.hit) { st.hit = true; c.note(c.scale(2), 1, 1.6); for (let k = 0; k < 20; k++) st.dust.push({ x: b.x - b.r, y: b.y, vx: -Math.random() * 0.5, vy: -Math.random() * 0.5, t: 0 }); }
+    }
+  }
   function ballStep(c, st, h) {
     const b = st.ball, vx = (b.x - b.px) * 0.999, vy = (b.y - b.py) * 0.999;
     b.px = b.x; b.py = b.y; b.x += vx; b.y += vy + 2.4 * h * h;
@@ -43,14 +56,7 @@
       if (d < rr && d > 1e-9) { const nx = qx / d, ny = qy / d; b.x += nx * (rr - d); b.y += ny * (rr - d); let wx = b.x - b.px, wy = b.y - b.py; const vn = wx * nx + wy * ny; if (vn < 0) { wx -= 1.15 * vn * nx; wy -= 1.15 * vn * ny; b.px = b.x - wx; b.py = b.y - wy; } }
     }
     if (b.y > GROUND - b.r) { b.y = GROUND - b.r; const wx = b.x - b.px; b.px = b.x - wx * 0.995; if (b.py > b.y) b.py = b.y + (b.py - b.y) * -0.2; }
-    // ball against blocks: the heavier the ball, the more the blocks give way
-    const p = st.p, wb = 1 / (st.m * 0.25), wp = 1, rr = b.r + CELL / 2;
-    for (let i = 0; i < p.n; i++) {
-      const dx = p.X[i] - b.x, dy = p.Y[i] - b.y, d2 = dx * dx + dy * dy; if (d2 >= rr * rr || d2 < 1e-12) continue;
-      const d = Math.sqrt(d2), o = (rr - d) / d, s = wb + wp;
-      p.X[i] += dx * o * wp / s; p.Y[i] += dy * o * wp / s; b.x -= dx * o * wb / s; b.y -= dy * o * wb / s;
-      if (!st.hit) { st.hit = true; c.note(c.scale(2), 1, 1.6); for (let k = 0; k < 20; k++) st.dust.push({ x: b.x - b.r, y: b.y, vx: -Math.random() * 0.5, vy: -Math.random() * 0.5, t: 0 }); }
-    }
+    contacts(c, st);
     b.rot += (b.x - b.px) / b.r;
   }
   function step(c, dt) {
@@ -59,7 +65,7 @@
     for (let s = 0; s < sub; s++) {
       P.integrate(p, h, 0.9, () => [0, 2.4], 4);
       ballStep(c, st, h);
-      for (let it = 0; it < 4; it++) { solve(c, st, h); P.collide(p, CELL / 2, -0.1, -0.2, 1.5, 1.8, 0.8); ground(st); }
+      for (let it = 0; it < 4; it++) { solve(c, st, h); P.collide(p, CELL / 2, -0.1, -0.2, 1.5, 1.8, 0.8); contacts(c, st); ground(st); }
     }
     for (const d of st.dust) { d.t += dt; d.x += d.vx * dt; d.y += d.vy * dt; d.vy += 0.6 * dt; } st.dust = st.dust.filter(d => d.t < 1.5);
     const b = st.ball, sp = Math.hypot(b.x - b.px, b.y - b.py) / h;
@@ -79,8 +85,18 @@
     g.strokeStyle = 'rgba(214,206,255,' + (0.4 + beat * 0.4).toFixed(2) + ')'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(ox, Y(GROUND)); g.lineTo(ox + s, Y(GROUND)); g.stroke();
     // blocks
     const p = st.p, z = CELL * s * 0.94;
-    for (let k = 0; k < 5; k++) { g.fillStyle = TONES[k]; g.beginPath(); for (let i = 0; i < p.n; i++) if (p.col[i] === k) g.rect(X(p.X[i]) - z / 2, Y(p.Y[i]) - z / 2, z, z); g.fill(); }
-    g.fillStyle = 'rgba(30,20,10,.25)'; g.beginPath(); for (let i = 0; i < p.n; i++) g.rect(X(p.X[i]) - z / 2, Y(p.Y[i]) + z * 0.25, z, z * 0.25); g.fill();
+    // each block is drawn turned like the structure around it (from its bonds); a loose block keeps the angle it had
+    const ang = st.ang;
+    for (let i = 0; i < p.n; i++) { let a = null; const hb = st.hb[i], vb = st.vb[i];
+      if (hb >= 0 && st.alive[hb]) { const j = st.bonds[hb][1]; a = Math.atan2(p.Y[j] - p.Y[i], p.X[j] - p.X[i]); }
+      else if (vb >= 0 && st.alive[vb]) { const j = st.bonds[vb][1]; a = Math.atan2(p.Y[j] - p.Y[i], p.X[j] - p.X[i]) + Math.PI / 2; }
+      if (a !== null) ang[i] = a; else if (p.Y[i] > GROUND - CELL * 0.6) ang[i] *= 0.9;           // a free block settles flat on the ground
+    }
+    for (let k = 0; k < 5; k++) { g.fillStyle = TONES[k]; g.beginPath();
+      for (let i = 0; i < p.n; i++) { if (p.col[i] !== k) continue; const cx = X(p.X[i]), cy = Y(p.Y[i]), ca = Math.cos(ang[i]) * z / 2, sa = Math.sin(ang[i]) * z / 2;
+        g.moveTo(cx - ca + sa, cy - sa - ca); g.lineTo(cx + ca + sa, cy + sa - ca); g.lineTo(cx + ca - sa, cy + sa + ca); g.lineTo(cx - ca - sa, cy - sa + ca); g.closePath(); }
+      g.fill(); }
+
     // ramp
     g.lineCap = 'round'; g.strokeStyle = 'rgba(111,127,230,.75)'; g.lineWidth = Math.max(4, 0.024 * s); g.beginPath(); g.moveTo(X(RAMP[0][0]), Y(RAMP[0][1])); g.lineTo(X(RAMP[0][2]), Y(RAMP[0][3])); g.lineTo(X(RAMP[1][2]), Y(RAMP[1][3])); g.stroke();
     g.fillStyle = 'rgba(111,127,230,.25)'; g.beginPath(); g.moveTo(X(RAMP[0][0]), Y(RAMP[0][1])); g.lineTo(X(RAMP[0][2]), Y(RAMP[0][3])); g.lineTo(X(RAMP[1][2]), Y(RAMP[1][3])); g.lineTo(X(RAMP[1][2]), Y(GROUND)); g.lineTo(X(1.05), Y(GROUND)); g.lineTo(X(1.05), Y(RAMP[0][1])); g.closePath(); g.fill();
@@ -103,6 +119,12 @@
       { key: 'cols', label: 'Largeur', min: 6, max: 18, step: 1, value: 12, restart: true },
       { key: 'height', label: 'Hauteur', min: 0.4, max: 1.1, step: 0.05, value: 0.85, restart: true }
     ],
-    thumbSteps: 200, reset, step, draw
+    thumbSteps: 200, reset, step, draw,
+    audit(c) {                                     // blocks under the ground or inside the ramp / the ball, overlap between blocks
+      const st = c.st, p = st.p, r = CELL / 2, b = st.ball; let pen = 0;
+      for (let i = 0; i < p.n; i++) { pen = Math.max(pen, (p.Y[i] + r - GROUND) / r, (b.r + r - Math.hypot(p.X[i] - b.x, p.Y[i] - b.y)) / r);
+        for (const q of RAMP) { const ex = q[2] - q[0], ey = q[3] - q[1], t = Math.max(0, Math.min(1, ((p.X[i] - q[0]) * ex + (p.Y[i] - q[1]) * ey) / (ex * ex + ey * ey))); pen = Math.max(pen, (r + 0.012 - Math.hypot(p.X[i] - q[0] - ex * t, p.Y[i] - q[1] - ey * t)) / r); } }
+      return { pen, ov: P.overlap(p, r), note: st.m + ' kg, ' + st.broken + ' liens cassés' };
+    }
   });
 })();

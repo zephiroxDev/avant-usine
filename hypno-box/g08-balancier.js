@@ -15,8 +15,8 @@
   const PL = [plate(-1), plate(1)];
   function reset(c) {
     const cap = c.thumb ? 200 : Math.round(c.opt.max || 1300);
-    const st = c.st = { p: P.pool(cap), r: 0.03, rmin: Math.sqrt(0.45 / cap), th: 0, ph: 0, gen: 0, pressed: 0, dwell: 0, t: 0, flashes: [], end: 0, presses: 0 };
-    for (let i = 0; i < 18; i++) P.add(st.p, (Math.random() - 0.5) * 1.2, -0.3 + Math.random() * 0.6, (Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02, 0, 1);
+    const st = c.st = { p: P.pool(cap), r: 0.03, rmin: Math.sqrt(0.45 / cap), th: 0, w: 1.4, gen: 0, pressed: 0, dwell: 0, t: 0, flashes: [], end: 0, presses: 0 };
+    for (let i = 0; i < 18; i++) P.add(st.p, (P.rnd() - 0.5) * 1.2, -0.3 + P.rnd() * 0.6, (P.rnd() - 0.5) * 0.02, (P.rnd() - 0.5) * 0.02, 0, 1);
   }
   function solids(st) {
     const p = st.p, X = p.X, Y = p.Y, r = st.r, B = bob(st.th);
@@ -47,30 +47,41 @@
     }
     st.flashes.push({ side, t: 0 });
     if (!k) { c.note(c.scale(0), 0.5, 0.6); return; }
-    const g = ++st.gen, m = Math.min(p.cap - p.n, Math.max(k, Math.round(k * (c.opt.mult || 3))));
-    for (let j = 0; j < m; j++) {
-      const along = 0.1 + Math.random() * (q.len - 0.15), out = -GAP * (0.2 + Math.random() * 0.6);
-      P.add(p, q.ax + q.tx * along + q.nx * out, q.ay + q.ty * along + q.ny * out, -q.nx * 0.01, -0.012 - Math.random() * 0.01, g, 0.2);
+    const g = ++st.gen, m = Math.min(p.cap - p.n, Math.max(k, Math.round(k * (c.opt.mult || 2))));
+    // reborn balls: first in the slot itself, then just below it, only on free places outside the bob and the panels
+    const s = 2 * st.r * 1.03, occ = P.occupancy(p, s), B = bob(st.th), free = (x, y) => {
+      if (x * x + y * y > (1 - st.r * 1.1) ** 2 || !occ.free(x, y, s * 0.98)) return false;
+      let worst = -1e9; for (let e = 0; e < 4; e++) { const [ax, ay] = B[e], [bx, by] = B[(e + 1) % 4], ex = bx - ax, ey = by - ay, l = Math.hypot(ex, ey); worst = Math.max(worst, (x - ax) * ey / l - (y - ay) * ex / l); }
+      if (worst < st.r) return false;                                                           // inside or touching the bob
+      const dx = x - q.ax, dy = y - q.ay, al = dx * q.tx + dy * q.ty; return al > q.len + st.r || dx * q.nx + dy * q.ny < -st.r;   // not inside the panel
+    };
+    let put = 0;
+    const cx0 = q.ax + q.tx * q.len * 0.5 - q.nx * st.r, cy0 = q.ay + q.ty * q.len * 0.5 - q.ny * st.r, L = P.lattice();
+    for (let j = 0; j < L.length && put < m; j++) {                                   // nearest free places around the slot, spreading outward
+      const x = cx0 + L[j][0] * s, y = cy0 + L[j][1] * s; if (!free(x, y)) continue;
+      P.add(p, x, y, -q.nx * 0.02, -0.01, g, 0.2); occ.mark(x, y); put++;
     }
-    st.presses++; c.note(c.scale(4 + g % 9), 1, 1.4);
+    st.presses++; st.last = [k, m, put]; c.note(c.scale(4 + g % 9), 1, 1.4);
   }
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt;
-    st.ph += dt * 2 * Math.PI / (c.opt.period || 2.8);
-    const raw = 1.3 * Math.sin(st.ph), th = AMP * Math.max(-1, Math.min(1, raw));     // flat at the ends: the bob rests against the plate
-    st.th = th;
-    const side = raw >= 1 ? 1 : raw <= -1 ? -1 : 0;
-    if (side) { st.dwell += dt; if (st.dwell > 0.08 && st.pressed !== side) { st.pressed = side; press(c, st, side); } } else st.dwell = 0;
-    if (Math.abs(raw) < 0.3) st.pressed = 0;
+    // a real pendulum: θ'' = −(g/L)·sin θ. The panels stop it at ±AMP (impact, partial rebound); a motor in the pivot gives back,
+    // at the bottom of each swing, just the energy lost, so that it keeps reaching the panels. Its period comes from g/L.
+    const T = c.opt.period || 2.8, k2 = Math.pow(2 * Math.PI / T, 2), w0 = Math.sqrt(2 * k2 * (1 - Math.cos(AMP))) * 1.12;
+    st.w -= k2 * Math.sin(st.th) * dt; const prev = st.th; st.th += st.w * dt;
+    if (prev * st.th <= 0 && prev !== st.th) st.w = Math.sign(st.w || 1) * Math.max(Math.abs(st.w), w0);   // motor pulse at the bottom
+    if (Math.abs(st.th) >= AMP) {                                                                         // hits a panel
+      const side = Math.sign(st.th); st.th = side * AMP;
+      if (st.w * side > 0) { st.w = -st.w * 0.35; if (st.pressed !== side) { st.pressed = side; press(c, st, side); } }
+    }
+    if (Math.abs(st.th) < AMP * 0.3) st.pressed = 0;
     const rT = Math.max(st.rmin, Math.min(0.03, Math.sqrt(0.3 / Math.max(1, st.p.n))));
     st.r += (rT - st.r) * Math.min(1, dt * 1.2);
     const sub = 3, h = dt / sub;
     for (let s = 0; s < sub; s++) {
       P.integrate(st.p, h, 1, () => [0, 2.2], 3.2);
-      for (let it = 0; it < 3; it++) { P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1, 0.6); solids(st); P.inCircle(st.p, 1, st.r, 1); }
-      const p = st.p, kick = (c.opt.bounce || 1.1);                       // bouncy balls: a resting ball low in the circle jumps again
-      for (let i = 0; i < p.n; i++) { if (p.Y[i] < 0.55) continue; const vx = p.X[i] - p.PX[i], vy = p.Y[i] - p.PY[i];
-        if (vx * vx + vy * vy < 1e-7 && Math.random() < 0.08) { const v = Math.sqrt(2 * 2.2 * kick * (0.5 + Math.random() * 0.6)) * h; p.PY[i] = p.Y[i] + v; p.PX[i] = p.X[i] - (Math.random() - 0.5) * v * 0.8; } }
+      // bouncy balls: elastic contacts (restitution) instead of random kicks
+      for (let it = 0; it < 4; it++) { P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1, 0.8, c.opt.rest == null ? 1 : c.opt.rest); P.inCircle(st.p, 1, st.r, 1); solids(st); }
     }
     for (const f of st.flashes) f.t += dt; st.flashes = st.flashes.filter(f => f.t < 0.5);
     if (st.p.n >= st.p.cap * 0.98 || st.end) { if (P.ending(c, st, dt, 'Balancier', 'Cercle rempli : ' + st.p.n + ' billes après ' + st.presses + ' pressions, en ' + Math.round(st.t) + ' s', 4)) reset(c); }
@@ -113,10 +124,17 @@
     id: 'balancier', name: 'Balancier',
     desc: 'Un lourd pendule presse les billes contre les panneaux : chaque pression les fait renaître multipliées.',
     ranges: [
-      { key: 'mult', label: 'Multiplier', min: 2, max: 6, step: 1, value: 3 },
+      { key: 'mult', label: 'Multiplier', min: 2, max: 8, step: 1, value: 2 },
       { key: 'period', label: 'Balancement', min: 1.6, max: 5, step: 0.1, value: 2.8 },
       { key: 'max', label: 'Billes', min: 400, max: 2400, step: 100, value: 1300, restart: true }
     ],
-    thumbSteps: 300, reset, step, draw
+    thumbSteps: 300, reset, step, draw,
+    audit(c) {                                   // balls inside the bob (convex polygon) or past the rim
+      const st = c.st, p = st.p, r = st.r, B = bob(st.th); let pen = 0;
+      for (let i = 0; i < p.n; i++) { let worst = 1e9;
+        for (let e = 0; e < 4; e++) { const [ax, ay] = B[e], [bx, by] = B[(e + 1) % 4], ex = bx - ax, ey = by - ay, l = Math.hypot(ex, ey); worst = Math.min(worst, (p.X[i] - ax) * ey / l - (p.Y[i] - ay) * ex / l); }
+        pen = Math.max(pen, (r + worst) / r * (worst > -r ? 1 : 0), (Math.hypot(p.X[i], p.Y[i]) + r - 1) / r); }
+      return { pen, ov: P.overlap(p, r), note: p.n + ' billes, θ=' + st.th.toFixed(2) };
+    }
   });
 })();

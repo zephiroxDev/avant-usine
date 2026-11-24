@@ -7,7 +7,7 @@
   function build(c, st) {
     const n = LEVELS[st.lv % LEVELS.length] + 1, W = 0.56, sp = W / (n - 1), x0 = 0.5 - W / 2, y0 = 0.28;
     const N = n * n, X = new Float32Array(N), Y = new Float32Array(N), PX = new Float32Array(N), PY = new Float32Array(N), Z = new Float32Array(N);
-    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) { const k = j * n + i; X[k] = PX[k] = x0 + i * sp; Y[k] = PY[k] = y0 + (Math.random() - 0.5) * 0.002; Z[k] = (j / (n - 1) - 0.5) * W; }
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) { const k = j * n + i; X[k] = PX[k] = x0 + i * sp; Y[k] = PY[k] = y0 + (HBP.rnd() - 0.5) * 0.002; Z[k] = (j / (n - 1) - 0.5) * W; }
     // the net is seen in perspective: its depth (z) only shifts points up a little, physics happens in x / y
     const links = [];
     for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) { const k = j * n + i; if (i + 1 < n) links.push([k, k + 1, sp]); if (j + 1 < n) links.push([k, k + n, sp]); }
@@ -54,9 +54,12 @@
     // net: back half lighter, front half brighter
     const X = st.X, Y = st.Y, Z = st.Z, L = st.links, al = st.alive, w = Math.max(0.8, s * 0.004 * Math.min(1, 10 / st.n * 1.6));
     for (const front of [false, true]) {
-      g.strokeStyle = front ? 'rgba(220,226,255,.95)' : 'rgba(150,156,200,.55)'; g.lineWidth = w; g.beginPath();
-      for (let m = 0; m < L.length; m++) { if (!al[m]) continue; const [a, b] = L[m]; if ((Z[a] + Z[b] > 0) !== front) continue; g.moveTo(PXf(X[a]), PYf(Y[a] - Z[a] * 0.12)); g.lineTo(PXf(X[b]), PYf(Y[b] - Z[b] * 0.12)); }
-      g.stroke();
+      // the colour of a thread shows its real tension: relaxed = pale, stretched near breaking = pink
+      g.lineWidth = w; const bins = [[], [], []];
+      for (let m = 0; m < L.length; m++) { if (!al[m]) continue; const [a, b, r0] = L[m]; if ((Z[a] + Z[b] > 0) !== front) continue;
+        const k = Math.max(0, (Math.hypot(X[b] - X[a], Y[b] - Y[a]) / r0 - 1) / (st.tear - 1)); bins[k < 0.33 ? 0 : k < 0.7 ? 1 : 2].push(a, b); }
+      const cols = front ? ['rgba(220,226,255,.95)', 'rgba(255,190,225,.95)', 'rgba(255,95,168,1)'] : ['rgba(150,156,200,.55)', 'rgba(200,150,190,.6)', 'rgba(255,95,168,.7)'];
+      bins.forEach((bn, bi) => { g.strokeStyle = cols[bi]; g.beginPath(); for (let q = 0; q < bn.length; q += 2) { const a = bn[q], b = bn[q + 1]; g.moveTo(PXf(X[a]), PYf(Y[a] - Z[a] * 0.12)); g.lineTo(PXf(X[b]), PYf(Y[b] - Z[b] * 0.12)); } g.stroke(); });
     }
     g.strokeStyle = 'rgba(214,206,255,.75)'; g.lineWidth = Math.max(2, s * 0.01); g.strokeRect(PXf(BOX.x0), PYf(BOX.y0), (BOX.x1 - BOX.x0) * s, (BOX.y1 - BOX.y0) * s);
     if (!c.thumb) { const m = (st.n - 1) * (st.n - 1), fs = Math.round(Math.min(c.W * 0.08, 34) * (1 + st.label * 0.25)); g.save(); g.font = '800 ' + fs + 'px "Unbounded", system-ui, sans-serif'; g.textAlign = 'left'; g.textBaseline = 'top'; g.fillStyle = 'rgba(241,238,255,.92)'; g.fillText(m.toLocaleString('fr-FR') + ' MAILLES', ox + 0.05 * s, oy + 0.04 * s); g.restore(); }
@@ -68,6 +71,11 @@
       { key: 'tear', label: 'Résistance', min: 1.05, max: 2.2, step: 0.05, value: 1.4, restart: true },
       { key: 'secs', label: 'Durée manche', min: 4, max: 20, step: 0.5, value: 9 }
     ],
-    thumbSteps: 120, reset, step, draw
+    thumbSteps: 120, reset, step, draw,
+    audit(c) {                      // net knots inside the ball (at their depth) or under the floor
+      const st = c.st, [sx, sy, sr] = SPH; let pen = 0; if (!st.X) return {};
+      for (let k = 0; k < st.X.length; k++) { const rr = Math.sqrt(Math.max(0, sr * sr - st.Z[k] * st.Z[k] * 0.25)); pen = Math.max(pen, (rr - Math.hypot(st.X[k] - sx, st.Y[k] - sy)) / 0.01, (st.Y[k] - BOX.y1) / 0.01); }
+      return { pen, note: (st.n - 1) * (st.n - 1) + ' mailles, ' + st.cut + ' fils coupés' };
+    }
   });
 })();

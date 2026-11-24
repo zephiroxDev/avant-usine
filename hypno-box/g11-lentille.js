@@ -12,7 +12,7 @@
     const max = c.thumb ? 512 : STEPS[Math.min(STEPS.length - 1, Math.round(c.opt.top == null ? 11 : c.opt.top))];
     let n = STEPS[st.round % STEPS.length]; if (n > max) { st.round = 0; n = STEPS[0]; }
     st.n = n; st.X = new Float32Array(n); st.Y = new Float32Array(n); st.VX = new Float32Array(n); st.VY = new Float32Array(n); st.C = new Float32Array(n * 3); st.rt = 0; st.flash = 1;
-    const off = Math.random() * 6.283;
+    const off = HBP.rnd() * 6.283;
     for (let i = 0; i < n; i++) {
       const a = off + i * 2 * Math.PI / n; st.VX[i] = Math.cos(a); st.VY[i] = Math.sin(a);
       const h = i / n * 6, k = h % 2 - 1, x = 1 - Math.abs(k), sec = Math.floor(h) % 6;      // rainbow by starting angle
@@ -26,7 +26,9 @@
     const n = st.n, X = st.X, Y = st.Y, VX = st.VX, VY = st.VY, sp = 0.7, sub = 2, h = dt * sp / sub;
     for (let s = 0; s < sub; s++) for (let i = 0; i < n; i++) {
       let x = X[i] + VX[i] * h, y = Y[i] + VY[i] * h;
-      for (const cx of [-D, D]) {                               // leaving the disc of one circle = hitting its arc
+      // leaving the disc of one circle = hitting its arc: mirror reflection on the arc's normal. Two passes, because near the
+      // pointed ends a ball can be outside both circles at once.
+      for (let pass = 0; pass < 2; pass++) for (const cx of [-D, D]) {
         const dx = x - cx, d2 = dx * dx + y * y;
         if (d2 > 1) { const d = Math.sqrt(d2), nx = dx / d, ny = y / d, vn = VX[i] * nx + VY[i] * ny; if (vn > 0) { VX[i] -= 2 * vn * nx; VY[i] -= 2 * vn * ny; } x = cx + nx * 0.9999; y = ny * 0.9999; }
       }
@@ -72,6 +74,11 @@
       { key: 'trail', label: 'Traînée', min: 0.5, max: 0.97, step: 0.01, value: 0.82 },
       { key: 'top', label: 'Jusqu\'à', min: 3, max: 11, step: 1, value: 11 }
     ],
-    thumbSteps: 160, reset, step, draw
+    thumbSteps: 160, reset, step, draw,
+    audit(c) {                              // any ball outside the lens (outside either circle)
+      const st = c.st; let out = 0, sp = 0;
+      for (let i = 0; i < st.n; i++) { out = Math.max(out, Math.hypot(st.X[i] + D, st.Y[i]) - 1, Math.hypot(st.X[i] - D, st.Y[i]) - 1); sp = Math.max(sp, Math.abs(Math.hypot(st.VX[i], st.VY[i]) - 1)); }
+      return { pen: Math.max(0, out) * 100, bad: sp > 1e-3 ? 1 : 0, note: st.n + ' billes, écart de vitesse max ' + sp.toExponential(1) };
+    }
   });
 })();

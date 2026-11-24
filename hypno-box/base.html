@@ -1103,7 +1103,7 @@ window.HB = (() => {
       W: 0, H: 0, clear: true, slow: false, opt: {}, scale, status(t) { statusEl.textContent = t; },
       note(m, v, d) { if (!soundOn) return; if (!melody) return void note(m, v, d); if (note(melody.notes[melody.i % melody.notes.length].m, v, d)) melody.i++; }
     };
-    const restart = () => { if (melody) melody.i = 0; def.reset(c); c.clear = true; };
+    const restart = () => { if (melody) melody.i = 0; c.acc = 0; if (window.HBP && HBP.seed) HBP.seed((Math.random() * 4294967296) >>> 0); def.reset(c); c.clear = true; };
     const importSpan = view.querySelector('[data-import]'); importLabels.push(importSpan); if (melody) importSpan.textContent = '♪ ' + melody.name;
     view.querySelector('[data-music]').addEventListener('change', async e => {
       const f = e.target.files && e.target.files[0]; if (!f) return;
@@ -1138,7 +1138,8 @@ window.HB = (() => {
       if (preRoll > 0) { preRoll -= sdt; if (preRoll <= 0) { HBX.startRec(cv, ac, master, def.id); recLeft = def.loopLen(c); c.looping = true; } }
       else if (recLeft > 0) { recLeft -= sdt; if (recLeft <= 0) stopFilm(); }
       if (rec && countdown <= 0 && HBX.due()) stopFilm();
-      if (running && countdown <= 0 && c.W > 0) def.step(c, dt * parseFloat(speedEl.value));
+      // fixed-step physics: the same simulation at 30, 60 or 120 images per second; a long pause is dropped, not replayed
+      if (running && countdown <= 0 && c.W > 0) { const n = HB.fixedSteps(c, Math.min(0.25, raw) * parseFloat(speedEl.value)); for (let i = 0; i < n; i++) def.step(c, HB.FIX); }
       g.setTransform(dpr, 0, 0, dpr, 0, 0);
       let dg = g;
       if (def.fade) {
@@ -1195,7 +1196,10 @@ window.HB = (() => {
     };
     window['__hb_' + def.id] = { c, def };
   }
-  return { game, scale, BG, setMelody, get melody() { return melody; } };
+  const FIX = 1 / 60, MAXN = 8;
+  // how many fixed steps to run for this frame; the remainder is kept for the next frame
+  function fixedSteps(c, t) { c.acc = (c.acc || 0) + t; let n = Math.floor(c.acc / FIX + 1e-9); c.acc -= n * FIX; if (n > MAXN) { n = MAXN; c.acc = 0; } return n; }
+  return { game, scale, BG, setMelody, FIX, fixedSteps, get melody() { return melody; } };
 })();
 
 </script>

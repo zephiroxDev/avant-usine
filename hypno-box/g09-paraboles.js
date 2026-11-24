@@ -8,8 +8,28 @@
   function reset(c) {
     c.st = { pins: [], paths: [], ball: null, wait: 0.4, t: 0, n: 0, esc: 0, sparks: [], end: 0, col: 0 };
   }
+  // the two faces of each tooth are segments: base corner → tip → base corner
+  function touchesTeeth(x, y) {
+    const a = ((Math.atan2(y, x) % 6.2832) + 6.2832) % 6.2832, w = 2 * Math.PI / TEETH, i0 = Math.floor(a / w);
+    if (Math.hypot(x, y) > 1 - BR * 0.2 && !inGap(a)) return true;
+    for (let i = i0 - 1; i <= i0 + 1; i++) {
+      const a0 = i * w, a1 = (i + 1) * w, am = (a0 + a1) / 2; if (inGap(a0) || inGap(a1)) continue;
+      const tx = Math.cos(am) * (1 - DEPTH), ty = Math.sin(am) * (1 - DEPTH);
+      for (const [px, py] of [[Math.cos(a0), Math.sin(a0)], [Math.cos(a1), Math.sin(a1)]]) {
+        const ex = tx - px, ey = ty - py, t = Math.max(0, Math.min(1, ((x - px) * ex + (y - py) * ey) / (ex * ex + ey * ey)));
+        if (Math.hypot(x - px - ex * t, y - py - ey * t) < BR) return true;
+      }
+    }
+    return false;
+  }
+  function seg(b, ax, ay, bx, by, rr, e) {
+    const ex = bx - ax, ey = by - ay, t = Math.max(0, Math.min(1, ((b.x - ax) * ex + (b.y - ay) * ey) / (ex * ex + ey * ey))), qx = b.x - ax - ex * t, qy = b.y - ay - ey * t, d = Math.hypot(qx, qy);
+    if (d >= rr || d < 1e-9) return false;
+    const nx = qx / d, ny = qy / d, vn = b.vx * nx + b.vy * ny; b.x += nx * (rr - d); b.y += ny * (rr - d);
+    if (vn < 0) { b.vx -= (1 + e) * vn * nx; b.vy -= (1 + e) * vn * ny; } return true;
+  }
   function launch(c, st) {
-    const sp = 1.25 + Math.random() * 0.75, a = -0.25 - Math.random() * 0.75;
+    const sp = 1.25 + P.rnd() * 0.75, a = -0.25 - P.rnd() * 0.75;
     st.ball = { x: -0.86, y: -0.12, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 0, col: P.COLS[st.col++ % P.COLS.length], path: [[-0.86, -0.12]] };
     st.n++;
   }
@@ -18,7 +38,7 @@
     const b = st.ball; st.ball = null; st.wait = 0.35;
     st.paths.push({ pts: b.path, col: b.col }); if (st.paths.length > (c.opt.keep || 40)) st.paths.shift();
     if (dead) {
-      const d = Math.hypot(b.x, b.y), k = (1 - DEPTH - BR) / d; st.pins.push({ x: b.x * Math.min(1, k), y: b.y * Math.min(1, k), t: 0 });
+      st.pins.push({ x: b.x, y: b.y, t: 0 });                                     // it stays exactly where it touched the teeth
       burst(st, b.x, b.y, b.col, 1); c.note(c.scale(1 + st.pins.length % 6), 0.9, 1);
     } else { st.esc++; burst(st, b.x, b.y, '#ffe66b', 2); c.note(c.scale(12), 1, 1.6); }
   }
@@ -32,16 +52,15 @@
       for (let s = 0; s < n && st.ball; s++) {
         b.vy += g * h; b.x += b.vx * h; b.y += b.vy * h; b.life += h;
         // pole
-        const [ax, ay, , by] = POLE;
-        if (b.y > ay - BR && b.y < by && Math.abs(b.x - ax) < BR + 0.008) { b.x = ax + Math.sign(b.x - ax || 1) * (BR + 0.008); b.vx = -b.vx * 0.95; c.note(c.scale(5 + st.n % 7), 0.7, 0.8); }
-        if (Math.hypot(b.x - ax, b.y - ay) < BR + 0.008 && b.vy > 0 && b.y < ay) { b.vy = -Math.abs(b.vy) * 0.95; }
+        // pole: a thin capsule; reflection about its real normal (side or rounded top), restitution 0.95
+        if (seg(b, POLE[0], POLE[1], POLE[2], POLE[3], BR + 0.008, 0.95)) c.note(c.scale(5 + st.n % 7), 0.7, 0.8);
         // pins: bounce off the balls that died before
         for (const q of st.pins) {
           const dx = b.x - q.x, dy = b.y - q.y, d = Math.hypot(dx, dy);
           if (d < 2 * BR && d > 1e-6) { const nx = dx / d, ny = dy / d, vn = b.vx * nx + b.vy * ny; b.x = q.x + nx * 2 * BR; b.y = q.y + ny * 2 * BR; if (vn < 0) { b.vx -= 1.9 * vn * nx; b.vy -= 1.9 * vn * ny; } q.t = 0.3; c.note(c.scale(8 + st.pins.indexOf(q) % 7), 0.6, 0.7); }
         }
-        const d = Math.hypot(b.x, b.y), a = Math.atan2(b.y, b.x);
-        if (d > 1 - DEPTH * 0.55 - BR && !inGap(a)) { finish(c, st, true); break; }
+        const d = Math.hypot(b.x, b.y);
+        if (d > 1 - DEPTH - BR && touchesTeeth(b.x, b.y)) { finish(c, st, true); break; }
         if (d > 1.12 || b.life > 14) { finish(c, st, false); break; }
       }
       if (st.ball) { const L = b.path[b.path.length - 1]; if (Math.hypot(b.x - L[0], b.y - L[1]) > 0.012) b.path.push([b.x, b.y]); }
@@ -91,6 +110,12 @@
       { key: 'keep', label: 'Traces', min: 5, max: 120, step: 5, value: 40 },
       { key: 'pins', label: 'Plots max', min: 8, max: 80, step: 1, value: 30, restart: true }
     ],
-    thumbSteps: 600, reset, step, draw
+    thumbSteps: 600, reset, step, draw,
+    audit(c) {                             // the flying ball inside a pin, the pole or the teeth
+      const st = c.st, b = st.ball; let pen = 0; if (!b) return {};
+      for (const q of st.pins) pen = Math.max(pen, (2 * BR - Math.hypot(b.x - q.x, b.y - q.y)) / BR);
+      const t = Math.max(0, Math.min(1, (b.y - POLE[1]) / (POLE[3] - POLE[1]))), dp = Math.hypot(b.x - POLE[0], b.y - (POLE[1] + (POLE[3] - POLE[1]) * t)); pen = Math.max(pen, (BR + 0.008 - dp) / BR);
+      return { pen, note: st.n + ' billes, ' + st.pins.length + ' plots' };
+    }
   });
 })();

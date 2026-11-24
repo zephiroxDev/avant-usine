@@ -2,6 +2,7 @@
    Deux orbes du même niveau qui se touchent fusionnent en un orbe du niveau suivant, plus gros, avec une onde de
    choc. La chaîne monte jusqu'à l'orbe géant final, puis le flacon se vide. Coordonnées : flacon de rayon 1. */
 (() => {
+  const P = HBP;
   const NECK = 0.16, NECK_TOP = -2.1, NECK_BOT = -0.98;
   // nine original orb designs, from small to giant: colour, ring count, symbol
   const LV = [
@@ -31,11 +32,11 @@
     if (st.end) { st.end += dt; for (const o of st.o) { o.y += dt * 1.8 * st.end; } if (st.end > 3.2 && !c.thumb) reset(c); upd(st, dt); return; }
     st.drop -= dt;
     const topFree = !st.o.some(o => o.y < NECK_TOP + 0.4);
-    if (st.drop <= 0 && topFree) { add(st, (Math.random() - 0.5) * 0.02, NECK_TOP, 0, 0.004); st.drop = 1 / (c.opt.rate || 3); }
+    if (st.drop <= 0 && topFree) { add(st, 0, NECK_TOP, 0, 0.004); /* dropped exactly on the axis, as in the reference: the orbs stack in a column */ st.drop = 1 / (c.opt.rate || 3); }
     const sub = 4, h = dt / sub, G = 3;
     for (let s = 0; s < sub; s++) {
-      const mag = (c.opt.magnet == null ? 0.6 : c.opt.magnet) * h * h;           // orbs of the same level drift toward each other
-      if (mag) for (let i = 0; i < st.o.length; i++) for (let j = i + 1; j < st.o.length; j++) { const p = st.o[i], q = st.o[j]; if (p.k !== q.k || p.y < NECK_BOT || q.y < NECK_BOT) continue; const dx = q.x - p.x, dy = q.y - p.y, d = Math.hypot(dx, dy) || 1; p.x += dx / d * mag; p.y += dy / d * mag; q.x -= dx / d * mag; q.y -= dy / d * mag; }
+
+
       for (const o of st.o) { const vx = (o.x - o.px) * 0.985, vy = (o.y - o.py) * 0.985; o.px = o.x; o.py = o.y; o.x += vx; o.y += vy + G * h * h; o.born += h; }
       for (let it = 0; it < 4; it++) {
         for (let i = 0; i < st.o.length; i++) for (let j = i + 1; j < st.o.length; j++) {
@@ -52,12 +53,19 @@
     upd(st, dt);
     if (st.best >= LV.length - 1 && !st.end) { st.end = 0.001; if (!c.thumb) HBH.add('Fusion', 'Orbe géant atteint après ' + st.merges + ' fusions, en ' + Math.round(st.t) + ' s'); c.note(c.scale(16), 1, 2.5); }
     // the flask overflows: the giant never came, so it empties and starts again
-    if (st.t > 240 && !st.end) { st.end = 0.001; if (!c.thumb) HBH.add('Fusion', 'Flacon plein au niveau ' + (st.best + 1) + ', ' + st.merges + ' fusions'); }
+    // the flask is full when an orb rests in the neck and nothing has merged for 4 s (a real jam, not a timer)
+    const jam = st.o.some(o => o.y < NECK_BOT - 0.3 && o.born > 3 && Math.hypot(o.x - o.px, o.y - o.py) < 2e-4);
+    st.idle = jam ? (st.idle || 0) + dt : 0; if (st.lastMerges !== st.merges) { st.lastMerges = st.merges; st.idle = 0; }
+    if (st.idle > 4 && !st.end) { st.end = 0.001; if (!c.thumb) HBH.add('Fusion', 'Flacon plein au niveau ' + (st.best + 1) + ', ' + st.merges + ' fusions'); }
     if (!c.thumb) c.status('Niveau ' + (st.best + 1) + ' / ' + LV.length + ' · ' + st.merges + ' fusions');
   }
   function merge(c, st, a, b) {
     a.dead = b.dead = true; const k = a.k + 1, x = (a.x + b.x) / 2, y = (a.y + b.y) / 2;
-    add(st, x, y, k, -0.004); st.best = Math.max(st.best, k); st.merges++;
+    // momentum is kept: the new orb starts at the centre of mass of the two, with their mean velocity (masses ∝ area)
+    const ma = rad(a.k) ** 2, mb = rad(b.k) ** 2, M = ma + mb, cx = (a.x * ma + b.x * mb) / M, cy = (a.y * ma + b.y * mb) / M;
+    const vx = ((a.x - a.px) * ma + (b.x - b.px) * mb) / M, vy = ((a.y - a.py) * ma + (b.y - b.py) * mb) / M;
+    st.o.push({ x: cx, y: cy, px: cx - vx, py: cy - vy, k, born: 0 }); walls(st.o[st.o.length - 1]);
+    st.best = Math.max(st.best, k); st.merges++;
     st.waves.push({ x, y, t: 0, r: rad(k) }); for (let i = 0, n = HBT.n(20 + k * 6); i < n; i++) { const an = Math.random() * 6.283, v = 0.3 + Math.random() * 0.8; st.sparks.push({ x, y, vx: Math.cos(an) * v, vy: Math.sin(an) * v, t: 0, col: LV[k][0] }); }
     c.note(c.scale(2 + k * 2), 1, 1 + k * 0.15);
   }
@@ -101,7 +109,14 @@
   HB.game({
     id: 'fusion', name: 'Fusion',
     desc: 'Des orbes tombent dans un flacon : deux identiques fusionnent en un plus gros, jusqu\'à l\'orbe géant.',
-    ranges: [{ key: 'rate', label: 'Débit', min: 0.8, max: 5, step: 0.1, value: 3 }, { key: 'magnet', label: 'Aimant', min: 0, max: 2, step: 0.05, value: 0.6 }],
-    thumbSteps: 900, reset, step, draw
+    ranges: [{ key: 'rate', label: 'Débit', min: 0.8, max: 5, step: 0.1, value: 3 }],
+    thumbSteps: 900, reset, step, draw,
+    audit(c) {                         // overlap between orbs (in radii of the smaller one) and orbs through the flask wall
+      const st = c.st, o = st.o; let pen = 0, ov = 0; if (st.end) return {};          // the flask empties at the end
+      for (let i = 0; i < o.length; i++) { const ri = rad(o[i].k);
+        for (let j = i + 1; j < o.length; j++) { const rj = rad(o[j].k), d = Math.hypot(o[i].x - o[j].x, o[i].y - o[j].y); ov = Math.max(ov, (ri + rj - d) / (2 * Math.min(ri, rj))); }
+        if (o[i].y > NECK_BOT + 0.05) pen = Math.max(pen, (Math.hypot(o[i].x, o[i].y) + ri - 1) / ri); else pen = Math.max(pen, (Math.abs(o[i].x) + Math.min(ri, NECK) - NECK) / ri); }
+      return { pen, ov: { worst: ov, mean: 0 }, note: 'niveau ' + (st.best + 1) + ', ' + st.merges + ' fusions' };
+    }
   });
 })();

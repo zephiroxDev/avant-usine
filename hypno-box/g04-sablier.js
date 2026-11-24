@@ -2,12 +2,12 @@
    écraser quand elles sont prises entre les pistons : chaque écrasement fait jaillir une gerbe de nouvelles
    billes vers le haut et vers le bas, jusqu'à remplir le cercle. */
 (() => {
-  const P = HBP, TIP = 0.15, FLARE = 0.2, OPEN = 0.24;
+  const P = HBP, TIP = 0.18, FLARE = 0.2, OPEN = 0.26;
 
   function reset(c) {
     const cap = c.thumb ? 200 : Math.round(c.opt.max || 1500);
-    const st = c.st = { p: P.pool(cap), r: 0.032, rmin: Math.sqrt(0.5 / cap), g: OPEN, ph: 'wait', pt: 0.6, gen: 0, t: 0, bursts: [], end: 0, crushes: 0 };
-    for (let i = 0; i < 8; i++) { const a = Math.random() * 6.28; P.add(st.p, Math.cos(a) * 0.15, Math.sin(a) * 0.15, (Math.random() - 0.5) * 0.01, (Math.random() - 0.5) * 0.01, 0, 1); }
+    const st = c.st = { p: P.pool(cap), r: 0.032, rmin: Math.sqrt(0.5 / cap), g: OPEN, ph: 'wait', pt: 0.6, gen: 0, t: 0, bursts: [], end: 0, crushes: 0, caught: 0 };
+    for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 + 0.3; P.add(st.p, Math.cos(a) * 0.4, Math.sin(a) * 0.4, (P.rnd() - 0.5) * 0.01, (P.rnd() - 0.5) * 0.01, 0, 1); }
   }
   const half = (st, x) => TIP + Math.max(0, Math.abs(x) - st.g) * FLARE;
   function pistons(st) {
@@ -15,7 +15,7 @@
     for (let i = 0; i < p.n; i++) {
       const ax = Math.abs(X[i]), s = X[i] < 0 ? -1 : 1, hw = half(st, X[i]);
       if (ax + r <= st.g || Math.abs(Y[i]) > hw + r) continue;
-      if (st.ph === 'slam' && ax < st.g + r && Math.abs(Y[i]) < TIP) { X[i] *= 0.5; p.PX[i] = X[i]; continue; }   // caught between the pistons
+      if (st.ph === 'slam' && ax < st.g + r && Math.abs(Y[i]) < TIP && st.g < r) { st.caught++; P.remove(p, i); i--; continue; }   // no room left between the two faces: crushed
       // inside or touching a piston: leave by the nearest side (the tip face or the top / bottom edge)
       const dFace = ax + r - st.g, dEdge = hw + r - Math.abs(Y[i]);
       if (dFace < dEdge && ax < st.g + 0.02) { X[i] = s * (st.g - r); let vx = X[i] - p.PX[i]; if (vx * s > 0) p.PX[i] = X[i] + vx * 0.9; }
@@ -24,13 +24,16 @@
   }
   function crush(c, st) {
     const p = st.p; let k = 0;
-    for (let i = p.n - 1; i >= 0; i--) if (Math.abs(p.X[i]) < 0.12 && Math.abs(p.Y[i]) < TIP + st.r * 0.3) { k++; P.remove(p, i); }
-    st.bursts.push({ t: 0, k });
+    for (let i = p.n - 1; i >= 0; i--) if (Math.abs(p.X[i]) < st.r && Math.abs(p.Y[i]) < TIP) { k++; P.remove(p, i); }
+    k += st.caught; st.caught = 0; st.bursts.push({ t: 0, k });
     if (!k) { c.note(c.scale(0), 0.4, 0.5); return; }
     const gcol = ++st.gen, m = Math.min(p.cap - p.n, Math.round(k * (c.opt.mult || 4)));
-    for (let j = 0; j < m; j++) {
-      const sy = j % 2 ? 1 : -1, sp = 0.012 + Math.random() * 0.014;
-      P.add(p, (Math.random() - 0.5) * 0.06, sy * (TIP + st.r + 0.01 + Math.random() * 0.05), (Math.random() - 0.5) * 0.006, sy * sp, gcol, 0.3);
+    // the new balls spurt out of the seam, up and down, on free places just outside the pistons, moving away from them
+    const s = 2 * st.r * 1.03, occ = P.occupancy(p, s); let put = 0;
+    for (let row = 0; put < m && row < 40; row++) for (const sy of [1, -1]) for (let col = 0; col < 25 && put < m; col++) {
+      const x = (col % 2 ? 1 : -1) * Math.ceil(col / 2) * s * 0.9, y = sy * (TIP + st.r * 1.05 + row * s * 0.87);
+      if (x * x + y * y > (1 - st.r * 1.1) ** 2 || !occ.free(x, y, s * 0.98)) continue;
+      const sp = 0.012 + P.rnd() * 0.012; P.add(p, x, y, x * 0.02, sy * sp, gcol, 0.3); occ.mark(x, y); put++;
     }
     st.crushes++; c.note(c.scale(3 + gcol % 9), 1, 1.3);
   }
@@ -39,13 +42,13 @@
     if (st.ph === 'wait' && st.pt > (st.wait || 0.9)) { st.ph = 'slam'; st.pt = 0; }
     else if (st.ph === 'slam') { st.g = Math.max(0, OPEN * (1 - st.pt / 0.14)); if (st.g <= 0) { st.ph = 'hold'; st.pt = 0; crush(c, st); } }
     else if (st.ph === 'hold' && st.pt > 0.12) { st.ph = 'open'; st.pt = 0; }
-    else if (st.ph === 'open') { st.g = OPEN * P.sm(st.pt / 0.45); if (st.pt >= 0.45) { st.ph = 'wait'; st.pt = 0; st.wait = 0.25 + Math.random() * 0.6; } }
+    else if (st.ph === 'open') { st.g = OPEN * P.sm(st.pt / 0.45); if (st.pt >= 0.45) { st.ph = 'wait'; st.pt = 0; st.wait = 0.15 + P.rnd() * 0.35; } }
     const rT = Math.max(st.rmin, Math.min(0.032, Math.sqrt(0.35 / Math.max(1, st.p.n))));
     st.r += (rT - st.r) * Math.min(1, dt * 1.5);
-    const sub = 3, h = dt / sub, pull = 1.3 + (c.react ? c.react.beat * 2 : 0);
+    const sub = 3, h = dt / sub, pull = 1.8;
     for (let s = 0; s < sub; s++) {
       P.integrate(st.p, h, 0.85, (x, y) => [-x * pull, -y * pull], 3);
-      for (let it = 0; it < 2; it++) { P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1, 0.7); pistons(st); P.inCircle(st.p, 1, st.r, 0.8); }
+      for (let it = 0; it < 4; it++) { P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1, 0.9); P.inCircle(st.p, 1, st.r, 0.8); pistons(st); }
     }
     for (const b of st.bursts) b.t += dt; st.bursts = st.bursts.filter(b => b.t < 0.6);
     if (st.p.n >= st.p.cap * 0.98 || st.end) { if (P.ending(c, st, dt, 'Sablier', 'Cercle rempli : ' + st.p.n + ' billes après ' + st.crushes + ' écrasements, en ' + Math.round(st.t) + ' s', 4)) reset(c); }
@@ -82,9 +85,16 @@
     id: 'sablier', name: 'Sablier',
     desc: 'Deux pistons claquent au centre : chaque bille écrasée fait jaillir une gerbe de nouvelles billes.',
     ranges: [
-      { key: 'mult', label: 'Multiplier', min: 2, max: 6, step: 1, value: 4 },
+      { key: 'mult', label: 'Multiplier', min: 2, max: 10, step: 1, value: 4 },
       { key: 'max', label: 'Billes', min: 400, max: 3000, step: 100, value: 1500, restart: true }
     ],
-    thumbSteps: 300, reset, step, draw
+    thumbSteps: 300, reset, step, draw,
+    audit(c) {
+      const st = c.st, p = st.p, r = st.r; let pen = 0;
+      for (let i = 0; i < p.n; i++) { const ax = Math.abs(p.X[i]), hw = half(st, p.X[i]), ay = Math.abs(p.Y[i]);
+        if (ax + r > st.g && ay < hw + r && p.age[i] >= 1) pen = Math.max(pen, Math.min(ax + r - st.g, hw + r - ay) / r);
+        pen = Math.max(pen, (Math.hypot(p.X[i], p.Y[i]) + r - 1) / r); }
+      return { pen, ov: P.overlap(p, r), note: p.n + ' billes' };
+    }
   });
 })();

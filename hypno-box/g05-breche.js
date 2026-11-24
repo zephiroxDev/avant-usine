@@ -2,6 +2,7 @@
    (rose, puis grise une fois touchée, puis détruite). Des bonus tombent : billes en plus, raquette plus large,
    vitesse, billes perforantes. Quand le mur est presque vide, il explose. Monde fixe de 1 × 1.8. */
 (() => {
+  const P = HBP;
   const WW = 1, WH = 1.8, COLS = 56, Y0 = 0.08, CELL = WW / COLS, ROWS = Math.floor(0.86 / CELL), PY = 1.56, BR = 0.0065;
   const KINDS = { multi: ['#6fd8ff', '⁂'], large: ['#8fdc6e', '↔'], fast: ['#f0a050', '»'], pierce: ['#ffe66b', '★'] };
 
@@ -11,12 +12,12 @@
       fast: 0, pierce: 0, dirty: true, wall: null, wx: null, end: 0, boom: 0, broken: 0
     };
     for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) st.hp[y * COLS + x] = (y === 0 || y === ROWS - 1) ? 1 : 2;
-    const tc = Math.floor(COLS * (0.35 + Math.random() * 0.3));                // a narrow tunnel to start the digging
+    const tc = Math.floor(COLS * (0.35 + P.rnd() * 0.3));                // a narrow tunnel to start the digging
     for (let y = Math.floor(ROWS * 0.55); y < ROWS; y++) for (let x = tc; x < tc + 2; x++) { st.hp[y * COLS + x] = 0; }
     for (let y = Math.floor(ROWS * 0.55) - 1; y < ROWS; y++) for (const x of [tc - 1, tc + 2]) st.hp[y * COLS + x] = 1;
     st.left = 0; for (const h of st.hp) if (h) st.left++; st.total = st.left; st.px = (tc + 1) * CELL; launch(st);
   }
-  function launch(st) { const a = (Math.random() - 0.5) * 0.6; st.balls.push({ x: st.px, y: PY - 0.02, vx: Math.sin(a), vy: -Math.cos(a) }); }
+  function launch(st) { const a = (P.rnd() - 0.5) * 0.6; st.balls.push({ x: st.px, y: PY - 0.02, vx: Math.sin(a), vy: -Math.cos(a) }); }
   function paint(st, i) {
     if (!st.wx) return; const x = i % COLS, y = (i / COLS) | 0, h = st.hp[i];
     st.wx.clearRect(x * 4, y * 4, 4, 4); if (!h) return;
@@ -27,7 +28,7 @@
     st.hp[i] = st.pierce > 0 ? 0 : h - 1; paint(st, i);
     if (!st.hp[i]) {
       st.left--; st.broken++;
-      if (Math.random() < (c.opt.bonus || 0.05) && !c.thumb) { const ks = Object.keys(KINDS); st.caps.push({ x: (i % COLS + 0.5) * CELL, y: Y0 + (((i / COLS) | 0) + 0.5) * CELL, k: ks[Math.floor(Math.random() * ks.length)] }); }
+      if (P.rnd() < (c.opt.bonus || 0.035) && !c.thumb) { const ks = Object.keys(KINDS); st.caps.push({ x: (i % COLS + 0.5) * CELL, y: Y0 + (((i / COLS) | 0) + 0.5) * CELL, k: ks[Math.floor(P.rnd() * ks.length)] }); }
       if (Math.random() < 0.25) st.parts.push({ x: (i % COLS + 0.5) * CELL, y: Y0 + (((i / COLS) | 0) + 0.5) * CELL, vx: (Math.random() - 0.5) * 0.3, vy: Math.random() * 0.3, t: 0, col: h === 2 ? '#ff5fa8' : '#a7a2cc' });
       c.note(c.scale(6 + (((i / COLS) | 0) % 10)), 0.45, 0.5);
     }
@@ -36,24 +37,20 @@
   function moveBall(c, st, b, dist) {
     const steps = Math.ceil(dist / (CELL * 0.4)), d = dist / steps;
     for (let s = 0; s < steps; s++) {
-      const ox = b.x, oy = b.y; b.x += b.vx * d; b.y += b.vy * d;
+      const oy = b.y;
+      // axis by axis, with the edge of the ball (not its centre): a brick is hit by the side that actually touches it
+      b.x += b.vx * d;
       if (b.x < BR) { b.x = BR; b.vx = Math.abs(b.vx); } if (b.x > WW - BR) { b.x = WW - BR; b.vx = -Math.abs(b.vx); }
+      let i = cellAt(b.x + Math.sign(b.vx) * BR, b.y);
+      if (i >= 0 && st.hp[i]) { hit(c, st, i, b); if (st.pierce <= 0) { b.x -= b.vx * d; b.vx = -b.vx; } }
+      b.y += b.vy * d;
       if (b.y < BR) { b.y = BR; b.vy = Math.abs(b.vy); }
-      const i = cellAt(b.x, b.y);
-      if (i >= 0 && st.hp[i]) {
-        hit(c, st, i, b);
-        if (st.pierce <= 0) {
-          const pi = cellAt(ox, oy), sx = pi < 0 || (pi % COLS) !== (i % COLS), sy = pi < 0 || ((pi / COLS) | 0) !== ((i / COLS) | 0);
-          if (sx) b.vx = -b.vx; if (sy || !sx) b.vy = -b.vy; b.x = ox; b.y = oy;
-        }
-      }
+      i = cellAt(b.x, b.y + Math.sign(b.vy) * BR);
+      if (i >= 0 && st.hp[i]) { hit(c, st, i, b); if (st.pierce <= 0) { b.y -= b.vy * d; b.vy = -b.vy; } }
       if (b.vy > 0 && b.y >= PY - BR && oy < PY - BR + 0.004 && Math.abs(b.x - st.px) <= st.pw / 2 + BR) {
-        let off = Math.max(-1, Math.min(1, (b.x - st.px) / (st.pw / 2))) * 1.05 + (Math.random() - 0.5) * 0.08;
-        if (Math.random() < (c.opt.aim == null ? 0.75 : c.opt.aim)) {                 // aim into the hollow: a random dug cell
-          for (let tries = 0; tries < 30; tries++) { const j = Math.floor(Math.random() * st.hp.length); if (st.hp[j]) continue;
-            const tx = (j % COLS + 0.5) * CELL, ty = Y0 + (((j / COLS) | 0) + 0.5) * CELL; off = Math.max(-1.2, Math.min(1.2, Math.atan2(tx - b.x, PY - ty))); break; }
-        }
-        b.vx = Math.sin(off); b.vy = -Math.cos(off); b.y = PY - BR;
+        // classic paddle: the angle only depends on where the ball touches it (centre = straight up, edges = 60°)
+        const off = Math.max(-1, Math.min(1, (b.x - st.px) / (st.pw / 2))) * 1.05;
+        b.vx = Math.sin(off); b.vy = -Math.cos(off); b.y = PY - BR; b.plan = null;
       }
     }
   }
@@ -68,8 +65,18 @@
     const st = c.st; if (!st) return; st.t += dt; st.fast = Math.max(0, st.fast - dt); st.pierce = Math.max(0, st.pierce - dt);
     if (st.end) { st.boom += dt; for (const p of st.parts) { p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 0.6 * dt; } if (P_end(c, st, dt)) reset(c); return; }
     // the paddle follows the lowest falling ball, or a falling bonus when no ball is close
-    let tx = st.px, best = -1;
-    for (const b of st.balls) if (b.vy > 0 && b.y > best) { best = b.y; tx = b.x; }
+    // the automatic player picks the ball that lands first, predicts where (bounces on the side walls included),
+    // and moves there with a limited speed, offset so that the ball leaves toward the hollow it wants to dig
+    let tx = st.px, best = 1e9, bb = null;
+    for (const b of st.balls) if (b.vy > 0) { const tl = (PY - BR - b.y) / b.vy; if (tl >= 0 && tl < best) { best = tl; bb = b; } }
+    if (bb) {
+      let lx = bb.x + bb.vx * best; const span = WW - 2 * BR; lx -= BR; lx = ((lx % (2 * span)) + 2 * span) % (2 * span); if (lx > span) lx = 2 * span - lx; lx += BR;
+      if (!bb.plan) { let u = (P.rnd() - 0.5) * 1.4;
+        if (P.rnd() < (c.opt.aim == null ? 0.75 : c.opt.aim)) for (let tries = 0; tries < 30; tries++) { const j = Math.floor(P.rnd() * st.hp.length); if (st.hp[j]) continue;
+          const gx = (j % COLS + 0.5) * CELL, gy = Y0 + (((j / COLS) | 0) + 0.5) * CELL; u = Math.max(-0.95, Math.min(0.95, Math.atan2(gx - lx, PY - gy) / 1.05)); break; }
+        bb.plan = u; }
+      tx = lx - bb.plan * st.pw / 2;
+    }
     for (const k of st.caps) if (k.y > 1.2 && (best < 1.3)) { tx = k.x; break; }
     const ms = 2.2 * dt; st.px += Math.max(-ms, Math.min(ms, tx - st.px)); st.px = Math.max(st.pw / 2, Math.min(WW - st.pw / 2, st.px));
     const v = st.speed * (st.fast > 0 ? 1.8 : 1) * dt;
@@ -123,10 +130,15 @@
     id: 'breche', name: 'Brèche',
     desc: 'Une raquette automatique renvoie des billes qui creusent un mur de minuscules briques, avec des bonus qui pleuvent.',
     ranges: [
-      { key: 'bonus', label: 'Bonus', min: 0.005, max: 0.1, step: 0.005, value: 0.05 },
+      { key: 'bonus', label: 'Bonus', min: 0.005, max: 0.1, step: 0.005, value: 0.035 },
       { key: 'max', label: 'Billes max', min: 20, max: 600, step: 10, value: 300 },
       { key: 'aim', label: 'Visée', min: 0, max: 1, step: 0.05, value: 0.75 }
     ],
-    thumbSteps: 500, reset, step, draw
+    thumbSteps: 500, reset, step, draw,
+    audit(c) {                                        // a ball overlapping a standing brick (centre inside a brick = went through)
+      const st = c.st; let pen = 0; if (!st.balls) return {};
+      for (const b of st.balls) { const i = cellAt(b.x, b.y); if (i >= 0 && st.hp[i]) pen = Math.max(pen, 1); }
+      return { pen, note: Math.round(100 * (1 - st.left / st.total)) + ' % · ' + st.balls.length + ' billes' };
+    }
   });
 })();

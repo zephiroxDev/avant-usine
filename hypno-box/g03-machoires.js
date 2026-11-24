@@ -8,21 +8,37 @@
 
   function reset(c) {
     const cap = c.thumb ? 200 : 1800;
-    const st = c.st = { p: P.pool(cap), r: c.thumb ? 0.03 : 0.0165 * (c.opt.size || 1), s: 1.1 + A, ph: 'open', pt: 0, gen: 0, t: 0, full: false, blocked: 0, pen: 0, end: 0, shake: 0 };
-    for (let i = 0; i < 16; i++) P.add(st.p, (Math.random() - 0.5) * 0.6, -0.5 + Math.random() * 0.3, 0, 0, 0, 1);
+    const st = c.st = { p: P.pool(cap), r: c.thumb ? 0.03 : 0.0165 * (c.opt.size || 1), s: 1.1 + A, ph: 'open', pt: 0, gen: 0, t: 0, full: false, blocked: 0, pen: 0, end: 0, shake: 0, squeezed: 16 };
+    for (let i = 0; i < 16; i++) P.add(st.p, -0.3 + (i % 8) * 0.08, -0.5 - Math.floor(i / 8) * 0.08, (P.rnd() - 0.5) * 0.004, 0, 0, 1);
+  }
+  // each jaw edge is a real zigzag line: vertex k at y = k·HALF; a ball is pushed out along the normal of the nearest tooth face
+  const edgeX = (side, k, s) => side < 0 ? -s + (k % 2 === 0 ? A : 0) : s - A + (k % 2 === 0 ? A : 0);
+  function contact(side, s, x, y, r) {                          // returns [push x, push y] (0, 0 when free)
+    const k0 = Math.floor(y / HALF); let best = 1e9, qx = 0, qy = 0;
+    for (let k = k0 - 1; k <= k0 + 1; k++) {
+      const ax = edgeX(side, ((k % 2) + 2) % 2, s), ay = k * HALF, bx = edgeX(side, (((k + 1) % 2) + 2) % 2, s), by = (k + 1) * HALF;
+      const ex = bx - ax, ey = by - ay, t = Math.max(0, Math.min(1, ((x - ax) * ex + (y - ay) * ey) / (ex * ex + ey * ey))), cx = ax + ex * t, cy = ay + ey * t, d = Math.hypot(x - cx, y - cy);
+      if (d < best) { best = d; qx = cx; qy = cy; }
+    }
+    const inside = side < 0 ? x < -s + T(y) : x > s - A + T(y);
+    if (!inside && best >= r) return null;
+    let nx = x - qx, ny = y - qy; const l = Math.hypot(nx, ny) || 1e-9; nx /= l; ny /= l; if (inside) { nx = -nx; ny = -ny; }
+    const push = inside ? best + r : r - best; return [nx * push, ny * push, push];
   }
   function jaws(st) {
-    const p = st.p, X = p.X, Y = p.Y, r = st.r * SLOPE; let pen = 0;
-    for (let i = 0; i < p.n; i++) {
-      const t = T(Y[i]), eL = -st.s + t, eR = st.s - A + t;
-      if (X[i] < eL + r) { pen = Math.max(pen, eL + r - X[i]); X[i] = eL + r; }
-      if (X[i] > eR - r) { pen = Math.max(pen, X[i] - eR + r); X[i] = eR - r; }
+    const p = st.p, X = p.X, Y = p.Y, r = st.r; let pen = 0;
+    for (let i = 0; i < p.n; i++) for (const side of [-1, 1]) {
+      const q = contact(side, st.s, X[i], Y[i], r); if (!q) continue;
+      X[i] += q[0]; Y[i] += q[1]; if (q[2] > pen) pen = q[2];
     }
     st.pen = Math.max(st.pen, pen);
   }
   function batch(c, st) {
-    const p = st.p, grow = c.opt.grow || 0.6, m = Math.min(p.cap - p.n, Math.max(4, Math.round(p.n * grow))), g = ++st.gen;
-    for (let j = 0; j < m; j++) P.add(p, (Math.random() - 0.5) * 1.1, -0.75 + Math.random() * 0.35 - (j / m) * 0.2, (Math.random() - 0.5) * 0.004, 0, g, 0.6);
+    // new balls: as many as grow × the balls that were squeezed, released above the pile on free places only
+    const p = st.p, grow = c.opt.grow || 0.6, m = Math.min(p.cap - p.n, Math.max(4, Math.round(st.squeezed * grow))), g = ++st.gen, s = 2 * st.r * 1.05, occ = P.occupancy(p, s);
+    let top = 1; for (let i = 0; i < p.n; i++) top = Math.min(top, p.Y[i]);
+    for (let y = top - s * 1.5, put = 0; put < m && y > -0.97; y -= s * 0.87) for (let x = -0.95 + (Math.round(y / s) & 1) * s / 2; x < 0.95 && put < m; x += s)
+      if (x * x + y * y < (1 - st.r * 1.1) ** 2 && occ.free(x, y, s * 0.98)) { P.add(p, x, y, (P.rnd() - 0.5) * 0.003, 0, g, 0.6); occ.mark(x, y); put++; }
     c.note(c.scale(4 + g % 8), 1, 1.3);
   }
   function step(c, dt) {
@@ -30,9 +46,9 @@
     const open = 1.1 + A, smin = A / 2 + 0.004;
     if (st.ph === 'open') { st.s = Math.min(open, st.s + dt * 1.1); if (st.pt > 2.4 && !st.full) { st.ph = 'close'; st.pt = 0; st.blocked = 0; } }
     else if (st.ph === 'close') {
-      if (st.pen < st.r * 0.55) st.s = Math.max(smin, st.s - dt * 0.75); else { st.blocked += dt; st.s += dt * 0.04; }
+      if (st.pen < st.r * 0.2) st.s = Math.max(smin, st.s - dt * 0.75); else { st.blocked += dt; st.s += dt * 0.02; }      // the jaws stall against the packed balls
       if (st.s <= smin + 1e-4 || st.blocked > 0.45) {
-        st.ph = 'hold'; st.pt = 0; st.shake = 0.25; c.note(c.scale(1 + st.gen % 8), 0.9, 0.8);
+        st.ph = 'hold'; st.pt = 0; st.shake = 0.25; st.squeezed = st.p.n; c.note(c.scale(1 + st.gen % 8), 0.9, 0.8);
         let top = 0; for (let i = 0; i < st.p.n; i++) if (st.p.Y[i] < -0.8) top++;
         if (top > 4 || st.p.n >= st.p.cap * 0.97) st.full = true;
       }
@@ -41,7 +57,7 @@
     const sub = 3, h = dt / sub;
     for (let s = 0; s < sub; s++) {
       P.integrate(st.p, h, 0.6, () => [0, 3.2], 4);
-      for (let it = 0; it < 3; it++) { P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1); jaws(st); P.inCircle(st.p, 1, st.r, 0.15); }
+      for (let it = 0; it < 5; it++) { P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1, 1); P.inCircle(st.p, 1, st.r, 0.15); jaws(st); }
     }
     if (st.ph === 'done' && P.ending(c, st, dt, 'Mâchoires', 'Plein : ' + st.p.n + ' billes en ' + Math.round(st.t) + ' s', 3.5)) reset(c);
     if (!c.thumb) c.status(st.p.n + ' billes' + (st.full ? ' · plein !' : ''));
@@ -80,6 +96,11 @@
       { key: 'grow', label: 'Croissance', min: 0.2, max: 1.2, step: 0.05, value: 0.6 },
       { key: 'size', label: 'Taille billes', min: 0.7, max: 1.5, step: 0.05, value: 1, restart: true }
     ],
-    thumbSteps: 200, reset, step, draw
+    thumbSteps: 200, reset, step, draw,
+    audit(c) {
+      const st = c.st, p = st.p; let pen = 0;
+      for (let i = 0; i < p.n; i++) { for (const side of [-1, 1]) { const q = contact(side, st.s, p.X[i], p.Y[i], st.r * 0.999); if (q) pen = Math.max(pen, q[2] / st.r); } pen = Math.max(pen, (Math.hypot(p.X[i], p.Y[i]) + st.r - 1) / st.r); }
+      return { pen, ov: P.overlap(p, st.r), note: p.n + ' billes' };
+    }
   });
 })();

@@ -2,14 +2,15 @@
    sur les parois en laissant une traînée de chevrons dont la couleur glisse à chaque rebond ; chaque rebond
    allume un repère sur la paroi et soulève de la poussière. La caméra le suit vers le haut. */
 (() => {
+  const P = HBP;
   const NC = 14, CS = 1 / NC, VH = 1.8, SZ = 0.042;
   function rock(st, cx, cy) { if (cx < 0 || cx >= NC) return true; const row = st.rows.get(cy); return row ? row[cx] === 1 : true; }
   function ensure(st, topRow) {
     while (st.genTop > topRow - 4) {                     // carve rooms upward, each overlapping the previous one
-      const prev = st.last, w = 3 + Math.floor(Math.random() * (3 + (st.wide || 0))), h = 3 + Math.floor(Math.random() * 4);
-      let x0 = Math.max(1, Math.min(NC - 1 - w, prev.x + Math.floor((Math.random() - 0.5) * (prev.w + w))));
+      const prev = st.last, w = 3 + Math.floor(P.rnd() * (3 + (st.wide || 0))), h = 3 + Math.floor(P.rnd() * 4);
+      let x0 = Math.max(1, Math.min(NC - 1 - w, prev.x + Math.floor((P.rnd() - 0.5) * (prev.w + w))));
       if (x0 + w <= prev.x + 1) x0 = prev.x + 2 - w; if (x0 >= prev.x + prev.w - 1) x0 = prev.x + prev.w - 2; x0 = Math.max(1, Math.min(NC - 1 - w, x0));
-      const y1 = prev.y + 1 + Math.floor(Math.random() * 2), y0 = y1 - h;           // rows grow toward negative y
+      const y1 = prev.y + 1 + Math.floor(P.rnd() * 2), y0 = y1 - h;           // rows grow toward negative y
       for (let y = y0; y <= y1; y++) { if (!st.rows.has(y)) st.rows.set(y, new Uint8Array(NC).fill(1)); const r = st.rows.get(y); for (let x = x0; x < x0 + w; x++) r[x] = 0; }
       st.last = { x: x0, y: y0, w }; st.genTop = Math.min(st.genTop, y0);
     }
@@ -102,6 +103,7 @@
       { key: 'shift', label: 'Couleur', min: 0, max: 60, step: 1, value: 14 },
       { key: 'wide', label: 'Salles', min: 0, max: 5, step: 1, value: 2, restart: true }
     ],
-    thumbSteps: 240, reset, step, draw, leave
+    thumbSteps: 240, reset, step, draw, leave,
+    audit(c) { const st = c.st; return { pen: hits(st, st.x, st.y) ? 1 : 0, note: st.bounces + ' rebonds' }; }   // the cube overlapping rock = went through
   });
 })();

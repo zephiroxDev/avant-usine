@@ -1,6 +1,9 @@
 /* Boîte à outils des jeux de billes : réserve de billes (Verlet), collisions par grille, rendu par vignettes. */
 window.HBP = (() => {
   const COLS = ['#8fdc6e', '#6f7fe6', '#b06bff', '#e0607a', '#f0a050', '#5cc8e0', '#ff5fa8', '#e6d35a', '#5ad6a6', '#c77dff', '#ff8a5c', '#7fb2ff'];
+  // physics randomness: seeded, so a run never depends on the graphics quality (particle effects keep Math.random)
+  let sd = 1; const seed = v => { sd = (v >>> 0) || 1; };
+  const rnd = () => { sd = (sd + 0x6D2B79F5) >>> 0; let t = sd; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   const sm = k => k <= 0 ? 0 : k >= 1 ? 1 : k * k * (3 - 2 * k);
   const lerp = (a, b, k) => a + (b - a) * k;
   const wrap = a => { while (a > Math.PI) a -= 2 * Math.PI; while (a < -Math.PI) a += 2 * Math.PI; return a; };
@@ -33,7 +36,7 @@ window.HBP = (() => {
     }
   }
   // ball–ball contacts for equal radii r inside the box [x0, x0 + w] × [y0, y0 + h]; young balls (age < 1) push harder
-  function collide(p, r, x0, y0, w, h, stiff) {
+  function collide(p, r, x0, y0, w, h, stiff, rest) {
     const n = p.n, X = p.X, Y = p.Y, D = 2 * r, D2 = D * D, cs = D, GX = Math.max(1, Math.ceil(w / cs) + 1), GY = Math.max(1, Math.ceil(h / cs) + 1);
     if (GX * GY > 400000) return;
     if (!p.head || p.head.length < GX * GY) p.head = new Int32Array(GX * GY);
@@ -41,10 +44,16 @@ window.HBP = (() => {
     for (let i = 0; i < n; i++) { const gx = Math.min(GX - 1, Math.max(0, ((X[i] - x0) / cs) | 0)), gy = Math.min(GY - 1, Math.max(0, ((Y[i] - y0) / cs) | 0)), id = gy * GX + gx; next[i] = head[id]; head[id] = i; }
     const pair = (i, j) => {
       const dx = X[j] - X[i], dy = Y[j] - Y[i], d2 = dx * dx + dy * dy; if (d2 >= D2) return;
-      if (d2 < 1e-14) { X[j] += r * 0.1 * (Math.random() - 0.5); Y[j] += r * 0.1 * (Math.random() - 0.5); return; }
+      if (d2 < 1e-14) { X[j] += r * 0.1 * (rnd() - 0.5); Y[j] += r * 0.1 * (rnd() - 0.5); return; }
       const wi = age[i] >= 1 ? 1 : 0.2 + age[i] * 0.8, wj = age[j] >= 1 ? 1 : 0.2 + age[j] * 0.8;
       const d = Math.sqrt(d2), o = Math.min(maxC, D - d) * k0 / d, s = wi + wj, ki = o * wi / s, kj = o * wj / s;
+      if (rest == null) { X[i] -= dx * ki; Y[i] -= dy * ki; X[j] += dx * kj; Y[j] += dy * kj; return; }
+      // with a restitution: real bounce (equal masses), and the overlap correction does not turn into extra speed
+      const PX = p.PX, PY = p.PY, vix = X[i] - PX[i], viy = Y[i] - PY[i], vjx = X[j] - PX[j], vjy = Y[j] - PY[j], nx = dx / d, ny = dy / d;
       X[i] -= dx * ki; Y[i] -= dy * ki; X[j] += dx * kj; Y[j] += dy * kj;
+      const vn = (vjx - vix) * nx + (vjy - viy) * ny; let ji = 0, jj = 0;
+      if (vn < 0) { const J = -(1 + rest) * vn / s; ji = J * wi; jj = J * wj; }
+      PX[i] = X[i] - (vix - nx * ji); PY[i] = Y[i] - (viy - ny * ji); PX[j] = X[j] - (vjx + nx * jj); PY[j] = Y[j] - (vjy + ny * jj);
     };
     for (let gy = 0; gy < GY; gy++) for (let gx = 0; gx < GX; gx++) {
       for (let i = head[gy * GX + gx]; i >= 0; i = next[i]) {
@@ -54,6 +63,30 @@ window.HBP = (() => {
       }
     }
   }
+  // audit: worst and mean overlap between balls of radius r, as a fraction of the diameter (0 = none)
+  function overlap(p, r) {
+    const n = p.n, X = p.X, Y = p.Y, D = 2 * r, cs = D, m = new Map(); let worst = 0, sum = 0, cnt = 0;
+    for (let i = 0; i < n; i++) { const k = ((X[i] / cs) | 0) * 73856093 ^ ((Y[i] / cs) | 0) * 19349663; let a = m.get(k); if (!a) m.set(k, a = []); a.push(i); }
+    for (let i = 0; i < n; i++) { const gx = (X[i] / cs) | 0, gy = (Y[i] / cs) | 0;
+      for (let ox = -1; ox <= 1; ox++) for (let oy = -1; oy <= 1; oy++) { const a = m.get((gx + ox) * 73856093 ^ (gy + oy) * 19349663); if (!a) continue;
+        for (const j of a) { if (j <= i) continue; const d = Math.hypot(X[j] - X[i], Y[j] - Y[i]); if (d < D) { const o = (D - d) / D; if (o > worst) worst = o; sum += o; cnt++; } } } }
+    return { worst, mean: cnt ? sum / cnt : 0, pairs: cnt };
+  }
+  // occupancy of a ball set, to spawn new balls only on free places: free(x, y, d) is true when no ball centre is closer than d
+  function occupancy(p, cell) {
+    const m = new Map(), key = (gx, gy) => gx * 73856093 ^ gy * 19349663;
+    for (let i = 0; i < p.n; i++) { const k = key(Math.floor(p.X[i] / cell), Math.floor(p.Y[i] / cell)); let a = m.get(k); if (!a) m.set(k, a = []); a.push(p.X[i], p.Y[i]); }
+    return {
+      free(x, y, d) { const gx = Math.floor(x / cell), gy = Math.floor(y / cell);
+        for (let ox = -1; ox <= 1; ox++) for (let oy = -1; oy <= 1; oy++) { const a = m.get(key(gx + ox, gy + oy)); if (!a) continue; for (let j = 0; j < a.length; j += 2) if ((a[j] - x) ** 2 + (a[j + 1] - y) ** 2 < d * d) return false; }
+        return true; },
+      count(x, y, d) { let n = 0; const gx = Math.floor(x / cell), gy = Math.floor(y / cell);
+        for (let ox = -1; ox <= 1; ox++) for (let oy = -1; oy <= 1; oy++) { const a = m.get(key(gx + ox, gy + oy)); if (!a) continue; for (let j = 0; j < a.length; j += 2) if ((a[j] - x) ** 2 + (a[j + 1] - y) ** 2 < d * d) n++; }
+        return n; },
+      mark(x, y) { const k = key(Math.floor(x / cell), Math.floor(y / cell)); let a = m.get(k); if (!a) m.set(k, a = []); a.push(x, y); }
+    };
+  }
+  const finite = p => { for (let i = 0; i < p.n; i++) if (!isFinite(p.X[i]) || !isFinite(p.Y[i])) return false; return true; };
   // keep balls inside a circle of radius R centred on the origin, with a bounce
   function inCircle(p, R, r, bounce) {
     const lim = R - r, X = p.X, Y = p.Y, PX = p.PX, PY = p.PY, b = 1 + (bounce == null ? 0.5 : bounce);
@@ -106,5 +139,5 @@ window.HBP = (() => {
     return st.end > (hold || 4) + 1.6 && !c.thumb;
   }
   function fade(g, c, st, hold) { const k = ((st.end || 0) - (hold || 4)) / 1.4; if (k > 0 && !c.thumb) { g.globalAlpha = Math.min(1, k); g.fillStyle = '#0d0b1e'; g.fillRect(0, 0, c.W, c.H); g.globalAlpha = 1; } }
-  return { COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
+  return { seed, rnd, overlap, finite, occupancy, COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
 })();
