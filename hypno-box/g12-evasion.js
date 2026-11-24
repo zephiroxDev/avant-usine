@@ -4,8 +4,8 @@
 (() => {
   const P = HBP, TH = 0.03;
   function reset(c) {
-    const cap = c.thumb ? 300 : Math.round(c.opt.max || 1600);
-    const st = c.st = { p: P.pool(cap), out: P.pool(cap * 2), r: 0.038, gap: c.opt.gap || 0.55, rot: P.rnd() * 6.28, t: 0, esc: 0, end: 0, sparks: [] };
+    const cap = c.thumb ? 300 : Math.round(c.opt.max || 520);
+    const st = c.st = { p: P.pool(cap), out: P.pool(Math.round(cap * 1.6)), r: 0.038, gap: c.opt.gap || 0.7, rot: P.rnd() * 6.28, t: 0, esc: 0, end: 0, sparks: [] };
     P.add(st.p, 0, -0.3, 0.012, -0.004, 0, 1);
   }
   const inGap = (st, a) => { let d = a - st.rot; d = ((d % 6.2832) + 6.2832) % 6.2832; return d < st.gap; };
@@ -21,6 +21,7 @@
       if ((g0 && d > 1 - TH - r * 0.2) || (!g0 && d > 1)) {
         if (!g0 && d <= 1 + TH + r) { const k = (1 + TH + r * 1.01) / d; X[i] *= k; Y[i] *= k; p.PX[i] *= k; p.PY[i] *= k; }
         if (Math.hypot(X[i], Y[i]) > 1 + TH + r) {
+          if (st.out.n >= st.out.cap) { st.full = true; continue; }          // no room left outside: the game ends, no ball is lost
           P.add(st.out, X[i], Y[i], X[i] - p.PX[i], Y[i] - p.PY[i], p.col[i], 1); P.remove(p, i); st.esc++;
           // exactly two new balls, at the nearest free places to the centre, thrown in opposite random directions
           if (!occ) occ = P.occupancy(p, 2 * r); const L = P.lattice(), an = P.rnd() * 6.283, sp = 0.012 + P.rnd() * 0.008;
@@ -54,7 +55,7 @@
       for (let it = 0; it < 4; it++) { P.collide(st.p, st.r, -1.2, -1.2, 2.4, 2.4, 0.9, 0.95); ring(c, st); P.collide(st.out, st.r, -W - 0.1, -H - 0.5, 2 * W + 0.2, 2 * H + 0.6); outside(st, W, H); }
     }
     for (const sp of st.sparks) sp.t += dt; st.sparks = st.sparks.filter(sp => sp.t < 0.5);
-    if (st.p.n >= st.p.cap * 0.97 || st.out.n >= st.out.cap - 2 || st.end) { if (P.ending(c, st, dt, 'Évasion', st.esc + ' évadées, ' + st.p.n + ' billes dans l\'anneau, en ' + Math.round(st.t) + ' s', 4)) reset(c); }
+    if (st.p.n >= st.p.cap * 0.97 || st.full || st.end) { if (P.ending(c, st, dt, 'Évasion', st.esc + ' évadées, ' + st.p.n + ' billes dans l\'anneau, en ' + Math.round(st.t) + ' s', 4)) reset(c); }
     if (!c.thumb) c.status(st.p.n + ' dedans · ' + st.esc + ' évadées');
   }
   function draw(c, g) {
@@ -73,14 +74,14 @@
     id: 'evasion', name: 'Évasion',
     desc: 'Une ouverture tourne autour de l\'anneau : chaque bille qui s\'échappe en fait apparaître deux au centre.',
     ranges: [
-      { key: 'gap', label: 'Ouverture', min: 0.15, max: 1.4, step: 0.05, value: 0.55, restart: true },
+      { key: 'gap', label: 'Ouverture', min: 0.15, max: 1.4, step: 0.05, value: 0.7, restart: true },
       { key: 'spin', label: 'Rotation', min: 0, max: 2, step: 0.05, value: 0.5 },
       { key: 'grav', label: 'Gravité', min: 0, max: 3, step: 0.05, value: 1.4 },
-      { key: 'max', label: 'Billes', min: 400, max: 2600, step: 100, value: 1600, restart: true }
+      { key: 'max', label: 'Billes', min: 150, max: 700, step: 10, value: 520, restart: true }
     ],
     thumbSteps: 500, reset, step, draw,
     audit(c) {                    // inside balls in the closed part of the ring; escaped balls back inside
-      const st = c.st, p = st.p, r = st.r; let pen = 0;
+      const st = c.st, p = st.p, r = st.r; let pen = 0; if (st.end) return {};
       for (let i = 0; i < p.n; i++) { const d = Math.hypot(p.X[i], p.Y[i]); if (!inGap(st, Math.atan2(p.Y[i], p.X[i])) && d > 1 - TH - r) pen = Math.max(pen, (d - (1 - TH - r)) / r); }
       for (let i = 0; i < st.out.n; i++) pen = Math.max(pen, (1 + TH + r - Math.hypot(st.out.X[i], st.out.Y[i])) / r);
       return { pen, ov: P.overlap(p, r), note: p.n + ' dedans, ' + st.esc + ' évadées' };

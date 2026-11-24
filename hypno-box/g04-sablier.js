@@ -27,7 +27,7 @@
     for (let i = p.n - 1; i >= 0; i--) if (Math.abs(p.X[i]) < st.r && Math.abs(p.Y[i]) < TIP) { k++; P.remove(p, i); }
     k += st.caught; st.caught = 0; st.bursts.push({ t: 0, k });
     if (!k) { c.note(c.scale(0), 0.4, 0.5); return; }
-    const gcol = ++st.gen, m = Math.min(p.cap - p.n, Math.round(k * (c.opt.mult || 4)));
+    const gcol = ++st.gen, m = Math.min(p.cap - p.n, Math.round(k * (c.opt.mult || 3)));
     // the new balls spurt out of the seam, up and down, on free places just outside the pistons, moving away from them
     const s = 2 * st.r * 1.03, occ = P.occupancy(p, s); let put = 0;
     for (let row = 0; put < m && row < 40; row++) for (const sy of [1, -1]) for (let col = 0; col < 25 && put < m; col++) {
@@ -85,7 +85,7 @@
     id: 'sablier', name: 'Sablier',
     desc: 'Deux pistons claquent au centre : chaque bille écrasée fait jaillir une gerbe de nouvelles billes.',
     ranges: [
-      { key: 'mult', label: 'Multiplier', min: 2, max: 10, step: 1, value: 4 },
+      { key: 'mult', label: 'Multiplier', min: 2, max: 10, step: 1, value: 3 },
       { key: 'max', label: 'Billes', min: 400, max: 3000, step: 100, value: 1500, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,

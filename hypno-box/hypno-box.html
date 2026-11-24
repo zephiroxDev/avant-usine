@@ -1292,6 +1292,15 @@ window.HBP = (() => {
       mark(x, y) { const k = key(Math.floor(x / cell), Math.floor(y / cell)); let a = m.get(k); if (!a) m.set(k, a = []); a.push(x, y); }
     };
   }
+  // 3D camera (y points down, like the screen): perspective projection of world points, and of directions for face culling
+  function camera(W, H, o) {
+    const cy = Math.cos(o.yaw), sy = Math.sin(o.yaw), cp = Math.cos(o.pitch), sp = Math.sin(o.pitch), S = o.scale, cx0 = o.cx == null ? W / 2 : o.cx, cy0 = o.cy == null ? H / 2 : o.cy;
+    const view = (dx, dy, dz) => { const x1 = dx * cy - dz * sy, z1 = dx * sy + dz * cy; return [x1, dy * cp - z1 * sp, dy * sp + z1 * cp]; };
+    return {
+      p(x, y, z) { const [x1, y2, z2] = view(x - o.tx, y - o.ty, z - o.tz), d = z2 + o.dist, k = S * o.dist / d; return [cx0 + x1 * k, cy0 + y2 * k, d, k]; },
+      facing(nx, ny, nz, px, py, pz) { const [vx, vy, vz] = view(px - o.tx, py - o.ty, pz - o.tz), [ax, ay, az] = view(nx, ny, nz); return ax * vx + ay * vy + az * (vz + o.dist) < 0; }
+    };
+  }
   const finite = p => { for (let i = 0; i < p.n; i++) if (!isFinite(p.X[i]) || !isFinite(p.Y[i])) return false; return true; };
   // keep balls inside a circle of radius R centred on the origin, with a bounce
   function inCircle(p, R, r, bounce) {
@@ -1345,7 +1354,7 @@ window.HBP = (() => {
     return st.end > (hold || 4) + 1.6 && !c.thumb;
   }
   function fade(g, c, st, hold) { const k = ((st.end || 0) - (hold || 4)) / 1.4; if (k > 0 && !c.thumb) { g.globalAlpha = Math.min(1, k); g.fillStyle = '#0d0b1e'; g.fillRect(0, 0, c.W, c.H); g.globalAlpha = 1; } }
-  return { seed, rnd, overlap, finite, occupancy, COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
+  return { seed, rnd, overlap, finite, occupancy, camera, COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
 })();
 </script>
 <script>
@@ -1424,7 +1433,7 @@ window.HBP = (() => {
     return { rot, near };
   }
   function clawStep(c, st, k, i, dt) {
-    k.t += dt; const q = Math.min(1, k.t / k.dur), e = sm(q), f = k.from, to = k.to;
+    k.t += dt; const q = Math.min(1, k.t / k.dur), e = sm(q), f = k.from, to = k.to;     // claw tempo: one catch-and-throw ≈ 3 s
     if (f) { for (const p of ['e', 'B', 'A', 'be', 'sp']) k[p] = lerp(f[p], to[p], k.s === 'fire' && p === 'e' ? 1 - Math.pow(1 - q, 3) : e); k.rot = f.rot + wrap(to.rot - f.rot) * e; }
     if (k.s === 'press') k.sp = Math.sin(q * Math.PI * 0.5) * Math.PI / 4 + Math.sin(q * Math.PI * 6) * 0.06;
     if (k.s === 'idle') {
@@ -1453,7 +1462,7 @@ window.HBP = (() => {
     else if (k.s === 'back') { k.s = 'idle'; k.from = null; }
   }
   function fire(c, st, k, i) {
-    const mult = c.opt.mult || 5, room = st.cap - st.n, g = ++st.gen, m = Math.max(Math.min(k.hc, room), Math.min(Math.round(k.hc * mult), room));
+    const mult = c.opt.mult || 4, room = st.cap - st.n, g = ++st.gen, m = Math.max(Math.min(k.hc, room), Math.min(Math.round(k.hc * mult), room));
     k.held = []; k.hc = 0;
     const s = 2 * st.r * 1.02, G = geo(k), L0 = lattice(), R0 = s * Math.sqrt(m) * 0.5;
     const ahead = k.e + BAR / 2 + st.r * 1.1 + R0, qx = G.hx + G.ux * ahead, qy = G.hy + G.uy * ahead;      // in front of the plate, never inside it
@@ -1607,7 +1616,7 @@ window.HBP = (() => {
     id: 'alchimie', name: 'Alchimie',
     desc: 'Deux pinces se renvoient les billes : chacune attrape la nuée qui arrive et la relance multipliée, d\'une nouvelle couleur.',
     ranges: [
-      { key: 'mult', label: 'Multiplier', min: 2, max: 8, step: 1, value: 5 },
+      { key: 'mult', label: 'Multiplier', min: 2, max: 8, step: 1, value: 4 },
       { key: 'max', label: 'Billes', min: 400, max: 3000, step: 100, value: 1600, restart: true },
       { key: 'claws', label: 'Pinces', min: 1, max: 4, step: 1, value: 2, restart: true }
     ],
@@ -1631,7 +1640,7 @@ window.HBP = (() => {
 (() => {
   const P = HBP, SUM = 0.66, HUB = 0.07;
   // one cycle per pair: close (squeeze), hold closed, reopen, pause with both open
-  const PH = [['close', 1.1], ['hold', 0.35], ['open', 0.9], ['pause', 0.7]];
+  const PH = [['close', 1.6], ['hold', 0.45], ['open', 1.25], ['pause', 1]];
 
   function reset(c) {
     const cap = c.thumb ? 260 : Math.round(c.opt.max || 2000);
@@ -1655,7 +1664,7 @@ window.HBP = (() => {
     for (let i = p.n - 1; i >= 0; i--) if (inPair(st, i, pair)) { k++; P.remove(p, i); }      // gap shut: nothing can stay in it
     k += st.crushed[pair]; st.crushed[pair] = 0;
     if (!k) return;
-    const full = p.n + k * 2 > st.cap, mult = full ? 1 : (c.opt.mult || 3), m = Math.min(Math.round(k * mult), st.cap - p.n);
+    const full = p.n + k * 2 > st.cap, mult = full ? 1 : (c.opt.mult || 2), m = Math.min(Math.round(k * mult), st.cap - p.n);
     st.pend.push({ m, m0: m, g: ++st.gen, pair });
     if (full) st.rounds++;
     st.flash.push({ pair, t: 0 });
@@ -1751,7 +1760,7 @@ window.HBP = (() => {
     id: 'eventail', name: 'Éventail',
     desc: 'Quatre pales s\'ouvrent et se ferment tour à tour : les billes écrasées renaissent multipliées, d\'une nouvelle couleur.',
     ranges: [
-      { key: 'mult', label: 'Multiplier', min: 2, max: 6, step: 1, value: 3 },
+      { key: 'mult', label: 'Multiplier', min: 2, max: 6, step: 1, value: 2 },
       { key: 'max', label: 'Billes', min: 500, max: 3500, step: 100, value: 2000, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
@@ -1903,7 +1912,7 @@ window.HBP = (() => {
     for (let i = p.n - 1; i >= 0; i--) if (Math.abs(p.X[i]) < st.r && Math.abs(p.Y[i]) < TIP) { k++; P.remove(p, i); }
     k += st.caught; st.caught = 0; st.bursts.push({ t: 0, k });
     if (!k) { c.note(c.scale(0), 0.4, 0.5); return; }
-    const gcol = ++st.gen, m = Math.min(p.cap - p.n, Math.round(k * (c.opt.mult || 4)));
+    const gcol = ++st.gen, m = Math.min(p.cap - p.n, Math.round(k * (c.opt.mult || 3)));
     // the new balls spurt out of the seam, up and down, on free places just outside the pistons, moving away from them
     const s = 2 * st.r * 1.03, occ = P.occupancy(p, s); let put = 0;
     for (let row = 0; put < m && row < 40; row++) for (const sy of [1, -1]) for (let col = 0; col < 25 && put < m; col++) {
@@ -1961,7 +1970,7 @@ window.HBP = (() => {
     id: 'sablier', name: 'Sablier',
     desc: 'Deux pistons claquent au centre : chaque bille écrasée fait jaillir une gerbe de nouvelles billes.',
     ranges: [
-      { key: 'mult', label: 'Multiplier', min: 2, max: 10, step: 1, value: 4 },
+      { key: 'mult', label: 'Multiplier', min: 2, max: 10, step: 1, value: 3 },
       { key: 'max', label: 'Billes', min: 400, max: 3000, step: 100, value: 1500, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
@@ -2130,20 +2139,52 @@ window.HBP = (() => {
   const NC = 14, CS = 1 / NC, VH = 1.8, SZ = 0.042;
   function rock(st, cx, cy) { if (cx < 0 || cx >= NC) return true; const row = st.rows.get(cy); return row ? row[cx] === 1 : true; }
   function ensure(st, topRow) {
-    while (st.genTop > topRow - 4) {                     // carve rooms upward, each overlapping the previous one
+    let built = false;
+    while (st.genTop > topRow - 4) { built = true;                     // carve rooms upward, each overlapping the previous one
       const prev = st.last, w = 3 + Math.floor(P.rnd() * (3 + (st.wide || 0))), h = 3 + Math.floor(P.rnd() * 4);
       let x0 = Math.max(1, Math.min(NC - 1 - w, prev.x + Math.floor((P.rnd() - 0.5) * (prev.w + w))));
-      if (x0 + w <= prev.x + 1) x0 = prev.x + 2 - w; if (x0 >= prev.x + prev.w - 1) x0 = prev.x + prev.w - 2; x0 = Math.max(1, Math.min(NC - 1 - w, x0));
+      const ov = Math.min(3, w, prev.w);                                // rooms share at least three columns: a real passage, not a slit
+      if (x0 + w < prev.x + ov) x0 = prev.x + ov - w; if (x0 > prev.x + prev.w - ov) x0 = prev.x + prev.w - ov; x0 = Math.max(1, Math.min(NC - 1 - w, x0));
       const y1 = prev.y + 1 + Math.floor(P.rnd() * 2), y0 = y1 - h;           // rows grow toward negative y
       for (let y = y0; y <= y1; y++) { if (!st.rows.has(y)) st.rows.set(y, new Uint8Array(NC).fill(1)); const r = st.rows.get(y); for (let x = x0; x < x0 + w; x++) r[x] = 0; }
       st.last = { x: x0, y: y0, w }; st.genTop = Math.min(st.genTop, y0);
+    }
+    return built;
+  }
+  const SP = 0.62, MS = CS * 0.2, TAU = MS / SP;
+  // the cube moves on a fine integer grid (step U on each axis): its path is exactly periodic, so a closed loop can be recognised
+  const U = MS / Math.SQRT2;
+  function micro(o, onBounce) {
+    const S = o.st || o;
+    if (hits(S, (o.xi + o.sx) * U, o.yi * U)) { if (onBounce) onBounce(o.xi * U + o.sx * SZ / 2, o.yi * U, 'x'); o.sx = -o.sx; } else o.xi += o.sx;
+    if (hits(S, o.xi * U, (o.yi + o.sy) * U)) { if (onBounce) onBounce(o.xi * U, o.yi * U + o.sy * SZ / 2, 'y'); o.sy = -o.sy; } else o.yi += o.sy;
+    o.x = o.xi * U; o.y = o.yi * U; o.vx = o.sx * SP / Math.SQRT2; o.vy = o.sy * SP / Math.SQRT2;
+  }
+  // Look-ahead: follow the cube's future path through the rooms already built. If it would circle in a room without climbing,
+  // the exit is dug into that room's ceiling, right above the highest point of its loop — while that room is still out of sight.
+  // The cube never goes through rock: the level is simply designed so that it can always climb.
+  function lookahead(st) {
+    const o = { st, xi: st.xi, yi: st.yi, sx: st.sx, sy: st.sy, x: st.x, y: st.y }; let best = o.y, bx = o.x, since = 0, seen = new Set(), loop = false;
+    const onB = () => { const k = o.xi + ',' + o.yi + ',' + o.sx + ',' + o.sy; if (seen.has(k)) loop = true; else seen.add(k); };
+    for (let n = 0; n < 40000; n++) {
+      micro(o, onB);
+      if (o.y < best - 0.02) { best = o.y; bx = o.x; since = 0; seen = new Set(); } else since++;
+      if (o.y < (st.genTop + 6) * CS) return;                          // reached the newest rooms: checked again when more are built
+      if ((loop || since > 600) && best < st.cam - 0.1) {                 // only out of sight loop = false; seen = new Set();   // the same bounce came back: a closed loop                                             // looping: dig a two-cell shaft up from the top of the loop
+        let changed = false; const cx = Math.max(1, Math.min(NC - 3, Math.floor(bx / CS) - (bx / CS % 1 < 0.5 ? 1 : 0)));
+        for (let y = Math.floor(best / CS) - 1, k = 0; k < 20; y--, k++) {
+          if (!st.rows.has(y)) st.rows.set(y, new Uint8Array(NC).fill(1)); const row = st.rows.get(y);
+          if (!row[cx] && !row[cx + 1] && k > 1) break; if ((row[cx] || row[cx + 1]) && y * CS > st.cam - 0.05) { st.seenDig = (st.seenDig || 0) + 1; } if (row[cx] || row[cx + 1]) changed = true; row[cx] = 0; row[cx + 1] = 0;
+        }
+        if (changed) st.dug = (st.dug || 0) + 1; since = 0;
+      }
     }
   }
   function reset(c) {
     const st = c.st = { rows: new Map(), genTop: 0, last: { x: 5, y: 2, w: 4 }, wide: Math.round(c.opt.wide == null ? 2 : c.opt.wide), t: 0, hue: 50, trail: [], marks: [], dust: [], bounces: 0, cam: 0, best: 0, stuck: 0, squash: 0 };
     for (let y = -2; y <= 6; y++) { const r = new Uint8Array(NC).fill(1); if (y >= -2 && y <= 3) for (let x = 3; x < 10; x++) r[x] = 0; st.rows.set(y, r); }
     st.last = { x: 3, y: -2, w: 7 }; st.genTop = -2; ensure(st, -40);
-    st.x = 6.5 * CS; st.y = 2 * CS; const sp = 0.62; st.vx = sp / Math.SQRT2; st.vy = -sp / Math.SQRT2; st.cam = st.y - VH * 0.6; st.best = st.y;
+    st.xi = Math.round(6.5 * CS / U); st.yi = Math.round(2 * CS / U); st.sx = 1; st.sy = -1; st.x = st.xi * U; st.y = st.yi * U; st.vx = SP / Math.SQRT2; st.vy = -SP / Math.SQRT2; st.cam = st.y - VH * 0.6; st.best = st.y; lookahead(st);
     st.trail.push({ x: st.x, y: st.y, h: st.hue });
   }
   function hits(st, x, y) {
@@ -2159,26 +2200,17 @@ window.HBP = (() => {
   }
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.squash = Math.max(0, st.squash - dt * 5);
-    const n = Math.ceil(dt * 0.62 / (CS * 0.2)), d = dt / n;
-    for (let i = 0; i < n; i++) {
-      const nx = st.x + st.vx * d; if (hits(st, nx, st.y)) { bounce(c, st, st.x + Math.sign(st.vx) * SZ / 2, st.y, 'x'); st.vx = -st.vx; } else st.x = nx;
-      const ny = st.y + st.vy * d; if (hits(st, st.x, ny)) { bounce(c, st, st.x, st.y + Math.sign(st.vy) * SZ / 2, 'y'); st.vy = -st.vy; } else st.y = ny;
-    }
+    // fixed micro-steps: the motion is exactly reproducible, so the look-ahead below predicts the real path
+    st.acc = (st.acc || 0) + dt;
+    while (st.acc >= TAU) { st.acc -= TAU; micro(st, (x, y, ax) => bounce(c, st, x, y, ax)); }
     const last = st.trail[st.trail.length - 1];
     if (Math.hypot(st.x - last.x, st.y - last.y) > 0.012) { st.trail.push({ x: st.x, y: st.y, h: st.hue }); if (st.trail.length > (c.opt.trail || 420)) st.trail.shift(); }
-    // keep climbing: if the cube has not gone higher for a while, it blasts through the rock above it
-    if (st.y < st.best - 0.02) { st.best = st.y; st.stuck = 0; } else st.stuck += dt;
-    if (st.stuck > 4) {
-      st.stuck = 0; const cx = Math.floor(st.x / CS), cy = Math.floor(st.y / CS);
-      for (let y = cy - 4; y <= cy; y++) { if (!st.rows.has(y)) st.rows.set(y, new Uint8Array(NC).fill(1)); for (let x = Math.max(1, cx - 1); x <= Math.min(NC - 2, cx + 1); x++) st.rows.get(y)[x] = 0; }
-      for (let i = 0; i < 40; i++) st.dust.push({ x: st.x + (Math.random() - 0.5) * 0.2, y: st.y - Math.random() * 0.3, vx: (Math.random() - 0.5) * 0.6, vy: (Math.random() - 0.5) * 0.6, t: 0 });
-      st.vy = -Math.abs(st.vy); c.note(c.scale(14), 1, 1.4);
-    }
-    ensure(st, Math.floor((st.cam - 0.5) / CS));
+    if (st.y < st.best - 0.02) st.best = st.y;
+    st.la = (st.la || 0) + dt;
+    if (ensure(st, Math.floor((st.cam - 0.5) / CS) - 30) || st.la > 2) { st.la = 0; lookahead(st); }      // rooms are built two screens ahead, out of sight
     const want = st.y - VH * 0.55; st.cam += (want - st.cam) * Math.min(1, dt * 2.2);
     for (const m of st.marks) m.t += dt;
     for (const p of st.dust) { p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= 0.97; p.vy *= 0.97; } st.dust = st.dust.filter(p => p.t < 1.4);
-    for (const [y] of st.rows) if (y * CS > st.cam + VH + 1) st.rows.delete(y);
     if (!c.thumb) c.status(st.bounces + ' rebonds · ' + Math.max(0, Math.round(-st.best * 10)) + ' m');
   }
   function leave(c) { const st = c.st; if (st && st.bounces > 20) HBH.add('Ricochet', st.bounces + ' rebonds, ' + Math.max(0, Math.round(-st.best * 10)) + ' m de montée en ' + Math.round(st.t) + ' s'); }
@@ -2228,7 +2260,7 @@ window.HBP = (() => {
       { key: 'wide', label: 'Salles', min: 0, max: 5, step: 1, value: 2, restart: true }
     ],
     thumbSteps: 240, reset, step, draw, leave,
-    audit(c) { const st = c.st; return { pen: hits(st, st.x, st.y) ? 1 : 0, note: st.bounces + ' rebonds' }; }   // the cube overlapping rock = went through
+    audit(c) { const st = c.st; return { pen: hits(st, st.x, st.y) ? 1 : 0, bad: st.seenDig ? 1 : 0, note: st.bounces + ' rebonds, ' + Math.round(-st.best * 10) + ' m, sorties creusées ' + (st.dug || 0) + ', dont visibles ' + (st.seenDig || 0) }; }   // the cube overlapping rock = went through
   });
 })();
 </script>
@@ -2256,6 +2288,18 @@ window.HBP = (() => {
         const dx = X[i] - G.mx, dy = Y[i] - G.my, d = Math.hypot(dx, dy) || 1e-9;
         if (Math.abs(d - A) < r + TH && inArc(Math.atan2(dy, dx), G.a0)) { const tgt = d < A ? A - r - TH : A + r + TH; X[i] = G.mx + dx / d * tgt; Y[i] = G.my + dy / d * tgt; }
         for (const [ex, ey] of [[k.cx, k.cy], [G.ex, G.ey]]) { const qx = X[i] - ex, qy = Y[i] - ey, q = Math.hypot(qx, qy); if (q < r + TH && q > 1e-9) { X[i] = ex + qx / q * (r + TH); Y[i] = ey + qy / q * (r + TH); } }
+      }
+    }
+  }
+  // a ball caught in the closing angle between an arc and a wall has no room left: it is squeezed to the other side of the arc
+  function squeeze(st) {
+    const p = st.p, r = st.r, lim = 1 - r;
+    for (let i = 0; i < p.n; i++) for (const k of st.arcs) {
+      const G = geo(k), dx = p.X[i] - G.mx, dy = p.Y[i] - G.my, d = Math.hypot(dx, dy) || 1e-9;
+      if (Math.abs(d - A) > (r + TH) * 0.75 || !inArc(Math.atan2(dy, dx), G.a0)) continue;
+      for (const tgt of d < A ? [A + r + TH, A - r - TH] : [A - r - TH, A + r + TH]) {
+        const x = G.mx + dx / d * tgt, y = G.my + dy / d * tgt;
+        if (Math.abs(x) <= lim && Math.abs(y) <= lim) { const vx = p.X[i] - p.PX[i], vy = p.Y[i] - p.PY[i]; p.X[i] = x; p.Y[i] = y; p.PX[i] = x - vx; p.PY[i] = y - vy; break; }
       }
     }
   }
@@ -2299,7 +2343,8 @@ window.HBP = (() => {
     for (let s = 0; s < sub; s++) {
       P.integrate(st.p, h, st.p.n < 60 ? 0.97 : 0.7, () => [(P.rnd() - 0.5) * jit, (P.rnd() - 0.5) * jit], 4);
       for (let it = 0; it < 5; it++) { P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1, 1); arcs(st); box(st); }
-      for (let it = 0; it < 3; it++) { arcs(st); box(st); }            // a ball pinched between an arc and a wall slides along the wall
+      squeeze(st);
+      for (let it = 0; it < 8; it++) { arcs(st); box(st); }            // a ball pinched between an arc and a wall slides along the wall
     }
     for (const rg of st.rings) rg.t += dt; st.rings = st.rings.filter(rg => rg.t < 0.8);
     if (st.p.n >= st.p.cap * 0.98 || st.end) { if (P.ending(c, st, dt, 'Quatre lunes', 'Boîte remplie : ' + st.p.n + ' billes, ' + st.gen + ' couleurs en ' + Math.round(st.t) + ' s', 4)) reset(c); }
@@ -2414,7 +2459,7 @@ window.HBP = (() => {
     const st = c.st; if (!st) return; st.t += dt;
     // a real pendulum: θ'' = −(g/L)·sin θ. The panels stop it at ±AMP (impact, partial rebound); a motor in the pivot gives back,
     // at the bottom of each swing, just the energy lost, so that it keeps reaching the panels. Its period comes from g/L.
-    const T = c.opt.period || 2.8, k2 = Math.pow(2 * Math.PI / T, 2), w0 = Math.sqrt(2 * k2 * (1 - Math.cos(AMP))) * 1.12;
+    const T = c.opt.period || 3.6, k2 = Math.pow(2 * Math.PI / T, 2), w0 = Math.sqrt(2 * k2 * (1 - Math.cos(AMP))) * 1.12;
     st.w -= k2 * Math.sin(st.th) * dt; const prev = st.th; st.th += st.w * dt;
     if (prev * st.th <= 0 && prev !== st.th) st.w = Math.sign(st.w || 1) * Math.max(Math.abs(st.w), w0);   // motor pulse at the bottom
     if (Math.abs(st.th) >= AMP) {                                                                         // hits a panel
@@ -2472,7 +2517,7 @@ window.HBP = (() => {
     desc: 'Un lourd pendule presse les billes contre les panneaux : chaque pression les fait renaître multipliées.',
     ranges: [
       { key: 'mult', label: 'Multiplier', min: 2, max: 8, step: 1, value: 2 },
-      { key: 'period', label: 'Balancement', min: 1.6, max: 5, step: 0.1, value: 2.8 },
+      { key: 'period', label: 'Balancement', min: 1.6, max: 5, step: 0.1, value: 3.6 },
       { key: 'max', label: 'Billes', min: 400, max: 2400, step: 100, value: 1300, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
@@ -2555,7 +2600,7 @@ window.HBP = (() => {
       if (st.ball) { const L = b.path[b.path.length - 1]; if (Math.hypot(b.x - L[0], b.y - L[1]) > 0.012) b.path.push([b.x, b.y]); }
     }
     upd(st, dt);
-    if (st.pins.length >= (c.opt.pins || 30) && !st.ball && !st.end) { st.end = 0.001; if (!c.thumb) HBH.add('Paraboles', st.n + ' billes lancées, ' + st.esc + ' évadées, en ' + Math.round(st.t) + ' s'); }
+    if (st.pins.length >= (c.opt.pins || 16) && !st.ball && !st.end) { st.end = 0.001; if (!c.thumb) HBH.add('Paraboles', st.n + ' billes lancées, ' + st.esc + ' évadées, en ' + Math.round(st.t) + ' s'); }
     if (!c.thumb) c.status(st.n + ' billes · ' + st.esc + (st.esc > 1 ? ' évadées' : ' évadée'));
   }
   function upd(st, dt) {
@@ -2597,7 +2642,7 @@ window.HBP = (() => {
     desc: 'Des billes lancées en arc rebondissent sur un poteau ; celles qui touchent les dents deviennent des plots et dessinent leur chemin.',
     ranges: [
       { key: 'keep', label: 'Traces', min: 5, max: 120, step: 5, value: 40 },
-      { key: 'pins', label: 'Plots max', min: 8, max: 80, step: 1, value: 30, restart: true }
+      { key: 'pins', label: 'Plots max', min: 8, max: 80, step: 1, value: 16, restart: true }
     ],
     thumbSteps: 600, reset, step, draw,
     audit(c) {                             // the flying ball inside a pin, the pole or the teeth
@@ -2610,133 +2655,159 @@ window.HBP = (() => {
 })();
 </script>
 <script>
-/* Jeu 10 · Démolition : vue de côté. Une tour de petits blocs liés entre eux ; une boule de métal tombe sur une
-   rampe et la percute. À chaque manche, la boule pèse dix fois plus (1 kg, 10 kg, 100 kg, 1 000 kg) : les liens
-   cassent de plus en plus et la tour s'effondre en avalanche de blocs. Monde de 1 × 1.6, sol en y = 1.45. */
+/* Jeu 10 · Démolition (3D) : une tour de petits cubes (largeur × profondeur × hauteur) liés à leurs voisins. Une boule de métal
+   dévale une rampe et la percute de face. À chaque manche, elle pèse dix fois plus (1 kg, 10 kg, 100 kg, 1 000 kg) : les liens
+   cassent sous l'effort, la gravité fait le reste. Physique en 3D (y vers le bas, sol en y = 0), rendu en perspective. */
 (() => {
-  const P = HBP, GROUND = 1.45, CELL = 0.024, MASSES = [1, 10, 100, 1000];
-  const RAMP = [[1.02, 0.86, 0.74, 1.3], [0.74, 1.3, 0.62, 1.42]];
+  const P = HBP, CELL = 0.032, R = CELL / 2, MASSES = [1, 10, 100, 1000], G = 2.4;
+  const RAMP = [[1.25, -0.95, 0.62, -0.12], [0.62, -0.12, 0.42, 0]];       // ramp profile in x / y, as wide as the tower is deep
+  const TONES = [[214, 177, 131], [201, 164, 118], [224, 190, 143], [190, 152, 108], [208, 170, 124]];
+
   function reset(c) { c.st = { round: 0, t: 0 }; build(c, c.st); }
   function build(c, st) {
-    const cols = Math.round(c.opt.cols || 12), rows = Math.round((c.opt.height || 0.85) / CELL), cap = cols * rows;
-    const p = P.pool(cap), x0 = 0.42 - cols * CELL / 2, bonds = [];
-    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) P.add(p, x0 + (x + 0.5) * CELL, GROUND - (y + 0.5) * CELL, 0, 0, (x * 7 + y * 3) % 5, 1);
-    const id = (x, y) => y * cols + x;
-    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
-      if (x + 1 < cols) bonds.push([id(x, y), id(x + 1, y), CELL, 0.45]);
-      if (y + 1 < rows) bonds.push([id(x, y), id(x, y + 1), CELL, 1]);
-      if (x + 1 < cols && y + 1 < rows) { bonds.push([id(x, y), id(x + 1, y + 1), CELL * Math.SQRT2, 0.4]); bonds.push([id(x + 1, y), id(x, y + 1), CELL * Math.SQRT2, 0.4]); }
+    const nx = Math.round(c.opt.cols || 8), nz = c.thumb ? 2 : 4, ny = Math.round((c.opt.height || 0.85) / CELL), N = nx * ny * nz;
+    const X = new Float32Array(N), Y = new Float32Array(N), Z = new Float32Array(N), PX = new Float32Array(N), PY = new Float32Array(N), PZ = new Float32Array(N), tone = new Uint8Array(N);
+    const id = (i, j, k) => (j * nz + k) * nx + i, bonds = [];
+    for (let j = 0; j < ny; j++) for (let k = 0; k < nz; k++) for (let i = 0; i < nx; i++) {
+      const q = id(i, j, k); X[q] = PX[q] = (i - (nx - 1) / 2) * CELL; Y[q] = PY[q] = -(j + 0.5) * CELL; Z[q] = PZ[q] = (k - (nz - 1) / 2) * CELL; tone[q] = (i * 7 + j * 3 + k * 5) % 5;
+      // neighbours: x and z (side by side, weaker), y (stacked, stronger), diagonals in the x-y and z-y planes (shear)
+      if (i + 1 < nx) bonds.push(q, id(i + 1, j, k), 0); if (k + 1 < nz) bonds.push(q, id(i, j, k + 1), 0); if (j + 1 < ny) bonds.push(q, id(i, j + 1, k), 1);
+      if (i + 1 < nx && j + 1 < ny) { bonds.push(q, id(i + 1, j + 1, k), 2); bonds.push(id(i + 1, j, k), id(i, j + 1, k), 2); }
+      if (k + 1 < nz && j + 1 < ny) { bonds.push(q, id(i, j + 1, k + 1), 2); bonds.push(id(i, j, k + 1), id(i, j + 1, k), 2); }
     }
-    const m = MASSES[st.round % MASSES.length], br = 0.034 * (1 + Math.log10(m) * 0.22);
-    const hb = new Int32Array(cap).fill(-1), vb = new Int32Array(cap).fill(-1);
-    bonds.forEach(([i, j, L, w], k) => { if (j === i + 1 && w < 1) hb[i] = k; else if (j === i + cols) vb[i] = k; });
-    Object.assign(st, { hb, vb, ang: new Float32Array(cap), p, bonds, alive: new Uint8Array(bonds.length).fill(1), broken: 0, m, ball: { x: 0.92, y: -0.1, px: 0.92, py: -0.1, r: br, rot: 0 }, rt: 0, hit: false, still: 0, label: 1.4, dust: [] });
+    const nb = bonds.length / 3, A = new Int32Array(nb), B = new Int32Array(nb), L = new Float32Array(nb), W = new Float32Array(nb), hb = new Int32Array(N).fill(-1);
+    for (let m = 0; m < nb; m++) { A[m] = bonds[m * 3]; B[m] = bonds[m * 3 + 1]; const t = bonds[m * 3 + 2]; L[m] = t === 2 ? CELL * Math.SQRT2 : CELL; W[m] = t === 1 ? 1 : t === 0 ? 0.45 : 0.4; if (t === 0 && B[m] === A[m] + 1) hb[A[m]] = m; }
+    const m = MASSES[st.round % MASSES.length], br = 0.036 * (1 + Math.log10(m) * 0.22);
+    Object.assign(st, { N, nx, ny, nz, X, Y, Z, PX, PY, PZ, tone, A, B, L, W, hb, alive: new Uint8Array(nb).fill(1), ang: new Float32Array(N), broken: 0, m,
+      ball: startBall(br), rt: 0, hit: false, still: 0, label: 1.4, dust: [], head: null, next: new Int32Array(N) });
   }
-  function solve(c, st, h) {
-    const p = st.p, X = p.X, Y = p.Y, B = st.bonds, al = st.alive, brk = c.opt.strength || 0.07;
-    for (let k = 0; k < B.length; k++) {
-      if (!al[k]) continue; const [i, j, L, w] = B[k], dx = X[j] - X[i], dy = Y[j] - Y[i], d = Math.hypot(dx, dy) || 1e-9, e = (d - L) / L;
-      if (Math.abs(e) > brk * w) { al[k] = 0; st.broken++; if (st.broken % 6 === 0) c.note(c.scale(4 + (st.broken / 6) % 12), 0.35, 0.4); continue; }
-      const f = (d - L) / d * 0.5; X[i] += dx * f; Y[i] += dy * f; X[j] -= dx * f; Y[j] -= dy * f;
+  // the ball starts resting on the slope, whatever its size (never inside the ramp)
+  function startBall(r) {
+    const [ax, ay, bx, by] = RAMP[0], t = 0.1, ex = bx - ax, ey = by - ay, l = Math.hypot(ex, ey), nx = -ey / l, ny = ex / l, k = r + 0.0125;      // normal pointing up, above the slope
+    const x = ax + ex * t + nx * k, y = ay + ey * t + ny * k; return { x, y, z: 0, px: x, py: y, pz: 0, r, rot: 0 };
+  }
+  function bondsPass(c, st) {
+    const { X, Y, Z, A, B, L, W, alive } = st, brk = c.opt.strength || 0.07;
+    for (let m = 0; m < A.length; m++) {
+      if (!alive[m]) continue; const i = A[m], j = B[m], dx = X[j] - X[i], dy = Y[j] - Y[i], dz = Z[j] - Z[i], d = Math.hypot(dx, dy, dz) || 1e-9, e = (d - L[m]) / L[m];
+      if (Math.abs(e) > brk * W[m]) { alive[m] = 0; st.broken++; if (st.broken % 12 === 0) c.note(c.scale(4 + (st.broken / 12) % 12), 0.35, 0.4); continue; }
+      const f = (d - L[m]) / d * 0.5; X[i] += dx * f; Y[i] += dy * f; Z[i] += dz * f; X[j] -= dx * f; Y[j] -= dy * f; Z[j] -= dz * f;
+    }
+  }
+  // block against block (spheres of radius R) with a 3D spatial hash
+  function contacts(st) {
+    const { X, Y, Z, N, next } = st, D = 2 * R, cs = D, key = (a, b, c2) => ((a * 73856093) ^ (b * 19349663) ^ (c2 * 83492791)) & 16383;
+    if (!st.head) st.head = new Int32Array(16384); const head = st.head; head.fill(-1);
+    for (let i = 0; i < N; i++) { const k = key(Math.floor(X[i] / cs), Math.floor(Y[i] / cs), Math.floor(Z[i] / cs)); next[i] = head[k]; head[k] = i; }
+    for (let i = 0; i < N; i++) {
+      const gx = Math.floor(X[i] / cs), gy = Math.floor(Y[i] / cs), gz = Math.floor(Z[i] / cs);
+      for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let e = -1; e <= 1; e++) for (let j = head[key(gx + a, gy + b, gz + e)]; j >= 0; j = next[j]) {
+        if (j <= i) continue; const dx = X[j] - X[i], dy = Y[j] - Y[i], dz = Z[j] - Z[i], d2 = dx * dx + dy * dy + dz * dz; if (d2 >= D * D || d2 < 1e-12) continue;
+        const d = Math.sqrt(d2), f = (D - d) / d * 0.5; X[i] -= dx * f; Y[i] -= dy * f; Z[i] -= dz * f; X[j] += dx * f; Y[j] += dy * f; Z[j] += dz * f;
+      }
     }
   }
   function ground(st) {
-    const p = st.p, r = CELL / 2;
-    for (let i = 0; i < p.n; i++) {
-      if (p.Y[i] > GROUND - r) { p.Y[i] = GROUND - r; const vx = p.X[i] - p.PX[i]; p.PX[i] = p.X[i] - vx * 0.55; if (p.PY[i] > p.Y[i]) p.PY[i] = p.Y[i]; }
-      if (p.X[i] < r) p.X[i] = r; if (p.X[i] > 1.3) p.X[i] = 1.3;
-      for (const q of RAMP) P.capsule(p, i, q[0], q[1], q[2], q[3], r + 0.012);
+    const { X, Y, Z, PX, PZ, N } = st;
+    for (let i = 0; i < N; i++) {
+      if (Y[i] > -R) { Y[i] = -R; PX[i] = X[i] - (X[i] - PX[i]) * 0.55; PZ[i] = Z[i] - (Z[i] - PZ[i]) * 0.55; if (st.PY[i] > Y[i]) st.PY[i] = Y[i]; }
+      for (const q of RAMP) if (Math.abs(Z[i]) < 0.2) { const ex = q[2] - q[0], ey = q[3] - q[1], t = Math.max(0, Math.min(1, ((X[i] - q[0]) * ex + (Y[i] - q[1]) * ey) / (ex * ex + ey * ey))), ox = X[i] - q[0] - ex * t, oy = Y[i] - q[1] - ey * t, d = Math.hypot(ox, oy); if (d < R + 0.01 && d > 1e-9) { X[i] += ox / d * (R + 0.01 - d); Y[i] += oy / d * (R + 0.01 - d); } }
     }
   }
-  function contacts(c, st) {
-    const b = st.ball;
-    // ball against blocks: the heavier the ball, the more the blocks give way
-    const p = st.p, wb = 1 / (st.m * 0.25), wp = 1, rr = b.r + CELL / 2;
-    for (let i = 0; i < p.n; i++) {
-      const dx = p.X[i] - b.x, dy = p.Y[i] - b.y, d2 = dx * dx + dy * dy; if (d2 >= rr * rr || d2 < 1e-12) continue;
-      const d = Math.sqrt(d2), o = (rr - d) / d, s = wb + wp;
-      p.X[i] += dx * o * wp / s; p.Y[i] += dy * o * wp / s; b.x -= dx * o * wb / s; b.y -= dy * o * wb / s;
-      if (!st.hit) { st.hit = true; c.note(c.scale(2), 1, 1.6); for (let k = 0; k < 20; k++) st.dust.push({ x: b.x - b.r, y: b.y, vx: -Math.random() * 0.5, vy: -Math.random() * 0.5, t: 0 }); }
+  // the ball: a heavy sphere; contact with a block shares the correction by inverse mass (ball mass ∝ its kilograms)
+  function ballBlocks(c, st) {
+    const b = st.ball, { X, Y, Z, N } = st, wb = 1 / (st.m * 0.25), rr = b.r + R;
+    for (let i = 0; i < N; i++) {
+      const dx = X[i] - b.x, dy = Y[i] - b.y, dz = Z[i] - b.z, d2 = dx * dx + dy * dy + dz * dz; if (d2 >= rr * rr || d2 < 1e-12) continue;
+      const d = Math.sqrt(d2), o = (rr - d) / d, s = wb + 1;
+      X[i] += dx * o / s; Y[i] += dy * o / s; Z[i] += dz * o / s; b.x -= dx * o * wb / s; b.y -= dy * o * wb / s; b.z -= dz * o * wb / s;
+      if (!st.hit) { st.hit = true; c.note(c.scale(2), 1, 1.6); for (let k = 0; k < 24; k++) st.dust.push({ x: b.x - b.r, y: b.y, z: (Math.random() - 0.5) * 0.2, vx: -Math.random() * 0.5, vy: -Math.random() * 0.5, vz: (Math.random() - 0.5) * 0.4, t: 0 }); }
     }
   }
-  function ballStep(c, st, h) {
-    const b = st.ball, vx = (b.x - b.px) * 0.999, vy = (b.y - b.py) * 0.999;
-    b.px = b.x; b.py = b.y; b.x += vx; b.y += vy + 2.4 * h * h;
+  function ballMove(st, h) {
+    const b = st.ball, vx = b.x - b.px, vy = b.y - b.py, vz = b.z - b.pz; b.px = b.x; b.py = b.y; b.pz = b.z; b.x += vx; b.y += vy + G * h * h; b.z += vz * 0.98;
     for (const [ax, ay, bx, by] of RAMP) {
-      const ex = bx - ax, ey = by - ay, l2 = ex * ex + ey * ey; let t = ((b.x - ax) * ex + (b.y - ay) * ey) / l2; t = Math.max(0, Math.min(1, t));
-      const qx = b.x - ax - ex * t, qy = b.y - ay - ey * t, d = Math.hypot(qx, qy), rr = b.r + 0.012;
-      if (d < rr && d > 1e-9) { const nx = qx / d, ny = qy / d; b.x += nx * (rr - d); b.y += ny * (rr - d); let wx = b.x - b.px, wy = b.y - b.py; const vn = wx * nx + wy * ny; if (vn < 0) { wx -= 1.15 * vn * nx; wy -= 1.15 * vn * ny; b.px = b.x - wx; b.py = b.y - wy; } }
+      const ex = bx - ax, ey = by - ay, t = Math.max(0, Math.min(1, ((b.x - ax) * ex + (b.y - ay) * ey) / (ex * ex + ey * ey))), qx = b.x - ax - ex * t, qy = b.y - ay - ey * t, d = Math.hypot(qx, qy), rr = b.r + 0.012;
+      if (d < rr && d > 1e-9) { const nx = qx / d, ny = qy / d; b.x += nx * (rr - d); b.y += ny * (rr - d); let wx = b.x - b.px, wy = b.y - b.py; const vn = wx * nx + wy * ny; if (vn < 0) { wx -= vn * nx; wy -= vn * ny; b.px = b.x - wx; b.py = b.y - wy; } }
     }
-    if (b.y > GROUND - b.r) { b.y = GROUND - b.r; const wx = b.x - b.px; b.px = b.x - wx * 0.995; if (b.py > b.y) b.py = b.y + (b.py - b.y) * -0.2; }
-    contacts(c, st);
+    if (b.y > -b.r) { b.y = -b.r; b.px = b.x - (b.x - b.px) * 0.995; if (b.py > b.y) b.py = b.y; }
     b.rot += (b.x - b.px) / b.r;
   }
   function step(c, dt) {
-    const st = c.st; if (!st || !st.p) return; st.t += dt; st.rt += dt; st.label = Math.max(0, st.label - dt);
-    const sub = 4, h = dt / sub, p = st.p;
+    const st = c.st; if (!st || !st.X) return; st.t += dt; st.rt += dt; st.label = Math.max(0, st.label - dt);
+    const sub = 3, h = dt / sub, { X, Y, Z, PX, PY, PZ, N } = st, k = Math.pow(0.9, h), g2 = G * h * h;
     for (let s = 0; s < sub; s++) {
-      P.integrate(p, h, 0.9, () => [0, 2.4], 4);
-      ballStep(c, st, h);
-      for (let it = 0; it < 4; it++) { solve(c, st, h); P.collide(p, CELL / 2, -0.1, -0.2, 1.5, 1.8, 0.8); contacts(c, st); ground(st); }
+      for (let i = 0; i < N; i++) { const vx = (X[i] - PX[i]) * k, vy = (Y[i] - PY[i]) * k, vz = (Z[i] - PZ[i]) * k; PX[i] = X[i]; PY[i] = Y[i]; PZ[i] = Z[i]; X[i] += vx; Y[i] += vy + g2; Z[i] += vz; }
+      ballMove(st, h);
+      for (let it = 0; it < 3; it++) { bondsPass(c, st); contacts(st); ballBlocks(c, st); ground(st); }
     }
-    for (const d of st.dust) { d.t += dt; d.x += d.vx * dt; d.y += d.vy * dt; d.vy += 0.6 * dt; } st.dust = st.dust.filter(d => d.t < 1.5);
+    for (const d of st.dust) { d.t += dt; d.x += d.vx * dt; d.y += d.vy * dt; d.z += d.vz * dt; d.vy += 0.6 * dt; } st.dust = st.dust.filter(d => d.t < 1.5);
     const b = st.ball, sp = Math.hypot(b.x - b.px, b.y - b.py) / h;
     if (st.hit && sp < 0.05) st.still += dt; else st.still = 0;
-    if ((st.still > 1.5 || st.rt > 9) && st.rt > 4) {
+    if ((st.still > 2.5 || st.rt > 18) && st.rt > 13) {
       if (!c.thumb) HBH.add('Démolition', st.m.toLocaleString('fr-FR') + ' kg : ' + st.broken + ' liens cassés');
       st.round++; build(c, st);
     }
     if (!c.thumb) c.status(st.m.toLocaleString('fr-FR') + ' kg · ' + st.broken + ' liens cassés');
   }
-  const TONES = ['#c9a77a', '#bf9c6e', '#d2b183', '#b89466', '#c5a273'];
-  function draw(c, g) {
-    const st = c.st; if (!st || !st.p) return;
-    const s = Math.min(c.W / 1, c.H / 1.6), ox = (c.W - s) / 2, oy = (c.H - 1.6 * s) / 2, X = x => ox + x * s, Y = y => oy + y * s, beat = c.react ? c.react.beat : 0;
-    const bg = g.createLinearGradient(0, oy, 0, oy + 1.6 * s); bg.addColorStop(0, '#1c1738'); bg.addColorStop(1, '#0e0b20'); g.fillStyle = bg; g.fillRect(ox, oy, s, 1.6 * s);
-    g.fillStyle = '#2a2550'; g.fillRect(ox, Y(GROUND), s, (1.6 - GROUND) * s);
-    g.strokeStyle = 'rgba(214,206,255,' + (0.4 + beat * 0.4).toFixed(2) + ')'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(ox, Y(GROUND)); g.lineTo(ox + s, Y(GROUND)); g.stroke();
-    // blocks
-    const p = st.p, z = CELL * s * 0.94;
-    // each block is drawn turned like the structure around it (from its bonds); a loose block keeps the angle it had
-    const ang = st.ang;
-    for (let i = 0; i < p.n; i++) { let a = null; const hb = st.hb[i], vb = st.vb[i];
-      if (hb >= 0 && st.alive[hb]) { const j = st.bonds[hb][1]; a = Math.atan2(p.Y[j] - p.Y[i], p.X[j] - p.X[i]); }
-      else if (vb >= 0 && st.alive[vb]) { const j = st.bonds[vb][1]; a = Math.atan2(p.Y[j] - p.Y[i], p.X[j] - p.X[i]) + Math.PI / 2; }
-      if (a !== null) ang[i] = a; else if (p.Y[i] > GROUND - CELL * 0.6) ang[i] *= 0.9;           // a free block settles flat on the ground
-    }
-    for (let k = 0; k < 5; k++) { g.fillStyle = TONES[k]; g.beginPath();
-      for (let i = 0; i < p.n; i++) { if (p.col[i] !== k) continue; const cx = X(p.X[i]), cy = Y(p.Y[i]), ca = Math.cos(ang[i]) * z / 2, sa = Math.sin(ang[i]) * z / 2;
-        g.moveTo(cx - ca + sa, cy - sa - ca); g.lineTo(cx + ca + sa, cy + sa - ca); g.lineTo(cx + ca - sa, cy + sa + ca); g.lineTo(cx - ca - sa, cy - sa + ca); g.closePath(); }
-      g.fill(); }
 
-    // ramp
-    g.lineCap = 'round'; g.strokeStyle = 'rgba(111,127,230,.75)'; g.lineWidth = Math.max(4, 0.024 * s); g.beginPath(); g.moveTo(X(RAMP[0][0]), Y(RAMP[0][1])); g.lineTo(X(RAMP[0][2]), Y(RAMP[0][3])); g.lineTo(X(RAMP[1][2]), Y(RAMP[1][3])); g.stroke();
-    g.fillStyle = 'rgba(111,127,230,.25)'; g.beginPath(); g.moveTo(X(RAMP[0][0]), Y(RAMP[0][1])); g.lineTo(X(RAMP[0][2]), Y(RAMP[0][3])); g.lineTo(X(RAMP[1][2]), Y(RAMP[1][3])); g.lineTo(X(RAMP[1][2]), Y(GROUND)); g.lineTo(X(1.05), Y(GROUND)); g.lineTo(X(1.05), Y(RAMP[0][1])); g.closePath(); g.fill();
-    // metal ball
-    const b = st.ball, br = b.r * s, gr = g.createRadialGradient(X(b.x) - br * 0.35, Y(b.y) - br * 0.4, br * 0.1, X(b.x), Y(b.y), br);
-    gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.3, '#c9c6d8'); gr.addColorStop(0.75, '#6e6a86'); gr.addColorStop(1, '#2e2b40');
-    g.fillStyle = gr; g.beginPath(); g.arc(X(b.x), Y(b.y), br, 0, 7); g.fill();
-    g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = Math.max(1, br * 0.08); g.beginPath(); g.arc(X(b.x), Y(b.y), br * 0.6, b.rot, b.rot + 1.2); g.stroke();
-    g.fillStyle = '#e6dcc8'; for (const d of st.dust) { g.globalAlpha = Math.max(0, 1 - d.t / 1.5) * 0.7; g.fillRect(X(d.x) - 1.5, Y(d.y) - 1.5, 3, 3); } g.globalAlpha = 1;
+  function draw(c, g) {
+    const st = c.st; if (!st || !st.X) return;
+    const S = Math.min(c.W, c.H * 0.62), cam = P.camera(c.W, c.H, { yaw: -0.55, pitch: 0.32, dist: 3.2, scale: S * 0.62, tx: 0.25, ty: -0.5, tz: 0, cy: c.H * 0.56 }), beat = c.react ? c.react.beat : 0;
+    const bg = g.createLinearGradient(0, 0, 0, c.H); bg.addColorStop(0, '#1c1738'); bg.addColorStop(1, '#0e0b20'); g.fillStyle = bg; g.fillRect(0, 0, c.W, c.H);
+    // floor with a fading grid
+    const fl = [[-1.6, -1.2], [1.8, -1.2], [1.8, 1.2], [-1.6, 1.2]].map(([x, z]) => cam.p(x, 0, z));
+    g.fillStyle = '#231e45'; g.beginPath(); fl.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(214,206,255,' + (0.08 + beat * 0.1).toFixed(2) + ')'; g.lineWidth = 1; g.beginPath();
+    for (let x = -1.6; x <= 1.81; x += 0.2) { const a = cam.p(x, 0, -1.2), b2 = cam.p(x, 0, 1.2); g.moveTo(a[0], a[1]); g.lineTo(b2[0], b2[1]); }
+    for (let z = -1.2; z <= 1.21; z += 0.2) { const a = cam.p(-1.6, 0, z), b2 = cam.p(1.8, 0, z); g.moveTo(a[0], a[1]); g.lineTo(b2[0], b2[1]); } g.stroke();
+    // ramp: a slab as deep as the tower
+    const rz = 0.17, rp = [[RAMP[0][0], RAMP[0][1]], [RAMP[0][2], RAMP[0][3]], [RAMP[1][2], RAMP[1][3]]];
+    const face = (pts, col) => { g.fillStyle = col; g.beginPath(); pts.forEach(([x, y, z], i) => { const q = cam.p(x, y, z); i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1]); }); g.closePath(); g.fill(); };
+    face([[rp[0][0], 0, -rz], [rp[0][0], rp[0][1], -rz], [rp[1][0], rp[1][1], -rz], [rp[2][0], 0, -rz]], 'rgba(80,90,190,.55)');
+    face([[rp[0][0], rp[0][1], -rz], [rp[1][0], rp[1][1], -rz], [rp[1][0], rp[1][1], rz], [rp[0][0], rp[0][1], rz]], 'rgba(111,127,230,.75)');
+    face([[rp[1][0], rp[1][1], -rz], [rp[2][0], rp[2][1], -rz], [rp[2][0], rp[2][1], rz], [rp[1][0], rp[1][1], rz]], 'rgba(111,127,230,.75)');
+    face([[rp[0][0], 0, rz], [rp[0][0], rp[0][1], rz], [rp[1][0], rp[1][1], rz], [rp[2][0], 0, rz]], 'rgba(95,110,215,.7)');
+    // blocks and ball, painted from far to near; each block turned like its row (angle from its sideways bond)
+    const { X, Y, Z, N, ang } = st, items = [];
+    for (let i = 0; i < N; i++) {
+      const m = st.hb[i]; if (m >= 0 && st.alive[m]) { const j = st.B[m]; ang[i] = Math.atan2(Y[j] - Y[i], X[j] - X[i]); } else if (Y[i] > -R * 1.3) ang[i] *= 0.9;
+      items.push([cam.p(X[i], Y[i], Z[i])[2], i]);
+    }
+    const b = st.ball; items.push([cam.p(b.x, b.y, b.z)[2], -1]);
+    items.sort((p1, p2) => p2[0] - p1[0]);
+    const h = R * 0.96, LIGHT = [0.45, -0.75, -0.5];
+    for (const [, i] of items) {
+      if (i < 0) { const [bx, by, , bk] = cam.p(b.x, b.y, b.z), rr = b.r * bk, gr = g.createRadialGradient(bx - rr * 0.35, by - rr * 0.4, rr * 0.1, bx, by, rr);
+        gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.3, '#c9c6d8'); gr.addColorStop(0.75, '#6e6a86'); gr.addColorStop(1, '#2e2b40'); g.fillStyle = gr; g.beginPath(); g.arc(bx, by, rr, 0, 7); g.fill(); continue; }
+      const ca = Math.cos(ang[i]), sa = Math.sin(ang[i]), x = X[i], y = Y[i], z = Z[i], [r0, g0, b0] = TONES[st.tone[i]];
+      const P8 = []; for (const [u, v, w] of [[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]]) P8.push(cam.p(x + (u * ca - v * sa) * h, y + (u * sa + v * ca) * h, z + w * h));
+      for (const [f, nx, ny, nz] of [[[0, 1, 2, 3], 0, 0, -1], [[5, 4, 7, 6], 0, 0, 1], [[4, 0, 3, 7], -ca, -sa, 0], [[1, 5, 6, 2], ca, sa, 0], [[4, 5, 1, 0], sa, -ca, 0], [[3, 2, 6, 7], -sa, ca, 0]]) {
+        if (!cam.facing(nx, ny, nz, x + nx * h, y + ny * h, z + nz * h)) continue;
+        const l = 0.55 + 0.45 * Math.max(0, nx * LIGHT[0] + ny * LIGHT[1] + nz * LIGHT[2]);
+        g.fillStyle = 'rgb(' + (r0 * l | 0) + ',' + (g0 * l | 0) + ',' + (b0 * l | 0) + ')'; g.beginPath(); f.forEach((q, n) => n ? g.lineTo(P8[q][0], P8[q][1]) : g.moveTo(P8[q][0], P8[q][1])); g.closePath(); g.fill();
+      }
+    }
+    g.fillStyle = '#e6dcc8'; for (const d of st.dust) { const q = cam.p(d.x, d.y, d.z); g.globalAlpha = Math.max(0, 1 - d.t / 1.5) * 0.7; g.fillRect(q[0] - 1.5, q[1] - 1.5, 3, 3); } g.globalAlpha = 1;
     if (!c.thumb) {
       const txt = st.m.toLocaleString('fr-FR') + ' kg', fs = Math.round(Math.min(c.W * 0.11, 46) * (1 + st.label * 0.3));
-      g.save(); g.font = '800 ' + fs + 'px "Unbounded", system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(241,238,255,.92)'; g.fillText(txt, c.W / 2, oy + 0.12 * s); g.restore();
+      g.save(); g.font = '800 ' + fs + 'px "Unbounded", system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(241,238,255,.92)'; g.fillText(txt, c.W / 2, c.H * 0.1); g.restore();
     }
   }
   HB.game({
     id: 'demolition', name: 'Démolition',
-    desc: 'Une boule de métal dévale une rampe et percute une tour de blocs : dix fois plus lourde à chaque manche.',
+    desc: 'En 3D : une boule de métal dévale une rampe et percute une tour de petits cubes, dix fois plus lourde à chaque manche.',
     ranges: [
       { key: 'strength', label: 'Solidité', min: 0.03, max: 0.2, step: 0.01, value: 0.07 },
-      { key: 'cols', label: 'Largeur', min: 6, max: 18, step: 1, value: 12, restart: true },
+      { key: 'cols', label: 'Largeur', min: 4, max: 14, step: 1, value: 8, restart: true },
       { key: 'height', label: 'Hauteur', min: 0.4, max: 1.1, step: 0.05, value: 0.85, restart: true }
     ],
-    thumbSteps: 200, reset, step, draw,
-    audit(c) {                                     // blocks under the ground or inside the ramp / the ball, overlap between blocks
-      const st = c.st, p = st.p, r = CELL / 2, b = st.ball; let pen = 0;
-      for (let i = 0; i < p.n; i++) { pen = Math.max(pen, (p.Y[i] + r - GROUND) / r, (b.r + r - Math.hypot(p.X[i] - b.x, p.Y[i] - b.y)) / r);
-        for (const q of RAMP) { const ex = q[2] - q[0], ey = q[3] - q[1], t = Math.max(0, Math.min(1, ((p.X[i] - q[0]) * ex + (p.Y[i] - q[1]) * ey) / (ex * ex + ey * ey))); pen = Math.max(pen, (r + 0.012 - Math.hypot(p.X[i] - q[0] - ex * t, p.Y[i] - q[1] - ey * t)) / r); } }
-      return { pen, ov: P.overlap(p, r), note: st.m + ' kg, ' + st.broken + ' liens cassés' };
+    thumbSteps: 160, reset, step, draw,
+    audit(c) {                                     // blocks under the ground or inside the ball, overlap between nearby blocks
+      const st = c.st, b = st.ball; let pen = 0, ov = 0;
+      for (let i = 0; i < st.N; i++) pen = Math.max(pen, (st.Y[i] + R) / R, (b.r + R - Math.hypot(st.X[i] - b.x, st.Y[i] - b.y, st.Z[i] - b.z)) / R);
+      for (let i = 0; i < st.N; i += 3) for (let j = i + 1; j < Math.min(st.N, i + 40); j++) { const d = Math.hypot(st.X[i] - st.X[j], st.Y[i] - st.Y[j], st.Z[i] - st.Z[j]); ov = Math.max(ov, (2 * R - d) / (2 * R)); }
+      return { pen, ov: { worst: ov, mean: 0 }, note: st.m + ' kg, ' + st.broken + ' liens cassés' };
     }
   });
 })();
@@ -2786,7 +2857,7 @@ window.HBP = (() => {
       const px = ((X[i] + (1 - D) + 0.05) * sx) | 0, py = ((Y[i] + TIP + 0.05) * sy) | 0; if (px < 0 || py < 0 || px >= BW || py >= BH) continue;
       const o = (py * BW + px) * 3; buf[o] += st.C[i * 3] * gain; buf[o + 1] += st.C[i * 3 + 1] * gain; buf[o + 2] += st.C[i * 3 + 2] * gain;
     }
-    if (st.rt > (c.opt.secs || 7)) { st.round++; start(c, st); if (!c.thumb && st.round % STEPS.length === 0) HBH.add('Lentille', 'Cycle complet jusqu\'à ' + STEPS[STEPS.length - 1].toLocaleString('fr-FR') + ' billes'); }
+    if (st.rt > (c.opt.secs || 5)) { st.round++; start(c, st); if (!c.thumb && st.round % STEPS.length === 0) HBH.add('Lentille', 'Cycle complet jusqu\'à ' + STEPS[STEPS.length - 1].toLocaleString('fr-FR') + ' billes'); }
     if (!c.thumb) c.status(n.toLocaleString('fr-FR') + ' billes · manche ' + (st.round % STEPS.length + 1));
   }
   function draw(c, g) {
@@ -2814,7 +2885,7 @@ window.HBP = (() => {
     id: 'lentille', name: 'Lentille',
     desc: 'Des billes partent du centre d\'une amande et rebondissent sans fin : plus elles sont nombreuses, plus les formes lumineuses apparaissent.',
     ranges: [
-      { key: 'secs', label: 'Durée manche', min: 3, max: 20, step: 0.5, value: 7 },
+      { key: 'secs', label: 'Durée manche', min: 3, max: 20, step: 0.5, value: 5 },
       { key: 'trail', label: 'Traînée', min: 0.5, max: 0.97, step: 0.01, value: 0.82 },
       { key: 'top', label: 'Jusqu\'à', min: 3, max: 11, step: 1, value: 11 }
     ],
@@ -2834,8 +2905,8 @@ window.HBP = (() => {
 (() => {
   const P = HBP, TH = 0.03;
   function reset(c) {
-    const cap = c.thumb ? 300 : Math.round(c.opt.max || 1600);
-    const st = c.st = { p: P.pool(cap), out: P.pool(cap * 2), r: 0.038, gap: c.opt.gap || 0.55, rot: P.rnd() * 6.28, t: 0, esc: 0, end: 0, sparks: [] };
+    const cap = c.thumb ? 300 : Math.round(c.opt.max || 520);
+    const st = c.st = { p: P.pool(cap), out: P.pool(Math.round(cap * 1.6)), r: 0.038, gap: c.opt.gap || 0.7, rot: P.rnd() * 6.28, t: 0, esc: 0, end: 0, sparks: [] };
     P.add(st.p, 0, -0.3, 0.012, -0.004, 0, 1);
   }
   const inGap = (st, a) => { let d = a - st.rot; d = ((d % 6.2832) + 6.2832) % 6.2832; return d < st.gap; };
@@ -2851,6 +2922,7 @@ window.HBP = (() => {
       if ((g0 && d > 1 - TH - r * 0.2) || (!g0 && d > 1)) {
         if (!g0 && d <= 1 + TH + r) { const k = (1 + TH + r * 1.01) / d; X[i] *= k; Y[i] *= k; p.PX[i] *= k; p.PY[i] *= k; }
         if (Math.hypot(X[i], Y[i]) > 1 + TH + r) {
+          if (st.out.n >= st.out.cap) { st.full = true; continue; }          // no room left outside: the game ends, no ball is lost
           P.add(st.out, X[i], Y[i], X[i] - p.PX[i], Y[i] - p.PY[i], p.col[i], 1); P.remove(p, i); st.esc++;
           // exactly two new balls, at the nearest free places to the centre, thrown in opposite random directions
           if (!occ) occ = P.occupancy(p, 2 * r); const L = P.lattice(), an = P.rnd() * 6.283, sp = 0.012 + P.rnd() * 0.008;
@@ -2884,7 +2956,7 @@ window.HBP = (() => {
       for (let it = 0; it < 4; it++) { P.collide(st.p, st.r, -1.2, -1.2, 2.4, 2.4, 0.9, 0.95); ring(c, st); P.collide(st.out, st.r, -W - 0.1, -H - 0.5, 2 * W + 0.2, 2 * H + 0.6); outside(st, W, H); }
     }
     for (const sp of st.sparks) sp.t += dt; st.sparks = st.sparks.filter(sp => sp.t < 0.5);
-    if (st.p.n >= st.p.cap * 0.97 || st.out.n >= st.out.cap - 2 || st.end) { if (P.ending(c, st, dt, 'Évasion', st.esc + ' évadées, ' + st.p.n + ' billes dans l\'anneau, en ' + Math.round(st.t) + ' s', 4)) reset(c); }
+    if (st.p.n >= st.p.cap * 0.97 || st.full || st.end) { if (P.ending(c, st, dt, 'Évasion', st.esc + ' évadées, ' + st.p.n + ' billes dans l\'anneau, en ' + Math.round(st.t) + ' s', 4)) reset(c); }
     if (!c.thumb) c.status(st.p.n + ' dedans · ' + st.esc + ' évadées');
   }
   function draw(c, g) {
@@ -2903,14 +2975,14 @@ window.HBP = (() => {
     id: 'evasion', name: 'Évasion',
     desc: 'Une ouverture tourne autour de l\'anneau : chaque bille qui s\'échappe en fait apparaître deux au centre.',
     ranges: [
-      { key: 'gap', label: 'Ouverture', min: 0.15, max: 1.4, step: 0.05, value: 0.55, restart: true },
+      { key: 'gap', label: 'Ouverture', min: 0.15, max: 1.4, step: 0.05, value: 0.7, restart: true },
       { key: 'spin', label: 'Rotation', min: 0, max: 2, step: 0.05, value: 0.5 },
       { key: 'grav', label: 'Gravité', min: 0, max: 3, step: 0.05, value: 1.4 },
-      { key: 'max', label: 'Billes', min: 400, max: 2600, step: 100, value: 1600, restart: true }
+      { key: 'max', label: 'Billes', min: 150, max: 700, step: 10, value: 520, restart: true }
     ],
     thumbSteps: 500, reset, step, draw,
     audit(c) {                    // inside balls in the closed part of the ring; escaped balls back inside
-      const st = c.st, p = st.p, r = st.r; let pen = 0;
+      const st = c.st, p = st.p, r = st.r; let pen = 0; if (st.end) return {};
       for (let i = 0; i < p.n; i++) { const d = Math.hypot(p.X[i], p.Y[i]); if (!inGap(st, Math.atan2(p.Y[i], p.X[i])) && d > 1 - TH - r) pen = Math.max(pen, (d - (1 - TH - r)) / r); }
       for (let i = 0; i < st.out.n; i++) pen = Math.max(pen, (1 + TH + r - Math.hypot(st.out.X[i], st.out.Y[i])) / r);
       return { pen, ov: P.overlap(p, r), note: p.n + ' dedans, ' + st.esc + ' évadées' };
@@ -2919,83 +2991,95 @@ window.HBP = (() => {
 })();
 </script>
 <script>
-/* Jeu 13 · Filet : vue de face. Un filet souple tombe sur une grosse boule posée au-dessus d'une boîte ouverte.
-   Il l'enveloppe, s'étire, puis ses mailles se déchirent et les morceaux glissent dans la boîte. À chaque manche
-   le filet a quatre fois plus de mailles (16, 64, 256, 1 024…). Monde de 1 × 1.6. */
+/* Jeu 13 · Filet (3D) : un filet carré de nœuds reliés par des fils tombe sur une grosse boule posée au-dessus d'une boîte ouverte.
+   Les fils ne résistent qu'à l'étirement ; trop étirés, ils cassent. Le filet enveloppe la boule, se tend, se déchire et glisse
+   dans la boîte. À chaque manche il a plus de mailles (16, 64, 256, 1 024, 2 304). 3D, y vers le bas, sol en y = 0. */
 (() => {
-  const SPH = [0.5, 0.78, 0.2], BOX = { x0: 0.2, x1: 0.8, y0: 1.08, y1: 1.5 }, LEVELS = [4, 8, 16, 32, 48];
+  const P = HBP, SPH = { x: 0, y: -0.8, z: 0, r: 0.24 }, BOX = { x: 0.33, z: 0.33, top: -0.5 }     /* as in the reference: the ball hangs just above a box wider than it */, TH = 0.012, LEVELS = [4, 8, 16, 32, 48];
   function reset(c) { c.st = { lv: 0, t: 0 }; build(c, c.st); }
   function build(c, st) {
-    const n = LEVELS[st.lv % LEVELS.length] + 1, W = 0.56, sp = W / (n - 1), x0 = 0.5 - W / 2, y0 = 0.28;
-    const N = n * n, X = new Float32Array(N), Y = new Float32Array(N), PX = new Float32Array(N), PY = new Float32Array(N), Z = new Float32Array(N);
-    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) { const k = j * n + i; X[k] = PX[k] = x0 + i * sp; Y[k] = PY[k] = y0 + (HBP.rnd() - 0.5) * 0.002; Z[k] = (j / (n - 1) - 0.5) * W; }
-    // the net is seen in perspective: its depth (z) only shifts points up a little, physics happens in x / y
-    const links = [];
-    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) { const k = j * n + i; if (i + 1 < n) links.push([k, k + 1, sp]); if (j + 1 < n) links.push([k, k + n, sp]); }
-    Object.assign(st, { n, X, Y, PX, PY, Z, links, alive: new Uint8Array(links.length).fill(1), cut: 0, rt: 0, label: 1.4, sp, tear: 1 + ((c.opt.tear || 1.4) - 1) / (1 + (st.lv % LEVELS.length) * 1.1), heavy: 1 + (st.lv % LEVELS.length) * 0.6 });
+    const n = (c.thumb ? 8 : LEVELS[st.lv % LEVELS.length]) + 1, W = 0.66, sp = W / (n - 1), N = n * n, lv = st.lv % LEVELS.length;
+    const X = new Float32Array(N), Y = new Float32Array(N), Z = new Float32Array(N), PX = new Float32Array(N), PY = new Float32Array(N), PZ = new Float32Array(N);
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) { const k = j * n + i; X[k] = PX[k] = -W / 2 + i * sp; Z[k] = PZ[k] = -W / 2 + j * sp; Y[k] = PY[k] = -1.35 + (P.rnd() - 0.5) * 0.002; }
+    const a = [], b = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) { const k = j * n + i; if (i + 1 < n) { a.push(k); b.push(k + 1); } if (j + 1 < n) { a.push(k); b.push(k + n); } }
+    Object.assign(st, { n, N, X, Y, Z, PX, PY, PZ, A: Int32Array.from(a), B: Int32Array.from(b), sp, alive: new Uint8Array(a.length).fill(1), cut: 0, rt: 0, label: 1.4,
+      tear: 1 + ((c.opt.tear || 1.4) - 1) / (1 + lv * 1.1), heavy: 1 + lv * 0.6 });   // finer nets are heavier and weaker, as in the reference
+  }
+  function solids(st) {
+    const { X, Y, Z, PX, PZ, N } = st, R = SPH.r + 0.008;
+    for (let k = 0; k < N; k++) {
+      // the ball: a knot is pushed out to its surface, with a little sliding friction
+      const dx = X[k] - SPH.x, dy = Y[k] - SPH.y, dz = Z[k] - SPH.z, d = Math.hypot(dx, dy, dz);
+      if (d < R && d > 1e-9) { const f = R / d; X[k] = SPH.x + dx * f; Y[k] = SPH.y + dy * f; Z[k] = SPH.z + dz * f; PX[k] = X[k] - (X[k] - PX[k]) * 0.97; PZ[k] = Z[k] - (Z[k] - PZ[k]) * 0.97; }
+      // the box: four thin walls from its rim down to the floor; a knot stays on the side it is on
+      if (Y[k] > BOX.top) for (const [ax, lim, oth] of [[X, BOX.x, Z], [Z, BOX.z, X]]) for (const s of [-1, 1]) {
+        if (Math.abs(oth[k]) > (ax === X ? BOX.z : BOX.x) + TH) continue;
+        const w = s * lim, d2 = ax[k] - w; if (Math.abs(d2) < TH) ax[k] = w + (Math.sign(d2) || -s) * TH;
+      }
+      if (Y[k] > -TH) { Y[k] = -TH; PX[k] = X[k] - (X[k] - PX[k]) * 0.6; PZ[k] = Z[k] - (Z[k] - PZ[k]) * 0.6; }
+    }
+  }
+  function threads(c, st) {
+    const { X, Y, Z, A, B, alive, sp } = st, lim = sp * st.tear, every = Math.max(1, Math.round(A.length / 60));
+    for (let m = 0; m < A.length; m++) {
+      if (!alive[m]) continue; const i = A[m], j = B[m], dx = X[j] - X[i], dy = Y[j] - Y[i], dz = Z[j] - Z[i], d = Math.hypot(dx, dy, dz) || 1e-9;
+      if (d > lim) { alive[m] = 0; st.cut++; if (st.cut % every === 0) c.note(c.scale(5 + st.cut % 10), 0.4, 0.4); continue; }
+      if (d <= sp) continue;                                      // a thread only resists being stretched
+      const f = (d - sp) / d * 0.5; X[i] += dx * f; Y[i] += dy * f; Z[i] += dz * f; X[j] -= dx * f; Y[j] -= dy * f; Z[j] -= dz * f;
+    }
   }
   function step(c, dt) {
     const st = c.st; if (!st || !st.X) return; st.t += dt; st.rt += dt; st.label = Math.max(0, st.label - dt);
-    const sub = 6, h = dt / sub, N = st.X.length, X = st.X, Y = st.Y, PX = st.PX, PY = st.PY, Z = st.Z, L = st.links, al = st.alive, [sx, sy, sr] = SPH;
+    const sub = 5, h = dt / sub, { X, Y, Z, PX, PY, PZ, N } = st, g2 = 1.6 * st.heavy * h * h;
     for (let s = 0; s < sub; s++) {
-      for (let k = 0; k < N; k++) { const vx = (X[k] - PX[k]) * 0.995, vy = (Y[k] - PY[k]) * 0.995; PX[k] = X[k]; PY[k] = Y[k]; X[k] += vx; Y[k] += vy + 1.6 * st.heavy * h * h; }
-      for (let it = 0; it < 3; it++) {
-        for (let m = 0; m < L.length; m++) {
-          if (!al[m]) continue; const [a, b, r0] = L[m], dx = X[b] - X[a], dy = Y[b] - Y[a], d = Math.hypot(dx, dy) || 1e-9;
-          if (d > r0 * st.tear) { al[m] = 0; st.cut++; if (st.cut % Math.max(1, Math.round(L.length / 60)) === 0) c.note(c.scale(5 + st.cut % 10), 0.4, 0.4); continue; }
-          if (d < r0) continue;                                          // a net only resists stretching
-          const f = (d - r0) / d * 0.5; X[a] += dx * f; Y[a] += dy * f; X[b] -= dx * f; Y[b] -= dy * f;
-        }
-        for (let k = 0; k < N; k++) {
-          // sphere: the net point sits on the visible disc only if it is in front of it in depth
-          const dz = Z[k], rr = Math.sqrt(Math.max(0, sr * sr - dz * dz * 0.25)) + 0.006, dx = X[k] - sx, dy = Y[k] - sy, d = Math.hypot(dx, dy);
-          if (d < rr && d > 1e-9) { X[k] = sx + dx / d * rr; Y[k] = sy + dy / d * rr; const vx = X[k] - PX[k]; PX[k] = X[k] - vx * 0.98; }
-          // box walls (thin) and floor
-          for (const wx of [BOX.x0, BOX.x1]) if (Y[k] > BOX.y0 && Math.abs(X[k] - wx) < 0.012) X[k] = wx + (X[k] < wx ? -0.012 : 0.012);
-          if (Y[k] > BOX.y1 - 0.01 && X[k] > BOX.x0 && X[k] < BOX.x1) { Y[k] = BOX.y1 - 0.01; PX[k] = X[k] - (X[k] - PX[k]) * 0.5; }
-          if (Y[k] > BOX.y1 - 0.01) { Y[k] = BOX.y1 - 0.01; PX[k] = X[k] - (X[k] - PX[k]) * 0.5; }
-        }
-      }
+      for (let k = 0; k < N; k++) { const vx = (X[k] - PX[k]) * 0.996, vy = (Y[k] - PY[k]) * 0.996, vz = (Z[k] - PZ[k]) * 0.996; PX[k] = X[k]; PY[k] = Y[k]; PZ[k] = Z[k]; X[k] += vx; Y[k] += vy + g2; Z[k] += vz; }
+      for (let it = 0; it < 3; it++) { threads(c, st); solids(st); }
     }
-    const done = st.rt > 3 && Y.reduce((m, v) => Math.min(m, v), 9) > 0.62 && st.rt > 5;
-    if (st.rt > (c.opt.secs || 9) || done) { if (!c.thumb) HBH.add('Filet', (st.n - 1) * (st.n - 1) + ' mailles, ' + st.cut + ' fils coupés'); st.lv++; build(c, st); }
+    let top = 1; for (let k = 0; k < N; k++) top = Math.min(top, Y[k]);
+    if (st.rt > (c.opt.secs || 12) || (st.rt > 6 && top > BOX.top + 0.05)) { if (!c.thumb) HBH.add('Filet', (st.n - 1) * (st.n - 1) + ' mailles, ' + st.cut + ' fils coupés'); st.lv++; build(c, st); }
     if (!c.thumb) c.status((st.n - 1) * (st.n - 1) + ' mailles · ' + st.cut + ' fils coupés');
   }
+
   function draw(c, g) {
     const st = c.st; if (!st || !st.X) return;
-    const s = Math.min(c.W, c.H / 1.6), ox = (c.W - s) / 2, oy = (c.H - 1.6 * s) / 2, PXf = x => ox + x * s, PYf = y => oy + y * s, beat = c.react ? c.react.beat : 0;
-    const bg = g.createLinearGradient(0, oy, 0, oy + 1.6 * s); bg.addColorStop(0, '#1c1738'); bg.addColorStop(1, '#0f0b22'); g.fillStyle = bg; g.fillRect(ox, oy, s, 1.6 * s);
-    // box: back wall, then the net, then the front rim
-    g.fillStyle = '#2a2550'; g.fillRect(PXf(BOX.x0), PYf(BOX.y0), (BOX.x1 - BOX.x0) * s, (BOX.y1 - BOX.y0) * s);
-    g.fillStyle = '#1a1636'; g.fillRect(PXf(BOX.x0 + 0.03), PYf(BOX.y0 + 0.03), (BOX.x1 - BOX.x0 - 0.06) * s, (BOX.y1 - BOX.y0 - 0.03) * s);
-    // sphere
-    const [sx, sy, sr] = SPH, gr = g.createRadialGradient(PXf(sx - sr * 0.35), PYf(sy - sr * 0.4), sr * s * 0.1, PXf(sx), PYf(sy), sr * s);
-    gr.addColorStop(0, '#ffe39a'); gr.addColorStop(0.5, '#e0a93a'); gr.addColorStop(1, '#7a5214');
-    g.fillStyle = gr; g.beginPath(); g.arc(PXf(sx), PYf(sy), sr * s * (1 + beat * 0.02), 0, 7); g.fill();
-    // net: back half lighter, front half brighter
-    const X = st.X, Y = st.Y, Z = st.Z, L = st.links, al = st.alive, w = Math.max(0.8, s * 0.004 * Math.min(1, 10 / st.n * 1.6));
-    for (const front of [false, true]) {
-      // the colour of a thread shows its real tension: relaxed = pale, stretched near breaking = pink
-      g.lineWidth = w; const bins = [[], [], []];
-      for (let m = 0; m < L.length; m++) { if (!al[m]) continue; const [a, b, r0] = L[m]; if ((Z[a] + Z[b] > 0) !== front) continue;
-        const k = Math.max(0, (Math.hypot(X[b] - X[a], Y[b] - Y[a]) / r0 - 1) / (st.tear - 1)); bins[k < 0.33 ? 0 : k < 0.7 ? 1 : 2].push(a, b); }
-      const cols = front ? ['rgba(220,226,255,.95)', 'rgba(255,190,225,.95)', 'rgba(255,95,168,1)'] : ['rgba(150,156,200,.55)', 'rgba(200,150,190,.6)', 'rgba(255,95,168,.7)'];
-      bins.forEach((bn, bi) => { g.strokeStyle = cols[bi]; g.beginPath(); for (let q = 0; q < bn.length; q += 2) { const a = bn[q], b = bn[q + 1]; g.moveTo(PXf(X[a]), PYf(Y[a] - Z[a] * 0.12)); g.lineTo(PXf(X[b]), PYf(Y[b] - Z[b] * 0.12)); } g.stroke(); });
+    const S = Math.min(c.W, c.H * 0.6), cam = P.camera(c.W, c.H, { yaw: -0.6, pitch: 0.42, dist: 3, scale: S * 0.95, tx: 0, ty: -0.62, tz: 0, cy: c.H * 0.5 }), beat = c.react ? c.react.beat : 0;
+    const bg = g.createLinearGradient(0, 0, 0, c.H); bg.addColorStop(0, '#1c1738'); bg.addColorStop(1, '#0e0b20'); g.fillStyle = bg; g.fillRect(0, 0, c.W, c.H);
+    const poly = (pts, fill, stroke) => { g.beginPath(); pts.forEach(([x, y, z], i) => { const q = cam.p(x, y, z); i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1]); }); g.closePath(); if (fill) { g.fillStyle = fill; g.fill(); } if (stroke) { g.strokeStyle = stroke; g.lineWidth = 1.5; g.stroke(); } };
+    poly([[-1.2, 0, -1.2], [1.2, 0, -1.2], [1.2, 0, 1.2], [-1.2, 0, 1.2]], '#211c42');
+    const bx = BOX.x, bz = BOX.z, bt = BOX.top, walls = [
+      { pts: [[-bx, 0, bz], [bx, 0, bz], [bx, bt, bz], [-bx, bt, bz]], n: [0, 0, 1], c: [0, 0, bz] }, { pts: [[-bx, 0, -bz], [bx, 0, -bz], [bx, bt, -bz], [-bx, bt, -bz]], n: [0, 0, -1], c: [0, 0, -bz] },
+      { pts: [[bx, 0, -bz], [bx, 0, bz], [bx, bt, bz], [bx, bt, -bz]], n: [1, 0, 0], c: [bx, 0, 0] }, { pts: [[-bx, 0, -bz], [-bx, 0, bz], [-bx, bt, bz], [-bx, bt, -bz]], n: [-1, 0, 0], c: [-bx, 0, 0] }];
+    // walls seen from inside are drawn before the net, walls seen from outside after it (they hide what falls in)
+    const back = walls.filter(w => !cam.facing(w.n[0], w.n[1], w.n[2], w.c[0], bt / 2, w.c[2])), front = walls.filter(w => !back.includes(w));
+    poly([[-bx, -0.001, -bz], [bx, -0.001, -bz], [bx, -0.001, bz], [-bx, -0.001, bz]], '#2c2656');
+    for (const w of back) poly(w.pts, '#3b3566', 'rgba(214,206,255,.35)');
+    // threads split around the ball: behind its centre first, then the ball, then those in front; colour = real tension
+    const { X, Y, Z, A, B, alive, sp } = st, ballD = cam.p(SPH.x, SPH.y, SPH.z)[2], groups = [[[], [], []], [[], [], []]], w0 = Math.max(0.7, S * 0.0035 * Math.min(1, 12 / st.n));
+    for (let m = 0; m < A.length; m++) {
+      if (!alive[m]) continue; const i = A[m], j = B[m], p1 = cam.p(X[i], Y[i], Z[i]), p2 = cam.p(X[j], Y[j], Z[j]);
+      const k = Math.max(0, (Math.hypot(X[j] - X[i], Y[j] - Y[i], Z[j] - Z[i]) / sp - 1) / (st.tear - 1));
+      groups[(p1[2] + p2[2]) / 2 < ballD ? 1 : 0][k < 0.33 ? 0 : k < 0.7 ? 1 : 2].push(p1[0], p1[1], p2[0], p2[1]);
     }
-    g.strokeStyle = 'rgba(214,206,255,.75)'; g.lineWidth = Math.max(2, s * 0.01); g.strokeRect(PXf(BOX.x0), PYf(BOX.y0), (BOX.x1 - BOX.x0) * s, (BOX.y1 - BOX.y0) * s);
-    if (!c.thumb) { const m = (st.n - 1) * (st.n - 1), fs = Math.round(Math.min(c.W * 0.08, 34) * (1 + st.label * 0.25)); g.save(); g.font = '800 ' + fs + 'px "Unbounded", system-ui, sans-serif'; g.textAlign = 'left'; g.textBaseline = 'top'; g.fillStyle = 'rgba(241,238,255,.92)'; g.fillText(m.toLocaleString('fr-FR') + ' MAILLES', ox + 0.05 * s, oy + 0.04 * s); g.restore(); }
+    const strokeGroup = (grp, cols) => grp.forEach((arr, bi) => { if (!arr.length) return; g.strokeStyle = cols[bi]; g.lineWidth = w0; g.beginPath(); for (let q = 0; q < arr.length; q += 4) { g.moveTo(arr[q], arr[q + 1]); g.lineTo(arr[q + 2], arr[q + 3]); } g.stroke(); });
+    strokeGroup(groups[0], ['rgba(170,176,215,.75)', 'rgba(210,160,200,.8)', 'rgba(255,95,168,.85)']);
+    const [sx, sy, , sk] = cam.p(SPH.x, SPH.y, SPH.z), rr = SPH.r * sk * (1 + beat * 0.02), gr = g.createRadialGradient(sx - rr * 0.35, sy - rr * 0.4, rr * 0.1, sx, sy, rr);
+    gr.addColorStop(0, '#ffe39a'); gr.addColorStop(0.5, '#e0a93a'); gr.addColorStop(1, '#6d4810'); g.fillStyle = gr; g.beginPath(); g.arc(sx, sy, rr, 0, 7); g.fill();
+    strokeGroup(groups[1], ['rgba(232,236,255,.95)', 'rgba(255,190,225,.95)', 'rgba(255,95,168,1)']);
+    for (const w of front) poly(w.pts, 'rgba(70,62,120,.82)', 'rgba(214,206,255,.6)');
+    if (!c.thumb) { const m = (st.n - 1) * (st.n - 1), fs = Math.round(Math.min(c.W * 0.08, 34) * (1 + st.label * 0.25)); g.save(); g.font = '800 ' + fs + 'px "Unbounded", system-ui, sans-serif'; g.textAlign = 'left'; g.textBaseline = 'top'; g.fillStyle = 'rgba(241,238,255,.92)'; g.fillText(m.toLocaleString('fr-FR') + ' MAILLES', c.W * 0.06, c.H * 0.04); g.restore(); }
   }
   HB.game({
     id: 'filet', name: 'Filet',
-    desc: 'Un filet tombe sur une boule, s\'étire et se déchire dans la boîte : quatre fois plus de mailles à chaque manche.',
+    desc: 'En 3D : un filet tombe sur une boule, s\'étire et se déchire dans la boîte, avec plus de mailles à chaque manche.',
     ranges: [
       { key: 'tear', label: 'Résistance', min: 1.05, max: 2.2, step: 0.05, value: 1.4, restart: true },
-      { key: 'secs', label: 'Durée manche', min: 4, max: 20, step: 0.5, value: 9 }
+      { key: 'secs', label: 'Durée manche', min: 4, max: 20, step: 0.5, value: 12 }
     ],
     thumbSteps: 120, reset, step, draw,
-    audit(c) {                      // net knots inside the ball (at their depth) or under the floor
-      const st = c.st, [sx, sy, sr] = SPH; let pen = 0; if (!st.X) return {};
-      for (let k = 0; k < st.X.length; k++) { const rr = Math.sqrt(Math.max(0, sr * sr - st.Z[k] * st.Z[k] * 0.25)); pen = Math.max(pen, (rr - Math.hypot(st.X[k] - sx, st.Y[k] - sy)) / 0.01, (st.Y[k] - BOX.y1) / 0.01); }
+    audit(c) {                      // knots inside the ball, under the floor, or through a box wall
+      const st = c.st; let pen = 0; if (!st.X) return {};
+      for (let k = 0; k < st.N; k++) { pen = Math.max(pen, (SPH.r - Math.hypot(st.X[k] - SPH.x, st.Y[k] - SPH.y, st.Z[k] - SPH.z)) / 0.01, st.Y[k] / 0.01); }
       return { pen, note: (st.n - 1) * (st.n - 1) + ' mailles, ' + st.cut + ' fils coupés' };
     }
   });

@@ -73,7 +73,7 @@
     return { rot, near };
   }
   function clawStep(c, st, k, i, dt) {
-    k.t += dt; const q = Math.min(1, k.t / k.dur), e = sm(q), f = k.from, to = k.to;
+    k.t += dt; const q = Math.min(1, k.t / k.dur), e = sm(q), f = k.from, to = k.to;     // claw tempo: one catch-and-throw ≈ 3 s
     if (f) { for (const p of ['e', 'B', 'A', 'be', 'sp']) k[p] = lerp(f[p], to[p], k.s === 'fire' && p === 'e' ? 1 - Math.pow(1 - q, 3) : e); k.rot = f.rot + wrap(to.rot - f.rot) * e; }
     if (k.s === 'press') k.sp = Math.sin(q * Math.PI * 0.5) * Math.PI / 4 + Math.sin(q * Math.PI * 6) * 0.06;
     if (k.s === 'idle') {
@@ -102,7 +102,7 @@
     else if (k.s === 'back') { k.s = 'idle'; k.from = null; }
   }
   function fire(c, st, k, i) {
-    const mult = c.opt.mult || 5, room = st.cap - st.n, g = ++st.gen, m = Math.max(Math.min(k.hc, room), Math.min(Math.round(k.hc * mult), room));
+    const mult = c.opt.mult || 4, room = st.cap - st.n, g = ++st.gen, m = Math.max(Math.min(k.hc, room), Math.min(Math.round(k.hc * mult), room));
     k.held = []; k.hc = 0;
     const s = 2 * st.r * 1.02, G = geo(k), L0 = lattice(), R0 = s * Math.sqrt(m) * 0.5;
     const ahead = k.e + BAR / 2 + st.r * 1.1 + R0, qx = G.hx + G.ux * ahead, qy = G.hy + G.uy * ahead;      // in front of the plate, never inside it
@@ -256,7 +256,7 @@
     id: 'alchimie', name: 'Alchimie',
     desc: 'Deux pinces se renvoient les billes : chacune attrape la nuée qui arrive et la relance multipliée, d\'une nouvelle couleur.',
     ranges: [
-      { key: 'mult', label: 'Multiplier', min: 2, max: 8, step: 1, value: 5 },
+      { key: 'mult', label: 'Multiplier', min: 2, max: 8, step: 1, value: 4 },
       { key: 'max', label: 'Billes', min: 400, max: 3000, step: 100, value: 1600, restart: true },
       { key: 'claws', label: 'Pinces', min: 1, max: 4, step: 1, value: 2, restart: true }
     ],

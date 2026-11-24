@@ -66,7 +66,7 @@
       if (st.ball) { const L = b.path[b.path.length - 1]; if (Math.hypot(b.x - L[0], b.y - L[1]) > 0.012) b.path.push([b.x, b.y]); }
     }
     upd(st, dt);
-    if (st.pins.length >= (c.opt.pins || 30) && !st.ball && !st.end) { st.end = 0.001; if (!c.thumb) HBH.add('Paraboles', st.n + ' billes lancées, ' + st.esc + ' évadées, en ' + Math.round(st.t) + ' s'); }
+    if (st.pins.length >= (c.opt.pins || 16) && !st.ball && !st.end) { st.end = 0.001; if (!c.thumb) HBH.add('Paraboles', st.n + ' billes lancées, ' + st.esc + ' évadées, en ' + Math.round(st.t) + ' s'); }
     if (!c.thumb) c.status(st.n + ' billes · ' + st.esc + (st.esc > 1 ? ' évadées' : ' évadée'));
   }
   function upd(st, dt) {
@@ -108,7 +108,7 @@
     desc: 'Des billes lancées en arc rebondissent sur un poteau ; celles qui touchent les dents deviennent des plots et dessinent leur chemin.',
     ranges: [
       { key: 'keep', label: 'Traces', min: 5, max: 120, step: 5, value: 40 },
-      { key: 'pins', label: 'Plots max', min: 8, max: 80, step: 1, value: 30, restart: true }
+      { key: 'pins', label: 'Plots max', min: 8, max: 80, step: 1, value: 16, restart: true }
     ],
     thumbSteps: 600, reset, step, draw,
     audit(c) {                             // the flying ball inside a pin, the pole or the teeth

@@ -4,7 +4,7 @@
 (() => {
   const P = HBP, SUM = 0.66, HUB = 0.07;
   // one cycle per pair: close (squeeze), hold closed, reopen, pause with both open
-  const PH = [['close', 1.1], ['hold', 0.35], ['open', 0.9], ['pause', 0.7]];
+  const PH = [['close', 1.6], ['hold', 0.45], ['open', 1.25], ['pause', 1]];
 
   function reset(c) {
     const cap = c.thumb ? 260 : Math.round(c.opt.max || 2000);
@@ -28,7 +28,7 @@
     for (let i = p.n - 1; i >= 0; i--) if (inPair(st, i, pair)) { k++; P.remove(p, i); }      // gap shut: nothing can stay in it
     k += st.crushed[pair]; st.crushed[pair] = 0;
     if (!k) return;
-    const full = p.n + k * 2 > st.cap, mult = full ? 1 : (c.opt.mult || 3), m = Math.min(Math.round(k * mult), st.cap - p.n);
+    const full = p.n + k * 2 > st.cap, mult = full ? 1 : (c.opt.mult || 2), m = Math.min(Math.round(k * mult), st.cap - p.n);
     st.pend.push({ m, m0: m, g: ++st.gen, pair });
     if (full) st.rounds++;
     st.flash.push({ pair, t: 0 });
@@ -124,7 +124,7 @@
     id: 'eventail', name: 'Éventail',
     desc: 'Quatre pales s\'ouvrent et se ferment tour à tour : les billes écrasées renaissent multipliées, d\'une nouvelle couleur.',
     ranges: [
-      { key: 'mult', label: 'Multiplier', min: 2, max: 6, step: 1, value: 3 },
+      { key: 'mult', label: 'Multiplier', min: 2, max: 6, step: 1, value: 2 },
       { key: 'max', label: 'Billes', min: 500, max: 3500, step: 100, value: 2000, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,

@@ -67,7 +67,7 @@
     const st = c.st; if (!st) return; st.t += dt;
     // a real pendulum: θ'' = −(g/L)·sin θ. The panels stop it at ±AMP (impact, partial rebound); a motor in the pivot gives back,
     // at the bottom of each swing, just the energy lost, so that it keeps reaching the panels. Its period comes from g/L.
-    const T = c.opt.period || 2.8, k2 = Math.pow(2 * Math.PI / T, 2), w0 = Math.sqrt(2 * k2 * (1 - Math.cos(AMP))) * 1.12;
+    const T = c.opt.period || 3.6, k2 = Math.pow(2 * Math.PI / T, 2), w0 = Math.sqrt(2 * k2 * (1 - Math.cos(AMP))) * 1.12;
     st.w -= k2 * Math.sin(st.th) * dt; const prev = st.th; st.th += st.w * dt;
     if (prev * st.th <= 0 && prev !== st.th) st.w = Math.sign(st.w || 1) * Math.max(Math.abs(st.w), w0);   // motor pulse at the bottom
     if (Math.abs(st.th) >= AMP) {                                                                         // hits a panel
@@ -125,7 +125,7 @@
     desc: 'Un lourd pendule presse les billes contre les panneaux : chaque pression les fait renaître multipliées.',
     ranges: [
       { key: 'mult', label: 'Multiplier', min: 2, max: 8, step: 1, value: 2 },
-      { key: 'period', label: 'Balancement', min: 1.6, max: 5, step: 0.1, value: 2.8 },
+      { key: 'period', label: 'Balancement', min: 1.6, max: 5, step: 0.1, value: 3.6 },
       { key: 'max', label: 'Billes', min: 400, max: 2400, step: 100, value: 1300, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,

@@ -42,7 +42,7 @@
       const px = ((X[i] + (1 - D) + 0.05) * sx) | 0, py = ((Y[i] + TIP + 0.05) * sy) | 0; if (px < 0 || py < 0 || px >= BW || py >= BH) continue;
       const o = (py * BW + px) * 3; buf[o] += st.C[i * 3] * gain; buf[o + 1] += st.C[i * 3 + 1] * gain; buf[o + 2] += st.C[i * 3 + 2] * gain;
     }
-    if (st.rt > (c.opt.secs || 7)) { st.round++; start(c, st); if (!c.thumb && st.round % STEPS.length === 0) HBH.add('Lentille', 'Cycle complet jusqu\'à ' + STEPS[STEPS.length - 1].toLocaleString('fr-FR') + ' billes'); }
+    if (st.rt > (c.opt.secs || 5)) { st.round++; start(c, st); if (!c.thumb && st.round % STEPS.length === 0) HBH.add('Lentille', 'Cycle complet jusqu\'à ' + STEPS[STEPS.length - 1].toLocaleString('fr-FR') + ' billes'); }
     if (!c.thumb) c.status(n.toLocaleString('fr-FR') + ' billes · manche ' + (st.round % STEPS.length + 1));
   }
   function draw(c, g) {
@@ -70,7 +70,7 @@
     id: 'lentille', name: 'Lentille',
     desc: 'Des billes partent du centre d\'une amande et rebondissent sans fin : plus elles sont nombreuses, plus les formes lumineuses apparaissent.',
     ranges: [
-      { key: 'secs', label: 'Durée manche', min: 3, max: 20, step: 0.5, value: 7 },
+      { key: 'secs', label: 'Durée manche', min: 3, max: 20, step: 0.5, value: 5 },
       { key: 'trail', label: 'Traînée', min: 0.5, max: 0.97, step: 0.01, value: 0.82 },
       { key: 'top', label: 'Jusqu\'à', min: 3, max: 11, step: 1, value: 11 }
     ],

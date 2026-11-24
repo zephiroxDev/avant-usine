@@ -24,6 +24,18 @@
       }
     }
   }
+  // a ball caught in the closing angle between an arc and a wall has no room left: it is squeezed to the other side of the arc
+  function squeeze(st) {
+    const p = st.p, r = st.r, lim = 1 - r;
+    for (let i = 0; i < p.n; i++) for (const k of st.arcs) {
+      const G = geo(k), dx = p.X[i] - G.mx, dy = p.Y[i] - G.my, d = Math.hypot(dx, dy) || 1e-9;
+      if (Math.abs(d - A) > (r + TH) * 0.75 || !inArc(Math.atan2(dy, dx), G.a0)) continue;
+      for (const tgt of d < A ? [A + r + TH, A - r - TH] : [A - r - TH, A + r + TH]) {
+        const x = G.mx + dx / d * tgt, y = G.my + dy / d * tgt;
+        if (Math.abs(x) <= lim && Math.abs(y) <= lim) { const vx = p.X[i] - p.PX[i], vy = p.Y[i] - p.PY[i]; p.X[i] = x; p.Y[i] = y; p.PX[i] = x - vx; p.PY[i] = y - vy; break; }
+      }
+    }
+  }
   function box(st) {
     const p = st.p, lim = 1 - st.r;
     for (let i = 0; i < p.n; i++) {
@@ -64,7 +76,8 @@
     for (let s = 0; s < sub; s++) {
       P.integrate(st.p, h, st.p.n < 60 ? 0.97 : 0.7, () => [(P.rnd() - 0.5) * jit, (P.rnd() - 0.5) * jit], 4);
       for (let it = 0; it < 5; it++) { P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1, 1); arcs(st); box(st); }
-      for (let it = 0; it < 3; it++) { arcs(st); box(st); }            // a ball pinched between an arc and a wall slides along the wall
+      squeeze(st);
+      for (let it = 0; it < 8; it++) { arcs(st); box(st); }            // a ball pinched between an arc and a wall slides along the wall
     }
     for (const rg of st.rings) rg.t += dt; st.rings = st.rings.filter(rg => rg.t < 0.8);
     if (st.p.n >= st.p.cap * 0.98 || st.end) { if (P.ending(c, st, dt, 'Quatre lunes', 'Boîte remplie : ' + st.p.n + ' billes, ' + st.gen + ' couleurs en ' + Math.round(st.t) + ' s', 4)) reset(c); }

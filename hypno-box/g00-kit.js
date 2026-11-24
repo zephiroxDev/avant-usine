@@ -86,6 +86,15 @@ window.HBP = (() => {
       mark(x, y) { const k = key(Math.floor(x / cell), Math.floor(y / cell)); let a = m.get(k); if (!a) m.set(k, a = []); a.push(x, y); }
     };
   }
+  // 3D camera (y points down, like the screen): perspective projection of world points, and of directions for face culling
+  function camera(W, H, o) {
+    const cy = Math.cos(o.yaw), sy = Math.sin(o.yaw), cp = Math.cos(o.pitch), sp = Math.sin(o.pitch), S = o.scale, cx0 = o.cx == null ? W / 2 : o.cx, cy0 = o.cy == null ? H / 2 : o.cy;
+    const view = (dx, dy, dz) => { const x1 = dx * cy - dz * sy, z1 = dx * sy + dz * cy; return [x1, dy * cp - z1 * sp, dy * sp + z1 * cp]; };
+    return {
+      p(x, y, z) { const [x1, y2, z2] = view(x - o.tx, y - o.ty, z - o.tz), d = z2 + o.dist, k = S * o.dist / d; return [cx0 + x1 * k, cy0 + y2 * k, d, k]; },
+      facing(nx, ny, nz, px, py, pz) { const [vx, vy, vz] = view(px - o.tx, py - o.ty, pz - o.tz), [ax, ay, az] = view(nx, ny, nz); return ax * vx + ay * vy + az * (vz + o.dist) < 0; }
+    };
+  }
   const finite = p => { for (let i = 0; i < p.n; i++) if (!isFinite(p.X[i]) || !isFinite(p.Y[i])) return false; return true; };
   // keep balls inside a circle of radius R centred on the origin, with a bounce
   function inCircle(p, R, r, bounce) {
@@ -139,5 +148,5 @@ window.HBP = (() => {
     return st.end > (hold || 4) + 1.6 && !c.thumb;
   }
   function fade(g, c, st, hold) { const k = ((st.end || 0) - (hold || 4)) / 1.4; if (k > 0 && !c.thumb) { g.globalAlpha = Math.min(1, k); g.fillStyle = '#0d0b1e'; g.fillRect(0, 0, c.W, c.H); g.globalAlpha = 1; } }
-  return { seed, rnd, overlap, finite, occupancy, COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
+  return { seed, rnd, overlap, finite, occupancy, camera, COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
 })();

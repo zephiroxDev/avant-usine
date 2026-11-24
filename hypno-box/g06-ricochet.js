@@ -6,20 +6,52 @@
   const NC = 14, CS = 1 / NC, VH = 1.8, SZ = 0.042;
   function rock(st, cx, cy) { if (cx < 0 || cx >= NC) return true; const row = st.rows.get(cy); return row ? row[cx] === 1 : true; }
   function ensure(st, topRow) {
-    while (st.genTop > topRow - 4) {                     // carve rooms upward, each overlapping the previous one
+    let built = false;
+    while (st.genTop > topRow - 4) { built = true;                     // carve rooms upward, each overlapping the previous one
       const prev = st.last, w = 3 + Math.floor(P.rnd() * (3 + (st.wide || 0))), h = 3 + Math.floor(P.rnd() * 4);
       let x0 = Math.max(1, Math.min(NC - 1 - w, prev.x + Math.floor((P.rnd() - 0.5) * (prev.w + w))));
-      if (x0 + w <= prev.x + 1) x0 = prev.x + 2 - w; if (x0 >= prev.x + prev.w - 1) x0 = prev.x + prev.w - 2; x0 = Math.max(1, Math.min(NC - 1 - w, x0));
+      const ov = Math.min(3, w, prev.w);                                // rooms share at least three columns: a real passage, not a slit
+      if (x0 + w < prev.x + ov) x0 = prev.x + ov - w; if (x0 > prev.x + prev.w - ov) x0 = prev.x + prev.w - ov; x0 = Math.max(1, Math.min(NC - 1 - w, x0));
       const y1 = prev.y + 1 + Math.floor(P.rnd() * 2), y0 = y1 - h;           // rows grow toward negative y
       for (let y = y0; y <= y1; y++) { if (!st.rows.has(y)) st.rows.set(y, new Uint8Array(NC).fill(1)); const r = st.rows.get(y); for (let x = x0; x < x0 + w; x++) r[x] = 0; }
       st.last = { x: x0, y: y0, w }; st.genTop = Math.min(st.genTop, y0);
+    }
+    return built;
+  }
+  const SP = 0.62, MS = CS * 0.2, TAU = MS / SP;
+  // the cube moves on a fine integer grid (step U on each axis): its path is exactly periodic, so a closed loop can be recognised
+  const U = MS / Math.SQRT2;
+  function micro(o, onBounce) {
+    const S = o.st || o;
+    if (hits(S, (o.xi + o.sx) * U, o.yi * U)) { if (onBounce) onBounce(o.xi * U + o.sx * SZ / 2, o.yi * U, 'x'); o.sx = -o.sx; } else o.xi += o.sx;
+    if (hits(S, o.xi * U, (o.yi + o.sy) * U)) { if (onBounce) onBounce(o.xi * U, o.yi * U + o.sy * SZ / 2, 'y'); o.sy = -o.sy; } else o.yi += o.sy;
+    o.x = o.xi * U; o.y = o.yi * U; o.vx = o.sx * SP / Math.SQRT2; o.vy = o.sy * SP / Math.SQRT2;
+  }
+  // Look-ahead: follow the cube's future path through the rooms already built. If it would circle in a room without climbing,
+  // the exit is dug into that room's ceiling, right above the highest point of its loop — while that room is still out of sight.
+  // The cube never goes through rock: the level is simply designed so that it can always climb.
+  function lookahead(st) {
+    const o = { st, xi: st.xi, yi: st.yi, sx: st.sx, sy: st.sy, x: st.x, y: st.y }; let best = o.y, bx = o.x, since = 0, seen = new Set(), loop = false;
+    const onB = () => { const k = o.xi + ',' + o.yi + ',' + o.sx + ',' + o.sy; if (seen.has(k)) loop = true; else seen.add(k); };
+    for (let n = 0; n < 40000; n++) {
+      micro(o, onB);
+      if (o.y < best - 0.02) { best = o.y; bx = o.x; since = 0; seen = new Set(); } else since++;
+      if (o.y < (st.genTop + 6) * CS) return;                          // reached the newest rooms: checked again when more are built
+      if ((loop || since > 600) && best < st.cam - 0.1) {                 // only out of sight loop = false; seen = new Set();   // the same bounce came back: a closed loop                                             // looping: dig a two-cell shaft up from the top of the loop
+        let changed = false; const cx = Math.max(1, Math.min(NC - 3, Math.floor(bx / CS) - (bx / CS % 1 < 0.5 ? 1 : 0)));
+        for (let y = Math.floor(best / CS) - 1, k = 0; k < 20; y--, k++) {
+          if (!st.rows.has(y)) st.rows.set(y, new Uint8Array(NC).fill(1)); const row = st.rows.get(y);
+          if (!row[cx] && !row[cx + 1] && k > 1) break; if ((row[cx] || row[cx + 1]) && y * CS > st.cam - 0.05) { st.seenDig = (st.seenDig || 0) + 1; } if (row[cx] || row[cx + 1]) changed = true; row[cx] = 0; row[cx + 1] = 0;
+        }
+        if (changed) st.dug = (st.dug || 0) + 1; since = 0;
+      }
     }
   }
   function reset(c) {
     const st = c.st = { rows: new Map(), genTop: 0, last: { x: 5, y: 2, w: 4 }, wide: Math.round(c.opt.wide == null ? 2 : c.opt.wide), t: 0, hue: 50, trail: [], marks: [], dust: [], bounces: 0, cam: 0, best: 0, stuck: 0, squash: 0 };
     for (let y = -2; y <= 6; y++) { const r = new Uint8Array(NC).fill(1); if (y >= -2 && y <= 3) for (let x = 3; x < 10; x++) r[x] = 0; st.rows.set(y, r); }
     st.last = { x: 3, y: -2, w: 7 }; st.genTop = -2; ensure(st, -40);
-    st.x = 6.5 * CS; st.y = 2 * CS; const sp = 0.62; st.vx = sp / Math.SQRT2; st.vy = -sp / Math.SQRT2; st.cam = st.y - VH * 0.6; st.best = st.y;
+    st.xi = Math.round(6.5 * CS / U); st.yi = Math.round(2 * CS / U); st.sx = 1; st.sy = -1; st.x = st.xi * U; st.y = st.yi * U; st.vx = SP / Math.SQRT2; st.vy = -SP / Math.SQRT2; st.cam = st.y - VH * 0.6; st.best = st.y; lookahead(st);
     st.trail.push({ x: st.x, y: st.y, h: st.hue });
   }
   function hits(st, x, y) {
@@ -35,26 +67,17 @@
   }
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.squash = Math.max(0, st.squash - dt * 5);
-    const n = Math.ceil(dt * 0.62 / (CS * 0.2)), d = dt / n;
-    for (let i = 0; i < n; i++) {
-      const nx = st.x + st.vx * d; if (hits(st, nx, st.y)) { bounce(c, st, st.x + Math.sign(st.vx) * SZ / 2, st.y, 'x'); st.vx = -st.vx; } else st.x = nx;
-      const ny = st.y + st.vy * d; if (hits(st, st.x, ny)) { bounce(c, st, st.x, st.y + Math.sign(st.vy) * SZ / 2, 'y'); st.vy = -st.vy; } else st.y = ny;
-    }
+    // fixed micro-steps: the motion is exactly reproducible, so the look-ahead below predicts the real path
+    st.acc = (st.acc || 0) + dt;
+    while (st.acc >= TAU) { st.acc -= TAU; micro(st, (x, y, ax) => bounce(c, st, x, y, ax)); }
     const last = st.trail[st.trail.length - 1];
     if (Math.hypot(st.x - last.x, st.y - last.y) > 0.012) { st.trail.push({ x: st.x, y: st.y, h: st.hue }); if (st.trail.length > (c.opt.trail || 420)) st.trail.shift(); }
-    // keep climbing: if the cube has not gone higher for a while, it blasts through the rock above it
-    if (st.y < st.best - 0.02) { st.best = st.y; st.stuck = 0; } else st.stuck += dt;
-    if (st.stuck > 4) {
-      st.stuck = 0; const cx = Math.floor(st.x / CS), cy = Math.floor(st.y / CS);
-      for (let y = cy - 4; y <= cy; y++) { if (!st.rows.has(y)) st.rows.set(y, new Uint8Array(NC).fill(1)); for (let x = Math.max(1, cx - 1); x <= Math.min(NC - 2, cx + 1); x++) st.rows.get(y)[x] = 0; }
-      for (let i = 0; i < 40; i++) st.dust.push({ x: st.x + (Math.random() - 0.5) * 0.2, y: st.y - Math.random() * 0.3, vx: (Math.random() - 0.5) * 0.6, vy: (Math.random() - 0.5) * 0.6, t: 0 });
-      st.vy = -Math.abs(st.vy); c.note(c.scale(14), 1, 1.4);
-    }
-    ensure(st, Math.floor((st.cam - 0.5) / CS));
+    if (st.y < st.best - 0.02) st.best = st.y;
+    st.la = (st.la || 0) + dt;
+    if (ensure(st, Math.floor((st.cam - 0.5) / CS) - 30) || st.la > 2) { st.la = 0; lookahead(st); }      // rooms are built two screens ahead, out of sight
     const want = st.y - VH * 0.55; st.cam += (want - st.cam) * Math.min(1, dt * 2.2);
     for (const m of st.marks) m.t += dt;
     for (const p of st.dust) { p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= 0.97; p.vy *= 0.97; } st.dust = st.dust.filter(p => p.t < 1.4);
-    for (const [y] of st.rows) if (y * CS > st.cam + VH + 1) st.rows.delete(y);
     if (!c.thumb) c.status(st.bounces + ' rebonds · ' + Math.max(0, Math.round(-st.best * 10)) + ' m');
   }
   function leave(c) { const st = c.st; if (st && st.bounces > 20) HBH.add('Ricochet', st.bounces + ' rebonds, ' + Math.max(0, Math.round(-st.best * 10)) + ' m de montée en ' + Math.round(st.t) + ' s'); }
@@ -104,6 +127,6 @@
       { key: 'wide', label: 'Salles', min: 0, max: 5, step: 1, value: 2, restart: true }
     ],
     thumbSteps: 240, reset, step, draw, leave,
-    audit(c) { const st = c.st; return { pen: hits(st, st.x, st.y) ? 1 : 0, note: st.bounces + ' rebonds' }; }   // the cube overlapping rock = went through
+    audit(c) { const st = c.st; return { pen: hits(st, st.x, st.y) ? 1 : 0, bad: st.seenDig ? 1 : 0, note: st.bounces + ' rebonds, ' + Math.round(-st.best * 10) + ' m, sorties creusées ' + (st.dug || 0) + ', dont visibles ' + (st.seenDig || 0) }; }   // the cube overlapping rock = went through
   });
 })();
