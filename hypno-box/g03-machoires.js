@@ -44,9 +44,9 @@
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.pt += dt;
     const open = 1.1 + A, smin = A / 2 + 0.004;
-    if (st.ph === 'open') { st.s = Math.min(open, st.s + dt * 1.1); if (st.pt > 2.4 && !st.full) { st.ph = 'close'; st.pt = 0; st.blocked = 0; } }
+    if (st.ph === 'open') { st.s = Math.min(open, st.s + dt * 1.1); const mu = P.live(st); if ((mu ? (st.pt > 1.2 / st.mk && P.take(st, 'bq')) || st.pt > 4.5 : st.pt > 2.4) && !st.full) { st.ph = 'close'; st.pt = 0; st.blocked = 0; } }
     else if (st.ph === 'close') {
-      if (st.pen < st.r * 0.2) st.s = Math.max(smin, st.s - dt * 0.75); else { st.blocked += dt; st.s += dt * 0.02; }      // the jaws stall against the packed balls
+      if (st.pen < st.r * 0.2) st.s = Math.max(smin, st.s - dt * 0.75 * (P.live(st) ? 0.8 + st.lv * 0.6 * st.mk : 1)); else { st.blocked += dt; st.s += dt * 0.02; }      // the jaws stall against the packed balls
       if (st.s <= smin + 1e-4 || st.blocked > 0.45) {
         st.ph = 'hold'; st.pt = 0; st.shake = 0.25; st.squeezed = st.p.n; c.note(c.scale(1 + st.gen % 8), 0.9, 0.8);
         let top = 0; for (let i = 0; i < st.p.n; i++) if (st.p.Y[i] < -0.8) top++;
@@ -97,6 +97,8 @@
       { key: 'size', label: 'Taille billes', min: 0.7, max: 1.5, step: 0.05, value: 1, restart: true }
     ],
     thumbSteps: 200, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {
       const st = c.st, p = st.p; let pen = 0;
       for (let i = 0; i < p.n; i++) { for (const side of [-1, 1]) { const q = contact(side, st.s, p.X[i], p.Y[i], st.r * 0.999); if (q) pen = Math.max(pen, q[2] / st.r); } pen = Math.max(pen, (Math.hypot(p.X[i], p.Y[i]) + st.r - 1) / st.r); }

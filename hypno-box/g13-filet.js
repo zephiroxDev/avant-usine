@@ -28,7 +28,7 @@
     }
   }
   function threads(c, st) {
-    const { X, Y, Z, A, B, alive, sp } = st, lim = sp * st.tear, every = Math.max(1, Math.round(A.length / 60));
+    const { X, Y, Z, A, B, alive, sp } = st, lim = sp * (st.kickT > 0 ? 1 + (st.tear - 1) * (1 - 0.18 * st.mk) : st.tear), every = Math.max(1, Math.round(A.length / 60));
     for (let m = 0; m < A.length; m++) {
       if (!alive[m]) continue; const i = A[m], j = B[m], dx = X[j] - X[i], dy = Y[j] - Y[i], dz = Z[j] - Z[i], d = Math.hypot(dx, dy, dz) || 1e-9;
       if (d > lim) { alive[m] = 0; st.cut++; if (st.cut % every === 0) c.note(c.scale(5 + st.cut % 10), 0.4, 0.4); continue; }
@@ -38,6 +38,7 @@
   }
   function step(c, dt) {
     const st = c.st; if (!st || !st.X) return; st.t += dt; st.rt += dt; st.label = Math.max(0, st.label - dt);
+    st.kickT = Math.max(0, (st.kickT || 0) - dt);
     const sub = 5, h = dt / sub, { X, Y, Z, PX, PY, PZ, N } = st, g2 = 1.6 * st.heavy * h * h;
     for (let s = 0; s < sub; s++) {
       for (let k = 0; k < N; k++) { const vx = (X[k] - PX[k]) * 0.996, vy = (Y[k] - PY[k]) * 0.996, vz = (Z[k] - PZ[k]) * 0.996; PX[k] = X[k]; PY[k] = Y[k]; PZ[k] = Z[k]; X[k] += vx; Y[k] += vy + g2; Z[k] += vz; }
@@ -84,6 +85,8 @@
       { key: 'secs', label: 'Durée manche', min: 4, max: 20, step: 0.5, value: 12 }
     ],
     thumbSteps: 120, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (P.take(st, 'bq')) st.kickT = 0.12; },
     audit(c) {                      // knots inside the ball, under the floor, or through a box wall
       const st = c.st; let pen = 0; if (!st.X) return {};
       for (let k = 0; k < st.N; k++) { pen = Math.max(pen, (SPH.r - Math.hypot(st.X[k] - SPH.x, st.Y[k] - SPH.y, st.Z[k] - SPH.z)) / 0.01, st.Y[k] / 0.01); }

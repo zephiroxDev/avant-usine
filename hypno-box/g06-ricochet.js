@@ -68,7 +68,7 @@
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.squash = Math.max(0, st.squash - dt * 5);
     // fixed micro-steps: the motion is exactly reproducible, so the look-ahead below predicts the real path
-    st.acc = (st.acc || 0) + dt;
+    st.acc = (st.acc || 0) + dt * (P.live(st) ? Math.min(1.9, Math.max(0.55, 0.65 + st.lv * 0.8 * st.mk)) : 1);
     while (st.acc >= TAU) { st.acc -= TAU; micro(st, (x, y, ax) => bounce(c, st, x, y, ax)); }
     const last = st.trail[st.trail.length - 1];
     if (Math.hypot(st.x - last.x, st.y - last.y) > 0.012) { st.trail.push({ x: st.x, y: st.y, h: st.hue }); if (st.trail.length > (c.opt.trail || 420)) st.trail.shift(); }
@@ -127,6 +127,8 @@
       { key: 'wide', label: 'Salles', min: 0, max: 5, step: 1, value: 2, restart: true }
     ],
     thumbSteps: 240, reset, step, draw, leave,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); while (P.take(st, 'bq')) { st.hue = (st.hue + 30 * st.mk) % 360; st.squash = 1; } },
     audit(c) { const st = c.st; return { pen: hits(st, st.x, st.y) ? 1 : 0, bad: st.seenDig ? 1 : 0, note: st.bounces + ' rebonds, ' + Math.round(-st.best * 10) + ' m, sorties creusées ' + (st.dug || 0) + ', dont visibles ' + (st.seenDig || 0) }; }   // the cube overlapping rock = went through
   });
 })();

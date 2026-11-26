@@ -68,7 +68,7 @@
     const st = c.st; if (!st) return; st.t += dt;
     for (const k of st.arcs) {
       if (k.close > 0) { k.close -= dt; if (k.close <= 0) { k.close = 0; capture(c, st, k); } continue; }       // the ring stops while it is closed
-      k.th += k.w * dt; k.cd -= dt; if (k.cd <= 0) k.cd = tryClose(st, k) ? 0.9 + P.rnd() * 1.1 : 0.25;
+      k.th += k.w * dt * (P.live(st) ? 0.55 + st.lv * 0.9 * st.mk : 1); k.cd -= dt; if (P.live(st) && k.cd > 0 && k.cd < 0.7 && P.take(st, 'bq')) k.cd = 0; if (k.cd <= 0) k.cd = tryClose(st, k) ? 0.9 + P.rnd() * 1.1 : 0.25;
     }
     const rT = Math.max(st.rmin, Math.min(0.035, Math.sqrt(0.5 / Math.max(1, st.p.n))));
     st.r += (rT - st.r) * Math.min(1, dt * 1.2);
@@ -112,6 +112,8 @@
       { key: 'max', label: 'Billes', min: 400, max: 2600, step: 100, value: 1400, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {
       const st = c.st, p = st.p, r = st.r; let pen = 0, where = '';
       for (let i = 0; i < p.n; i++) { if (p.age[i] < 1) continue;

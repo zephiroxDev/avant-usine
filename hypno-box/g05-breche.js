@@ -79,7 +79,7 @@
     }
     for (const k of st.caps) if (k.y > 1.2 && (best < 1.3)) { tx = k.x; break; }
     const ms = 2.2 * dt; st.px += Math.max(-ms, Math.min(ms, tx - st.px)); st.px = Math.max(st.pw / 2, Math.min(WW - st.pw / 2, st.px));
-    const v = st.speed * (st.fast > 0 ? 1.8 : 1) * dt;
+    const v = st.speed * (st.fast > 0 ? 1.8 : 1) * dt * (P.live(st) ? Math.min(1.8, Math.max(0.6, 0.7 + st.lv * 0.7 * st.mk)) : 1);      // louder = faster
     for (const b of st.balls) moveBall(c, st, b, v);
     st.balls = st.balls.filter(b => b.y < WH + 0.02);
     if (!st.balls.length) launch(st);
@@ -135,6 +135,8 @@
       { key: 'aim', label: 'Visée', min: 0, max: 1, step: 0.05, value: 0.75 }
     ],
     thumbSteps: 500, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (P.take(st, 'bq')) st.pulse = 1; },
     audit(c) {                                        // a ball overlapping a standing brick (centre inside a brick = went through)
       const st = c.st; let pen = 0; if (!st.balls) return {};
       for (const b of st.balls) { const i = cellAt(b.x, b.y); if (i >= 0 && st.hp[i]) pen = Math.max(pen, 1); }

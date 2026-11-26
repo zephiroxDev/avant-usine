@@ -32,7 +32,7 @@
     if (st.end) { st.end += dt; for (const o of st.o) { o.y += dt * 1.8 * st.end; } if (st.end > 3.2 && !c.thumb) reset(c); upd(st, dt); return; }
     st.drop -= dt;
     const topFree = !st.o.some(o => o.y < NECK_TOP + 0.4);
-    if (st.drop <= 0 && topFree) { add(st, 0, NECK_TOP, 0, 0.004); /* dropped exactly on the axis, as in the reference: the orbs stack in a column */ st.drop = 1 / (c.opt.rate || 3); }
+    if (P.live(st) ? topFree && ((st.drop < 1 / (c.opt.rate || 3) * 0.5 && P.take(st, 'bq')) || st.drop < -1.2) : st.drop <= 0 && topFree) { add(st, 0, NECK_TOP, 0, 0.004); /* dropped exactly on the axis, as in the reference: the orbs stack in a column */ st.drop = 1 / (c.opt.rate || 3); }
     const sub = 4, h = dt / sub, G = 3;
     for (let s = 0; s < sub; s++) {
 
@@ -111,6 +111,8 @@
     desc: 'Des orbes tombent dans un flacon : deux identiques fusionnent en un plus gros, jusqu\'à l\'orbe géant.',
     ranges: [{ key: 'rate', label: 'Débit', min: 0.8, max: 5, step: 0.1, value: 3 }],
     thumbSteps: 900, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                         // overlap between orbs (in radii of the smaller one) and orbs through the flask wall
       const st = c.st, o = st.o; let pen = 0, ov = 0; if (st.end) return {};          // the flask empties at the end
       for (let i = 0; i < o.length; i++) { const ri = rad(o[i].k);

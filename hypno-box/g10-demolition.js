@@ -22,7 +22,7 @@
     for (let m = 0; m < nb; m++) { A[m] = bonds[m * 3]; B[m] = bonds[m * 3 + 1]; const t = bonds[m * 3 + 2]; L[m] = t === 2 ? CELL * Math.SQRT2 : CELL; W[m] = t === 1 ? 1 : t === 0 ? 0.45 : 0.4; if (t === 0 && B[m] === A[m] + 1) hb[A[m]] = m; }
     const m = MASSES[st.round % MASSES.length], br = 0.036 * (1 + Math.log10(m) * 0.22);
     Object.assign(st, { N, nx, ny, nz, X, Y, Z, PX, PY, PZ, tone, A, B, L, W, hb, alive: new Uint8Array(nb).fill(1), ang: new Float32Array(N), broken: 0, m,
-      ball: startBall(br), rt: 0, hit: false, still: 0, label: 1.4, dust: [], head: null, next: new Int32Array(N) });
+      ball: startBall(br), hold: P.live(st) ? 4 : 0, rt: 0, hit: false, still: 0, label: 1.4, dust: [], head: null, next: new Int32Array(N) });
   }
   // the ball starts resting on the slope, whatever its size (never inside the ramp)
   function startBall(r) {
@@ -77,11 +77,11 @@
     b.rot += (b.x - b.px) / b.r;
   }
   function step(c, dt) {
-    const st = c.st; if (!st || !st.X) return; st.t += dt; st.rt += dt; st.label = Math.max(0, st.label - dt);
+    const st = c.st; if (!st || !st.X) return; st.t += dt; st.rt += dt; if (st.hold > 0) { st.hold -= dt; if (P.live(st) && st.rt > 0.6 && P.take(st, 'bq')) st.hold = 0; } st.label = Math.max(0, st.label - dt);
     const sub = 3, h = dt / sub, { X, Y, Z, PX, PY, PZ, N } = st, k = Math.pow(0.9, h), g2 = G * h * h;
     for (let s = 0; s < sub; s++) {
       for (let i = 0; i < N; i++) { const vx = (X[i] - PX[i]) * k, vy = (Y[i] - PY[i]) * k, vz = (Z[i] - PZ[i]) * k; PX[i] = X[i]; PY[i] = Y[i]; PZ[i] = Z[i]; X[i] += vx; Y[i] += vy + g2; Z[i] += vz; }
-      ballMove(st, h);
+      if (st.hold > 0) { const b = st.ball; b.px = b.x; b.py = b.y; b.pz = b.z; } else ballMove(st, h);
       for (let it = 0; it < 3; it++) { bondsPass(c, st); contacts(st); ballBlocks(c, st); ground(st); }
     }
     for (const d of st.dust) { d.t += dt; d.x += d.vx * dt; d.y += d.vy * dt; d.z += d.vz * dt; d.vy += 0.6 * dt; } st.dust = st.dust.filter(d => d.t < 1.5);
@@ -146,6 +146,8 @@
       { key: 'height', label: 'Hauteur', min: 0.4, max: 1.1, step: 0.05, value: 0.85, restart: true }
     ],
     thumbSteps: 160, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (st.rt < 0.3 && !(st.hold > 0) && !st.hit) st.hold = 4; },      // with a song, the ball waits for a kick from the first round on
     audit(c) {                                     // blocks under the ground or inside the ball, overlap between nearby blocks
       const st = c.st, b = st.ball; let pen = 0, ov = 0;
       for (let i = 0; i < st.N; i++) pen = Math.max(pen, (st.Y[i] + R) / R, (b.r + R - Math.hypot(st.X[i] - b.x, st.Y[i] - b.y, st.Z[i] - b.z)) / R);

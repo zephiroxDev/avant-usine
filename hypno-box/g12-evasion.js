@@ -46,7 +46,7 @@
     }
   }
   function step(c, dt) {
-    const st = c.st; if (!st) return; st.t += dt; st.rot += dt * (c.opt.spin || 0.5);
+    const st = c.st; if (!st) return; st.t += dt; st.rot += dt * (c.opt.spin || 0.5) * (P.live(st) ? 0.4 + st.lv * 1.3 * st.mk : 1);
     const W = c.W && c.H ? Math.max(1.05, (c.W / 2) / Math.min(c.W * 0.4, c.H * 0.3)) : 1.25, H = c.W && c.H ? (c.H / 2) / Math.min(c.W * 0.4, c.H * 0.3) : 1.6;
     const sub = 2, h = dt / sub, G = c.opt.grav == null ? 1.4 : c.opt.grav;
     for (let s = 0; s < sub; s++) {
@@ -80,6 +80,8 @@
       { key: 'max', label: 'Billes', min: 150, max: 700, step: 10, value: 520, restart: true }
     ],
     thumbSteps: 500, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (P.take(st, 'bq')) { const p = st.p, v = 0.006 * st.mk; for (let i = 0; i < p.n; i++) p.PY[i] += v; } },
     audit(c) {                    // inside balls in the closed part of the ring; escaped balls back inside
       const st = c.st, p = st.p, r = st.r; let pen = 0; if (st.end) return {};
       for (let i = 0; i < p.n; i++) { const d = Math.hypot(p.X[i], p.Y[i]); if (!inGap(st, Math.atan2(p.Y[i], p.X[i])) && d > 1 - TH - r) pen = Math.max(pen, (d - (1 - TH - r)) / r); }

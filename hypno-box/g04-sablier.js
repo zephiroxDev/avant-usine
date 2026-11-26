@@ -39,7 +39,7 @@
   }
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.pt += dt;
-    if (st.ph === 'wait' && st.pt > (st.wait || 0.9)) { st.ph = 'slam'; st.pt = 0; }
+    if (st.ph === 'wait' && (P.live(st) ? (st.pt > 0.12 && P.take(st, 'bq')) || st.pt > 2.2 : st.pt > (st.wait || 0.9))) { st.ph = 'slam'; st.pt = 0; }
     else if (st.ph === 'slam') { st.g = Math.max(0, OPEN * (1 - st.pt / 0.14)); if (st.g <= 0) { st.ph = 'hold'; st.pt = 0; crush(c, st); } }
     else if (st.ph === 'hold' && st.pt > 0.12) { st.ph = 'open'; st.pt = 0; }
     else if (st.ph === 'open') { st.g = OPEN * P.sm(st.pt / 0.45); if (st.pt >= 0.45) { st.ph = 'wait'; st.pt = 0; st.wait = 0.15 + P.rnd() * 0.35; } }
@@ -89,6 +89,8 @@
       { key: 'max', label: 'Billes', min: 400, max: 3000, step: 100, value: 1500, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {
       const st = c.st, p = st.p, r = st.r; let pen = 0;
       for (let i = 0; i < p.n; i++) { const ax = Math.abs(p.X[i]), hw = half(st, p.X[i]), ay = Math.abs(p.Y[i]);

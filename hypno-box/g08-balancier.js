@@ -67,7 +67,7 @@
     const st = c.st; if (!st) return; st.t += dt;
     // a real pendulum: θ'' = −(g/L)·sin θ. The panels stop it at ±AMP (impact, partial rebound); a motor in the pivot gives back,
     // at the bottom of each swing, just the energy lost, so that it keeps reaching the panels. Its period comes from g/L.
-    const T = c.opt.period || 3.6, k2 = Math.pow(2 * Math.PI / T, 2), w0 = Math.sqrt(2 * k2 * (1 - Math.cos(AMP))) * 1.12;
+    const T = c.opt.period || 3.6, k2 = Math.pow(2 * Math.PI / T, 2), w0 = Math.sqrt(2 * k2 * (1 - Math.cos(AMP))) * (P.live(st) ? 1.04 + st.bs * 0.22 * st.mk : 1.12);
     st.w -= k2 * Math.sin(st.th) * dt; const prev = st.th; st.th += st.w * dt;
     if (prev * st.th <= 0 && prev !== st.th) st.w = Math.sign(st.w || 1) * Math.max(Math.abs(st.w), w0);   // motor pulse at the bottom
     if (Math.abs(st.th) >= AMP) {                                                                         // hits a panel
@@ -129,6 +129,8 @@
       { key: 'max', label: 'Billes', min: 400, max: 2400, step: 100, value: 1300, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (P.take(st, 'bq')) st.flashes.push({ side: Math.sign(st.th) || 1, t: 0.25 }); },
     audit(c) {                                   // balls inside the bob (convex polygon) or past the rim
       const st = c.st, p = st.p, r = st.r, B = bob(st.th); let pen = 0;
       for (let i = 0; i < p.n; i++) { let worst = 1e9;

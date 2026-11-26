@@ -29,7 +29,7 @@
     if (vn < 0) { b.vx -= (1 + e) * vn * nx; b.vy -= (1 + e) * vn * ny; } return true;
   }
   function launch(c, st) {
-    const sp = 1.25 + P.rnd() * 0.75, a = -0.25 - P.rnd() * 0.75;
+    const sp = (1.25 + P.rnd() * 0.75) * (P.live(st) ? 0.85 + st.lv * 0.3 * st.mk : 1), a = -0.25 - P.rnd() * 0.75;
     st.ball = { x: -0.86, y: -0.12, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 0, col: P.COLS[st.col++ % P.COLS.length], path: [[-0.86, -0.12]] };
     st.n++;
   }
@@ -45,7 +45,7 @@
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt;
     if (st.end) { st.end += dt; if (st.end > 4 && !c.thumb) reset(c); upd(st, dt); return; }
-    if (!st.ball) { st.wait -= dt; if (st.wait <= 0) launch(c, st); }
+    if (!st.ball) { st.wait -= dt; if (P.live(st) ? (st.wait <= 0 && P.take(st, 'bq')) || st.wait < -2.5 : st.wait <= 0) launch(c, st); }
     const b = st.ball, g = 1.7;
     if (b) {
       const n = Math.ceil(dt / 0.003), h = dt / n;
@@ -111,6 +111,8 @@
       { key: 'pins', label: 'Plots max', min: 8, max: 80, step: 1, value: 16, restart: true }
     ],
     thumbSteps: 600, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                             // the flying ball inside a pin, the pole or the teeth
       const st = c.st, b = st.ball; let pen = 0; if (!b) return {};
       for (const q of st.pins) pen = Math.max(pen, (2 * BR - Math.hypot(b.x - q.x, b.y - q.y)) / BR);

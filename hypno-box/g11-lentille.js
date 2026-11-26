@@ -2,6 +2,7 @@
    réparties en éventail, et rebondissent parfaitement sur les bords sans se toucher. À chaque manche leur nombre
    grandit (2, 16, 64… jusqu'à 65 536) : leurs fronts dessinent des anneaux et des rectangles lumineux. */
 (() => {
+  const P = HBP;
   const D = 0.55, TIP = Math.sqrt(1 - D * D), STEPS = [2, 16, 64, 128, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
   const BW = 240, BH = Math.round(BW * (TIP * 2 + 0.1) / (2 * (1 - D) + 0.1));
   function reset(c) {
@@ -23,7 +24,7 @@
   }
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.rt += dt; st.flash = Math.max(0, st.flash - dt * 1.5);
-    const n = st.n, X = st.X, Y = st.Y, VX = st.VX, VY = st.VY, sp = 0.7, sub = 2, h = dt * sp / sub;
+    const n = st.n, X = st.X, Y = st.Y, VX = st.VX, VY = st.VY, sp = 0.7 * (P.live(st) ? Math.min(1.8, 0.45 + st.lv * 1.1 * st.mk) : 1), sub = 2, h = dt * sp / sub;
     for (let s = 0; s < sub; s++) for (let i = 0; i < n; i++) {
       let x = X[i] + VX[i] * h, y = Y[i] + VY[i] * h;
       // leaving the disc of one circle = hitting its arc: mirror reflection on the arc's normal. Two passes, because near the
@@ -42,7 +43,8 @@
       const px = ((X[i] + (1 - D) + 0.05) * sx) | 0, py = ((Y[i] + TIP + 0.05) * sy) | 0; if (px < 0 || py < 0 || px >= BW || py >= BH) continue;
       const o = (py * BW + px) * 3; buf[o] += st.C[i * 3] * gain; buf[o + 1] += st.C[i * 3 + 1] * gain; buf[o + 2] += st.C[i * 3 + 2] * gain;
     }
-    if (st.rt > (c.opt.secs || 5)) { st.round++; start(c, st); if (!c.thumb && st.round % STEPS.length === 0) HBH.add('Lentille', 'Cycle complet jusqu\'à ' + STEPS[STEPS.length - 1].toLocaleString('fr-FR') + ' billes'); }
+    const sec = c.opt.secs || 5;
+    if (P.live(st) ? (st.rt > sec * 0.6 && P.take(st, 'bq')) || st.rt > sec * 1.6 : st.rt > sec) { st.round++; start(c, st); if (!c.thumb && st.round % STEPS.length === 0) HBH.add('Lentille', 'Cycle complet jusqu\'à ' + STEPS[STEPS.length - 1].toLocaleString('fr-FR') + ' billes'); }
     if (!c.thumb) c.status(n.toLocaleString('fr-FR') + ' billes · manche ' + (st.round % STEPS.length + 1));
   }
   function draw(c, g) {
@@ -75,6 +77,8 @@
       { key: 'top', label: 'Jusqu\'à', min: 3, max: 11, step: 1, value: 11 }
     ],
     thumbSteps: 160, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                              // any ball outside the lens (outside either circle)
       const st = c.st; let out = 0, sp = 0;
       for (let i = 0; i < st.n; i++) { out = Math.max(out, Math.hypot(st.X[i] + D, st.Y[i]) - 1, Math.hypot(st.X[i] - D, st.Y[i]) - 1); sp = Math.max(sp, Math.abs(Math.hypot(st.VX[i], st.VY[i]) - 1)); }

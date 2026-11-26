@@ -81,7 +81,8 @@
       if (!full) k.rot = lerp(k.rot, Math.sin(st.t * 0.9 + i * 2) * 0.35, Math.min(1, dt * 2));
       if (st.turn !== i || st.end || full) return;
       k.wait += dt; const a = aim(st, k);
-      if (a.near >= Math.max(1, st.lastM * 0.55) || k.wait > 2.6) { k.wait = 0; go(k, 'open', 0.4, POSE.open, a.rot); }
+      const mu = P.live(st), ready = mu ? (a.near >= 1 && k.wait > 0.6 / st.mk && P.take(st, 'bq')) || k.wait > 5 : a.near >= Math.max(1, st.lastM * 0.55) || k.wait > 2.6;
+      if (ready) { k.wait = 0; go(k, 'open', 0.4, POSE.open, a.rot); }
       return;
     }
     if (q < 1) return;
@@ -107,7 +108,7 @@
     const s = 2 * st.r * 1.02, G = geo(k), L0 = lattice(), R0 = s * Math.sqrt(m) * 0.5;
     const ahead = k.e + BAR / 2 + st.r * 1.1 + R0, qx = G.hx + G.ux * ahead, qy = G.hy + G.uy * ahead;      // in front of the plate, never inside it
     const nk = st.claws[(i + 1) % st.claws.length], tx = Math.cos(nk.h) * 0.45 - qx, ty = Math.sin(nk.h) * 0.45 + (P.rnd() - 0.5) * 0.5 - qy, tl = Math.hypot(tx, ty) || 1;
-    const sp = 0.009 * (st.claws.length === 1 ? 0.6 : 1);
+    const sp = 0.009 * (st.claws.length === 1 ? 0.6 : 1) * (P.live(st) ? 0.8 + st.bs * 0.5 * st.mk : 1);       // stronger bass, harder throw
     // the cluster fills the lattice around its centre, skipping places outside the circle or behind the plate
     const lim = 1 - st.r * 1.05, occ = P.occupancy(st, s);
     for (let j = 0, put = 0; put < m && j < L0.length; j++) {
@@ -261,6 +262,8 @@
       { key: 'claws', label: 'Pinces', min: 1, max: 4, step: 1, value: 2, restart: true }
     ],
     thumbSteps: 360, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                                    // penetration of balls into the claw bars, overlap between balls
       const st = c.st, G = st.claws.map(geo), rr = st.r + BAR / 2; let pen = 0, where = '';
       for (let i = 0; i < st.n; i++) { if (st.age[i] < 1) continue; for (const gk of G) for (const [ax, ay, bx, by] of gk.seg) {

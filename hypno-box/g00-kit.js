@@ -95,6 +95,12 @@ window.HBP = (() => {
       facing(nx, ny, nz, px, py, pz) { const [vx, vy, vz] = view(px - o.tx, py - o.ty, pz - o.tz), [ax, ay, az] = view(nx, ny, nz); return ax * vx + ay * vy + az * (vz + o.dist) < 0; }
     };
   }
+  // Music as an input, shared by every game: store what the song says (pending kicks, energy, bass, strength of the setting)
+  function mus(st, m) { st.mt = st.t; st.mk = m.k; st.lv = m.level || 0; st.bs = m.bass || 0; st.pc = m.perc || 0; st.sil = !!m.silent;
+    // light: one kick out of two; balanced: every kick; strong: kicks plus the other attacks (snares, hats)
+    st.bq = m.silent ? 0 : Math.min(2, (st.bq || 0) + (m.kick || 0) * Math.min(1, m.k) + (m.k > 1 ? Math.max(0, (m.hit || 0) - (m.kick || 0)) * 0.5 : 0)); st.hq = Math.min(4, (st.hq || 0) + (m.hit || 0)); }
+  const live = st => st.mt != null && st.t - st.mt < 0.35;                       // a song is playing and drives this game right now
+  function take(st, q) { if (!(st[q] >= 1)) return false; st[q]--; st.mh = (st.mh || 0) + 1; return true; }   // consume one musical event
   const finite = p => { for (let i = 0; i < p.n; i++) if (!isFinite(p.X[i]) || !isFinite(p.Y[i])) return false; return true; };
   // keep balls inside a circle of radius R centred on the origin, with a bounce
   function inCircle(p, R, r, bounce) {
@@ -148,5 +154,5 @@ window.HBP = (() => {
     return st.end > (hold || 4) + 1.6 && !c.thumb;
   }
   function fade(g, c, st, hold) { const k = ((st.end || 0) - (hold || 4)) / 1.4; if (k > 0 && !c.thumb) { g.globalAlpha = Math.min(1, k); g.fillStyle = '#0d0b1e'; g.fillRect(0, 0, c.W, c.H); g.globalAlpha = 1; } }
-  return { seed, rnd, overlap, finite, occupancy, camera, COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
+  return { seed, rnd, overlap, finite, occupancy, camera, mus, live, take, COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
 })();

@@ -123,6 +123,8 @@
   body.rec .deck { display: none; }
   body.rec .app { max-width: none; gap: 0; }
   body.rec .stage { border-radius: 0; box-shadow: none; }
+  body.rec:not(.cine) .app { justify-content: center; align-items: center; }
+  body.rec:not(.cine) .stage { flex: none; width: min(100%, calc(100vh * 9 / 16)); width: min(100%, calc(100dvh * 9 / 16)); height: auto; aspect-ratio: 9 / 16; }   /* videos are always 9:16 */
   .hook { display: flex; flex-direction: column; gap: 6px; }
   .hook span { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-soft); font-weight: 700; }
   .export { position: fixed; inset: 0; z-index: 10; background: rgba(8,6,20,.82); display: grid; place-items: center; padding: 16px; }
@@ -219,7 +221,9 @@ window.HBX = (() => {
     r.mr.onstop = () => {
       try { if (r.dest) r.master.disconnect(r.dest); } catch (e) {}
       r.stream.getTracks().forEach(t => t.stop());
-      if (silent || !r.chunks.length) return;
+      if (silent) return;
+      if (!r.chunks.length) { HBH.err('Vidéo : aucune image reçue par l\'enregistreur (' + r.type + ')'); return; }
+      HBH.add('Vidéo', r.name + ' · ' + Math.round((performance.now() - r.t0) / 1000) + ' s · ' + (r.type.includes('mp4') ? 'MP4' : 'WebM'));
       sheet(new Blob(r.chunks, { type: r.type.split(';')[0] }), r.type.includes('mp4') ? 'mp4' : 'webm', (performance.now() - r.t0) / 1000, r.name);
     };
     try { r.mr.stop(); } catch (e) {}
@@ -263,6 +267,8 @@ window.HBH = (() => {
   const rd = k => { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) { return []; } };
   const wr = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
   function add(game, text) { const l = rd(K); l.unshift({ t: Date.now(), g: game, x: text }); wr(K, l.slice(0, 150)); }
+  // real play time and sessions per game (only counted when a game was open for more than 3 s)
+  function time(game, secs) { if (!(secs > 3)) return; let s0 = {}; try { s0 = JSON.parse(localStorage.getItem('hypno.stats') || '{}'); } catch (e) {} const g = s0[game] || { s: 0, n: 0 }; g.s += secs; g.n++; s0[game] = g; try { localStorage.setItem('hypno.stats', JSON.stringify(s0)); } catch (e) {} }
   const seen = new Set(), toast = document.createElement('div'); toast.className = 'cine-hint err-toast'; document.body.appendChild(toast);
   function err(m) {
     m = String(m || 'erreur inconnue').slice(0, 160); const l = rd(KE); l.unshift({ t: Date.now(), x: m }); wr(KE, l.slice(0, 30));
@@ -276,9 +282,11 @@ window.HBH = (() => {
     const box = document.createElement('div'); box.className = 'export';
     const l = rd(K), errs = rd(KE), games = {};
     for (const e of l) { games[e.g] = games[e.g] || { n: 0, last: e }; games[e.g].n++; }
+    let st0 = {}; try { st0 = JSON.parse(localStorage.getItem('hypno.stats') || '{}'); } catch (e) {} for (const g of Object.keys(st0)) games[g] = games[g] || { n: 0, last: { t: 0 } };
+    const dur = s => s < 60 ? Math.round(s) + ' s' : s < 3600 ? Math.round(s / 60) + ' min' : (s / 3600).toFixed(1) + ' h';
     const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     box.innerHTML = '<div class="export-card" role="dialog" aria-label="Historique"><p class="export-title">Historique et statistiques</p>' +
-      (Object.keys(games).length ? '<div class="stats-wrap"><table class="stats"><thead><tr><th>Jeu</th><th>Parties</th><th>Dernière</th></tr></thead><tbody>' + Object.entries(games).map(([g, v]) => '<tr><td>' + esc(g) + '</td><td>' + v.n + '</td><td>' + fmt(v.last.t) + '</td></tr>').join('') + '</tbody></table></div>' : '<p class="sheet-tip">Pas encore de partie terminée.</p>') +
+      (Object.keys(games).length ? '<div class="stats-wrap"><table class="stats"><thead><tr><th>Jeu</th><th>Sessions</th><th>Temps</th><th>Événements</th><th>Dernier</th></tr></thead><tbody>' + Object.entries(games).sort((a, b) => ((st0[b[0]] || {}).s || 0) - ((st0[a[0]] || {}).s || 0)).map(([g, v]) => '<tr><td>' + esc(g) + '</td><td>' + ((st0[g] || {}).n || 0) + '</td><td>' + dur((st0[g] || {}).s || 0) + '</td><td>' + v.n + '</td><td>' + (v.last.t ? fmt(v.last.t) : '—') + '</td></tr>').join('') + '</tbody></table></div>' : '<p class="sheet-tip">Pas encore de partie terminée.</p>') +
       '<div class="hist">' + l.slice(0, 60).map(e => '<p><span>' + fmt(e.t) + ' · ' + esc(e.g) + '</span>' + esc(e.x) + '</p>').join('') + '</div>' +
       (errs.length ? '<h3 class="sheet-h">Problèmes rencontrés</h3><div class="hist">' + errs.slice(0, 10).map(e => '<p><span>' + fmt(e.t) + '</span>' + esc(e.x) + '</p>').join('') + '</div>' : '') +
       '<div class="row"><button type="button" data-clear>Effacer</button><button class="main" type="button" data-close>Fermer</button></div></div>';
@@ -286,7 +294,7 @@ window.HBH = (() => {
     box.querySelector('[data-close]').addEventListener('click', () => box.remove());
     box.querySelector('[data-clear]').addEventListener('click', e => { if (!e.target.dataset.sure) { e.target.dataset.sure = 1; e.target.textContent = 'Toucher encore pour tout effacer'; return; } wr(K, []); wr(KE, []); box.remove(); });
   }
-  return { add, err, open };
+  return { add, err, open, time };
 })();
 /* Options panel shared by every game: one "Options" button per game opens tabs (Jeu, Musique, Affichage, Configs),
    so the main screen keeps only the essential controls. */
@@ -408,7 +416,7 @@ window.HBT = (() => {
       else if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
       else throw new Error('no');
       msg.textContent = '';
-    } catch (e) { msg.textContent = 'Le plein écran n\'est pas disponible ici. Il marche quand le fichier HTML est ouvert directement dans le navigateur.'; }
+    } catch (e) { cinema(true); msg.textContent = 'Plein écran indisponible ici (iPhone ou page intégrée) : mode cinéma activé à la place. Sur iPhone, « Partager › Sur l\'écran d\'accueil » donne une vraie vue plein écran.'; }
   }
   const nodes = [];
   function refresh() { for (const nd of nodes) { nd.querySelector('[data-th]').value = s.theme; nd.querySelector('[data-gl]').value = s.glow; nd.querySelector('[data-pa]').value = s.parts; nd.querySelector('[data-q]').value = s.quality; nd.querySelector('[data-mo]').value = s.motion; } }
@@ -448,9 +456,12 @@ window.HBC = (() => {
   const ctrls = view => Array.from(view.querySelectorAll('input[type=range][id], select[id], button[aria-pressed][id]')).filter(e => !e.closest('[data-nocfg]') && !e.hasAttribute('data-nocfg'));
   function capture(view) { const v = {}; for (const e of ctrls(view)) v[e.id] = e.tagName === 'BUTTON' ? e.getAttribute('aria-pressed') : e.value; return v; }
   function apply(view, vals) {
-    for (const [id, val] of Object.entries(vals || {})) {
+    for (let [id, val] of Object.entries(vals || {})) {
       const e = view.querySelector('#' + CSS.escape(id)); if (!e) continue;
       if (e.tagName === 'BUTTON') { if (e.getAttribute('aria-pressed') !== val && !e.disabled) e.click(); continue; }
+      if (val == null || typeof val === 'object') continue;
+      if (e.tagName === 'SELECT' && ![...e.options].some(o => o.value === String(val))) continue;        // an option that no longer exists
+      if (e.type === 'range') { const v = parseFloat(val); if (!isFinite(v)) continue; val = String(Math.min(+e.max, Math.max(+e.min, v))); }
       if (e.value === String(val)) continue;
       e.value = val; e.dispatchEvent(new Event('input', { bubbles: true })); e.dispatchEvent(new Event('change', { bubbles: true }));
     }
@@ -631,11 +642,12 @@ window.HBV = (() => {
     tiktok: ['TikTok standard : 30 s, accroche en haut', { dur: 30, cd: 3, pos: 'haut', size: 1, hide: false, loop: false }],
     court: ['Défi rapide : 15 s, texte en bas', { dur: 15, cd: 3, pos: 'bas', size: 1.1, hide: false, loop: false }],
     long: ['Ambiance : 60 s sans texte', { dur: 60, cd: 3, hide: true, loop: false }],
-    boucle: ['Boucle parfaite (Vague de pendules)', { dur: 0, cd: 0.01, loop: true, hide: true }]
+    complet: ['Partie complète : 90 s sans texte', { dur: 90, cd: 3, hide: true, loop: false }]
   };
   function sync(nd, view) {
     const q = s => nd.querySelector(s);
-    q('[data-dur]').value = st.loop ? 'loop' : String(st.dur); q('[data-cd]').value = String(st.cd >= 1 ? st.cd : 0);
+    st.loop = false; const known = ['0', '10', '15', '30', '45', '60', '90', '120'].includes(String(st.dur)); q('[data-dur]').value = known ? String(st.dur) : 'custom';
+    q('[data-customrow]').hidden = known; q('[data-cus]').value = String(st.dur || 30); q('[data-cd]').value = String(st.cd >= 1 ? st.cd : 0);
     q('[data-size]').value = st.size; q('[data-pos]').value = st.pos; q('[data-col]').value = st.color; q('[data-hide]').setAttribute('aria-pressed', String(st.hide));
     q('[data-cap]').value = HBX.caption;
     const game = view.id.replace('view-', ''), cf = q('[data-cfg]'); cf.textContent = '';
@@ -648,7 +660,8 @@ window.HBV = (() => {
     const id = view.id, nd = document.createElement('div'); nd.className = 'tab-pane'; nd.dataset.nocfg = '';
     nd.innerHTML =
       '<label class="winrow" for="' + id + '-vpre"><span>Préréglage vidéo</span><select id="' + id + '-vpre" data-pre><option value="">Choisir…</option>' + Object.entries(PRE).map(([k, v]) => '<option value="' + k + '">' + v[0] + '</option>').join('') + '</select></label>' +
-      '<label class="winrow" for="' + id + '-vdur"><span>Durée de la vidéo</span><select id="' + id + '-vdur" data-dur><option value="0">Libre : tu touches l\'écran pour arrêter</option><option value="10">10 s</option><option value="15">15 s</option><option value="30">30 s</option><option value="45">45 s</option><option value="60">60 s</option><option value="loop">Boucle parfaite (Vague de pendules)</option></select></label>' +
+      '<label class="winrow" for="' + id + '-vdur"><span>Durée de la vidéo</span><select id="' + id + '-vdur" data-dur><option value="0">Libre : tu touches l\'écran pour arrêter</option><option value="10">10 s</option><option value="15">15 s</option><option value="30">30 s</option><option value="45">45 s</option><option value="60">60 s</option><option value="90">90 s</option><option value="120">120 s</option><option value="custom">Personnalisée…</option></select></label>' +
+      '<label class="winrow" data-customrow hidden for="' + id + '-vcus"><span>Durée personnalisée (secondes)</span><input type="number" id="' + id + '-vcus" data-cus min="3" max="600" step="1" inputmode="numeric"></label>' +
       '<label class="winrow" for="' + id + '-vcd"><span>Compte à rebours avant le début</span><select id="' + id + '-vcd" data-cd><option value="0">Aucun</option><option value="3">3 s</option><option value="5">5 s</option></select></label>' +
       '<label class="winrow" for="' + id + '-vcap"><span>Texte d\'accroche</span><input type="text" id="' + id + '-vcap" data-cap maxlength="60" placeholder="Ex. : Attends la fin…" autocomplete="off"></label>' +
       '<label class="winrow" for="' + id + '-vsize"><span>Taille du texte</span><input type="range" id="' + id + '-vsize" data-size min="0.6" max="1.6" step="0.05"></label>' +
@@ -662,7 +675,8 @@ window.HBV = (() => {
       '<p class="sheet-tip" data-msg aria-live="polite">La vidéo se fabrique en temps réel : une vidéo de 30 s prend 30 s. Elle s\'arrête seule à la durée choisie, puis s\'affiche prête à enregistrer.</p>';
     const q = s => nd.querySelector(s), msg = q('[data-msg]');
     q('[data-pre]').addEventListener('change', e => { const pr = PRE[e.target.value]; e.target.value = ''; if (pr) { Object.assign(st, pr[1]); HBX.saveStudio(); panes.forEach(([n, v]) => sync(n, v)); } });
-    q('[data-dur]').addEventListener('change', e => { if (e.target.value === 'loop') { st.loop = true; st.dur = 0; } else { st.loop = false; st.dur = +e.target.value; } HBX.saveStudio(); panes.forEach(([n, v]) => sync(n, v)); });
+    q('[data-cus]').addEventListener('change', e => { const v = Math.round(Math.min(600, Math.max(3, +e.target.value || 30))); st.dur = v; e.target.value = v; HBX.saveStudio(); });
+    q('[data-dur]').addEventListener('change', e => { st.loop = false; if (e.target.value === 'custom') { q('[data-customrow]').hidden = false; st.dur = Math.round(+q('[data-cus]').value || 30); } else { q('[data-customrow]').hidden = true; st.dur = +e.target.value; } HBX.saveStudio(); panes.forEach(([n, v]) => sync(n, v)); });
     q('[data-cd]').addEventListener('change', e => set('cd', +e.target.value || 0.01));
     q('[data-size]').addEventListener('input', e => set('size', +e.target.value));
     q('[data-pos]').addEventListener('change', e => set('pos', e.target.value));
@@ -671,7 +685,6 @@ window.HBV = (() => {
     q('[data-cap]').addEventListener('input', e => { HBX.setCaption(e.target.value); const home = document.getElementById('caption'); if (home) home.value = HBX.caption; });
     q('[data-gen]').addEventListener('click', () => {
       const game = id.replace('view-', ''), ci = q('[data-cfg]').value;
-      if (st.loop && game !== 'pendules') { msg.textContent = 'La boucle parfaite ne marche que pour la Vague de pendules. Choisis une durée pour ce jeu.'; return; }
       if (ci !== '') { const c = HBC.list(game)[+ci]; if (c) HBC.apply(view, c.vals); }
       if (HBM.curves && !HBM.playing) HBM.play();
       HBUI.get(view).sh.hidden = true;
@@ -932,9 +945,9 @@ window.HypnoGames = {};
    moments. Reactions are visual only and never change a game's physics, so a chosen race winner stays exact. */
 window.HBM = (() => {
   let curves = null, name = '', buf = null, src = null, gain = null, playing = false, startAt = 0, offset = 0;
-  let vol = 0, inten = 1, mode = 'all';
-  try { const s = JSON.parse(localStorage.getItem('hypno.music') || '{}'); if (s.vol != null) vol = +s.vol; if (s.inten != null) inten = +s.inten; if (s.mode) mode = s.mode; } catch (e) {}
-  const saveP = () => { try { localStorage.setItem('hypno.music', JSON.stringify({ vol, inten, mode })); } catch (e) {} };
+  let vol = 0, inten = 1, mode = 'all', gp = 1;               // gp: how much the song drives the game itself (0, 0.5, 1, 1.7)
+  try { const s = JSON.parse(localStorage.getItem('hypno.music') || '{}'); if (s.vol != null) vol = +s.vol; if (s.inten != null) inten = +s.inten; if (s.mode) mode = s.mode; if (s.gp != null) gp = +s.gp; } catch (e) {}
+  const saveP = () => { try { localStorage.setItem('hypno.music', JSON.stringify({ vol, inten, mode, gp })); } catch (e) {} };
   const ctx = () => window.__rebond && window.__rebond.ctx ? window.__rebond.ctx() : null;
   const OFF = { on: false, bass: 0, perc: 0, level: 0, beat: 0, beatId: -1, strong: 0 };
   const sheets = [], buttons = [];
@@ -971,7 +984,12 @@ window.HBM = (() => {
     for (let f = 0; f < F; f++) { acc += lvl[f]; if (f >= 200) acc -= lvl[f - 200]; sm[f] = acc / Math.min(200, f + 1); }
     const p80 = Array.from(sm).sort((x, y) => x - y)[Math.floor(F * 0.8)] || 1;
     const strong = new Uint8Array(F); for (let f = 0; f < F; f++) strong[f] = sm[f] >= p80 ? 1 : 0;
-    return { FR, F, bass, high, lvl, kicks, all, strong, dur: b.duration };
+    // silences (≥ 1.5 s nearly quiet: the gaps between the beats of a slow song are not silences), density of attacks (per second, over 2 s) and the tempo (median gap between kicks)
+    const sil = new Uint8Array(F); for (let f = 0, run = 0; f < F; f++) { run = lvl[f] < 0.06 ? run + 1 : 0; if (run >= 150) for (let k = f - run + 1; k <= f; k++) sil[k] = 1; }
+    const dens = new Float32Array(F); { let a = 0, b2 = 0; for (let f = 0; f < F; f++) { while (b2 < all.length && all[b2] <= f + 100) b2++; while (a < all.length && all[a] < f - 100) a++; dens[f] = (b2 - a) / 2; } }
+    const gaps = []; for (let i = 1; i < kicks.length; i++) { const g = (kicks[i] - kicks[i - 1]) / FR; if (g > 0.25 && g < 1.5) gaps.push(g); }
+    gaps.sort((x, y) => x - y); const tempo = gaps.length ? Math.round(60 / gaps[gaps.length >> 1]) : 0;
+    return { FR, F, bass, high, lvl, kicks, all, strong, sil, dens, tempo, dur: b.duration };
   }
   function pos() {
     const c = ctx(); if (!curves) return 0;
@@ -1011,14 +1029,27 @@ window.HBM = (() => {
       beatId: bi, strong: curves.strong[f] * k
     };
   }
+  // What a game reads each frame: levels, and the kicks / attacks that happened since this game last asked (never twice).
+  const seen = {};
+  function game(id) {
+    if (!curves || !playing || gp <= 0) return { on: false, k: 0, kick: 0, hit: 0 };
+    const t = pos(), f = Math.min(curves.F - 1, Math.floor(t * curves.FR)), last = seen[id];
+    const count = (list, from, to) => { let n = 0; for (const x of list) if (x > from && x <= to) n++; return n; };
+    let kick = 0, hit = 0;
+    if (last != null) { if (f >= last) { kick = count(curves.kicks, last, f); hit = count(curves.all, last, f); } else { kick = count(curves.kicks, -1, f); hit = count(curves.all, -1, f); } }   // the song looped
+    seen[id] = f;
+    return { on: true, k: gp, t, level: curves.lvl[f], bass: curves.bass[f], perc: curves.high[f], strong: curves.strong[f], silent: curves.sil[f], dens: curves.dens[f], tempo: curves.tempo, kick, hit };
+  }
+  function clear() { stopSrc(); playing = false; offset = 0; buf = null; curves = null; name = ''; for (const k in seen) delete seen[k]; if (window.HB) HB.setMelody(null); refresh(); }
   const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
   function refresh() {
     for (const b of buttons) b.textContent = playing ? 'Musique ♪' : 'Musique';
     for (const sh of sheets) {
       sh.querySelector('[data-track]').textContent = curves ? name + ' · ' + fmt(pos()) + ' / ' + fmt(curves.dur) + (playing ? '' : ' · en pause')
-        : 'Aucun morceau pour l\'instant. Importe-le avec « Importer une musique » : il servira dans les quatre jeux.';
+        : 'Aucun morceau pour l\'instant. Importe-le avec « Importer une musique » : il sert dans les 14 jeux.';
       const pl = sh.querySelector('[data-play]'); pl.textContent = playing ? 'Pause' : 'Lire le morceau'; pl.disabled = !curves;
-      sh.querySelector('[data-restart]').disabled = !curves;
+      sh.querySelector('[data-restart]').disabled = !curves; sh.querySelector('[data-clear]').disabled = !curves; sh.querySelector('[data-gp]').value = String(gp);
+      sh.querySelector('[data-info]').textContent = curves ? (curves.tempo ? 'Tempo estimé : ' + curves.tempo + ' BPM · ' : '') + curves.kicks.length + ' battements, ' + curves.all.length + ' attaques détectés.' : '';
       sh.querySelector('[data-vol]').value = vol; sh.querySelector('[data-int]').value = inten; sh.querySelector('[data-mode]').value = mode;
     }
   }
@@ -1026,15 +1057,20 @@ window.HBM = (() => {
   function attach(view) {
     const id = view.id, sh = document.createElement('div'); sh.className = 'tab-pane'; sh.dataset.nocfg = '';
     sh.innerHTML = '<p class="sheet-tip" data-track></p>' +
-      '<div class="row"><button class="main" type="button" data-play>Lire le morceau</button><button type="button" data-restart>Depuis le début</button></div>' +
+      '<div class="row"><button class="main" type="button" data-play>Lire le morceau</button><button type="button" data-restart>Depuis le début</button><button type="button" data-clear>Retirer</button></div>' +
+      '<p class="sheet-tip" data-info></p>' +
+      '<label class="winrow" for="' + id + '-mgp"><span>Influence de la musique sur le jeu</span><select id="' + id + '-mgp" data-gp><option value="0">Aucune (le jeu suit ses propres règles)</option><option value="0.5">Légère</option><option value="1">Équilibrée</option><option value="1.7">Forte</option></select></label>' +
+      '<p class="sheet-tip">Chaque jeu utilise la musique à sa façon : pinces qui attrapent sur le battement, pistons qui claquent sur la grosse caisse, vitesse qui suit l\'énergie… Sans morceau, le jeu tourne normalement.</p>' +
       '<label class="winrow" for="' + id + '-mvol"><span>Volume du morceau</span><input type="range" id="' + id + '-mvol" data-vol min="0" max="1" step="0.05"></label>' +
       '<p class="sheet-tip">À zéro, le morceau reste muet : il sert seulement à faire réagir l\'animation. Les notes rejouées par les jeux ne changent pas.</p>' +
       '<label class="winrow" for="' + id + '-mint"><span>Réaction de l\'animation</span><input type="range" id="' + id + '-mint" data-int min="0" max="2" step="0.05"></label>' +
       '<label class="winrow" for="' + id + '-mmode"><span>L\'animation réagit à</span><select id="' + id + '-mmode" data-mode><option value="all">Tout le rythme (automatique)</option><option value="bass">Basses seulement</option><option value="perc">Percussions</option></select></label>' +
-      '<p class="sheet-tip">Les réactions sont visuelles : lumières, ondes, pulsations. Elles ne touchent jamais la physique, donc un gagnant choisi reste garanti.</p>';
+      '<p class="sheet-tip">Ce réglage-ci ne concerne que les effets visuels : lumières, ondes, pulsations.</p>';
     sheets.push(sh);
     sh.querySelector('[data-play]').addEventListener('click', () => { if (playing) pause(); else play(); });
     sh.querySelector('[data-restart]').addEventListener('click', restart);
+    sh.querySelector('[data-clear]').addEventListener('click', clear);
+    sh.querySelector('[data-gp]').addEventListener('change', e => { gp = +e.target.value; saveP(); refresh(); });
     sh.querySelector('[data-vol]').addEventListener('input', e => { vol = +e.target.value; if (gain) gain.gain.value = vol; saveP(); refresh(); });
     sh.querySelector('[data-int]').addEventListener('input', e => { inten = +e.target.value; saveP(); refresh(); });
     sh.querySelector('[data-mode]').addEventListener('change', e => { mode = e.target.value; saveP(); refresh(); });
@@ -1044,7 +1080,7 @@ window.HBM = (() => {
   // a video starts with the song from its beginning, so picture and music line up
   const startRec0 = HBX.startRec;
   HBX.startRec = (...a) => { if (curves && playing) restart(); return startRec0(...a); };
-  return { attach, setTrack, react, play, pause, restart, get buffer() { return buf; }, get playing() { return playing; }, get curves() { return curves; } };
+  return { attach, setTrack, react, game, clear, play, pause, restart, get influence() { return gp; }, get buffer() { return buf; }, get playing() { return playing; }, get curves() { return curves; } };
 })();
 </script>
 <script>
@@ -1098,7 +1134,7 @@ window.HB = (() => {
     document.body.appendChild(view);
     const cv = view.querySelector('canvas'), g = cv.getContext('2d'), stage = view.querySelector('.stage');
     const statusEl = view.querySelector('.status'), playBtn = view.querySelector('[data-a=play]'), speedEl = view.querySelector('#' + def.id + '-speed');
-    let active = false, running = false, soundOn = false, countdown = 0, rec = false, dpr = 1, last = 0, raf = 0;
+    let entered = 0, active = false, running = false, soundOn = false, countdown = 0, rec = false, dpr = 1, last = 0, raf = 0;
     const c = {
       W: 0, H: 0, clear: true, slow: false, opt: {}, scale, status(t) { statusEl.textContent = t; },
       note(m, v, d) { if (!soundOn) return; if (!melody) return void note(m, v, d); if (note(melody.notes[melody.i % melody.notes.length].m, v, d)) melody.i++; }
@@ -1108,8 +1144,18 @@ window.HB = (() => {
     view.querySelector('[data-music]').addEventListener('change', async e => {
       const f = e.target.files && e.target.files[0]; if (!f) return;
       importSpan.textContent = 'Analyse…';
-      try { await importFile(f, p => { importSpan.textContent = 'Analyse… ' + Math.round(p * 100) + ' %'; }); restart(); soundOn = true; running = true; label(); }
-      catch (err) { importSpan.textContent = 'Fichier illisible'; }
+      // the file is decoded by the browser itself (free, local): if it cannot read it, say so and keep the previous song
+      try {
+        await importFile(f, p => { importSpan.textContent = 'Analyse… ' + Math.round(p * 100) + ' %'; });
+        if (!HBM.curves) throw new Error('analyse');
+        restart(); soundOn = true; running = true; label();
+        const cv0 = HBM.curves; HBH.add('Musique', 'Importée : « ' + f.name.replace(/\.[^.]+$/, '').slice(0, 60) + ' » · ' + Math.round(cv0.dur) + ' s, ' + cv0.kicks.length + ' battements' + (cv0.tempo ? ', ~' + cv0.tempo + ' BPM' : ''));
+        c.status('Morceau prêt : ' + cv0.kicks.length + ' battements détectés');
+      } catch (err) {
+        e.target.value = ''; importSpan.textContent = '⚠ Fichier non lisible'; setTimeout(() => { importSpan.textContent = HB.melody ? '♪ ' + HB.melody.name : 'Importer une musique'; }, 4500);
+        const why = err && err.message === 'audio' ? 'le son est bloqué par le navigateur' : 'ce format n\'est pas lisible par ce navigateur (essaie MP3, M4A ou WAV)';
+        c.status('Import impossible : ' + why); HBH.err('Import musique « ' + f.name.slice(0, 60) + ' » : ' + why + (err && err.message ? ' [' + err.message + ']' : ''));
+      }
     });
     for (const r of def.ranges || []) {
       const sl = view.querySelector('.sliders'); sl.classList.remove('one'); sl.style.gridTemplateColumns = 'repeat(' + (1 + def.ranges.length) + ', 1fr)';
@@ -1118,10 +1164,11 @@ window.HB = (() => {
       lab.querySelector('input').addEventListener('input', e => { c.opt[r.key] = parseFloat(e.target.value); if (r.restart) restart(); });
     }
     let ema = 0.016, layer = null, lg = null, preRoll = 0, recLeft = 0;
-    function stopFilm() { rec = false; countdown = 0; preRoll = 0; recLeft = 0; c.looping = false; document.body.classList.remove('rec'); soundOn = true; label(); HBX.stopRec(); }
+    function recFail() { stopFilm(); c.status('Le navigateur a refusé l\'enregistrement vidéo.'); HBH.err('Vidéo : démarrage de l\'enregistrement refusé'); }
+    function stopFilm() { rec = false; countdown = 0; preRoll = 0; recLeft = 0; c.looping = false; document.body.classList.remove('rec'); soundOn = true; label(); HBX.stopRec(); resize(); }
 
     function resize() {
-      const r = stage.getBoundingClientRect(); c.W = r.width; c.H = r.height; dpr = HBT.dpr();
+      const r = stage.getBoundingClientRect(); c.W = r.width; c.H = r.height; dpr = document.body.classList.contains('rec') && rec ? Math.min(3, Math.max(HBT.dpr(), 1080 / Math.max(1, c.W))) : HBT.dpr();   // videos: at least 1080 px wide
       cv.width = Math.max(1, Math.round(c.W * dpr)); cv.height = Math.max(1, Math.round(c.H * dpr)); c.clear = true;
     }
     new ResizeObserver(resize).observe(stage);
@@ -1131,9 +1178,12 @@ window.HB = (() => {
       const raw = (now - last) / 1000 || 0.016, dt = Math.min(0.033, raw); last = now;
       ema = ema * 0.9 + Math.min(0.2, raw) * 0.1; c.slow = ema > 0.024; if (!c.thumb) HBT.tick(ema > 0.026, raw);
       const mr = window.HBM ? HBM.react() : null; c.react = mr && mr.on ? mr : null;
+      // the song as a game input: each game decides what a kick, an attack, the energy or a silence does to its mechanism
+      c.mus = window.HBM && running && countdown <= 0 ? HBM.game(def.id) : null;
+      if (c.mus && c.mus.on && def.music && c.st) try { def.music(c, c.mus); } catch (err) { HBH.err(def.id + ' musique : ' + err.message); }
       if (countdown > 0) { countdown -= dt; if (countdown <= 0) { restart(); soundOn = true; running = true;
         const L = HBX.studio.loop && def.loopLen ? def.loopLen(c) : 0;
-        if (L) { preRoll = L; recLeft = 0; c.status('Tour de chauffe : la boucle commence dans un cycle'); } else HBX.startRec(cv, ac, master, def.id); } }
+        if (L) { preRoll = L; recLeft = 0; c.status('Tour de chauffe : la boucle commence dans un cycle'); } else if (!HBX.startRec(cv, ac, master, def.id)) recFail(); } }
       const sdt = running ? dt * parseFloat(speedEl.value) : 0;
       if (preRoll > 0) { preRoll -= sdt; if (preRoll <= 0) { HBX.startRec(cv, ac, master, def.id); recLeft = def.loopLen(c); c.looping = true; } }
       else if (recLeft > 0) { recLeft -= sdt; if (recLeft <= 0) stopFilm(); }
@@ -1170,9 +1220,12 @@ window.HB = (() => {
     }
     view.addEventListener('click', e => {
       const a = e.target.closest('[data-a]'); if (!a) return; audio();
-      if (a.dataset.a === 'play') { if (!soundOn) { restart(); soundOn = true; running = true; } else running = !running; }
+      if (a.dataset.a === 'play') { if (!soundOn) { restart(); soundOn = true; running = true; } else running = !running;
+        if (HBM.curves) { if (running && !HBM.playing) HBM.play(); else if (!running && HBM.playing) HBM.pause(); } }      // the song pauses with the game
       if (a.dataset.a === 'reset') { restart(); running = true; }
-      if (a.dataset.a === 'rec') { rec = true; document.body.classList.add('rec'); soundOn = false; countdown = Math.max(0.01, HBX.studio.cd); restart(); }
+      if (a.dataset.a === 'rec') {
+        if (!HBX.canRecord()) { c.status('Ce navigateur ne sait pas filmer une page : utilise l\'enregistrement d\'écran du téléphone.'); HBH.err('Vidéo : MediaRecorder ou captureStream absent'); label(); return; }
+        rec = true; document.body.classList.add('rec'); soundOn = false; countdown = Math.max(0.01, HBX.studio.cd); if (HBM.curves && !HBM.playing) HBM.play(); restart(); resize(); }
       label();
     });
     cv.addEventListener('click', () => { if (!rec) return; stopFilm(); });
@@ -1191,8 +1244,8 @@ window.HB = (() => {
     HBM.attach(view); HBT.attach(view); HBV.attach(view); HBC.attach(view, def.id); HBS.attach(view, def.id);
     window.addEventListener('hb-look', resize);
     window.HypnoGames[def.id] = {
-      enter() { active = true; resize(); restart(); running = true; label(); last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); },
-      leave() { active = false; running = false; cancelAnimationFrame(raf); label(); if (def.leave) try { def.leave(c); } catch (e) {} }
+      enter() { active = true; entered = performance.now(); resize(); restart(); running = true; label(); last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); },
+      leave() { active = false; running = false; cancelAnimationFrame(raf); if (rec) stopFilm(); label(); if (HBM.playing) HBM.pause(); HBH.time(def.name, (performance.now() - entered) / 1000); if (def.leave) try { def.leave(c); } catch (e) {} }
     };
     window['__hb_' + def.id] = { c, def };
   }
@@ -1301,6 +1354,12 @@ window.HBP = (() => {
       facing(nx, ny, nz, px, py, pz) { const [vx, vy, vz] = view(px - o.tx, py - o.ty, pz - o.tz), [ax, ay, az] = view(nx, ny, nz); return ax * vx + ay * vy + az * (vz + o.dist) < 0; }
     };
   }
+  // Music as an input, shared by every game: store what the song says (pending kicks, energy, bass, strength of the setting)
+  function mus(st, m) { st.mt = st.t; st.mk = m.k; st.lv = m.level || 0; st.bs = m.bass || 0; st.pc = m.perc || 0; st.sil = !!m.silent;
+    // light: one kick out of two; balanced: every kick; strong: kicks plus the other attacks (snares, hats)
+    st.bq = m.silent ? 0 : Math.min(2, (st.bq || 0) + (m.kick || 0) * Math.min(1, m.k) + (m.k > 1 ? Math.max(0, (m.hit || 0) - (m.kick || 0)) * 0.5 : 0)); st.hq = Math.min(4, (st.hq || 0) + (m.hit || 0)); }
+  const live = st => st.mt != null && st.t - st.mt < 0.35;                       // a song is playing and drives this game right now
+  function take(st, q) { if (!(st[q] >= 1)) return false; st[q]--; st.mh = (st.mh || 0) + 1; return true; }   // consume one musical event
   const finite = p => { for (let i = 0; i < p.n; i++) if (!isFinite(p.X[i]) || !isFinite(p.Y[i])) return false; return true; };
   // keep balls inside a circle of radius R centred on the origin, with a bounce
   function inCircle(p, R, r, bounce) {
@@ -1354,7 +1413,7 @@ window.HBP = (() => {
     return st.end > (hold || 4) + 1.6 && !c.thumb;
   }
   function fade(g, c, st, hold) { const k = ((st.end || 0) - (hold || 4)) / 1.4; if (k > 0 && !c.thumb) { g.globalAlpha = Math.min(1, k); g.fillStyle = '#0d0b1e'; g.fillRect(0, 0, c.W, c.H); g.globalAlpha = 1; } }
-  return { seed, rnd, overlap, finite, occupancy, camera, COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
+  return { seed, rnd, overlap, finite, occupancy, camera, mus, live, take, COLS, sm, lerp, wrap, lattice, pool, add, remove, integrate, collide, inCircle, capsule, sprite, drawBalls, counter, ending, fade };
 })();
 </script>
 <script>
@@ -1441,7 +1500,8 @@ window.HBP = (() => {
       if (!full) k.rot = lerp(k.rot, Math.sin(st.t * 0.9 + i * 2) * 0.35, Math.min(1, dt * 2));
       if (st.turn !== i || st.end || full) return;
       k.wait += dt; const a = aim(st, k);
-      if (a.near >= Math.max(1, st.lastM * 0.55) || k.wait > 2.6) { k.wait = 0; go(k, 'open', 0.4, POSE.open, a.rot); }
+      const mu = P.live(st), ready = mu ? (a.near >= 1 && k.wait > 0.6 / st.mk && P.take(st, 'bq')) || k.wait > 5 : a.near >= Math.max(1, st.lastM * 0.55) || k.wait > 2.6;
+      if (ready) { k.wait = 0; go(k, 'open', 0.4, POSE.open, a.rot); }
       return;
     }
     if (q < 1) return;
@@ -1467,7 +1527,7 @@ window.HBP = (() => {
     const s = 2 * st.r * 1.02, G = geo(k), L0 = lattice(), R0 = s * Math.sqrt(m) * 0.5;
     const ahead = k.e + BAR / 2 + st.r * 1.1 + R0, qx = G.hx + G.ux * ahead, qy = G.hy + G.uy * ahead;      // in front of the plate, never inside it
     const nk = st.claws[(i + 1) % st.claws.length], tx = Math.cos(nk.h) * 0.45 - qx, ty = Math.sin(nk.h) * 0.45 + (P.rnd() - 0.5) * 0.5 - qy, tl = Math.hypot(tx, ty) || 1;
-    const sp = 0.009 * (st.claws.length === 1 ? 0.6 : 1);
+    const sp = 0.009 * (st.claws.length === 1 ? 0.6 : 1) * (P.live(st) ? 0.8 + st.bs * 0.5 * st.mk : 1);       // stronger bass, harder throw
     // the cluster fills the lattice around its centre, skipping places outside the circle or behind the plate
     const lim = 1 - st.r * 1.05, occ = P.occupancy(st, s);
     for (let j = 0, put = 0; put < m && j < L0.length; j++) {
@@ -1621,6 +1681,8 @@ window.HBP = (() => {
       { key: 'claws', label: 'Pinces', min: 1, max: 4, step: 1, value: 2, restart: true }
     ],
     thumbSteps: 360, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                                    // penetration of balls into the claw bars, overlap between balls
       const st = c.st, G = st.claws.map(geo), rr = st.r + BAR / 2; let pen = 0, where = '';
       for (let i = 0; i < st.n; i++) { if (st.age[i] < 1) continue; for (const gk of G) for (const [ax, ay, bx, by] of gk.seg) {
@@ -1703,6 +1765,7 @@ window.HBP = (() => {
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt;
     st.pt += dt; const nm = PH[st.ph][0];
+    if (PH[st.ph][0] === 'pause' && P.live(st) && st.pt > 0.25 && P.take(st, 'bq')) st.pt = PH[st.ph][1];      // a kick starts the next closing
     if (st.pt >= PH[st.ph][1]) {
       st.pt = 0;
       if (nm === 'close') convert(c, st);
@@ -1713,7 +1776,7 @@ window.HBP = (() => {
     st.pend = st.pend.filter(q => q.m > 0);
     const rT = st.rT = Math.max(st.rmin, Math.min(0.03, Math.sqrt(0.09 / Math.max(1, st.p.n + st.pend.reduce((a, q) => a + q.m, 0)))));   // balls shrink as the crowd grows, new ones included
     st.r += (rT - st.r) * Math.min(1, dt * 1.5);
-    const sub = 2, h = dt / sub, g0 = 1.6;
+    const sub = 2, h = dt / sub, g0 = 1.6 * (P.live(st) ? 0.8 + st.bs * 0.6 * st.mk : 1);
     for (let s = 0; s < sub; s++) {
       P.integrate(st.p, h, 0.5, (x, y) => { const d = Math.hypot(x, y) || 1; return [x / d * g0, y / d * g0]; }, 3);
       for (let it = 0; it < 10; it++) { blades(st); P.inCircle(st.p, 1, st.r, 0.2); P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1, 1); }
@@ -1764,6 +1827,8 @@ window.HBP = (() => {
       { key: 'max', label: 'Billes', min: 500, max: 3500, step: 100, value: 2000, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                                    // how far balls go into a blade, the hub or past the rim (in radii)
       const st = c.st, p = st.p, r = st.r; let pen = 0;
       for (let i = 0; i < p.n; i++) { if (p.age[i] < 1) continue; const rho = Math.hypot(p.X[i], p.Y[i]), phi = Math.atan2(p.Y[i], p.X[i]), q = Math.round(phi / (Math.PI / 2)), hw = (q & 1) ? st.hv : st.hh, d = Math.abs(P.wrap(phi - q * Math.PI / 2));
@@ -1821,9 +1886,9 @@ window.HBP = (() => {
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.pt += dt;
     const open = 1.1 + A, smin = A / 2 + 0.004;
-    if (st.ph === 'open') { st.s = Math.min(open, st.s + dt * 1.1); if (st.pt > 2.4 && !st.full) { st.ph = 'close'; st.pt = 0; st.blocked = 0; } }
+    if (st.ph === 'open') { st.s = Math.min(open, st.s + dt * 1.1); const mu = P.live(st); if ((mu ? (st.pt > 1.2 / st.mk && P.take(st, 'bq')) || st.pt > 4.5 : st.pt > 2.4) && !st.full) { st.ph = 'close'; st.pt = 0; st.blocked = 0; } }
     else if (st.ph === 'close') {
-      if (st.pen < st.r * 0.2) st.s = Math.max(smin, st.s - dt * 0.75); else { st.blocked += dt; st.s += dt * 0.02; }      // the jaws stall against the packed balls
+      if (st.pen < st.r * 0.2) st.s = Math.max(smin, st.s - dt * 0.75 * (P.live(st) ? 0.8 + st.lv * 0.6 * st.mk : 1)); else { st.blocked += dt; st.s += dt * 0.02; }      // the jaws stall against the packed balls
       if (st.s <= smin + 1e-4 || st.blocked > 0.45) {
         st.ph = 'hold'; st.pt = 0; st.shake = 0.25; st.squeezed = st.p.n; c.note(c.scale(1 + st.gen % 8), 0.9, 0.8);
         let top = 0; for (let i = 0; i < st.p.n; i++) if (st.p.Y[i] < -0.8) top++;
@@ -1874,6 +1939,8 @@ window.HBP = (() => {
       { key: 'size', label: 'Taille billes', min: 0.7, max: 1.5, step: 0.05, value: 1, restart: true }
     ],
     thumbSteps: 200, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {
       const st = c.st, p = st.p; let pen = 0;
       for (let i = 0; i < p.n; i++) { for (const side of [-1, 1]) { const q = contact(side, st.s, p.X[i], p.Y[i], st.r * 0.999); if (q) pen = Math.max(pen, q[2] / st.r); } pen = Math.max(pen, (Math.hypot(p.X[i], p.Y[i]) + st.r - 1) / st.r); }
@@ -1924,7 +1991,7 @@ window.HBP = (() => {
   }
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.pt += dt;
-    if (st.ph === 'wait' && st.pt > (st.wait || 0.9)) { st.ph = 'slam'; st.pt = 0; }
+    if (st.ph === 'wait' && (P.live(st) ? (st.pt > 0.12 && P.take(st, 'bq')) || st.pt > 2.2 : st.pt > (st.wait || 0.9))) { st.ph = 'slam'; st.pt = 0; }
     else if (st.ph === 'slam') { st.g = Math.max(0, OPEN * (1 - st.pt / 0.14)); if (st.g <= 0) { st.ph = 'hold'; st.pt = 0; crush(c, st); } }
     else if (st.ph === 'hold' && st.pt > 0.12) { st.ph = 'open'; st.pt = 0; }
     else if (st.ph === 'open') { st.g = OPEN * P.sm(st.pt / 0.45); if (st.pt >= 0.45) { st.ph = 'wait'; st.pt = 0; st.wait = 0.15 + P.rnd() * 0.35; } }
@@ -1974,6 +2041,8 @@ window.HBP = (() => {
       { key: 'max', label: 'Billes', min: 400, max: 3000, step: 100, value: 1500, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {
       const st = c.st, p = st.p, r = st.r; let pen = 0;
       for (let i = 0; i < p.n; i++) { const ax = Math.abs(p.X[i]), hw = half(st, p.X[i]), ay = Math.abs(p.Y[i]);
@@ -2066,7 +2135,7 @@ window.HBP = (() => {
     }
     for (const k of st.caps) if (k.y > 1.2 && (best < 1.3)) { tx = k.x; break; }
     const ms = 2.2 * dt; st.px += Math.max(-ms, Math.min(ms, tx - st.px)); st.px = Math.max(st.pw / 2, Math.min(WW - st.pw / 2, st.px));
-    const v = st.speed * (st.fast > 0 ? 1.8 : 1) * dt;
+    const v = st.speed * (st.fast > 0 ? 1.8 : 1) * dt * (P.live(st) ? Math.min(1.8, Math.max(0.6, 0.7 + st.lv * 0.7 * st.mk)) : 1);      // louder = faster
     for (const b of st.balls) moveBall(c, st, b, v);
     st.balls = st.balls.filter(b => b.y < WH + 0.02);
     if (!st.balls.length) launch(st);
@@ -2122,6 +2191,8 @@ window.HBP = (() => {
       { key: 'aim', label: 'Visée', min: 0, max: 1, step: 0.05, value: 0.75 }
     ],
     thumbSteps: 500, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (P.take(st, 'bq')) st.pulse = 1; },
     audit(c) {                                        // a ball overlapping a standing brick (centre inside a brick = went through)
       const st = c.st; let pen = 0; if (!st.balls) return {};
       for (const b of st.balls) { const i = cellAt(b.x, b.y); if (i >= 0 && st.hp[i]) pen = Math.max(pen, 1); }
@@ -2201,7 +2272,7 @@ window.HBP = (() => {
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.squash = Math.max(0, st.squash - dt * 5);
     // fixed micro-steps: the motion is exactly reproducible, so the look-ahead below predicts the real path
-    st.acc = (st.acc || 0) + dt;
+    st.acc = (st.acc || 0) + dt * (P.live(st) ? Math.min(1.9, Math.max(0.55, 0.65 + st.lv * 0.8 * st.mk)) : 1);
     while (st.acc >= TAU) { st.acc -= TAU; micro(st, (x, y, ax) => bounce(c, st, x, y, ax)); }
     const last = st.trail[st.trail.length - 1];
     if (Math.hypot(st.x - last.x, st.y - last.y) > 0.012) { st.trail.push({ x: st.x, y: st.y, h: st.hue }); if (st.trail.length > (c.opt.trail || 420)) st.trail.shift(); }
@@ -2260,6 +2331,8 @@ window.HBP = (() => {
       { key: 'wide', label: 'Salles', min: 0, max: 5, step: 1, value: 2, restart: true }
     ],
     thumbSteps: 240, reset, step, draw, leave,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); while (P.take(st, 'bq')) { st.hue = (st.hue + 30 * st.mk) % 360; st.squash = 1; } },
     audit(c) { const st = c.st; return { pen: hits(st, st.x, st.y) ? 1 : 0, bad: st.seenDig ? 1 : 0, note: st.bounces + ' rebonds, ' + Math.round(-st.best * 10) + ' m, sorties creusées ' + (st.dug || 0) + ', dont visibles ' + (st.seenDig || 0) }; }   // the cube overlapping rock = went through
   });
 })();
@@ -2335,7 +2408,7 @@ window.HBP = (() => {
     const st = c.st; if (!st) return; st.t += dt;
     for (const k of st.arcs) {
       if (k.close > 0) { k.close -= dt; if (k.close <= 0) { k.close = 0; capture(c, st, k); } continue; }       // the ring stops while it is closed
-      k.th += k.w * dt; k.cd -= dt; if (k.cd <= 0) k.cd = tryClose(st, k) ? 0.9 + P.rnd() * 1.1 : 0.25;
+      k.th += k.w * dt * (P.live(st) ? 0.55 + st.lv * 0.9 * st.mk : 1); k.cd -= dt; if (P.live(st) && k.cd > 0 && k.cd < 0.7 && P.take(st, 'bq')) k.cd = 0; if (k.cd <= 0) k.cd = tryClose(st, k) ? 0.9 + P.rnd() * 1.1 : 0.25;
     }
     const rT = Math.max(st.rmin, Math.min(0.035, Math.sqrt(0.5 / Math.max(1, st.p.n))));
     st.r += (rT - st.r) * Math.min(1, dt * 1.2);
@@ -2379,6 +2452,8 @@ window.HBP = (() => {
       { key: 'max', label: 'Billes', min: 400, max: 2600, step: 100, value: 1400, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {
       const st = c.st, p = st.p, r = st.r; let pen = 0, where = '';
       for (let i = 0; i < p.n; i++) { if (p.age[i] < 1) continue;
@@ -2459,7 +2534,7 @@ window.HBP = (() => {
     const st = c.st; if (!st) return; st.t += dt;
     // a real pendulum: θ'' = −(g/L)·sin θ. The panels stop it at ±AMP (impact, partial rebound); a motor in the pivot gives back,
     // at the bottom of each swing, just the energy lost, so that it keeps reaching the panels. Its period comes from g/L.
-    const T = c.opt.period || 3.6, k2 = Math.pow(2 * Math.PI / T, 2), w0 = Math.sqrt(2 * k2 * (1 - Math.cos(AMP))) * 1.12;
+    const T = c.opt.period || 3.6, k2 = Math.pow(2 * Math.PI / T, 2), w0 = Math.sqrt(2 * k2 * (1 - Math.cos(AMP))) * (P.live(st) ? 1.04 + st.bs * 0.22 * st.mk : 1.12);
     st.w -= k2 * Math.sin(st.th) * dt; const prev = st.th; st.th += st.w * dt;
     if (prev * st.th <= 0 && prev !== st.th) st.w = Math.sign(st.w || 1) * Math.max(Math.abs(st.w), w0);   // motor pulse at the bottom
     if (Math.abs(st.th) >= AMP) {                                                                         // hits a panel
@@ -2521,6 +2596,8 @@ window.HBP = (() => {
       { key: 'max', label: 'Billes', min: 400, max: 2400, step: 100, value: 1300, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (P.take(st, 'bq')) st.flashes.push({ side: Math.sign(st.th) || 1, t: 0.25 }); },
     audit(c) {                                   // balls inside the bob (convex polygon) or past the rim
       const st = c.st, p = st.p, r = st.r, B = bob(st.th); let pen = 0;
       for (let i = 0; i < p.n; i++) { let worst = 1e9;
@@ -2563,7 +2640,7 @@ window.HBP = (() => {
     if (vn < 0) { b.vx -= (1 + e) * vn * nx; b.vy -= (1 + e) * vn * ny; } return true;
   }
   function launch(c, st) {
-    const sp = 1.25 + P.rnd() * 0.75, a = -0.25 - P.rnd() * 0.75;
+    const sp = (1.25 + P.rnd() * 0.75) * (P.live(st) ? 0.85 + st.lv * 0.3 * st.mk : 1), a = -0.25 - P.rnd() * 0.75;
     st.ball = { x: -0.86, y: -0.12, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 0, col: P.COLS[st.col++ % P.COLS.length], path: [[-0.86, -0.12]] };
     st.n++;
   }
@@ -2579,7 +2656,7 @@ window.HBP = (() => {
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt;
     if (st.end) { st.end += dt; if (st.end > 4 && !c.thumb) reset(c); upd(st, dt); return; }
-    if (!st.ball) { st.wait -= dt; if (st.wait <= 0) launch(c, st); }
+    if (!st.ball) { st.wait -= dt; if (P.live(st) ? (st.wait <= 0 && P.take(st, 'bq')) || st.wait < -2.5 : st.wait <= 0) launch(c, st); }
     const b = st.ball, g = 1.7;
     if (b) {
       const n = Math.ceil(dt / 0.003), h = dt / n;
@@ -2645,6 +2722,8 @@ window.HBP = (() => {
       { key: 'pins', label: 'Plots max', min: 8, max: 80, step: 1, value: 16, restart: true }
     ],
     thumbSteps: 600, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                             // the flying ball inside a pin, the pole or the teeth
       const st = c.st, b = st.ball; let pen = 0; if (!b) return {};
       for (const q of st.pins) pen = Math.max(pen, (2 * BR - Math.hypot(b.x - q.x, b.y - q.y)) / BR);
@@ -2679,7 +2758,7 @@ window.HBP = (() => {
     for (let m = 0; m < nb; m++) { A[m] = bonds[m * 3]; B[m] = bonds[m * 3 + 1]; const t = bonds[m * 3 + 2]; L[m] = t === 2 ? CELL * Math.SQRT2 : CELL; W[m] = t === 1 ? 1 : t === 0 ? 0.45 : 0.4; if (t === 0 && B[m] === A[m] + 1) hb[A[m]] = m; }
     const m = MASSES[st.round % MASSES.length], br = 0.036 * (1 + Math.log10(m) * 0.22);
     Object.assign(st, { N, nx, ny, nz, X, Y, Z, PX, PY, PZ, tone, A, B, L, W, hb, alive: new Uint8Array(nb).fill(1), ang: new Float32Array(N), broken: 0, m,
-      ball: startBall(br), rt: 0, hit: false, still: 0, label: 1.4, dust: [], head: null, next: new Int32Array(N) });
+      ball: startBall(br), hold: P.live(st) ? 4 : 0, rt: 0, hit: false, still: 0, label: 1.4, dust: [], head: null, next: new Int32Array(N) });
   }
   // the ball starts resting on the slope, whatever its size (never inside the ramp)
   function startBall(r) {
@@ -2734,11 +2813,11 @@ window.HBP = (() => {
     b.rot += (b.x - b.px) / b.r;
   }
   function step(c, dt) {
-    const st = c.st; if (!st || !st.X) return; st.t += dt; st.rt += dt; st.label = Math.max(0, st.label - dt);
+    const st = c.st; if (!st || !st.X) return; st.t += dt; st.rt += dt; if (st.hold > 0) { st.hold -= dt; if (P.live(st) && st.rt > 0.6 && P.take(st, 'bq')) st.hold = 0; } st.label = Math.max(0, st.label - dt);
     const sub = 3, h = dt / sub, { X, Y, Z, PX, PY, PZ, N } = st, k = Math.pow(0.9, h), g2 = G * h * h;
     for (let s = 0; s < sub; s++) {
       for (let i = 0; i < N; i++) { const vx = (X[i] - PX[i]) * k, vy = (Y[i] - PY[i]) * k, vz = (Z[i] - PZ[i]) * k; PX[i] = X[i]; PY[i] = Y[i]; PZ[i] = Z[i]; X[i] += vx; Y[i] += vy + g2; Z[i] += vz; }
-      ballMove(st, h);
+      if (st.hold > 0) { const b = st.ball; b.px = b.x; b.py = b.y; b.pz = b.z; } else ballMove(st, h);
       for (let it = 0; it < 3; it++) { bondsPass(c, st); contacts(st); ballBlocks(c, st); ground(st); }
     }
     for (const d of st.dust) { d.t += dt; d.x += d.vx * dt; d.y += d.vy * dt; d.z += d.vz * dt; d.vy += 0.6 * dt; } st.dust = st.dust.filter(d => d.t < 1.5);
@@ -2803,6 +2882,8 @@ window.HBP = (() => {
       { key: 'height', label: 'Hauteur', min: 0.4, max: 1.1, step: 0.05, value: 0.85, restart: true }
     ],
     thumbSteps: 160, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (st.rt < 0.3 && !(st.hold > 0) && !st.hit) st.hold = 4; },      // with a song, the ball waits for a kick from the first round on
     audit(c) {                                     // blocks under the ground or inside the ball, overlap between nearby blocks
       const st = c.st, b = st.ball; let pen = 0, ov = 0;
       for (let i = 0; i < st.N; i++) pen = Math.max(pen, (st.Y[i] + R) / R, (b.r + R - Math.hypot(st.X[i] - b.x, st.Y[i] - b.y, st.Z[i] - b.z)) / R);
@@ -2817,6 +2898,7 @@ window.HBP = (() => {
    réparties en éventail, et rebondissent parfaitement sur les bords sans se toucher. À chaque manche leur nombre
    grandit (2, 16, 64… jusqu'à 65 536) : leurs fronts dessinent des anneaux et des rectangles lumineux. */
 (() => {
+  const P = HBP;
   const D = 0.55, TIP = Math.sqrt(1 - D * D), STEPS = [2, 16, 64, 128, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
   const BW = 240, BH = Math.round(BW * (TIP * 2 + 0.1) / (2 * (1 - D) + 0.1));
   function reset(c) {
@@ -2838,7 +2920,7 @@ window.HBP = (() => {
   }
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt; st.rt += dt; st.flash = Math.max(0, st.flash - dt * 1.5);
-    const n = st.n, X = st.X, Y = st.Y, VX = st.VX, VY = st.VY, sp = 0.7, sub = 2, h = dt * sp / sub;
+    const n = st.n, X = st.X, Y = st.Y, VX = st.VX, VY = st.VY, sp = 0.7 * (P.live(st) ? Math.min(1.8, 0.45 + st.lv * 1.1 * st.mk) : 1), sub = 2, h = dt * sp / sub;
     for (let s = 0; s < sub; s++) for (let i = 0; i < n; i++) {
       let x = X[i] + VX[i] * h, y = Y[i] + VY[i] * h;
       // leaving the disc of one circle = hitting its arc: mirror reflection on the arc's normal. Two passes, because near the
@@ -2857,7 +2939,8 @@ window.HBP = (() => {
       const px = ((X[i] + (1 - D) + 0.05) * sx) | 0, py = ((Y[i] + TIP + 0.05) * sy) | 0; if (px < 0 || py < 0 || px >= BW || py >= BH) continue;
       const o = (py * BW + px) * 3; buf[o] += st.C[i * 3] * gain; buf[o + 1] += st.C[i * 3 + 1] * gain; buf[o + 2] += st.C[i * 3 + 2] * gain;
     }
-    if (st.rt > (c.opt.secs || 5)) { st.round++; start(c, st); if (!c.thumb && st.round % STEPS.length === 0) HBH.add('Lentille', 'Cycle complet jusqu\'à ' + STEPS[STEPS.length - 1].toLocaleString('fr-FR') + ' billes'); }
+    const sec = c.opt.secs || 5;
+    if (P.live(st) ? (st.rt > sec * 0.6 && P.take(st, 'bq')) || st.rt > sec * 1.6 : st.rt > sec) { st.round++; start(c, st); if (!c.thumb && st.round % STEPS.length === 0) HBH.add('Lentille', 'Cycle complet jusqu\'à ' + STEPS[STEPS.length - 1].toLocaleString('fr-FR') + ' billes'); }
     if (!c.thumb) c.status(n.toLocaleString('fr-FR') + ' billes · manche ' + (st.round % STEPS.length + 1));
   }
   function draw(c, g) {
@@ -2890,6 +2973,8 @@ window.HBP = (() => {
       { key: 'top', label: 'Jusqu\'à', min: 3, max: 11, step: 1, value: 11 }
     ],
     thumbSteps: 160, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                              // any ball outside the lens (outside either circle)
       const st = c.st; let out = 0, sp = 0;
       for (let i = 0; i < st.n; i++) { out = Math.max(out, Math.hypot(st.X[i] + D, st.Y[i]) - 1, Math.hypot(st.X[i] - D, st.Y[i]) - 1); sp = Math.max(sp, Math.abs(Math.hypot(st.VX[i], st.VY[i]) - 1)); }
@@ -2947,7 +3032,7 @@ window.HBP = (() => {
     }
   }
   function step(c, dt) {
-    const st = c.st; if (!st) return; st.t += dt; st.rot += dt * (c.opt.spin || 0.5);
+    const st = c.st; if (!st) return; st.t += dt; st.rot += dt * (c.opt.spin || 0.5) * (P.live(st) ? 0.4 + st.lv * 1.3 * st.mk : 1);
     const W = c.W && c.H ? Math.max(1.05, (c.W / 2) / Math.min(c.W * 0.4, c.H * 0.3)) : 1.25, H = c.W && c.H ? (c.H / 2) / Math.min(c.W * 0.4, c.H * 0.3) : 1.6;
     const sub = 2, h = dt / sub, G = c.opt.grav == null ? 1.4 : c.opt.grav;
     for (let s = 0; s < sub; s++) {
@@ -2981,6 +3066,8 @@ window.HBP = (() => {
       { key: 'max', label: 'Billes', min: 150, max: 700, step: 10, value: 520, restart: true }
     ],
     thumbSteps: 500, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (P.take(st, 'bq')) { const p = st.p, v = 0.006 * st.mk; for (let i = 0; i < p.n; i++) p.PY[i] += v; } },
     audit(c) {                    // inside balls in the closed part of the ring; escaped balls back inside
       const st = c.st, p = st.p, r = st.r; let pen = 0; if (st.end) return {};
       for (let i = 0; i < p.n; i++) { const d = Math.hypot(p.X[i], p.Y[i]); if (!inGap(st, Math.atan2(p.Y[i], p.X[i])) && d > 1 - TH - r) pen = Math.max(pen, (d - (1 - TH - r)) / r); }
@@ -3021,7 +3108,7 @@ window.HBP = (() => {
     }
   }
   function threads(c, st) {
-    const { X, Y, Z, A, B, alive, sp } = st, lim = sp * st.tear, every = Math.max(1, Math.round(A.length / 60));
+    const { X, Y, Z, A, B, alive, sp } = st, lim = sp * (st.kickT > 0 ? 1 + (st.tear - 1) * (1 - 0.18 * st.mk) : st.tear), every = Math.max(1, Math.round(A.length / 60));
     for (let m = 0; m < A.length; m++) {
       if (!alive[m]) continue; const i = A[m], j = B[m], dx = X[j] - X[i], dy = Y[j] - Y[i], dz = Z[j] - Z[i], d = Math.hypot(dx, dy, dz) || 1e-9;
       if (d > lim) { alive[m] = 0; st.cut++; if (st.cut % every === 0) c.note(c.scale(5 + st.cut % 10), 0.4, 0.4); continue; }
@@ -3031,6 +3118,7 @@ window.HBP = (() => {
   }
   function step(c, dt) {
     const st = c.st; if (!st || !st.X) return; st.t += dt; st.rt += dt; st.label = Math.max(0, st.label - dt);
+    st.kickT = Math.max(0, (st.kickT || 0) - dt);
     const sub = 5, h = dt / sub, { X, Y, Z, PX, PY, PZ, N } = st, g2 = 1.6 * st.heavy * h * h;
     for (let s = 0; s < sub; s++) {
       for (let k = 0; k < N; k++) { const vx = (X[k] - PX[k]) * 0.996, vy = (Y[k] - PY[k]) * 0.996, vz = (Z[k] - PZ[k]) * 0.996; PX[k] = X[k]; PY[k] = Y[k]; PZ[k] = Z[k]; X[k] += vx; Y[k] += vy + g2; Z[k] += vz; }
@@ -3077,6 +3165,8 @@ window.HBP = (() => {
       { key: 'secs', label: 'Durée manche', min: 4, max: 20, step: 0.5, value: 12 }
     ],
     thumbSteps: 120, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); if (P.take(st, 'bq')) st.kickT = 0.12; },
     audit(c) {                      // knots inside the ball, under the floor, or through a box wall
       const st = c.st; let pen = 0; if (!st.X) return {};
       for (let k = 0; k < st.N; k++) { pen = Math.max(pen, (SPH.r - Math.hypot(st.X[k] - SPH.x, st.Y[k] - SPH.y, st.Z[k] - SPH.z)) / 0.01, st.Y[k] / 0.01); }
@@ -3120,7 +3210,7 @@ window.HBP = (() => {
     if (st.end) { st.end += dt; for (const o of st.o) { o.y += dt * 1.8 * st.end; } if (st.end > 3.2 && !c.thumb) reset(c); upd(st, dt); return; }
     st.drop -= dt;
     const topFree = !st.o.some(o => o.y < NECK_TOP + 0.4);
-    if (st.drop <= 0 && topFree) { add(st, 0, NECK_TOP, 0, 0.004); /* dropped exactly on the axis, as in the reference: the orbs stack in a column */ st.drop = 1 / (c.opt.rate || 3); }
+    if (P.live(st) ? topFree && ((st.drop < 1 / (c.opt.rate || 3) * 0.5 && P.take(st, 'bq')) || st.drop < -1.2) : st.drop <= 0 && topFree) { add(st, 0, NECK_TOP, 0, 0.004); /* dropped exactly on the axis, as in the reference: the orbs stack in a column */ st.drop = 1 / (c.opt.rate || 3); }
     const sub = 4, h = dt / sub, G = 3;
     for (let s = 0; s < sub; s++) {
 
@@ -3199,6 +3289,8 @@ window.HBP = (() => {
     desc: 'Des orbes tombent dans un flacon : deux identiques fusionnent en un plus gros, jusqu\'à l\'orbe géant.',
     ranges: [{ key: 'rate', label: 'Débit', min: 0.8, max: 5, step: 0.1, value: 3 }],
     thumbSteps: 900, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                         // overlap between orbs (in radii of the smaller one) and orbs through the flask wall
       const st = c.st, o = st.o; let pen = 0, ov = 0; if (st.end) return {};          // the flask empties at the end
       for (let i = 0; i < o.length; i++) { const ri = rad(o[i].k);

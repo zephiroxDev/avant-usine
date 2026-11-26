@@ -67,6 +67,7 @@
   function step(c, dt) {
     const st = c.st; if (!st) return; st.t += dt;
     st.pt += dt; const nm = PH[st.ph][0];
+    if (PH[st.ph][0] === 'pause' && P.live(st) && st.pt > 0.25 && P.take(st, 'bq')) st.pt = PH[st.ph][1];      // a kick starts the next closing
     if (st.pt >= PH[st.ph][1]) {
       st.pt = 0;
       if (nm === 'close') convert(c, st);
@@ -77,7 +78,7 @@
     st.pend = st.pend.filter(q => q.m > 0);
     const rT = st.rT = Math.max(st.rmin, Math.min(0.03, Math.sqrt(0.09 / Math.max(1, st.p.n + st.pend.reduce((a, q) => a + q.m, 0)))));   // balls shrink as the crowd grows, new ones included
     st.r += (rT - st.r) * Math.min(1, dt * 1.5);
-    const sub = 2, h = dt / sub, g0 = 1.6;
+    const sub = 2, h = dt / sub, g0 = 1.6 * (P.live(st) ? 0.8 + st.bs * 0.6 * st.mk : 1);
     for (let s = 0; s < sub; s++) {
       P.integrate(st.p, h, 0.5, (x, y) => { const d = Math.hypot(x, y) || 1; return [x / d * g0, y / d * g0]; }, 3);
       for (let it = 0; it < 10; it++) { blades(st); P.inCircle(st.p, 1, st.r, 0.2); P.collide(st.p, st.r, -1.05, -1.05, 2.1, 2.1, 1); }
@@ -128,6 +129,8 @@
       { key: 'max', label: 'Billes', min: 500, max: 3500, step: 100, value: 2000, restart: true }
     ],
     thumbSteps: 300, reset, step, draw,
+    // the song drives the game: what each musical event does here
+    music(c, m) { const st = c.st; P.mus(st, m); },
     audit(c) {                                    // how far balls go into a blade, the hub or past the rim (in radii)
       const st = c.st, p = st.p, r = st.r; let pen = 0;
       for (let i = 0; i < p.n; i++) { if (p.age[i] < 1) continue; const rho = Math.hypot(p.X[i], p.Y[i]), phi = Math.atan2(p.Y[i], p.X[i]), q = Math.round(phi / (Math.PI / 2)), hw = (q & 1) ? st.hv : st.hh, d = Math.abs(P.wrap(phi - q * Math.PI / 2));

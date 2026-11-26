@@ -123,6 +123,8 @@
   body.rec .deck { display: none; }
   body.rec .app { max-width: none; gap: 0; }
   body.rec .stage { border-radius: 0; box-shadow: none; }
+  body.rec:not(.cine) .app { justify-content: center; align-items: center; }
+  body.rec:not(.cine) .stage { flex: none; width: min(100%, calc(100vh * 9 / 16)); width: min(100%, calc(100dvh * 9 / 16)); height: auto; aspect-ratio: 9 / 16; }   /* videos are always 9:16 */
   .hook { display: flex; flex-direction: column; gap: 6px; }
   .hook span { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-soft); font-weight: 700; }
   .export { position: fixed; inset: 0; z-index: 10; background: rgba(8,6,20,.82); display: grid; place-items: center; padding: 16px; }
@@ -219,7 +221,9 @@ window.HBX = (() => {
     r.mr.onstop = () => {
       try { if (r.dest) r.master.disconnect(r.dest); } catch (e) {}
       r.stream.getTracks().forEach(t => t.stop());
-      if (silent || !r.chunks.length) return;
+      if (silent) return;
+      if (!r.chunks.length) { HBH.err('Vidéo : aucune image reçue par l\'enregistreur (' + r.type + ')'); return; }
+      HBH.add('Vidéo', r.name + ' · ' + Math.round((performance.now() - r.t0) / 1000) + ' s · ' + (r.type.includes('mp4') ? 'MP4' : 'WebM'));
       sheet(new Blob(r.chunks, { type: r.type.split(';')[0] }), r.type.includes('mp4') ? 'mp4' : 'webm', (performance.now() - r.t0) / 1000, r.name);
     };
     try { r.mr.stop(); } catch (e) {}
@@ -263,6 +267,8 @@ window.HBH = (() => {
   const rd = k => { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) { return []; } };
   const wr = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
   function add(game, text) { const l = rd(K); l.unshift({ t: Date.now(), g: game, x: text }); wr(K, l.slice(0, 150)); }
+  // real play time and sessions per game (only counted when a game was open for more than 3 s)
+  function time(game, secs) { if (!(secs > 3)) return; let s0 = {}; try { s0 = JSON.parse(localStorage.getItem('hypno.stats') || '{}'); } catch (e) {} const g = s0[game] || { s: 0, n: 0 }; g.s += secs; g.n++; s0[game] = g; try { localStorage.setItem('hypno.stats', JSON.stringify(s0)); } catch (e) {} }
   const seen = new Set(), toast = document.createElement('div'); toast.className = 'cine-hint err-toast'; document.body.appendChild(toast);
   function err(m) {
     m = String(m || 'erreur inconnue').slice(0, 160); const l = rd(KE); l.unshift({ t: Date.now(), x: m }); wr(KE, l.slice(0, 30));
@@ -276,9 +282,11 @@ window.HBH = (() => {
     const box = document.createElement('div'); box.className = 'export';
     const l = rd(K), errs = rd(KE), games = {};
     for (const e of l) { games[e.g] = games[e.g] || { n: 0, last: e }; games[e.g].n++; }
+    let st0 = {}; try { st0 = JSON.parse(localStorage.getItem('hypno.stats') || '{}'); } catch (e) {} for (const g of Object.keys(st0)) games[g] = games[g] || { n: 0, last: { t: 0 } };
+    const dur = s => s < 60 ? Math.round(s) + ' s' : s < 3600 ? Math.round(s / 60) + ' min' : (s / 3600).toFixed(1) + ' h';
     const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     box.innerHTML = '<div class="export-card" role="dialog" aria-label="Historique"><p class="export-title">Historique et statistiques</p>' +
-      (Object.keys(games).length ? '<div class="stats-wrap"><table class="stats"><thead><tr><th>Jeu</th><th>Parties</th><th>Dernière</th></tr></thead><tbody>' + Object.entries(games).map(([g, v]) => '<tr><td>' + esc(g) + '</td><td>' + v.n + '</td><td>' + fmt(v.last.t) + '</td></tr>').join('') + '</tbody></table></div>' : '<p class="sheet-tip">Pas encore de partie terminée.</p>') +
+      (Object.keys(games).length ? '<div class="stats-wrap"><table class="stats"><thead><tr><th>Jeu</th><th>Sessions</th><th>Temps</th><th>Événements</th><th>Dernier</th></tr></thead><tbody>' + Object.entries(games).sort((a, b) => ((st0[b[0]] || {}).s || 0) - ((st0[a[0]] || {}).s || 0)).map(([g, v]) => '<tr><td>' + esc(g) + '</td><td>' + ((st0[g] || {}).n || 0) + '</td><td>' + dur((st0[g] || {}).s || 0) + '</td><td>' + v.n + '</td><td>' + (v.last.t ? fmt(v.last.t) : '—') + '</td></tr>').join('') + '</tbody></table></div>' : '<p class="sheet-tip">Pas encore de partie terminée.</p>') +
       '<div class="hist">' + l.slice(0, 60).map(e => '<p><span>' + fmt(e.t) + ' · ' + esc(e.g) + '</span>' + esc(e.x) + '</p>').join('') + '</div>' +
       (errs.length ? '<h3 class="sheet-h">Problèmes rencontrés</h3><div class="hist">' + errs.slice(0, 10).map(e => '<p><span>' + fmt(e.t) + '</span>' + esc(e.x) + '</p>').join('') + '</div>' : '') +
       '<div class="row"><button type="button" data-clear>Effacer</button><button class="main" type="button" data-close>Fermer</button></div></div>';
@@ -286,7 +294,7 @@ window.HBH = (() => {
     box.querySelector('[data-close]').addEventListener('click', () => box.remove());
     box.querySelector('[data-clear]').addEventListener('click', e => { if (!e.target.dataset.sure) { e.target.dataset.sure = 1; e.target.textContent = 'Toucher encore pour tout effacer'; return; } wr(K, []); wr(KE, []); box.remove(); });
   }
-  return { add, err, open };
+  return { add, err, open, time };
 })();
 /* Options panel shared by every game: one "Options" button per game opens tabs (Jeu, Musique, Affichage, Configs),
    so the main screen keeps only the essential controls. */
@@ -408,7 +416,7 @@ window.HBT = (() => {
       else if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
       else throw new Error('no');
       msg.textContent = '';
-    } catch (e) { msg.textContent = 'Le plein écran n\'est pas disponible ici. Il marche quand le fichier HTML est ouvert directement dans le navigateur.'; }
+    } catch (e) { cinema(true); msg.textContent = 'Plein écran indisponible ici (iPhone ou page intégrée) : mode cinéma activé à la place. Sur iPhone, « Partager › Sur l\'écran d\'accueil » donne une vraie vue plein écran.'; }
   }
   const nodes = [];
   function refresh() { for (const nd of nodes) { nd.querySelector('[data-th]').value = s.theme; nd.querySelector('[data-gl]').value = s.glow; nd.querySelector('[data-pa]').value = s.parts; nd.querySelector('[data-q]').value = s.quality; nd.querySelector('[data-mo]').value = s.motion; } }
@@ -448,9 +456,12 @@ window.HBC = (() => {
   const ctrls = view => Array.from(view.querySelectorAll('input[type=range][id], select[id], button[aria-pressed][id]')).filter(e => !e.closest('[data-nocfg]') && !e.hasAttribute('data-nocfg'));
   function capture(view) { const v = {}; for (const e of ctrls(view)) v[e.id] = e.tagName === 'BUTTON' ? e.getAttribute('aria-pressed') : e.value; return v; }
   function apply(view, vals) {
-    for (const [id, val] of Object.entries(vals || {})) {
+    for (let [id, val] of Object.entries(vals || {})) {
       const e = view.querySelector('#' + CSS.escape(id)); if (!e) continue;
       if (e.tagName === 'BUTTON') { if (e.getAttribute('aria-pressed') !== val && !e.disabled) e.click(); continue; }
+      if (val == null || typeof val === 'object') continue;
+      if (e.tagName === 'SELECT' && ![...e.options].some(o => o.value === String(val))) continue;        // an option that no longer exists
+      if (e.type === 'range') { const v = parseFloat(val); if (!isFinite(v)) continue; val = String(Math.min(+e.max, Math.max(+e.min, v))); }
       if (e.value === String(val)) continue;
       e.value = val; e.dispatchEvent(new Event('input', { bubbles: true })); e.dispatchEvent(new Event('change', { bubbles: true }));
     }
@@ -631,11 +642,12 @@ window.HBV = (() => {
     tiktok: ['TikTok standard : 30 s, accroche en haut', { dur: 30, cd: 3, pos: 'haut', size: 1, hide: false, loop: false }],
     court: ['Défi rapide : 15 s, texte en bas', { dur: 15, cd: 3, pos: 'bas', size: 1.1, hide: false, loop: false }],
     long: ['Ambiance : 60 s sans texte', { dur: 60, cd: 3, hide: true, loop: false }],
-    boucle: ['Boucle parfaite (Vague de pendules)', { dur: 0, cd: 0.01, loop: true, hide: true }]
+    complet: ['Partie complète : 90 s sans texte', { dur: 90, cd: 3, hide: true, loop: false }]
   };
   function sync(nd, view) {
     const q = s => nd.querySelector(s);
-    q('[data-dur]').value = st.loop ? 'loop' : String(st.dur); q('[data-cd]').value = String(st.cd >= 1 ? st.cd : 0);
+    st.loop = false; const known = ['0', '10', '15', '30', '45', '60', '90', '120'].includes(String(st.dur)); q('[data-dur]').value = known ? String(st.dur) : 'custom';
+    q('[data-customrow]').hidden = known; q('[data-cus]').value = String(st.dur || 30); q('[data-cd]').value = String(st.cd >= 1 ? st.cd : 0);
     q('[data-size]').value = st.size; q('[data-pos]').value = st.pos; q('[data-col]').value = st.color; q('[data-hide]').setAttribute('aria-pressed', String(st.hide));
     q('[data-cap]').value = HBX.caption;
     const game = view.id.replace('view-', ''), cf = q('[data-cfg]'); cf.textContent = '';
@@ -648,7 +660,8 @@ window.HBV = (() => {
     const id = view.id, nd = document.createElement('div'); nd.className = 'tab-pane'; nd.dataset.nocfg = '';
     nd.innerHTML =
       '<label class="winrow" for="' + id + '-vpre"><span>Préréglage vidéo</span><select id="' + id + '-vpre" data-pre><option value="">Choisir…</option>' + Object.entries(PRE).map(([k, v]) => '<option value="' + k + '">' + v[0] + '</option>').join('') + '</select></label>' +
-      '<label class="winrow" for="' + id + '-vdur"><span>Durée de la vidéo</span><select id="' + id + '-vdur" data-dur><option value="0">Libre : tu touches l\'écran pour arrêter</option><option value="10">10 s</option><option value="15">15 s</option><option value="30">30 s</option><option value="45">45 s</option><option value="60">60 s</option><option value="loop">Boucle parfaite (Vague de pendules)</option></select></label>' +
+      '<label class="winrow" for="' + id + '-vdur"><span>Durée de la vidéo</span><select id="' + id + '-vdur" data-dur><option value="0">Libre : tu touches l\'écran pour arrêter</option><option value="10">10 s</option><option value="15">15 s</option><option value="30">30 s</option><option value="45">45 s</option><option value="60">60 s</option><option value="90">90 s</option><option value="120">120 s</option><option value="custom">Personnalisée…</option></select></label>' +
+      '<label class="winrow" data-customrow hidden for="' + id + '-vcus"><span>Durée personnalisée (secondes)</span><input type="number" id="' + id + '-vcus" data-cus min="3" max="600" step="1" inputmode="numeric"></label>' +
       '<label class="winrow" for="' + id + '-vcd"><span>Compte à rebours avant le début</span><select id="' + id + '-vcd" data-cd><option value="0">Aucun</option><option value="3">3 s</option><option value="5">5 s</option></select></label>' +
       '<label class="winrow" for="' + id + '-vcap"><span>Texte d\'accroche</span><input type="text" id="' + id + '-vcap" data-cap maxlength="60" placeholder="Ex. : Attends la fin…" autocomplete="off"></label>' +
       '<label class="winrow" for="' + id + '-vsize"><span>Taille du texte</span><input type="range" id="' + id + '-vsize" data-size min="0.6" max="1.6" step="0.05"></label>' +
@@ -662,7 +675,8 @@ window.HBV = (() => {
       '<p class="sheet-tip" data-msg aria-live="polite">La vidéo se fabrique en temps réel : une vidéo de 30 s prend 30 s. Elle s\'arrête seule à la durée choisie, puis s\'affiche prête à enregistrer.</p>';
     const q = s => nd.querySelector(s), msg = q('[data-msg]');
     q('[data-pre]').addEventListener('change', e => { const pr = PRE[e.target.value]; e.target.value = ''; if (pr) { Object.assign(st, pr[1]); HBX.saveStudio(); panes.forEach(([n, v]) => sync(n, v)); } });
-    q('[data-dur]').addEventListener('change', e => { if (e.target.value === 'loop') { st.loop = true; st.dur = 0; } else { st.loop = false; st.dur = +e.target.value; } HBX.saveStudio(); panes.forEach(([n, v]) => sync(n, v)); });
+    q('[data-cus]').addEventListener('change', e => { const v = Math.round(Math.min(600, Math.max(3, +e.target.value || 30))); st.dur = v; e.target.value = v; HBX.saveStudio(); });
+    q('[data-dur]').addEventListener('change', e => { st.loop = false; if (e.target.value === 'custom') { q('[data-customrow]').hidden = false; st.dur = Math.round(+q('[data-cus]').value || 30); } else { q('[data-customrow]').hidden = true; st.dur = +e.target.value; } HBX.saveStudio(); panes.forEach(([n, v]) => sync(n, v)); });
     q('[data-cd]').addEventListener('change', e => set('cd', +e.target.value || 0.01));
     q('[data-size]').addEventListener('input', e => set('size', +e.target.value));
     q('[data-pos]').addEventListener('change', e => set('pos', e.target.value));
@@ -671,7 +685,6 @@ window.HBV = (() => {
     q('[data-cap]').addEventListener('input', e => { HBX.setCaption(e.target.value); const home = document.getElementById('caption'); if (home) home.value = HBX.caption; });
     q('[data-gen]').addEventListener('click', () => {
       const game = id.replace('view-', ''), ci = q('[data-cfg]').value;
-      if (st.loop && game !== 'pendules') { msg.textContent = 'La boucle parfaite ne marche que pour la Vague de pendules. Choisis une durée pour ce jeu.'; return; }
       if (ci !== '') { const c = HBC.list(game)[+ci]; if (c) HBC.apply(view, c.vals); }
       if (HBM.curves && !HBM.playing) HBM.play();
       HBUI.get(view).sh.hidden = true;
@@ -932,9 +945,9 @@ window.HypnoGames = {};
    moments. Reactions are visual only and never change a game's physics, so a chosen race winner stays exact. */
 window.HBM = (() => {
   let curves = null, name = '', buf = null, src = null, gain = null, playing = false, startAt = 0, offset = 0;
-  let vol = 0, inten = 1, mode = 'all';
-  try { const s = JSON.parse(localStorage.getItem('hypno.music') || '{}'); if (s.vol != null) vol = +s.vol; if (s.inten != null) inten = +s.inten; if (s.mode) mode = s.mode; } catch (e) {}
-  const saveP = () => { try { localStorage.setItem('hypno.music', JSON.stringify({ vol, inten, mode })); } catch (e) {} };
+  let vol = 0, inten = 1, mode = 'all', gp = 1;               // gp: how much the song drives the game itself (0, 0.5, 1, 1.7)
+  try { const s = JSON.parse(localStorage.getItem('hypno.music') || '{}'); if (s.vol != null) vol = +s.vol; if (s.inten != null) inten = +s.inten; if (s.mode) mode = s.mode; if (s.gp != null) gp = +s.gp; } catch (e) {}
+  const saveP = () => { try { localStorage.setItem('hypno.music', JSON.stringify({ vol, inten, mode, gp })); } catch (e) {} };
   const ctx = () => window.__rebond && window.__rebond.ctx ? window.__rebond.ctx() : null;
   const OFF = { on: false, bass: 0, perc: 0, level: 0, beat: 0, beatId: -1, strong: 0 };
   const sheets = [], buttons = [];
@@ -971,7 +984,12 @@ window.HBM = (() => {
     for (let f = 0; f < F; f++) { acc += lvl[f]; if (f >= 200) acc -= lvl[f - 200]; sm[f] = acc / Math.min(200, f + 1); }
     const p80 = Array.from(sm).sort((x, y) => x - y)[Math.floor(F * 0.8)] || 1;
     const strong = new Uint8Array(F); for (let f = 0; f < F; f++) strong[f] = sm[f] >= p80 ? 1 : 0;
-    return { FR, F, bass, high, lvl, kicks, all, strong, dur: b.duration };
+    // silences (≥ 1.5 s nearly quiet: the gaps between the beats of a slow song are not silences), density of attacks (per second, over 2 s) and the tempo (median gap between kicks)
+    const sil = new Uint8Array(F); for (let f = 0, run = 0; f < F; f++) { run = lvl[f] < 0.06 ? run + 1 : 0; if (run >= 150) for (let k = f - run + 1; k <= f; k++) sil[k] = 1; }
+    const dens = new Float32Array(F); { let a = 0, b2 = 0; for (let f = 0; f < F; f++) { while (b2 < all.length && all[b2] <= f + 100) b2++; while (a < all.length && all[a] < f - 100) a++; dens[f] = (b2 - a) / 2; } }
+    const gaps = []; for (let i = 1; i < kicks.length; i++) { const g = (kicks[i] - kicks[i - 1]) / FR; if (g > 0.25 && g < 1.5) gaps.push(g); }
+    gaps.sort((x, y) => x - y); const tempo = gaps.length ? Math.round(60 / gaps[gaps.length >> 1]) : 0;
+    return { FR, F, bass, high, lvl, kicks, all, strong, sil, dens, tempo, dur: b.duration };
   }
   function pos() {
     const c = ctx(); if (!curves) return 0;
@@ -1011,14 +1029,27 @@ window.HBM = (() => {
       beatId: bi, strong: curves.strong[f] * k
     };
   }
+  // What a game reads each frame: levels, and the kicks / attacks that happened since this game last asked (never twice).
+  const seen = {};
+  function game(id) {
+    if (!curves || !playing || gp <= 0) return { on: false, k: 0, kick: 0, hit: 0 };
+    const t = pos(), f = Math.min(curves.F - 1, Math.floor(t * curves.FR)), last = seen[id];
+    const count = (list, from, to) => { let n = 0; for (const x of list) if (x > from && x <= to) n++; return n; };
+    let kick = 0, hit = 0;
+    if (last != null) { if (f >= last) { kick = count(curves.kicks, last, f); hit = count(curves.all, last, f); } else { kick = count(curves.kicks, -1, f); hit = count(curves.all, -1, f); } }   // the song looped
+    seen[id] = f;
+    return { on: true, k: gp, t, level: curves.lvl[f], bass: curves.bass[f], perc: curves.high[f], strong: curves.strong[f], silent: curves.sil[f], dens: curves.dens[f], tempo: curves.tempo, kick, hit };
+  }
+  function clear() { stopSrc(); playing = false; offset = 0; buf = null; curves = null; name = ''; for (const k in seen) delete seen[k]; if (window.HB) HB.setMelody(null); refresh(); }
   const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
   function refresh() {
     for (const b of buttons) b.textContent = playing ? 'Musique ♪' : 'Musique';
     for (const sh of sheets) {
       sh.querySelector('[data-track]').textContent = curves ? name + ' · ' + fmt(pos()) + ' / ' + fmt(curves.dur) + (playing ? '' : ' · en pause')
-        : 'Aucun morceau pour l\'instant. Importe-le avec « Importer une musique » : il servira dans les quatre jeux.';
+        : 'Aucun morceau pour l\'instant. Importe-le avec « Importer une musique » : il sert dans les 14 jeux.';
       const pl = sh.querySelector('[data-play]'); pl.textContent = playing ? 'Pause' : 'Lire le morceau'; pl.disabled = !curves;
-      sh.querySelector('[data-restart]').disabled = !curves;
+      sh.querySelector('[data-restart]').disabled = !curves; sh.querySelector('[data-clear]').disabled = !curves; sh.querySelector('[data-gp]').value = String(gp);
+      sh.querySelector('[data-info]').textContent = curves ? (curves.tempo ? 'Tempo estimé : ' + curves.tempo + ' BPM · ' : '') + curves.kicks.length + ' battements, ' + curves.all.length + ' attaques détectés.' : '';
       sh.querySelector('[data-vol]').value = vol; sh.querySelector('[data-int]').value = inten; sh.querySelector('[data-mode]').value = mode;
     }
   }
@@ -1026,15 +1057,20 @@ window.HBM = (() => {
   function attach(view) {
     const id = view.id, sh = document.createElement('div'); sh.className = 'tab-pane'; sh.dataset.nocfg = '';
     sh.innerHTML = '<p class="sheet-tip" data-track></p>' +
-      '<div class="row"><button class="main" type="button" data-play>Lire le morceau</button><button type="button" data-restart>Depuis le début</button></div>' +
+      '<div class="row"><button class="main" type="button" data-play>Lire le morceau</button><button type="button" data-restart>Depuis le début</button><button type="button" data-clear>Retirer</button></div>' +
+      '<p class="sheet-tip" data-info></p>' +
+      '<label class="winrow" for="' + id + '-mgp"><span>Influence de la musique sur le jeu</span><select id="' + id + '-mgp" data-gp><option value="0">Aucune (le jeu suit ses propres règles)</option><option value="0.5">Légère</option><option value="1">Équilibrée</option><option value="1.7">Forte</option></select></label>' +
+      '<p class="sheet-tip">Chaque jeu utilise la musique à sa façon : pinces qui attrapent sur le battement, pistons qui claquent sur la grosse caisse, vitesse qui suit l\'énergie… Sans morceau, le jeu tourne normalement.</p>' +
       '<label class="winrow" for="' + id + '-mvol"><span>Volume du morceau</span><input type="range" id="' + id + '-mvol" data-vol min="0" max="1" step="0.05"></label>' +
       '<p class="sheet-tip">À zéro, le morceau reste muet : il sert seulement à faire réagir l\'animation. Les notes rejouées par les jeux ne changent pas.</p>' +
       '<label class="winrow" for="' + id + '-mint"><span>Réaction de l\'animation</span><input type="range" id="' + id + '-mint" data-int min="0" max="2" step="0.05"></label>' +
       '<label class="winrow" for="' + id + '-mmode"><span>L\'animation réagit à</span><select id="' + id + '-mmode" data-mode><option value="all">Tout le rythme (automatique)</option><option value="bass">Basses seulement</option><option value="perc">Percussions</option></select></label>' +
-      '<p class="sheet-tip">Les réactions sont visuelles : lumières, ondes, pulsations. Elles ne touchent jamais la physique, donc un gagnant choisi reste garanti.</p>';
+      '<p class="sheet-tip">Ce réglage-ci ne concerne que les effets visuels : lumières, ondes, pulsations.</p>';
     sheets.push(sh);
     sh.querySelector('[data-play]').addEventListener('click', () => { if (playing) pause(); else play(); });
     sh.querySelector('[data-restart]').addEventListener('click', restart);
+    sh.querySelector('[data-clear]').addEventListener('click', clear);
+    sh.querySelector('[data-gp]').addEventListener('change', e => { gp = +e.target.value; saveP(); refresh(); });
     sh.querySelector('[data-vol]').addEventListener('input', e => { vol = +e.target.value; if (gain) gain.gain.value = vol; saveP(); refresh(); });
     sh.querySelector('[data-int]').addEventListener('input', e => { inten = +e.target.value; saveP(); refresh(); });
     sh.querySelector('[data-mode]').addEventListener('change', e => { mode = e.target.value; saveP(); refresh(); });
@@ -1044,7 +1080,7 @@ window.HBM = (() => {
   // a video starts with the song from its beginning, so picture and music line up
   const startRec0 = HBX.startRec;
   HBX.startRec = (...a) => { if (curves && playing) restart(); return startRec0(...a); };
-  return { attach, setTrack, react, play, pause, restart, get buffer() { return buf; }, get playing() { return playing; }, get curves() { return curves; } };
+  return { attach, setTrack, react, game, clear, play, pause, restart, get influence() { return gp; }, get buffer() { return buf; }, get playing() { return playing; }, get curves() { return curves; } };
 })();
 </script>
 <script>
@@ -1098,7 +1134,7 @@ window.HB = (() => {
     document.body.appendChild(view);
     const cv = view.querySelector('canvas'), g = cv.getContext('2d'), stage = view.querySelector('.stage');
     const statusEl = view.querySelector('.status'), playBtn = view.querySelector('[data-a=play]'), speedEl = view.querySelector('#' + def.id + '-speed');
-    let active = false, running = false, soundOn = false, countdown = 0, rec = false, dpr = 1, last = 0, raf = 0;
+    let entered = 0, active = false, running = false, soundOn = false, countdown = 0, rec = false, dpr = 1, last = 0, raf = 0;
     const c = {
       W: 0, H: 0, clear: true, slow: false, opt: {}, scale, status(t) { statusEl.textContent = t; },
       note(m, v, d) { if (!soundOn) return; if (!melody) return void note(m, v, d); if (note(melody.notes[melody.i % melody.notes.length].m, v, d)) melody.i++; }
@@ -1108,8 +1144,18 @@ window.HB = (() => {
     view.querySelector('[data-music]').addEventListener('change', async e => {
       const f = e.target.files && e.target.files[0]; if (!f) return;
       importSpan.textContent = 'Analyse…';
-      try { await importFile(f, p => { importSpan.textContent = 'Analyse… ' + Math.round(p * 100) + ' %'; }); restart(); soundOn = true; running = true; label(); }
-      catch (err) { importSpan.textContent = 'Fichier illisible'; }
+      // the file is decoded by the browser itself (free, local): if it cannot read it, say so and keep the previous song
+      try {
+        await importFile(f, p => { importSpan.textContent = 'Analyse… ' + Math.round(p * 100) + ' %'; });
+        if (!HBM.curves) throw new Error('analyse');
+        restart(); soundOn = true; running = true; label();
+        const cv0 = HBM.curves; HBH.add('Musique', 'Importée : « ' + f.name.replace(/\.[^.]+$/, '').slice(0, 60) + ' » · ' + Math.round(cv0.dur) + ' s, ' + cv0.kicks.length + ' battements' + (cv0.tempo ? ', ~' + cv0.tempo + ' BPM' : ''));
+        c.status('Morceau prêt : ' + cv0.kicks.length + ' battements détectés');
+      } catch (err) {
+        e.target.value = ''; importSpan.textContent = '⚠ Fichier non lisible'; setTimeout(() => { importSpan.textContent = HB.melody ? '♪ ' + HB.melody.name : 'Importer une musique'; }, 4500);
+        const why = err && err.message === 'audio' ? 'le son est bloqué par le navigateur' : 'ce format n\'est pas lisible par ce navigateur (essaie MP3, M4A ou WAV)';
+        c.status('Import impossible : ' + why); HBH.err('Import musique « ' + f.name.slice(0, 60) + ' » : ' + why + (err && err.message ? ' [' + err.message + ']' : ''));
+      }
     });
     for (const r of def.ranges || []) {
       const sl = view.querySelector('.sliders'); sl.classList.remove('one'); sl.style.gridTemplateColumns = 'repeat(' + (1 + def.ranges.length) + ', 1fr)';
@@ -1118,10 +1164,11 @@ window.HB = (() => {
       lab.querySelector('input').addEventListener('input', e => { c.opt[r.key] = parseFloat(e.target.value); if (r.restart) restart(); });
     }
     let ema = 0.016, layer = null, lg = null, preRoll = 0, recLeft = 0;
-    function stopFilm() { rec = false; countdown = 0; preRoll = 0; recLeft = 0; c.looping = false; document.body.classList.remove('rec'); soundOn = true; label(); HBX.stopRec(); }
+    function recFail() { stopFilm(); c.status('Le navigateur a refusé l\'enregistrement vidéo.'); HBH.err('Vidéo : démarrage de l\'enregistrement refusé'); }
+    function stopFilm() { rec = false; countdown = 0; preRoll = 0; recLeft = 0; c.looping = false; document.body.classList.remove('rec'); soundOn = true; label(); HBX.stopRec(); resize(); }
 
     function resize() {
-      const r = stage.getBoundingClientRect(); c.W = r.width; c.H = r.height; dpr = HBT.dpr();
+      const r = stage.getBoundingClientRect(); c.W = r.width; c.H = r.height; dpr = document.body.classList.contains('rec') && rec ? Math.min(3, Math.max(HBT.dpr(), 1080 / Math.max(1, c.W))) : HBT.dpr();   // videos: at least 1080 px wide
       cv.width = Math.max(1, Math.round(c.W * dpr)); cv.height = Math.max(1, Math.round(c.H * dpr)); c.clear = true;
     }
     new ResizeObserver(resize).observe(stage);
@@ -1131,9 +1178,12 @@ window.HB = (() => {
       const raw = (now - last) / 1000 || 0.016, dt = Math.min(0.033, raw); last = now;
       ema = ema * 0.9 + Math.min(0.2, raw) * 0.1; c.slow = ema > 0.024; if (!c.thumb) HBT.tick(ema > 0.026, raw);
       const mr = window.HBM ? HBM.react() : null; c.react = mr && mr.on ? mr : null;
+      // the song as a game input: each game decides what a kick, an attack, the energy or a silence does to its mechanism
+      c.mus = window.HBM && running && countdown <= 0 ? HBM.game(def.id) : null;
+      if (c.mus && c.mus.on && def.music && c.st) try { def.music(c, c.mus); } catch (err) { HBH.err(def.id + ' musique : ' + err.message); }
       if (countdown > 0) { countdown -= dt; if (countdown <= 0) { restart(); soundOn = true; running = true;
         const L = HBX.studio.loop && def.loopLen ? def.loopLen(c) : 0;
-        if (L) { preRoll = L; recLeft = 0; c.status('Tour de chauffe : la boucle commence dans un cycle'); } else HBX.startRec(cv, ac, master, def.id); } }
+        if (L) { preRoll = L; recLeft = 0; c.status('Tour de chauffe : la boucle commence dans un cycle'); } else if (!HBX.startRec(cv, ac, master, def.id)) recFail(); } }
       const sdt = running ? dt * parseFloat(speedEl.value) : 0;
       if (preRoll > 0) { preRoll -= sdt; if (preRoll <= 0) { HBX.startRec(cv, ac, master, def.id); recLeft = def.loopLen(c); c.looping = true; } }
       else if (recLeft > 0) { recLeft -= sdt; if (recLeft <= 0) stopFilm(); }
@@ -1170,9 +1220,12 @@ window.HB = (() => {
     }
     view.addEventListener('click', e => {
       const a = e.target.closest('[data-a]'); if (!a) return; audio();
-      if (a.dataset.a === 'play') { if (!soundOn) { restart(); soundOn = true; running = true; } else running = !running; }
+      if (a.dataset.a === 'play') { if (!soundOn) { restart(); soundOn = true; running = true; } else running = !running;
+        if (HBM.curves) { if (running && !HBM.playing) HBM.play(); else if (!running && HBM.playing) HBM.pause(); } }      // the song pauses with the game
       if (a.dataset.a === 'reset') { restart(); running = true; }
-      if (a.dataset.a === 'rec') { rec = true; document.body.classList.add('rec'); soundOn = false; countdown = Math.max(0.01, HBX.studio.cd); restart(); }
+      if (a.dataset.a === 'rec') {
+        if (!HBX.canRecord()) { c.status('Ce navigateur ne sait pas filmer une page : utilise l\'enregistrement d\'écran du téléphone.'); HBH.err('Vidéo : MediaRecorder ou captureStream absent'); label(); return; }
+        rec = true; document.body.classList.add('rec'); soundOn = false; countdown = Math.max(0.01, HBX.studio.cd); if (HBM.curves && !HBM.playing) HBM.play(); restart(); resize(); }
       label();
     });
     cv.addEventListener('click', () => { if (!rec) return; stopFilm(); });
@@ -1191,8 +1244,8 @@ window.HB = (() => {
     HBM.attach(view); HBT.attach(view); HBV.attach(view); HBC.attach(view, def.id); HBS.attach(view, def.id);
     window.addEventListener('hb-look', resize);
     window.HypnoGames[def.id] = {
-      enter() { active = true; resize(); restart(); running = true; label(); last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); },
-      leave() { active = false; running = false; cancelAnimationFrame(raf); label(); if (def.leave) try { def.leave(c); } catch (e) {} }
+      enter() { active = true; entered = performance.now(); resize(); restart(); running = true; label(); last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); },
+      leave() { active = false; running = false; cancelAnimationFrame(raf); if (rec) stopFilm(); label(); if (HBM.playing) HBM.pause(); HBH.time(def.name, (performance.now() - entered) / 1000); if (def.leave) try { def.leave(c); } catch (e) {} }
     };
     window['__hb_' + def.id] = { c, def };
   }
