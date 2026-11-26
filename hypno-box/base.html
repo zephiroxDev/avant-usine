@@ -1080,7 +1080,7 @@ window.HBM = (() => {
   // a video starts with the song from its beginning, so picture and music line up
   const startRec0 = HBX.startRec;
   HBX.startRec = (...a) => { if (curves && playing) restart(); return startRec0(...a); };
-  return { attach, setTrack, react, game, clear, play, pause, restart, get influence() { return gp; }, get buffer() { return buf; }, get playing() { return playing; }, get curves() { return curves; } };
+  return { attach, setTrack, react, game, clear, play, pause, restart, get influence() { return gp; }, get time() { return curves && playing ? pos() : null; }, get name() { return name; }, get buffer() { return buf; }, get playing() { return playing; }, get curves() { return curves; } };
 })();
 </script>
 <script>
