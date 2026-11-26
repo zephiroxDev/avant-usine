@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f0d0c">
+<title>Atelier Avant l’usine</title>
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-onglet="volumes">
+
+<div class="appli">
+  <!-- Barre latérale -->
+  <aside class="cote" id="cote">
+    <div class="marque">
+      <img src="icone.png" alt="" class="marque-icone">
+      <div>
+        <div class="marque-titre">Avant l’usine</div>
+        <div class="marque-sous">Atelier des volumes</div>
+      </div>
+    </div>
+
+    <div class="cote-bloc">
+      <div class="cote-entete">
+        <span>Volumes</span>
+        <button class="bouton-mini" id="btn-nouveau-volume" title="Créer un volume">+ Nouveau</button>
+      </div>
+      <nav id="liste-volumes" class="liste-volumes"></nav>
+    </div>
+
+    <div class="cote-bloc cote-sons">
+      <div class="cote-entete">
+        <span>Sons importés</span>
+        <span class="compte" id="compte-sons">0</span>
+      </div>
+      <button class="bouton plein" id="btn-importer">Importer des sons…</button>
+      <p class="aide-mini">MP3, M4A, WAV, FLAC, OGG… Tu peux aussi glisser des fichiers dans la fenêtre.</p>
+      <div id="liste-sons" class="liste-sons"></div>
+    </div>
+    <div class="cote-pied" id="cote-pied"></div>
+  </aside>
+
+  <!-- Contenu -->
+  <main class="principal">
+    <section class="volume" id="vue-volume">
+      <div class="vide-grand" id="volume-vide">
+        <h2>Aucun volume pour l’instant</h2>
+        <p>Crée ton premier volume, puis ajoute-lui des sons.</p>
+        <button class="bouton plein" id="btn-premier-volume">Créer un volume</button>
+      </div>
+
+      <div id="volume-contenu" hidden>
+        <header class="volume-tete">
+          <button class="pochette" id="btn-pochette" title="Changer la pochette">
+            <img id="img-pochette" alt="">
+            <span class="pochette-vide" id="pochette-vide">Ajouter<br>une pochette</span>
+          </button>
+          <div class="volume-champs">
+            <label class="champ champ-titre-volume">
+              <span>Titre du volume</span>
+              <input id="v-titre" type="text" autocomplete="off" spellcheck="false">
+            </label>
+            <div class="rangee">
+              <label class="champ"><span>Artiste de l’album</span><input id="v-artiste" type="text" autocomplete="off" spellcheck="false"></label>
+              <label class="champ petit"><span>Année</span><input id="v-annee" type="text" inputmode="numeric" maxlength="4" autocomplete="off"></label>
+              <label class="champ"><span>Genre</span><input id="v-genre" type="text" autocomplete="off" spellcheck="false"></label>
+            </div>
+            <div class="rangee actions-volume">
+              <span class="resume" id="v-resume"></span>
+              <span class="espace"></span>
+              <button class="bouton discret" id="btn-supprimer-volume">Supprimer le volume</button>
+              <button class="bouton plein" id="btn-exporter">Exporter l’album</button>
+            </div>
+          </div>
+        </header>
+
+        <div class="volume-corps">
+          <section class="pistes">
+            <div class="section-tete">
+              <h3>Ordre des pistes</h3>
+              <button class="bouton-mini" id="btn-ajouter-pistes">+ Ajouter des sons</button>
+            </div>
+            <ol id="liste-pistes" class="liste-pistes"></ol>
+            <div class="vide-petit" id="pistes-vide">
+              Ce volume est vide. Importe des sons ou ajoute ceux de la colonne « Sons importés ».
+            </div>
+          </section>
+
+          <section class="editeur" id="editeur">
+            <div class="vide-petit" id="editeur-vide">Choisis une piste pour l’écouter et la retoucher.</div>
+            <div id="editeur-contenu" hidden>
+              <div class="editeur-tete">
+                <div class="editeur-titre">
+                  <span class="etiquette" id="e-numero"></span>
+                  <h3 id="e-titre"></h3>
+                </div>
+                <div class="annuler-refaire">
+                  <button class="bouton-icone" id="btn-annuler" title="Annuler (Ctrl+Z)">↶</button>
+                  <button class="bouton-icone" id="btn-refaire" title="Refaire (Ctrl+Y)">↷</button>
+                </div>
+              </div>
+
+              <div class="onde-cadre">
+                <div class="onde-regle" id="onde-regle"></div>
+                <canvas id="onde"></canvas>
+                <div class="onde-chargement" id="onde-chargement">Lecture du son…</div>
+              </div>
+              <input type="range" id="defilement" class="defilement" min="0" max="1000" value="0" aria-label="Faire défiler la forme d’onde">
+
+              <div class="transport">
+                <button class="bouton-rond" id="btn-lecture" title="Lecture / pause (Espace)"><span id="icone-lecture">▶</span></button>
+                <button class="bouton-icone" id="btn-debut" title="Revenir au début">⏮</button>
+                <div class="temps"><span id="t-pos">0:00.00</span><span class="sep">/</span><span id="t-duree">0:00.00</span></div>
+                <label class="case"><input type="checkbox" id="c-boucle"><span>Boucler la sélection</span></label>
+                <span class="espace"></span>
+                <div class="zoom">
+                  <button class="bouton-icone" id="btn-zoom-moins" title="Dézoomer">−</button>
+                  <button class="bouton-mini" id="btn-zoom-tout">Tout</button>
+                  <button class="bouton-icone" id="btn-zoom-plus" title="Zoomer">+</button>
+                </div>
+              </div>
+
+              <div class="selection-barre">
+                <span class="selection-titre">Sélection</span>
+                <label class="temps-champ"><span>de</span><input id="s-debut" type="text" inputmode="decimal" value="0:00.00"></label>
+                <label class="temps-champ"><span>à</span><input id="s-fin" type="text" inputmode="decimal" value="0:00.00"></label>
+                <span class="selection-duree" id="s-duree"></span>
+                <button class="bouton-mini" id="btn-tout-selectionner">Tout sélectionner</button>
+              </div>
+
+              <div class="outils">
+                <button class="outil" data-outil="couper" title="Supprimer la sélection (Suppr)"><b>Couper</b><small>retire le passage</small></button>
+                <button class="outil" data-outil="garder" title="Ne garder que la sélection"><b>Garder</b><small>seulement la sélection</small></button>
+                <button class="outil" data-outil="dupliquer" title="Dupliquer la sélection (Ctrl+D)"><b>Dupliquer</b><small>répète le passage</small></button>
+                <button class="outil" data-outil="silence"><b>Silence</b><small>rend muet</small></button>
+                <button class="outil" data-outil="fondu-entree"><b>Fondu ↗</b><small>sur la sélection</small></button>
+                <button class="outil" data-outil="fondu-sortie"><b>Fondu ↘</b><small>sur la sélection</small></button>
+                <button class="outil" data-outil="plus-fort"><b>+3 dB</b><small>sélection plus forte</small></button>
+                <button class="outil" data-outil="moins-fort"><b>−3 dB</b><small>sélection plus douce</small></button>
+                <button class="outil" data-outil="blanc"><b>Ajouter un blanc</b><small>au curseur</small></button>
+                <button class="outil" data-outil="nettoyer"><b>Retirer les blancs</b><small>début et fin</small></button>
+              </div>
+
+              <div class="reglages">
+                <div class="reglage">
+                  <div class="reglage-tete"><span>Fondu d’entrée</span><output id="o-fondu-entree">0 s</output></div>
+                  <input type="range" id="r-fondu-entree" min="0" max="15" step="0.1" value="0">
+                </div>
+                <div class="reglage">
+                  <div class="reglage-tete"><span>Fondu de sortie</span><output id="o-fondu-sortie">0 s</output></div>
+                  <input type="range" id="r-fondu-sortie" min="0" max="20" step="0.1" value="0">
+                </div>
+                <div class="reglage">
+                  <div class="reglage-tete"><span>Volume</span><output id="o-gain">0 dB</output></div>
+                  <input type="range" id="r-gain" min="-12" max="18" step="0.5" value="0">
+                </div>
+                <div class="reglage">
+                  <div class="reglage-tete"><span>Basses</span><output id="o-basses">0 dB</output></div>
+                  <input type="range" id="r-basses" min="-12" max="12" step="0.5" value="0">
+                </div>
+                <div class="reglage">
+                  <div class="reglage-tete"><span>Aigus</span><output id="o-aigus">0 dB</output></div>
+                  <input type="range" id="r-aigus" min="-12" max="12" step="0.5" value="0">
+                </div>
+                <div class="reglage cases">
+                  <label class="case"><input type="checkbox" id="c-normaliser"><span>Normaliser <small>(au plus fort sans saturer)</small></span></label>
+                  <label class="case"><input type="checkbox" id="c-compresseur"><span>Compresseur <small>(plus de punch)</small></span></label>
+                  <label class="case"><input type="checkbox" id="c-protection"><span>Anti-saturation</span></label>
+                  <label class="case"><input type="checkbox" id="c-mono"><span>Mono</span></label>
+                </div>
+                <div class="niveau" id="niveau"></div>
+              </div>
+
+              <div class="meta">
+                <div class="section-tete"><h3>Infos du morceau</h3><span class="aide-mini" id="e-fichier"></span></div>
+                <div class="rangee">
+                  <label class="champ large"><span>Titre</span><input id="m-titre" type="text" autocomplete="off" spellcheck="false"></label>
+                  <label class="champ petit"><span>N° de piste</span><input id="m-numero" type="number" min="1" step="1"></label>
+                </div>
+                <div class="rangee">
+                  <label class="champ"><span>Artiste</span><input id="m-artiste" type="text" autocomplete="off" spellcheck="false"></label>
+                  <label class="champ"><span>Invités (feat.)</span><input id="m-feat" type="text" placeholder="ex. : Alonzo, Naps" autocomplete="off" spellcheck="false"></label>
+                </div>
+                <div class="rangee">
+                  <label class="champ petit"><span>Année</span><input id="m-annee" type="text" inputmode="numeric" maxlength="4" placeholder="album" autocomplete="off"></label>
+                  <label class="champ"><span>Genre</span><input id="m-genre" type="text" placeholder="album" autocomplete="off" spellcheck="false"></label>
+                  <label class="champ"><span>Commentaire</span><input id="m-commentaire" type="text" autocomplete="off" spellcheck="false"></label>
+                </div>
+                <div class="apercu-nom" id="e-apercu"></div>
+                <div class="rangee">
+                  <button class="bouton discret" id="btn-pochette-son" hidden>Utiliser la pochette de ce son pour le volume</button>
+                  <span class="espace"></span>
+                  <button class="bouton discret" id="btn-retirer-piste">Retirer du volume</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Onglets du téléphone -->
+<nav class="onglets" id="onglets">
+  <button data-onglet="sons">Sons</button>
+  <button data-onglet="volumes">Volume</button>
+  <button data-onglet="edition">Édition</button>
+</nav>
+
+<!-- Fenêtre d’export -->
+<div class="voile" id="fenetre-export" hidden>
+  <div class="fenetre" role="dialog" aria-modal="true" aria-labelledby="export-titre">
+    <h2 id="export-titre">Exporter l’album</h2>
+    <div id="export-reglages">
+      <div class="champ">
+        <span>Format</span>
+        <div class="choix" id="choix-format"></div>
+        <p class="aide-mini" id="aide-format"></p>
+      </div>
+      <div class="champ" id="bloc-qualite">
+        <span>Qualité MP3</span>
+        <div class="choix" id="choix-qualite"></div>
+      </div>
+      <div class="champ">
+        <span>Les invités (feat.) vont…</span>
+        <div class="choix" id="choix-feat"></div>
+      </div>
+      <div class="champ" id="bloc-dossier">
+        <span>Dossier de destination</span>
+        <div class="rangee">
+          <div class="chemin" id="export-dossier"></div>
+          <button class="bouton discret" id="btn-choisir-dossier">Changer…</button>
+        </div>
+      </div>
+      <div class="liste-export" id="export-apercu"></div>
+    </div>
+    <div id="export-progres" hidden>
+      <div class="barre"><div class="barre-plein" id="barre-plein"></div></div>
+      <p id="export-etape" class="export-etape"></p>
+    </div>
+    <div class="fenetre-pied">
+      <button class="bouton discret" id="btn-export-annuler">Annuler</button>
+      <button class="bouton discret" id="btn-ouvrir-dossier" hidden>Ouvrir le dossier</button>
+      <button class="bouton plein" id="btn-export-lancer">Lancer l’export</button>
+    </div>
+  </div>
+</div>
+
+<!-- Choix d’un volume pour un son -->
+<div class="menu" id="menu" hidden></div>
+<div class="bulle" id="bulle" role="status" aria-live="polite"></div>
+<div class="depot" id="depot"><div>Lâche tes sons ici</div></div>
+
+<input type="file" id="f-sons" accept="audio/*,.mp3,.m4a,.wav,.flac,.ogg,.opus,.aac,.aif,.aiff,.wma" multiple hidden>
+<input type="file" id="f-pochette" accept="image/*" hidden>
+
+<script src="app.js"></script>
+</body>
+</html>

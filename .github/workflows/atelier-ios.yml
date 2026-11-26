@@ -1,0 +1,82 @@
+name: Atelier iPhone — application secondaire
+run-name: Atelier iPhone ${{ github.sha }}
+on:
+  push:
+    branches: [atelier/ios]
+    paths: ['work/atelier-ios/**', '.github/workflows/atelier-ios.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: atelier-ios
+  cancel-in-progress: true
+jobs:
+  ipa:
+    runs-on: macos-15
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: work/atelier-ios
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Select installed Xcode 26
+        run: |
+          XCODE_PATH=$(python3 - <<'PY'
+          import glob,re
+          paths=[p for p in glob.glob('/Applications/Xcode_26*.app') if re.search(r'Xcode_26[.\d]*\.app$',p)]
+          assert paths, 'Xcode 26 is unavailable'
+          print(max(paths,key=lambda p:tuple(map(int,re.search(r'Xcode_([\d.]+)\.app',p)[1].split('.')))))
+          PY
+          )
+          sudo xcode-select --switch "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
+      - name: Check the page scripts
+        run: node --check www/app.js
+      - name: Prepare the iOS project
+        run: |
+          npm install --no-audit --no-fund
+          npx cap add ios
+          npx cap sync ios
+          python3 scripts/configurer.py
+      - name: Compile for iPhone and iPad
+        run: |
+          set -o pipefail
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' \
+            build > build-output.log 2>&1 || (tail -80 build-output.log; exit 1)
+          lipo -archs build/Build/Products/Release-iphoneos/App.app/App | grep arm64
+      - name: Package and verify the IPA
+        run: |
+          FILE=$(python3 -c "import json;print(json.load(open('release.json'))['file'])")
+          mkdir -p build/ipa/Payload
+          ditto build/Build/Products/Release-iphoneos/App.app build/ipa/Payload/App.app
+          (cd build/ipa && zip -qry "../$FILE" Payload)
+          python3 scripts/verifier-ipa.py "build/$FILE"
+      - name: Publish as a separate pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=$(python3 -c "import json;print(json.load(open('release.json'))['tag'])")
+          FILE=$(python3 -c "import json;print(json.load(open('release.json'))['file'])")
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG" "build/$FILE" build/livraison.json --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$TAG" "build/$FILE" build/livraison.json --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" --prerelease \
+              --title "Atelier Avant l’usine — iPhone 1.0.0 (application secondaire)" \
+              --notes "Application secondaire d’Avant l’usine : l’atelier pour préparer les volumes (importer des sons, couper, fondus, volume, ordre des pistes, titre / feat. / album / pochette, export ZIP de MP3 tagués). IPA non signé, à installer comme les autres versions iPhone d’Avant l’usine. Ce n’est pas l’appli d’écoute principale."
+          fi
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: atelier-ios-diagnostics
+          path: work/atelier-ios/build-output.log
+          if-no-files-found: ignore
+          retention-days: 7

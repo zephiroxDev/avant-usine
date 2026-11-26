@@ -1,0 +1,6 @@
+{
+  "appId": "dev.zephirox.avantusine.atelier",
+  "appName": "Atelier",
+  "webDir": "www",
+  "ios": { "backgroundColor": "#0f0d0c", "contentInset": "automatic" }
+}
